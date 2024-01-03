@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
@@ -297,6 +298,8 @@ public class TimeCalcWindow {
         window.add(batteryForMonth);
 
         StringBuilder sb = null;
+
+        File focusTxt = new File("focus.txt");
         while (true) {
             if (stopBeforeEnd) {
                 window.setVisible(false);
@@ -304,6 +307,12 @@ public class TimeCalcWindow {
                 break;
             }
 
+            if(Math.random() > 0.9) {
+                if(focusTxt.exists()) {
+                    window.requestFocus();
+                    focusTxt.delete();
+                }
+            }
             if(Utils.highlighted.get()) {
                 Utils.ultraLight.set(false);
             }
