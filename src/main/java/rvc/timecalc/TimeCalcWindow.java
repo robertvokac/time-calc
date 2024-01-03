@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -94,7 +95,7 @@ public class TimeCalcWindow {
 
         //window.add(weatherButton);
         window.add(commandButton);
-        window.add(focusButton);
+        //window.add(focusButton);
 
         window.add(jokeButton);
         window.add(restartButton);
@@ -252,21 +253,21 @@ public class TimeCalcWindow {
                         .getWidth() + 10, 10, 80, 80);
         window.add(progressCircle);
 
-        Battery battery = new Battery();
-        battery.setBounds(progressCircle.getBounds().x,
+        Battery batteryForDay = new Battery();
+        batteryForDay.setBounds(progressCircle.getBounds().x,
                 progressCircle.getY() + 10 + progressCircle.getHeight(), 90,
                 140);
-        window.add(battery);
+        window.add(batteryForDay);
 
         Battery batteryForWeek = new Battery();
-        batteryForWeek.setBounds(battery.getBounds().x + battery.getWidth(),
-                battery.getY(), 90, 140);
+        batteryForWeek.setBounds(batteryForDay.getBounds().x + batteryForDay.getWidth(),
+                batteryForDay.getY(), 90, 140);
         window.add(batteryForWeek);
 
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
         LocalDate ld = LocalDate.of(calNow.get(Calendar.YEAR),calNow.get(Calendar.MONTH) + 1,1);
-        DayOfWeek firstDayOfMonth = ld.getDayOfWeek();
+
         int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
 
         int workDaysDone = 0;
@@ -293,9 +294,22 @@ public class TimeCalcWindow {
 
 
         Battery batteryForMonth = new Battery();
-        batteryForMonth.setBounds(battery.getBounds().x + battery.getWidth(),
-                battery.getY() + batteryForWeek.getHeight() + 10, 90, 140);
+        batteryForMonth.setBounds(batteryForDay.getBounds().x + batteryForDay.getWidth(),
+                batteryForDay.getY() + batteryForWeek.getHeight() + 10, 90, 140);
         window.add(batteryForMonth);
+
+        Battery batteryForHour = new Battery();
+        batteryForHour.setBounds(batteryForMonth.getBounds().x,
+                batteryForMonth.getY() + batteryForMonth.getHeight() + 10, 90, 140);
+        window.add(batteryForHour);
+        Rectangle hourRectangle = batteryForHour.getBounds();
+        Rectangle dayRectangle = batteryForDay.getBounds();
+        Rectangle weekRectangle = batteryForWeek.getBounds();
+        Rectangle monthRectangle = batteryForMonth.getBounds();
+        batteryForHour.setBounds(dayRectangle);
+        batteryForDay.setBounds(weekRectangle);
+        batteryForWeek.setBounds(monthRectangle);
+        batteryForMonth.setBounds(hourRectangle);
 
         StringBuilder sb = null;
 
@@ -321,9 +335,10 @@ public class TimeCalcWindow {
             progressSquare.setVisible(!Utils.everythingHidden.get());
             progressCircle.setVisible(!Utils.everythingHidden.get());
             analogClock.setVisible(!Utils.everythingHidden.get());
-            battery.setVisible(!Utils.everythingHidden.get());
+            batteryForDay.setVisible(!Utils.everythingHidden.get());
             batteryForWeek.setVisible(!Utils.everythingHidden.get());
             batteryForMonth.setVisible(!Utils.everythingHidden.get());
+            batteryForHour.setVisible(!Utils.everythingHidden.get());
             jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !Utils.everythingHidden.get());
             focusButton.setVisible(!Utils.everythingHidden.get());
 
@@ -379,7 +394,7 @@ public class TimeCalcWindow {
                           / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
             progressCircle.setDonePercent(done);
-            battery.setDonePercent(done);
+            batteryForDay.setDonePercent(done);
 
             int weekDayWhenMondayIsOne = calNow.get(Calendar.DAY_OF_WEEK) - 1;
             batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0
@@ -388,6 +403,14 @@ public class TimeCalcWindow {
 
             batteryForMonth.setDonePercent(weekDayWhenMondayIsOne == 0
                                            || weekDayWhenMondayIsOne == 6 ? workDaysDone/workDaysTotal : (workDaysDone + done) / workDaysTotal);
+
+
+            double minutesRemainsD = (double) minuteRemains;
+            double secondsRemainsD = (double) secondsRemains;
+            double millisecondsRemainsD = (double) millisecondsRemains;
+            minutesRemainsD = minutesRemainsD + secondsRemainsD / 60d;
+            minutesRemainsD = minutesRemainsD + millisecondsRemainsD / 1000d / 60d;
+            batteryForHour.setDonePercent(1 - ((minutesRemainsD%60d)/60d));
 
             int totalSecondsRemains =
                     (hourRemains * 60 * 60 + minuteRemains * 60
