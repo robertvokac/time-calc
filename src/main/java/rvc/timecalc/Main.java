@@ -179,9 +179,9 @@ public class Main {
         int spacesDone = (int) (percent * 52);
         int spacesTodo = spacesTotal - spacesDone;
         System.out.println(
-                WALL + createSpaces(spacesDone) + " () " + createOneZeroes(spacesTodo) + WALL + (spacesTodo == 0 ? "*GO*" :"XXXX") + WALL + NEW_LINE +
-                WALL + createSpaces(spacesDone) + "/||\\"  + createOneZeroes(spacesTodo) + WALL + (spacesTodo == 0 ? "HOME" :"XXXX") + WALL + NEW_LINE +
-                WALL + createSpaces(spacesDone) + " /\\ "  + createOneZeroes(spacesTodo) + WALL + (spacesTodo == 0 ? "!!!!" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "*GO*" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + "/||\\"  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "HOME" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + " /\\ "  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "!!!!" :"XXXX") + WALL + NEW_LINE +
                 "=================================================================="
          );
 
@@ -201,7 +201,8 @@ public class Main {
     private static final String createOneZeroes(int count) {
         StringBuilder sb = new StringBuilder();
         for(int i = 1; i <= count; i++) {
-            sb.append(Math.random() > 0.5 ? "1" : "0");
+            double random = Math.random();
+            sb.append(random > 0.66 ? "1" : (random > 0.33 ? "0" : "1"));
         }
         return sb.toString();
     }
