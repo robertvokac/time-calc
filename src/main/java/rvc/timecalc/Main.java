@@ -104,7 +104,7 @@ public class Main {
                     .format("%02d", minuteRemains) + " until end " + String
                                        .format("%02d", endHour) + ":" + String
                                        .format("%02d", endMinute));
-            if(minuteRemains <= 0) {
+            if(hourRemains <= 0 && minuteRemains <= 0) {
                 break;
             }
 
