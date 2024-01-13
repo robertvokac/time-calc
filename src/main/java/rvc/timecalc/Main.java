@@ -113,7 +113,7 @@ public class Main {
 //            System.out.println("minutesDone=" + minutesDone);
 //            System.out.println("totalMinutesDone=" + totalMinutesDone);
             String msg = "Done=" + formatter.format(done * 100) + "% Remains=" + String.format("%02d", hourRemains) + ":" + String
-                    .format("%02d", minuteRemains) + " (" + String.format("%03d", (hourRemains * 60 + minuteRemains)) + " minute" + (minuteRemains > 1 ? "s" : " ") + ")" + " End=" + String
+                    .format("%02d", minuteRemains) + " (" + String.format("%03d", (hourRemains * 60 + minuteRemains)) + " minute" + ((hourRemains * 60 + minuteRemains) > 1 ? "s" : " ") + ")" + " End=" + String
                                  .format("%02d", endHour) + ":" + String
                                  .format("%02d", endMinute);
 
