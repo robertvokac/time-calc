@@ -41,6 +41,9 @@ public class Main {
                 args[1] = "0:00";
             }
         }
+        if(args.length == 1) {
+            args = new String[]{args[0], "0:00"};
+        }
         if (args.length < EXPECTED_ARG_COUNT) {
             throw new RuntimeException(
                     "Expected arg count is " + EXPECTED_ARG_COUNT
@@ -104,7 +107,9 @@ public class Main {
                     .format("%02d", minuteRemains) + " until end " + String
                                        .format("%02d", endHour) + ":" + String
                                        .format("%02d", endMinute));
-            printPercentToAscii(done);
+            if(System.getProperty("progress")!=null) {
+                printPercentToAscii(done);
+            }
             if(hourRemains <= 0 && minuteRemains <= 0) {
                 break;
             }
