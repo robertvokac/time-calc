@@ -18,6 +18,9 @@ public class Main {
         while(true) {run(args);
             System.out.println(("Do you want to continue (y/n)?"));
             Scanner scanner = new Scanner(System.in);
+            if(args.length == 0) {
+                break;
+            }
             if(!scanner.nextLine().equals("y")) {
                 System.out.println("Exiting \"Time Calc\".");
                 break;
