@@ -16,11 +16,12 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         while(true) {run(args);
-            System.out.println(("Do you want to continue (y/n)?"));
-            Scanner scanner = new Scanner(System.in);
             if(args.length == 0) {
                 break;
             }
+            System.out.println(("Do you want to continue (y/n)?"));
+            Scanner scanner = new Scanner(System.in);
+
             if(!scanner.nextLine().equals("y")) {
                 System.out.println("Exiting \"Time Calc\".");
                 break;
@@ -114,6 +115,12 @@ public class Main {
                 printPercentToAscii(done);
             }
             if(hourRemains <= 0 && minuteRemains <= 0) {
+                System.out.println("Congratulation :-) It is the time to go home.\n\n");
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+
+                }
                 break;
             }
 
