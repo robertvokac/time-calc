@@ -128,11 +128,12 @@ public class Main {
 
         int percentInt = (int)(percent * 100);
 //        System.out.println("percentInt=" + percentInt);
-        int i1 = percentInt > 25 ? 10 : percentInt / 25;
-        int i2 = percentInt > 50 ? 10 : (int) ((percentInt - 25) / 2.5);
-        int i3 = percentInt > 75 ? 10 : (int) ((percentInt - 50) / 2.5);
-        int i4 = (int) ((percentInt - 75) / 2.5);
-        int[] array = new int[]{i1,i2,i3,i4};
+        int i1 = percentInt > 20 ? 10 : (int) (percentInt / 2);
+        int i2 = percentInt > 40 ? 10 : (int) ((percentInt - 20) / 2);
+        int i3 = percentInt > 60 ? 10 : (int) ((percentInt - 40) / 2);
+        int i4 = percentInt > 80 ? 10 : (int) ((percentInt - 60) / 2);
+        int i5 = (int) ((percentInt - 80) / 2);
+        int[] array = new int[]{i1,i2,i3,i4,i5};
 
 //        System.out.println(i1 +" " + i2 + " " + i3 + " " + i4);
 
