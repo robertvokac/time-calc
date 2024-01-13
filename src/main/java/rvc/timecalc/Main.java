@@ -104,6 +104,7 @@ public class Main {
                     .format("%02d", minuteRemains) + " until end " + String
                                        .format("%02d", endHour) + ":" + String
                                        .format("%02d", endMinute));
+            printPercentToAscii(done);
             if(hourRemains <= 0 && minuteRemains <= 0) {
                 break;
             }
@@ -114,6 +115,39 @@ public class Main {
 
             }
         }
+    }
+    private static void printPercentToAscii(double percent) {
+        NumberFormat formatter = new DecimalFormat("#00.00");
+        String s = formatter.format(percent * 100);
+        s = s.replace(",","");
+
+        int percentInt = (int)(percent * 100);
+//        System.out.println("percentInt=" + percentInt);
+        int i1 = percentInt > 25 ? 10 : percentInt / 25;
+        int i2 = percentInt > 50 ? 10 : (int) ((percentInt - 25) / 2.5);
+        int i3 = percentInt > 75 ? 10 : (int) ((percentInt - 50) / 2.5);
+        int i4 = (int) ((percentInt - 75) / 2.5);
+        int[] array = new int[]{i1,i2,i3,i4};
+
+//        System.out.println(i1 +" " + i2 + " " + i3 + " " + i4);
+
+
+        for(int i:array) {
+            if(i < 0) {
+                i = 0;
+            }
+            for(int j = 1; j <= i; j++) {
+                System.out.print("#");
+            }
+            for(int j = 10; j > i; j--) {
+                System.out.print(".");
+            }
+            System.out.println();
+
+        }
+
+        System.out.println("\n\n");
+
     }
 }
 
