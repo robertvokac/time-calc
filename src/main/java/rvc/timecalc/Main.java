@@ -16,7 +16,7 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         while(true) {run(args);
-            if(args.length == 0) {
+            if(args.length != 0) {
                 break;
             }
             System.out.println(("Do you want to continue (y/n)?"));
@@ -108,7 +108,7 @@ public class Main {
 //            System.out.println("minutesDone=" + minutesDone);
 //            System.out.println("totalMinutesDone=" + totalMinutesDone);
             System.out.println("Progress: " + formatter.format(done * 100) + "% Remains " + String.format("%02d", hourRemains) + ":" + String
-                    .format("%02d", minuteRemains) + " until end " + String
+                    .format("%02d", minuteRemains) + " (" + (hourRemains * 60 + minuteRemains) + " minutes)" + " until end " + String
                                        .format("%02d", endHour) + ":" + String
                                        .format("%02d", endMinute));
             if(System.getProperty("progress")!=null) {
