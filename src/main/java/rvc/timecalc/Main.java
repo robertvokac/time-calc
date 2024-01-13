@@ -112,12 +112,15 @@ public class Main {
 //            System.out.println("hourDone=" + hourDone);
 //            System.out.println("minutesDone=" + minutesDone);
 //            System.out.println("totalMinutesDone=" + totalMinutesDone);
-            System.out.println("Progress: " + formatter.format(done * 100) + "% Remains " + String.format("%02d", hourRemains) + ":" + String
-                    .format("%02d", minuteRemains) + " (" + (hourRemains * 60 + minuteRemains) + " minute" + (minuteRemains > 1 ? "s" : "") + ")" + " until end " + String
-                                       .format("%02d", endHour) + ":" + String
-                                       .format("%02d", endMinute));
+            String msg = "Done=" + formatter.format(done * 100) + "% Remains=" + String.format("%02d", hourRemains) + ":" + String
+                    .format("%02d", minuteRemains) + " (" + String.format("%03d", (hourRemains * 60 + minuteRemains)) + " minute" + (minuteRemains > 1 ? "s" : " ") + ")" + " End=" + String
+                                 .format("%02d", endHour) + ":" + String
+                                 .format("%02d", endMinute);
+
             if(System.getProperty("progress")!=null) {
-                printPercentToAscii(done);
+                printPercentToAscii(done, msg);
+            } else {
+                System.out.print(msg);
             }
             if(hourRemains <= 0 && minuteRemains <= 0) {
                 System.out.println("Congratulation :-) It is the time to go home.\n\n");
@@ -136,7 +139,8 @@ public class Main {
             }
         }
     }
-    private static void printPercentToAscii(double percent) {
+    private static void printPercentToAscii(double percent,
+            String msg) {
         NumberFormat formatter = new DecimalFormat("#00.00");
         String s = formatter.format(percent * 100);
         s = s.replace(",","");
@@ -153,10 +157,13 @@ public class Main {
 //        System.out.println(i1 +" " + i2 + " " + i3 + " " + i4);
 
 
+        int index = 0;
         for(int i:array) {
+
             if(i < 0) {
                 i = 0;
             }
+            System.out.print(index == 2 ? (msg + createSpaces(7)) : createSpaces(56));
             for(int j = 1; j <= i; j++) {
                 System.out.print("#");
             }
@@ -164,10 +171,10 @@ public class Main {
                 System.out.print(".");
             }
             System.out.println();
-
+            index++;
         }
 
-        System.out.println();
+        System.out.println(createSpaces(58) + "\\      /");
         int spacesTotal = 52;
         int spacesDone = (int) (percent * 52);
         int spacesTodo = spacesTotal - spacesDone;
