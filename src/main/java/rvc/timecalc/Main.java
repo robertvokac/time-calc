@@ -14,6 +14,10 @@ import java.util.Set;
  * @since 31.01.2024
  */
 public class Main {
+
+    public static final String WALL = "||";
+    private static final String NEW_LINE = "\n";
+
     public static void main(String[] args) {
         while(true) {run(args);
             if(args.length != 0) {
@@ -64,7 +68,8 @@ public class Main {
         //        System.out.println("overtimeUsedHour=" + overtimeUsedHour);
         //        System.out.println("overtimeUsedMinute=" + overtimeUsedMinute);
 
-        int endHour = startHour + 8 - overtimeUsedHour;
+            int workingHoursLength = 8;
+        int endHour = startHour + workingHoursLength - overtimeUsedHour;
         int endMinute = startMinute + 30 - overtimeUsedMinute;
         while (endMinute >= 60) {
             endMinute = endMinute - 60;
@@ -100,7 +105,7 @@ public class Main {
                 minuteRemains = minuteRemains + 60;
                 hourRemains = hourRemains - 1;
             }
-            int hourDone = 8 - overtimeUsedHour - hourRemains;
+            int hourDone = workingHoursLength - overtimeUsedHour - hourRemains;
             int minutesDone = 30 - overtimeUsedMinute - minuteRemains;
             int totalMinutesDone = hourDone * 60 + minutesDone;
             double done = ((double)totalMinutesDone)/((double)totalMinutes);
@@ -108,7 +113,7 @@ public class Main {
 //            System.out.println("minutesDone=" + minutesDone);
 //            System.out.println("totalMinutesDone=" + totalMinutesDone);
             System.out.println("Progress: " + formatter.format(done * 100) + "% Remains " + String.format("%02d", hourRemains) + ":" + String
-                    .format("%02d", minuteRemains) + " (" + (hourRemains * 60 + minuteRemains) + " minutes)" + " until end " + String
+                    .format("%02d", minuteRemains) + " (" + (hourRemains * 60 + minuteRemains) + " minute" + (minuteRemains > 1 ? "s" : "") + ")" + " until end " + String
                                        .format("%02d", endHour) + ":" + String
                                        .format("%02d", endMinute));
             if(System.getProperty("progress")!=null) {
@@ -162,8 +167,26 @@ public class Main {
 
         }
 
+        System.out.println();
+        int spacesTotal = 52;
+        int spacesDone = (int) (percent * 52);
+        int spacesTodo = spacesTotal - spacesDone;
+        System.out.println(
+                WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "*GO*" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + "/||\\"  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "HOME" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + " /\\ "  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "!!!!" :"XXXX") + WALL + NEW_LINE +
+                "=================================================================="
+         );
+
         System.out.println("\n\n");
 
+    }
+    private static final String createSpaces(int spaceCount) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i <= spaceCount; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 }
 
