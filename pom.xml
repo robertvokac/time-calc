@@ -17,6 +17,8 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <lib.dir>${basedir}/lib</lib.dir>
+        <timestamp>${maven.build.timestamp}</timestamp>
     </properties>
 
     <build>
@@ -45,6 +47,45 @@
                 ...
                 -->
             </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>rvc.timecalc.Main</mainClass>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifestEntries>
+                                    <Build-Date>${timestamp}</Build-Date>
+                                </manifestEntries>
+                            </archive>
+                            <!--                    <descriptorRefs>-->
+                            <!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+                            <!--                    </descriptorRefs>-->
+                            <descriptors>
+                                <descriptor>./src/main/resources/install.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                                <phase>package</phase> <!-- bind to the packaging phase -->
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <!--tfcConfUtils-3.4.jar-->
+        <dependency>
+            <groupId>jtoaster</groupId>
+            <artifactId>jtoaster</artifactId>
+            <version>1.0.5</version>
+            <scope>system</scope>
+            <systemPath>${lib.dir}/jtoaster-1.0.5.jar</systemPath>
+        </dependency>
+    </dependencies>
 </project>
