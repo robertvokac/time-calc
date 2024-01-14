@@ -107,6 +107,11 @@ public class TimeCalc {
             String nowString = DATE_TIME_FORMATTER.format(now);
             if (alreadyShownTimes.contains(nowString)) {
                 //nothing to do
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+
+                }
                 continue;
             } else {
                 alreadyShownTimes.add(nowString);
