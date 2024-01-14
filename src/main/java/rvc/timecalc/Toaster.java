@@ -156,6 +156,7 @@ public class Toaster
 			JPanel externalPanel = new JPanel(new BorderLayout(1, 1));
 			externalPanel.setBackground( getBorderColor() );
 			JPanel innerPanel = new JPanel(new BorderLayout( getMargin(), getMargin() ))
+
       {
         @Override
         public void paint(Graphics g) {
@@ -185,6 +186,10 @@ public class Toaster
 			innerPanel.add(iconLabel, BorderLayout.WEST);
 			innerPanel.add(message, BorderLayout.CENTER);
 			getContentPane().add(externalPanel);
+			JButton closeButton=new JButton("Close");
+			closeButton.setBounds(480,10,100, 40);
+			innerPanel.add(closeButton,BorderLayout.BEFORE_FIRST_LINE);
+			closeButton.addActionListener(e -> {setVisible(false); dispose();});
  		}
     
 
