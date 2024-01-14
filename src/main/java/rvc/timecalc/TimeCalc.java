@@ -185,7 +185,7 @@ public class TimeCalc {
             if(i < 0) {
                 i = 0;
             }
-            sb.append(index == 2 ? (msg + createSpaces(9 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0))) : createSpaces(58));
+            sb.append(index == 2 ? (msg + createSpaces((percentInt < 0 ? -1 : 0) + 9 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0))) : createSpaces(58));
             for(int j = 1; j <= i; j++) {
                 sb.append("#");
             }
@@ -199,7 +199,7 @@ public class TimeCalc {
         sb.append(createSpaces(58) + "||======||\n");
         int spacesTotal = 52;
         int spacesDone = (int) (percent * 52);
-        int spacesTodo = spacesTotal - spacesDone;
+        int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
         sb.append(
                 WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "  GO  " :"XXXXXX") + WALL + NEW_LINE +
                 WALL + createSpaces(spacesDone) + "/||\\"  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? " HOME " :"XXXXXX") + WALL + NEW_LINE +
