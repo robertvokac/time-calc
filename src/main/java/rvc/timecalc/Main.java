@@ -163,7 +163,7 @@ public class Main {
             if(i < 0) {
                 i = 0;
             }
-            System.out.print(index == 2 ? (msg + createSpaces(7 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0))) : createSpaces(56));
+            System.out.print(index == 2 ? (msg + createSpaces(9 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0))) : createSpaces(58));
             for(int j = 1; j <= i; j++) {
                 System.out.print("#");
             }
@@ -174,15 +174,15 @@ public class Main {
             index++;
         }
 
-        System.out.println(createSpaces(58) + "\\      /");
+        System.out.println(createSpaces(58) + "||======||");
         int spacesTotal = 52;
         int spacesDone = (int) (percent * 52);
         int spacesTodo = spacesTotal - spacesDone;
         System.out.println(
-                WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? " GO " :"XXXX") + WALL + NEW_LINE +
-                WALL + createSpaces(spacesDone) + "/||\\"  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "HOME" :"XXXX") + WALL + NEW_LINE +
-                WALL + createSpaces(spacesDone) + " /\\ "  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? " !! " :"XXXX") + WALL + NEW_LINE +
-                "=================================================================="
+                WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "  GO  " :"XXXXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + "/||\\"  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? " HOME " :"XXXXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + " /\\ "  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "  !!  " :"XXXXXX") + WALL + NEW_LINE +
+                "===================================================================="
          );
 
         System.out.println("\n\n");
