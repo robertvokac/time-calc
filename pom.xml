@@ -10,6 +10,7 @@
 
     <name>time-calc</name>
     <description>time-calc</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -78,14 +79,4 @@
                     </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <!--tfcConfUtils-3.4.jar-->
-        <dependency>
-            <groupId>jtoaster</groupId>
-            <artifactId>jtoaster</artifactId>
-            <version>1.0.5</version>
-            <scope>system</scope>
-            <systemPath>${lib.dir}/jtoaster-1.0.5.jar</systemPath>
-        </dependency>
-    </dependencies>
 </project>
