@@ -180,7 +180,7 @@ public class TimeCalc {
         s = s.replace(",","");
 
         int percentInt = (int)(percent * 100);
-        if(!alreadyShownPercents.contains((int)(percent*100)) || true) {
+        if(!alreadyShownPercents.contains((int)(percent*100))) {
             alreadyShownPercents.add((int)(percent*100));
             Toaster toasterManager = new Toaster();
             Font font = new Font("sans", Font.PLAIN, 32);

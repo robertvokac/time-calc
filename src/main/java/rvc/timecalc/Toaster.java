@@ -29,6 +29,8 @@ package rvc.timecalc;
  */
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -213,8 +215,8 @@ public class Toaster
 		 * Animate vertically the toaster. The toaster could be moved from bottom
 		 * to upper or to upper to bottom
 		 * @param posx
-		 * @param fromy
-		 * @param toy
+		 * @param fromY
+		 * @param toY
 		 * @throws InterruptedException 
 		 */
 		protected void animateVertically( int posx, int fromY, int toY ) throws InterruptedException
@@ -330,6 +332,9 @@ public class Toaster
       singleToaster.iconLabel.setIcon( icon );
     }
     singleToaster.message.setText( msg );
+
+		singleToaster.toFront( );
+		singleToaster.setAlwaysOnTop(true);
 		singleToaster.animate();
 	}
 
