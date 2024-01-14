@@ -179,9 +179,9 @@ public class Main {
         int spacesDone = (int) (percent * 52);
         int spacesTodo = spacesTotal - spacesDone;
         System.out.println(
-                WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "*GO*" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + " () " + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? " GO " :"XXXX") + WALL + NEW_LINE +
                 WALL + createSpaces(spacesDone) + "/||\\"  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "HOME" :"XXXX") + WALL + NEW_LINE +
-                WALL + createSpaces(spacesDone) + " /\\ "  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? "!!!!" :"XXXX") + WALL + NEW_LINE +
+                WALL + createSpaces(spacesDone) + " /\\ "  + createSpaces(spacesTodo) + WALL + (spacesTodo == 0 ? " !! " :"XXXX") + WALL + NEW_LINE +
                 "=================================================================="
          );
 
