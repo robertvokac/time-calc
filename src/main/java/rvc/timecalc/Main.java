@@ -163,7 +163,7 @@ public class Main {
             if(i < 0) {
                 i = 0;
             }
-            System.out.print(index == 2 ? (msg + createSpaces(7)) : createSpaces(56));
+            System.out.print(index == 2 ? (msg + createSpaces(7 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0))) : createSpaces(56));
             for(int j = 1; j <= i; j++) {
                 System.out.print("#");
             }
