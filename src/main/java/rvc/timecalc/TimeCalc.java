@@ -183,6 +183,8 @@ public class TimeCalc {
         if(!alreadyShownPercents.contains((int)(percent*1))) {
             alreadyShownPercents.add((int)(percent*1));
             Toaster toasterManager = new Toaster();
+            Font font = new Font("sans", Font.PLAIN, 32);
+            toasterManager.setToasterMessageFont(font);
             toasterManager.setDisplayTime(10000);
             Base64.Decoder base64Decoder = Base64.getDecoder();
 
