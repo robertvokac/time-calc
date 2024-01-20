@@ -56,7 +56,12 @@ public class ProgressSquare extends JPanel {
         g2d.fillRect(side - 4, side - 4, 4, 4);
         g2d.fillRect(1, side - 4, 4, 4);
         g2d.fillRect(1, 1, side, y - 1);
-        g2d.drawRect(1, y, x, 1);
+        if(x>1) {
+            g2d.drawRect(1, y, x - 1, 1);
+        }
+        g2d.setColor(Color.BLUE);
+        g2d.drawRect(x, y, 1, 1);
+        g2d.setColor(FOREGROUND_COLOR);
         }
     }
 
