@@ -32,8 +32,8 @@ public class Main {
                    "0:00"
             );
             try {
-                TimeCalc timeCalc =
-                        new TimeCalc(startTime, overTime);
+                TimeCalcWindow timeCalc =
+                        new TimeCalcWindow(startTime, overTime);
             } catch(Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), e.getMessage(), JOptionPane.ERROR_MESSAGE);
             }

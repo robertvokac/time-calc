@@ -71,9 +71,9 @@ public class AnalogClock extends JPanel {
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
         g2d.setColor(highlight ? Color.BLUE : FOREGROUND_COLOR);
-        System.out.println("centerX=" + centerX);
-        System.out.println("centerY=" + centerY);
-        System.out.println("radius=" + radius);
+//        System.out.println("centerX=" + centerX);
+//        System.out.println("centerY=" + centerY);
+//        System.out.println("radius=" + radius);
         g2d.drawOval(1, 1, centerX * 2 - 4, centerY * 2 - 4);
         g2d.drawOval(2, 2, centerX * 2 - 4, centerY * 2 - 4);
 //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);

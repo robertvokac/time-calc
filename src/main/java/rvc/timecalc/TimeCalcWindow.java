@@ -18,10 +18,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 08.02.2024
  */
-public class TimeCalc {
+public class TimeCalcWindow {
     private static final String DEFAULT_OVERTIME = "0:00";
     private static final int WORKING_HOURS_LENGTH = 8;
     private static final int WORKING_MINUTES_LENGTH = 30;
@@ -41,7 +41,7 @@ public class TimeCalc {
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private boolean stopBeforeEnd = false;
 
-    public TimeCalc(String startTimeIn, String overTimeIn) {
+    public TimeCalcWindow(String startTimeIn, String overTimeIn) {
         this.startTime = startTimeIn;
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ? DEFAULT_OVERTIME : overTimeIn;
 
@@ -81,7 +81,7 @@ public class TimeCalc {
         text.setBackground(new Color(238,238,238));
         window.add(text);
 
-        window.setSize(800,350);
+        window.setSize(1050,350);
         window.setLayout(null);
         window.setVisible(true);
         window.setTitle("Time Calc");
@@ -99,6 +99,10 @@ public class TimeCalc {
         AnalogClock analogClock = new AnalogClock();
         analogClock.setBounds(550,10,200, 200);
         window.add(analogClock);
+
+        ProgressSquare progressSquare = new ProgressSquare();
+        progressSquare.setBounds(550 + analogClock.getWidth() + 10,10,200, 200);
+        window.add(progressSquare);
 
         StringBuilder sb = null;
         while (true) {
@@ -153,6 +157,7 @@ public class TimeCalc {
 
 //            double done = ((double)totalMinutesDone)/((double)totalMinutes);
               double done = ((double)totalMillisecondsDone)/((double)totalMilliseconds);
+              progressSquare.setDonePercent(done);
 
             String msg = "Done=" + formatter.format(done * 100) + "% Remains=" + String.format("%02d", hourRemains) + ":" + String
                     .format("%02d", minuteRemains) + " (" + String.format("%03d", (hourRemains * 60 + minuteRemains)) + " minute" + ((hourRemains * 60 + minuteRemains) > 1 ? "s" : " ") + ")" + " End=" + String
