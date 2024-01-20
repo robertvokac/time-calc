@@ -64,15 +64,11 @@ public class TimeCalc {
 
         JFrame window=new JFrame();
 
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.setBounds(10,260,500, 10);
-        window.add(progressBar);
-
         JButton restartButton=new JButton("Restart");
         JButton exitButton=new JButton("Exit");
 
-        restartButton.setBounds(280,300,100, 30);
-        exitButton.setBounds(390,300,100, 30);
+        restartButton.setBounds(280,260,100, 30);
+        exitButton.setBounds(390,260,100, 30);
 
         window.add(restartButton);
         window.add(exitButton);
@@ -83,7 +79,7 @@ public class TimeCalc {
         text.setBackground(new Color(238,238,238));
         window.add(text);
 
-        window.setSize(550,390);
+        window.setSize(550,350);
         window.setLayout(null);
         window.setVisible(true);
         window.setTitle("Time Calc");
@@ -140,7 +136,6 @@ public class TimeCalc {
                                  .format("%02d", endMinute);
 
             //if(System.getProperty("progress")!=null) {
-            progressBar.setValue((done * 100) < 0 ? 0 : ((int)(done*100)));
                 printPercentToAscii(done, msg, sb);
 //            } else {
 //                sb.append(msg);
