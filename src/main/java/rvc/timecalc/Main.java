@@ -19,7 +19,7 @@ public class Main {
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     null,
-                    ""
+                    "7:00"
             );
             String overTime = (String) JOptionPane.showInputDialog(
                     null,

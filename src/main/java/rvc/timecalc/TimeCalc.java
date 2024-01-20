@@ -79,7 +79,7 @@ public class TimeCalc {
         text.setBackground(new Color(238,238,238));
         window.add(text);
 
-        window.setSize(550,350);
+        window.setSize(800,350);
         window.setLayout(null);
         window.setVisible(true);
         window.setTitle("Time Calc");
@@ -94,6 +94,9 @@ public class TimeCalc {
         exitButton.addActionListener(e -> System.exit(0));
         restartButton.addActionListener(e -> {window.setVisible(false); stopBeforeEnd = true;});
 
+        AnalogClock analogClock = new AnalogClock();
+        analogClock.setBounds(550,10,200, 200);
+        window.add(analogClock);
 
         StringBuilder sb = null;
         while (true) {
