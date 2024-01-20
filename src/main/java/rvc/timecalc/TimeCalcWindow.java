@@ -40,6 +40,7 @@ public class TimeCalcWindow {
     private final Set<String> alreadyShownTimes = new HashSet<>();
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private boolean stopBeforeEnd = false;
+    private boolean vtipyShown = false;
 
     public TimeCalcWindow(String startTimeIn, String overTimeIn) {
         this.startTime = startTimeIn;
@@ -169,7 +170,8 @@ public class TimeCalcWindow {
 //            } else {
 //                sb.append(msg);
 //            }
-            if(hourRemains == 0 && minuteRemains ==1) {
+            if(hourRemains == 0 && minuteRemains ==1 && !vtipyShown) {
+                vtipyShown = true;
                 Vtipy.showRandom();
             }
             if(hourRemains == 0 && minuteRemains <= 3) {
