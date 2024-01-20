@@ -205,9 +205,9 @@ public class TimeCalc {
             if(image != null) {
 //                toasterManager.setToasterWidth(600);
 //                toasterManager.setToasterHeight(400);
-                toasterManager.showToaster( new ImageIcon(image), "Progress: " + (formatter2.format(percent*100)) + "%" );
+                toasterManager.showToaster( new ImageIcon(image), "Progress: " + (percentInt) + "%" );
             } else {
-                toasterManager.showToaster( "Progress: " + (formatter2.format(percent*100)) + "%" );
+                toasterManager.showToaster( "Progress: " + (percentInt) + "%" );
             }
 
 
