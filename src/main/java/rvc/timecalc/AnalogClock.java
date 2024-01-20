@@ -16,8 +16,8 @@ import java.util.GregorianCalendar;
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends JPanel {
 
-    private static final Color FOREGROUND_COLOR  = new Color(230, 230, 230);
-    private static final Color BACKGROUND_COLOR  = new Color(240,240,240);
+    private static final Color FOREGROUND_COLOR  = new Color(220, 220, 220);
+    private static final Color BACKGROUND_COLOR  = new Color(238,238,238);
 
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
