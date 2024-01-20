@@ -255,7 +255,7 @@ public class TimeCalc {
             if(i < 0) {
                 i = 0;
             }
-            sb.append(index == 2 ? (msg + createSpaces((percentInt < 0 ? -1 : 0) + 9 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0))) : createSpaces(58));
+            sb.append(index == 2 ? (msg + createSpaces((percentInt < 0 ? -1 : 0) + 9 + (percentInt<10 ? 1: 0) + (percentInt==100 ? -1: 0) - 3)) : createSpaces(58));
             for(int j = 1; j <= i; j++) {
                 sb.append("#");
             }
