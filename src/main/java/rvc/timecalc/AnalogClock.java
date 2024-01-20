@@ -39,8 +39,8 @@ public class AnalogClock extends JPanel {
         int hour = time.get(Calendar.HOUR_OF_DAY);
 
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
-        drawHand(g2d, side / 2 - 20, minute / 60.0, 2.0f, Color.BLUE);
-        drawHand(g2d, side / 2 - 40, hour / 12.0, 4.0f, Color.BLACK);
+        drawHand(g2d, side / 2 - 20, minute / 60.0 + second / 60.0 / 60.0, 2.0f, Color.BLUE);
+        drawHand(g2d, side / 2 - 40, hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12, 4.0f, Color.BLACK);
 
         // Draw clock numbers and circle
         drawClockFace(g2d, centerX, centerY, side / 2 - 40);
