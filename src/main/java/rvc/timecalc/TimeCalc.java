@@ -146,6 +146,11 @@ public class TimeCalc {
             if(hourRemains == 0 && minuteRemains ==1) {
                 Vtipy.showRandom();
             }
+            if(hourRemains == 0 && minuteRemains <= 3) {
+                analogClock.setHighlight(true);
+                text.setForeground(Color.BLUE);
+            }
+
             if(hourRemains <= 0 && minuteRemains <= 0) {
                 sb.append("\nCongratulation :-) It is the time to go home.");
                 Toaster toasterManager = new Toaster();

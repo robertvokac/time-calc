@@ -19,6 +19,12 @@ public class AnalogClock extends JPanel {
     private static final Color FOREGROUND_COLOR  = new Color(220, 220, 220);
     private static final Color BACKGROUND_COLOR  = new Color(238,238,238);
 
+    private boolean highlight = false;
+
+    public void setHighlight(boolean highlight) {
+        this.highlight = highlight;
+    }
+
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
         setBackground(BACKGROUND_COLOR);
@@ -56,7 +62,7 @@ public class AnalogClock extends JPanel {
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        g2d.setColor(FOREGROUND_COLOR);
+        g2d.setColor(highlight ? Color.BLUE : FOREGROUND_COLOR);
         g2d.setStroke(new BasicStroke(stroke));
         g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
@@ -64,7 +70,7 @@ public class AnalogClock extends JPanel {
     private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.setColor(FOREGROUND_COLOR);
+        g2d.setColor(highlight ? Color.BLUE : FOREGROUND_COLOR);
         System.out.println("centerX=" + centerX);
         System.out.println("centerY=" + centerY);
         System.out.println("radius=" + radius);
