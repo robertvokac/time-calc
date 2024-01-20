@@ -140,6 +140,9 @@ public class TimeCalc {
 //            } else {
 //                sb.append(msg);
 //            }
+            if(hourRemains == 0 && minuteRemains ==1) {
+                Vtipy.showRandom();
+            }
             if(hourRemains <= 0 && minuteRemains <= 0) {
                 sb.append("\nCongratulation :-) It is the time to go home.");
                 Toaster toasterManager = new Toaster();
