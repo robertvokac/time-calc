@@ -12,7 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         while(true) {
-            String startTime = (String) JOptionPane.showInputDialog(
+            boolean test = false;
+            String startTime = test ? "7:00" : (String) JOptionPane.showInputDialog(
                     null,
                     "Start Time:",
                     "Start Time",
@@ -21,14 +22,14 @@ public class Main {
                     null,
                     "7:00"
             );
-            String overTime = (String) JOptionPane.showInputDialog(
+            String overTime = test ? "0:00" : (String) JOptionPane.showInputDialog(
                     null,
                     "Overtime:",
                     "Overtime",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     null,
-                    "0:00"
+                   "0:00"
             );
             try {
                 TimeCalc timeCalc =

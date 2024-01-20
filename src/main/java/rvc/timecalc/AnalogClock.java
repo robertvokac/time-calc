@@ -16,9 +16,12 @@ import java.util.GregorianCalendar;
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends JPanel {
 
+    private static final Color FOREGROUND_COLOR  = new Color(230, 230, 230);
+    private static final Color BACKGROUND_COLOR  = new Color(240,240,240);
+
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
-        setBackground(new Color(240,240,240));
+        setBackground(BACKGROUND_COLOR);
         new Timer(1000, e -> repaint()).start();
     }
 
@@ -53,20 +56,19 @@ public class AnalogClock extends JPanel {
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.setColor(FOREGROUND_COLOR);
         g2d.setStroke(new BasicStroke(stroke));
-        g2d.drawLine(getWidth() / 2 - 4, getHeight() / 2 + 4, endX - 4, endY + 4);
+        g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
 
-    // Added method to draw the clock face and numbers
     private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.setColor(FOREGROUND_COLOR);
         System.out.println("centerX=" + centerX);
         System.out.println("centerY=" + centerY);
         System.out.println("radius=" + radius);
-        g2d.drawOval(1, 1, centerX * 2 - 2, centerY * 2 - 2);
+        g2d.drawOval(1, 1, centerX * 2 - 4, centerY * 2 - 4);
         g2d.drawOval(2, 2, centerX * 2 - 4, centerY * 2 - 4);
 //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
 //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
