@@ -27,7 +27,7 @@ public class TimeCalc {
     private static final int WORKING_MINUTES_LENGTH = 30;
     public static final String WALL = "||";
     private static final String NEW_LINE = "\n";
-    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final String startTime;
     private final String overTime;
     private final int startHour;
@@ -59,8 +59,9 @@ public class TimeCalc {
             endHour = endHour + 1;
         }
         this.totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+        int totalSeconds = totalMinutes * 60;
 
-        NumberFormat formatter = new DecimalFormat("#0.00");
+        NumberFormat formatter = new DecimalFormat("#0.0000");
 
         JFrame window=new JFrame();
 
@@ -108,30 +109,44 @@ public class TimeCalc {
             sb = new StringBuilder();
             LocalDateTime now = LocalDateTime.now();
             String nowString = DATE_TIME_FORMATTER.format(now);
-            if (alreadyShownTimes.contains(nowString)) {
-                //nothing to do
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-
-                }
-                continue;
-            } else {
-                alreadyShownTimes.add(nowString);
-            }
+//            if (alreadyShownTimes.contains(nowString)) {
+//                //nothing to do
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//
+//                }
+//                continue;
+//            } else {
+//                alreadyShownTimes.add(nowString);
+//            }
             int hourNow = Integer.parseInt(nowString.split(":")[0]);
             int minuteNow = Integer.parseInt(nowString.split(":")[1]);
-
+            int secondNow = Integer.parseInt(nowString.split(":")[2]);
             int hourRemains = endHour - hourNow;
             int minuteRemains = endMinute - minuteNow;
             if (minuteRemains < 0) {
                 minuteRemains = minuteRemains + 60;
                 hourRemains = hourRemains - 1;
             }
+            int secondsRemains = 60 - secondNow;
+
+
             int hourDone = WORKING_HOURS_LENGTH - overtimeHour - hourRemains;
             int minutesDone = 30 - overtimeMinute - minuteRemains;
+            int secondsDone = secondNow;
+
+
             int totalMinutesDone = hourDone * 60 + minutesDone;
-            double done = ((double)totalMinutesDone)/((double)totalMinutes);
+            int totalSecondsDone = totalMinutesDone * 60 + secondsDone;
+
+//            System.out.println(hourNow + " " + minuteNow + " " + secondNow);
+//            System.out.println(hourRemains + " " + minuteRemains + " " + secondsRemains);
+//            System.out.println(hourDone + " " + minutesDone + " " + secondsDone + "\n");
+//            System.out.println("totalSecondsDone=" + totalSecondsDone);
+
+//            double done = ((double)totalMinutesDone)/((double)totalMinutes);
+              double done = ((double)totalSecondsDone)/((double)totalSeconds);
 
             String msg = "Done=" + formatter.format(done * 100) + "% Remains=" + String.format("%02d", hourRemains) + ":" + String
                     .format("%02d", minuteRemains) + " (" + String.format("%03d", (hourRemains * 60 + minuteRemains)) + " minute" + ((hourRemains * 60 + minuteRemains) > 1 ? "s" : " ") + ")" + " End=" + String
@@ -176,7 +191,7 @@ public class TimeCalc {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
 
             }
