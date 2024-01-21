@@ -17,7 +17,12 @@ public class ProgressSquare extends JPanel {
     private int side = 0;
     private int square;
     private double donePercent = 0;
+
     private boolean highlight = false;
+
+    public void setHighlight(boolean highlight) {
+        this.highlight = highlight;
+    }
 
     public ProgressSquare() {
         setPreferredSize(new Dimension(400, 400));
@@ -57,10 +62,6 @@ public class ProgressSquare extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-
-        if(donePercent >= 0.99) {
-            highlight = true;
-        }
         if (side == 0) {
             this.side = Math.min(getWidth(), getHeight());
             this.square = side * side;

@@ -188,6 +188,7 @@ public class TimeCalcWindow {
             }
             if (hourRemains == 0 && minuteRemains <= 3) {
                 analogClock.setHighlight(true);
+                progressSquare.setHighlight(true);
                 text.setForeground(Color.BLUE);
             }
 
