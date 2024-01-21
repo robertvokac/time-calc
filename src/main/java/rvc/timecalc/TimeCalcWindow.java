@@ -72,19 +72,20 @@ public class TimeCalcWindow {
         JButton restartButton = new JButton("Restart");
         JButton exitButton = new JButton("Exit");
 
-        restartButton.setBounds(280, 260, 100, 30);
-        exitButton.setBounds(390, 260, 100, 30);
+
 
         window.add(restartButton);
         window.add(exitButton);
         JTextPane text = new JTextPane();
-        text.setBounds(10, 10, 540, 250);
+        text.setBounds(10, 10 + 210 + 10, 540, 250);
         text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         text.setForeground(Color.GRAY);
         text.setBackground(new Color(238, 238, 238));
         window.add(text);
+        restartButton.setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
+        exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
 
-        window.setSize(1050, 350);
+        window.setSize(520 + 20, 580);
         window.setLayout(null);
         window.setVisible(true);
         window.setTitle("Time Calc");
@@ -103,12 +104,12 @@ public class TimeCalcWindow {
         });
 
         AnalogClock analogClock = new AnalogClock();
-        analogClock.setBounds(550, 10, 200, 200);
+        analogClock.setBounds(10, 10, 200, 200);
         window.add(analogClock);
 
         ProgressSquare progressSquare = new ProgressSquare();
         progressSquare
-                .setBounds(550 + analogClock.getWidth() + 10, 10, 200, 200);
+                .setBounds(10 + analogClock.getWidth() + 10, 10, 200, 200);
         window.add(progressSquare);
 
         StringBuilder sb = null;
