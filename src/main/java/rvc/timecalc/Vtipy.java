@@ -14,8 +14,8 @@ public class Vtipy {
      */
     private static final String[] array = new String[] {
             "\"Když dosáhnete mého věku, 65 let, stanou se tři věci,\" vypráví důchodce Karel. \"Nejprve vás začne opouštět paměť a na ty dvě další si teď nemůžu vzpomenout.\"",
-"Žán, odjíždíme zrovna někam? \"Ne, pane.\" \"Tak to mi právě ukradli auto.\"",
-    "Jestli se plaváním hubne, tak co dělají velryby špatně?",
+            "Žán, odjíždíme zrovna někam? \"Ne, pane.\" \"Tak to mi právě ukradli auto.\"",
+            "Jestli se plaváním hubne, tak co dělají velryby špatně?",
             "\"Tak co, Pepíčku, kde jsi byl o prázdninách?\"\n"
             + "\n"
             + "\"S maminkou a jejím novým přítelem u moře.\"\n"
@@ -84,14 +84,14 @@ public class Vtipy {
             + "\"Takže ty se opičíš po rodičích, co? To mi tedy řekni, co bys dělal, kdyby tvoje máma byla dementní a tvůj otec homosexuál?\"\n"
             + "\n"
             + "A Pepíček odpoví: \"Tak to bych nejspíš fandil Spartě.\"",
-"Jsou Windows XP vir?\n"
-+ "\n"
-+ "???\n"
-+ "\n"
-+ "Samozřejmě nejsou, nebo\u009D vir se šíří bezplatně, má úsporný kód a něco dělá.",
-   "Víte, jaký je rozdíl mezi Windows a listím? . . . . . . . Listí padá jen na podzim.",
-       "Jeden opilec si zkrátil cestu domů přes hřbitov. Tam však spadl do vykopané jámy a usnul. Ráno se prochladlý probudil a nadává: Sakra, to je kosa. A paní, co byla kousek dál položit kytičku, povídá: Tak co ty ses odkopal?",
-"Co ma spolecneho lahev a blondyna? - Od hrdla vyse jsou obe prazdne.",
+            "Jsou Windows XP vir?\n"
+            + "\n"
+            + "???\n"
+            + "\n"
+            + "Samozřejmě nejsou, nebo\u009D vir se šíří bezplatně, má úsporný kód a něco dělá.",
+            "Víte, jaký je rozdíl mezi Windows a listím? . . . . . . . Listí padá jen na podzim.",
+            "Jeden opilec si zkrátil cestu domů přes hřbitov. Tam však spadl do vykopané jámy a usnul. Ráno se prochladlý probudil a nadává: Sakra, to je kosa. A paní, co byla kousek dál položit kytičku, povídá: Tak co ty ses odkopal?",
+            "Co ma spolecneho lahev a blondyna? - Od hrdla vyse jsou obe prazdne.",
             "Vždy, když dávám večer děti spát, přemýšlím, jestli je mám 'Uložit' anebo 'Uložit jako'..",
             "Kolik je na světě Somálců?\n"
             + "\n"
@@ -134,6 +134,6 @@ public class Vtipy {
         t.setToasterColor(Color.GRAY);
         Font font = new Font("sans", Font.PLAIN, 16);
         t.setToasterMessageFont(font);
-        t.showToaster(array[((int) (Math.random() * ((double)array.length)))]);
+        t.showToaster(array[((int) (Math.random() * ((double) array.length)))]);
     }
 }

@@ -8,34 +8,35 @@ import javax.swing.JOptionPane;
  */
 public class Main {
 
-
-
     public static void main(String[] args) {
-        while(true) {
+        while (true) {
             boolean test = false;
-            String startTime = test ? "7:00" : (String) JOptionPane.showInputDialog(
-                    null,
-                    "Start Time:",
-                    "Start Time",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    "7:00"
-            );
-            String overTime = test ? "0:00" : (String) JOptionPane.showInputDialog(
-                    null,
-                    "Overtime:",
-                    "Overtime",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                   "0:00"
-            );
+            String startTime =
+                    test ? "7:00" : (String) JOptionPane.showInputDialog(
+                            null,
+                            "Start Time:",
+                            "Start Time",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "7:00"
+                    );
+            String overTime =
+                    test ? "0:00" : (String) JOptionPane.showInputDialog(
+                            null,
+                            "Overtime:",
+                            "Overtime",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "0:00"
+                    );
             try {
                 TimeCalcWindow timeCalc =
                         new TimeCalcWindow(startTime, overTime);
-            } catch(Exception e) {
-                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
+                        e.getMessage(), JOptionPane.ERROR_MESSAGE);
             }
         }
 

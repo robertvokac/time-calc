@@ -18,14 +18,10 @@ import java.util.GregorianCalendar;
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends JPanel {
 
-    private static final Color FOREGROUND_COLOR  = new Color(220, 220, 220);
-    private static final Color BACKGROUND_COLOR  = new Color(238,238,238);
+    private static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
+    private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
 
     private boolean highlight = false;
-
-    public void setHighlight(boolean highlight) {
-        this.highlight = highlight;
-    }
 
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
@@ -60,6 +56,18 @@ public class AnalogClock extends JPanel {
         });
     }
 
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Analog Clock");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new AnalogClock());
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public void setHighlight(boolean highlight) {
+        this.highlight = highlight;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -77,8 +85,11 @@ public class AnalogClock extends JPanel {
         int hour = time.get(Calendar.HOUR_OF_DAY);
 
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
-        drawHand(g2d, side / 2 - 20, minute / 60.0 + second / 60.0 / 60.0, 2.0f, Color.BLUE);
-        drawHand(g2d, side / 2 - 40, hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12, 4.0f, Color.BLACK);
+        drawHand(g2d, side / 2 - 20, minute / 60.0 + second / 60.0 / 60.0, 2.0f,
+                Color.BLUE);
+        drawHand(g2d, side / 2 - 40,
+                hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12, 4.0f,
+                Color.BLACK);
 
         // Draw clock numbers and circle
         drawClockFace(g2d, centerX, centerY, side / 2 - 40);
@@ -86,7 +97,7 @@ public class AnalogClock extends JPanel {
 
     private void drawHand(Graphics2D g2d, int length, double value,
             float stroke, Color color) {
-        length= length - 4;
+        length = length - 4;
         double angle = Math.PI * 2 * (value - 0.25);
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
@@ -100,13 +111,13 @@ public class AnalogClock extends JPanel {
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
         g2d.setColor(highlight ? Color.BLACK : FOREGROUND_COLOR);
-//        System.out.println("centerX=" + centerX);
-//        System.out.println("centerY=" + centerY);
-//        System.out.println("radius=" + radius);
+        //        System.out.println("centerX=" + centerX);
+        //        System.out.println("centerY=" + centerY);
+        //        System.out.println("radius=" + radius);
         g2d.drawOval(1, 1, centerX * 2 - 4, centerY * 2 - 4);
         g2d.drawOval(2, 2, centerX * 2 - 4, centerY * 2 - 4);
-//        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
-//        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
+        //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
+        //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
 
         for (int i = 1; i <= 12; i++) {
             double angle = Math.PI * 2 * (i / 12.0 - 0.25);
@@ -116,13 +127,5 @@ public class AnalogClock extends JPanel {
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Analog Clock");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new AnalogClock());
-        frame.pack();
-        frame.setVisible(true);
     }
 }
