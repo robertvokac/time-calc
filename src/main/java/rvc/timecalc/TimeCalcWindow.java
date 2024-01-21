@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
