@@ -305,20 +305,22 @@ public class TimeCalcWindow {
             index++;
         }
 
-        sb.append(createSpaces(58) + "||======||\n");
         int spacesTotal = 52;
         int spacesDone = (int) (percent * 52);
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
+        sb.append(createSpaces(58) + (spacesTodo == 0 ? "          \n": "||======||\n"));
+
+
         sb.append(
                 WALL + createSpaces(spacesDone) + " () " + createSpaces(
-                        spacesTodo) + WALL + (spacesTodo == 0 ? "  GO  " :
-                        "XXXXXX") + WALL + NEW_LINE +
+                        spacesTodo) + /*WALL +*/ (spacesTodo == 0 ? "  \\☼☼☼☼/   " :
+                        "|     _  |") + /*WALL +*/ NEW_LINE +
                 WALL + createSpaces(spacesDone) + "/||\\" + createSpaces(
-                        spacesTodo) + WALL + (spacesTodo == 0 ? " HOME " :
-                        "XXXXXX") + WALL + NEW_LINE +
+                        spacesTodo) + /*WALL +*/ (spacesTodo == 0 ? "  ☼☼☼☼☼☼  " :
+                        "|    |   |") + /*WALL +*/ NEW_LINE +
                 WALL + createSpaces(spacesDone) + " /\\ " + createSpaces(
-                        spacesTodo) + WALL + (spacesTodo == 0 ? "  !!  " :
-                        "XXXXXX") + WALL + NEW_LINE +
+                        spacesTodo) + /*WALL +*/ (spacesTodo == 0 ? "  /☼☼☼☼\\   " :
+                        "|        |") + /*WALL +*/ NEW_LINE +
                 "===================================================================="
                 + NEW_LINE
         );
