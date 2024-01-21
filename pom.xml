@@ -48,35 +48,35 @@
                 ...
                 -->
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>rvc.timecalc.Main</mainClass>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Build-Date>${timestamp}</Build-Date>
-                        </manifestEntries>
-                    </archive>
-                    <!--                    <descriptorRefs>-->
-                    <!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
-                    <!--                    </descriptorRefs>-->
-                    <descriptors>
-                        <descriptor>./src/main/resources/install.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>rvc.timecalc.Main</mainClass>-->
+<!--                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
+<!--                        </manifest>-->
+<!--                        <manifestEntries>-->
+<!--                            <Build-Date>${timestamp}</Build-Date>-->
+<!--                        </manifestEntries>-->
+<!--                    </archive>-->
+<!--                    &lt;!&ndash;                    <descriptorRefs>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <descriptorRef>jar-with-dependencies</descriptorRef>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </descriptorRefs>&ndash;&gt;-->
+<!--                    <descriptors>-->
+<!--                        <descriptor>./src/main/resources/install.xml</descriptor>-->
+<!--                    </descriptors>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
+<!--                        <phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
