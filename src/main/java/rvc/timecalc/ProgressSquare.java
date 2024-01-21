@@ -43,15 +43,14 @@ public class ProgressSquare extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-
-        System.out.println("square=" + square);
+//        System.out.println("square=" + square);
         int dotNumber = (int)(donePercent * square);
         int y = dotNumber / side;
         int x = dotNumber - y * side;
 
-        System.out.println("dotNumber=" + dotNumber);
-        System.out.println("x=" + x);
-        System.out.println("y=" + y);
+//        System.out.println("dotNumber=" + dotNumber);
+//        System.out.println("x=" + x);
+//        System.out.println("y=" + y);
         if(y > 1) {
         g2d.fillRect(side - 4, side - 4, 4, 4);
         g2d.fillRect(1, side - 4, 4, 4);
