@@ -67,6 +67,5 @@ public class Vtipy {
         Font font = new Font("sans", Font.PLAIN, 16);
         t.setToasterMessageFont(font);
         t.showToaster(array[((int) (Math.random() * ((double) array.length)))]);
-        System.out.println("Nalezeno x vtipů: " + array.length);
     }
 }

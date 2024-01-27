@@ -174,6 +174,11 @@ public class AnalogClock extends JPanel {
                 //}
             }
         }
+        if(Math.random() >  (1 - (1/200))) {
+            for(int i = 0; i<12; i++) {
+                colors[i] = i == 11 ? colors[0] :colors[i + 1];
+            }
+        }
         for (int i = 1; i <= 12; i++) {
             double angle = Math.PI * 2 * (i / 12.0 - 0.25);
             int dx = centerX + (int) ((radius + 20) * Math.cos(angle)) - 4;
