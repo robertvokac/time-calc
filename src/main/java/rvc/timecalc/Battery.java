@@ -19,6 +19,10 @@ public class Battery extends JPanel {
     public static final Color MEDIUM = new Color(255, 204, 153);
     public static final Color HIGH = new Color(204, 255, 204);
     public static final Color HIGHEST = new Color(153, 255, 153);
+    public static final Color LOW_HIGHLIGHTED = Color.red;
+    public static final Color MEDIUM_HIGHLIGHTED = Color.ORANGE;
+    public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
+    public static final Color HIGHEST_HIGHLIGHTED = Color.green;
     private int height_ = 0;
     private int square;
     private double donePercent = 0;
@@ -43,7 +47,7 @@ public class Battery extends JPanel {
     public Battery() {
         setPreferredSize(new Dimension(40, 100));
         setBackground(BACKGROUND_COLOR);
-        new Timer(1000, e -> repaint()).start();
+        new Timer(100, e -> repaint()).start();
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -88,6 +92,8 @@ public class Battery extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        if(Math.random() > 0.9)
+        {highlight = Utils.highlightTxt.exists();}
         if (height_ == 0) {
             this.height_ = Math.min(getWidth(), getHeight());
             this.width_= (int)(this.height_* 0.6);
@@ -99,8 +105,13 @@ public class Battery extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.fillRect(width_/4,0,width_, height_);
-        g2d.setColor(donePercent < 0.1 ? LOW : (donePercent < 0.75 ?
-                MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
+        if(highlight) {
+            g2d.setColor(donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
+                    MEDIUM_HIGHLIGHTED : (donePercent < 0.9 ? HIGH_HIGHLIGHTED : HIGHEST_HIGHLIGHTED)));
+        } else {
+            g2d.setColor(donePercent < 0.1 ? LOW : (donePercent < 0.75 ?
+                    MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
+        }
         g2d.fillRect(width_/4,height_ - (int)(height_ * donePercent),width_, (int)(height_ * donePercent));
         g2d.setColor(Color.LIGHT_GRAY);
         g2d.drawString(String.valueOf((int)(donePercent * 100)) + "%",width_/2, height_/2);

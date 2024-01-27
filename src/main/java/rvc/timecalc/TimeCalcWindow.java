@@ -14,6 +14,8 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,8 +76,6 @@ public class TimeCalcWindow {
         JButton restartButton = new JButton("Restart");
         JButton exitButton = new JButton("Exit");
 
-
-
         window.add(jokeButton);
         window.add(restartButton);
         window.add(exitButton);
@@ -89,7 +89,7 @@ public class TimeCalcWindow {
         restartButton.setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
         exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
 
-        window.setSize(520 + 20, 580);
+        window.setSize(520 + 20 + 100, 580);
         window.setLayout(null);
         window.setVisible(true);
         window.setTitle("Time Calc");
@@ -113,8 +113,7 @@ public class TimeCalcWindow {
         window.add(analogClock);
 
         ProgressSquare progressSquare = new ProgressSquare();
-        progressSquare
-                .setBounds(10 + analogClock.getWidth() + 10, 10, 200, 200);
+        progressSquare.setBounds(10 + analogClock.getWidth() + 10, 10, 200, 200);
         window.add(progressSquare);
 
         ProgressCircle progressCircle = new ProgressCircle();
@@ -126,6 +125,10 @@ public class TimeCalcWindow {
         battery.setBounds(progressCircle.getBounds().x, progressCircle.getY() + 10 + progressCircle.getHeight(), 90, 140);
         window.add(battery);
 
+        Battery batteryForWeek = new Battery();
+        batteryForWeek.setBounds(battery.getBounds().x + battery.getWidth(), battery.getY(), 90, 140);
+        window.add(batteryForWeek);
+
 
 
         if(Utils.highlightTxt.exists()) {
@@ -133,6 +136,7 @@ public class TimeCalcWindow {
             progressSquare.setHighlight(true);
             progressCircle.setHighlight(true);
             battery.setHighlight(true);
+            batteryForWeek.setHighlight(true);
         }
         StringBuilder sb = null;
         while (true) {
@@ -190,6 +194,11 @@ public class TimeCalcWindow {
             progressSquare.setDonePercent(done);
             progressCircle.setDonePercent(done);
             battery.setDonePercent(done);
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            int weekDayWhenMondayIsOne =  cal.get(Calendar.DAY_OF_WEEK) - 1;
+            batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0 || weekDayWhenMondayIsOne == 6) ? 100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
 
             int totalSecondsRemains = (hourRemains * 60 * 60 + minuteRemains * 60 + secondsRemains);
             int totalMillisecondsRemains = totalSecondsRemains * 1000 + millisecondsRemains;

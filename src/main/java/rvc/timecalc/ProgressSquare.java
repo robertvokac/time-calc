@@ -38,7 +38,7 @@ public class ProgressSquare extends JPanel {
     public ProgressSquare() {
         setPreferredSize(new Dimension(400, 400));
         setBackground(BACKGROUND_COLOR);
-        new Timer(1000, e -> repaint()).start();
+        new Timer(100, e -> repaint()).start();
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
