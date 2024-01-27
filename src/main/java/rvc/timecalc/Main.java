@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         while (true) {
-            boolean test = true;
+            boolean test = false;
             File starttimeTxt = new File("starttime.txt");
             File overtimeTxt = new File("overtime.txt");
             String lastStartTime = Utils.readTextFromFile(starttimeTxt);
