@@ -20,22 +20,6 @@ public class ProgressCircle extends JPanel {
     private int side = 0;
     private double donePercent = 0;
 
-    private boolean highlight = false;
-
-    public void setHighlight(boolean highlight) {
-        this.highlight = highlight;
-        if (highlight && !Utils.highlightTxt.exists()) {
-            try {
-                Utils.highlightTxt.createNewFile();
-            } catch (IOException ioException) {
-                System.out.println(ioException);
-            }
-        }
-        if (!highlight && Utils.highlightTxt.exists()) {
-            Utils.highlightTxt.delete();
-        }
-    }
-
     public ProgressCircle() {
         setPreferredSize(new Dimension(200, 200));
         setBackground(BACKGROUND_COLOR);
@@ -43,17 +27,7 @@ public class ProgressCircle extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                highlight = !highlight;
-                if (highlight && !Utils.highlightTxt.exists()) {
-                    try {
-                        Utils.highlightTxt.createNewFile();
-                    } catch (IOException ioException) {
-                        System.out.println(e);
-                    }
-                }
-                if (!highlight && Utils.highlightTxt.exists()) {
-                    Utils.highlightTxt.delete();
-                }
+                Utils.highlighted.flip();
             }
 
             @Override
@@ -84,13 +58,12 @@ public class ProgressCircle extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        highlight = Utils.highlightTxt.exists();
         if (side == 0) {
             this.side = Math.min(getWidth(), getHeight());
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(highlight ? Color.darkGray : FOREGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.get() ? Color.darkGray : FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 //        if (highlight) {
@@ -106,7 +79,7 @@ public class ProgressCircle extends JPanel {
 
         g2d.fillArc(0,0,side,side,90, -(int) angleDouble);
         int side2 = ((int)(side/2));
-        g2d.setColor(highlight ? new Color(105, 175, 236) : FOREGROUND_COLOR2);
+        g2d.setColor(Utils.highlighted.get() ? new Color(105, 175, 236) : FOREGROUND_COLOR2);
         g2d.fillArc(0+(side2/2),0+(side2/2),side2, side2,90, -(int) angleDouble2);
     }
 

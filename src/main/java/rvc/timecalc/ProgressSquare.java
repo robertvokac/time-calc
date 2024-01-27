@@ -19,22 +19,6 @@ public class ProgressSquare extends JPanel {
     private int square;
     private double donePercent = 0;
 
-    private boolean highlight = false;
-
-    public void setHighlight(boolean highlight) {
-        this.highlight = highlight;
-        if(highlight && !Utils.highlightTxt.exists()) {
-            try {
-                Utils.highlightTxt.createNewFile();
-            } catch (IOException ioException) {
-                System.out.println(ioException);
-            }
-        }
-        if(!highlight && Utils.highlightTxt.exists()) {
-            Utils.highlightTxt.delete();
-        }
-    }
-
     public ProgressSquare() {
         setPreferredSize(new Dimension(400, 400));
         setBackground(BACKGROUND_COLOR);
@@ -42,17 +26,7 @@ public class ProgressSquare extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                highlight = !highlight;
-                if(highlight && !Utils.highlightTxt.exists()) {
-                    try {
-                        Utils.highlightTxt.createNewFile();
-                    } catch (IOException ioException) {
-                        System.out.println(e);
-                    }
-                }
-                if(!highlight && Utils.highlightTxt.exists()) {
-                    Utils.highlightTxt.delete();
-                }
+                Utils.highlighted.flip();
             }
 
             @Override
@@ -103,26 +77,26 @@ public class ProgressSquare extends JPanel {
         //        System.out.println("x=" + x);
         //        System.out.println("y=" + y);
         if (y > 1) {
-            if(highlight) g2d.setColor(Color.GRAY);
+            if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
             g2d.fillRect(side - 4, side - 4, 4, 4);
             g2d.fillRect(1, side - 4, 4, 4);
 
             g2d.setColor(FOREGROUND_COLOR);
             g2d.fillRect(1, 1, side, y - 1);
             if (x > 1) {
-                if(highlight) g2d.setColor(Color.GRAY);
+                if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
                 g2d.drawRect(1, y, x - 1, 1);
             }
-            if(highlight) g2d.setColor(Color.GRAY);
+            if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
             g2d.fillRect(side - 4, 1, 4, 4);
             g2d.fillRect(1, 1, 4, 4);
 
-            if(highlight) g2d.setColor(Color.GRAY);
+            if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
             g2d.drawLine(1, 1, x, y);
             //            g2d.drawLine(1+1, 1+1, x+1, y+1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
-            if(highlight) {
+            if(Utils.highlighted.get()) {
                 g2d.setColor(Color.BLUE);
                 g2d.drawLine(x - 10, y - 10, x + 10, y + 10);
                 g2d.drawLine(x + 10, y - 10, x - 10, y + 10);

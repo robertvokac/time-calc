@@ -21,7 +21,8 @@ public class Utils {
      * Count of bytes per one kilobyte.
      */
     private static final int COUNT_OF_BYTES_PER_ONE_KILOBYTE = 1024;
-    public static final File highlightTxt = new File("highlight.txt");
+    public static final BooleanHolder highlighted = new BooleanHolder();
+
     /**
      * Writes text to a file.
      * @param file file

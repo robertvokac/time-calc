@@ -28,23 +28,8 @@ public class Battery extends JPanel {
     private int height_ = 0;
     private double donePercent = 0;
 
-    private boolean highlight = false;
     private int width_;
     NumberFormat formatter3 = new DecimalFormat("#0.000");
-
-    public void setHighlight(boolean highlight) {
-        this.highlight = highlight;
-        if(highlight && !Utils.highlightTxt.exists()) {
-            try {
-                Utils.highlightTxt.createNewFile();
-            } catch (IOException ioException) {
-                System.out.println(ioException);
-            }
-        }
-        if(!highlight && Utils.highlightTxt.exists()) {
-            Utils.highlightTxt.delete();
-        }
-    }
 
     public Battery() {
         setPreferredSize(new Dimension(40, 100));
@@ -53,17 +38,7 @@ public class Battery extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                highlight = !highlight;
-                if(highlight && !Utils.highlightTxt.exists()) {
-                    try {
-                        Utils.highlightTxt.createNewFile();
-                    } catch (IOException ioException) {
-                        System.out.println(e);
-                    }
-                }
-                if(!highlight && Utils.highlightTxt.exists()) {
-                    Utils.highlightTxt.delete();
-                }
+                Utils.highlighted.flip();
             }
 
             @Override
@@ -94,7 +69,6 @@ public class Battery extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        highlight = Utils.highlightTxt.exists();
         if (height_ == 0) {
             this.height_ = Math.min(getWidth(), getHeight());
             this.width_= (int)(this.height_* 0.6);
@@ -106,7 +80,7 @@ public class Battery extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.fillRect(width_/4,0,width_, height_);
-        if(highlight) {
+        if(Utils.highlighted.get()) {
             g2d.setColor(donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
                     MEDIUM_HIGHLIGHTED : (donePercent < 0.9 ? HIGH_HIGHLIGHTED : HIGHEST_HIGHLIGHTED)));
         } else {
@@ -114,7 +88,7 @@ public class Battery extends JPanel {
                     MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
         }
         g2d.fillRect(width_/4,height_ - (int)(height_ * donePercent),width_, (int)(height_ * donePercent));
-        g2d.setColor(highlight ? Color.BLACK : Color.LIGHT_GRAY);
+        g2d.setColor(Utils.highlighted.get() ? Color.BLACK : Color.LIGHT_GRAY);
         g2d.drawString(
                 formatter3.format(donePercent * 100) + "%",((int)(width_ * 0.4)), height_ / 2);
 

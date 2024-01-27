@@ -129,15 +129,6 @@ public class TimeCalcWindow {
         batteryForWeek.setBounds(battery.getBounds().x + battery.getWidth(), battery.getY(), 90, 140);
         window.add(batteryForWeek);
 
-
-
-        if(Utils.highlightTxt.exists()) {
-            analogClock.setHighlight(true);
-            progressSquare.setHighlight(true);
-            progressCircle.setHighlight(true);
-            battery.setHighlight(true);
-            batteryForWeek.setHighlight(true);
-        }
         StringBuilder sb = null;
         while (true) {
             if (stopBeforeEnd) {
@@ -221,8 +212,7 @@ public class TimeCalcWindow {
                 Vtipy.showRandom();
             }
             if (hourRemains == 0 && minuteRemains <= 3) {
-                analogClock.setHighlight(true);
-                progressSquare.setHighlight(true);
+                Utils.highlighted.set(true);
                 text.setForeground(Color.BLUE);
             }
 
@@ -257,10 +247,8 @@ public class TimeCalcWindow {
 
             }
 
-            boolean exists = Utils.highlightTxt.exists();
-            analogClock.setHighlight(exists);
-            progressSquare.setHighlight(exists);
-            text.setForeground(exists ? Color.BLACK : Color.GRAY);
+
+            text.setForeground(Utils.highlighted.get() ? Color.BLACK : Color.GRAY);
         }
         window.setVisible(false);
         window.dispose();
