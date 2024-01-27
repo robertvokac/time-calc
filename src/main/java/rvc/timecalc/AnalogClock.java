@@ -15,8 +15,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends JPanel {
@@ -26,6 +30,7 @@ public class AnalogClock extends JPanel {
 
     private boolean highlight = false;
     private boolean coloured = false;
+    private int side;
 
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
@@ -90,7 +95,7 @@ public class AnalogClock extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int side = Math.min(getWidth(), getHeight());
+        this.side = Math.min(getWidth(), getHeight());
         int centerX = getWidth() / 2;
         int centerY = getHeight() / 2;
 
@@ -178,7 +183,13 @@ public class AnalogClock extends JPanel {
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }
-        g2d.setColor(highlight ? Color.BLACK : FOREGROUND_COLOR);
+        if (coloured) {
+            g2d.setColor(highlight ? Color.BLACK : FOREGROUND_COLOR);
+            g2d.setFont(new Font("sans", Font.BOLD, 12));
+            DateFormat formatter = new SimpleDateFormat("EEEE : yyyy-MM-dd", Locale.ENGLISH);
+            g2d.drawString(formatter.format(new Date()), ((int) (side * 0.25)),
+                    ((int) (side * 0.35)));
+        }
     }
 
 
