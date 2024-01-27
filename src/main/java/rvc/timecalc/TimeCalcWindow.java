@@ -72,10 +72,12 @@ public class TimeCalcWindow {
 
         JFrame window = new JFrame();
 
+        JButton weatherButton = new JButton("Weather");
         JButton jokeButton = new JButton("Joke");
         JButton restartButton = new JButton("Restart");
         JButton exitButton = new JButton("Exit");
 
+        //window.add(weatherButton);
         window.add(jokeButton);
         window.add(restartButton);
         window.add(exitButton);
@@ -85,7 +87,8 @@ public class TimeCalcWindow {
         text.setForeground(Color.GRAY);
         text.setBackground(new Color(238, 238, 238));
         window.add(text);
-        jokeButton.setBounds(120, text.getY() + text.getHeight() + 10, 100, 30);
+        weatherButton.setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
+        jokeButton.setBounds(140, text.getY() + text.getHeight() + 10, 100, 30);
         restartButton.setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
         exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
 
@@ -101,6 +104,7 @@ public class TimeCalcWindow {
                 System.exit(0);
             }
         });
+        weatherButton.addActionListener(e-> new WeatherWindow().setVisible(true));
         jokeButton.addActionListener(e-> {for(int i =1;i<=1;i++) {Vtipy.showRandom();}});
         exitButton.addActionListener(e -> System.exit(0));
         restartButton.addActionListener(e -> {
