@@ -78,6 +78,7 @@ public class TimeCalcWindow {
         JButton exitButton = new JButton("Exit");
 
         //window.add(weatherButton);
+
         window.add(jokeButton);
         window.add(restartButton);
         window.add(exitButton);

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -55,7 +56,7 @@ public class Utils {
             //nothing to do
             return null;
         }
-        return new String(Files.readAllBytes(file.toPath()));
+        return new String(Files.readAllBytes(file.toPath()), "UTF-8");
     }
     public static Color[] getRandomColors() {
         Color[] result = new Color[12];
