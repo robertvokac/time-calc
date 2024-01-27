@@ -10,6 +10,8 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class Battery extends JPanel {
 
@@ -24,11 +26,11 @@ public class Battery extends JPanel {
     public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
     private int height_ = 0;
-    private int square;
     private double donePercent = 0;
 
     private boolean highlight = false;
     private int width_;
+    NumberFormat formatter3 = new DecimalFormat("#0.000");
 
     public void setHighlight(boolean highlight) {
         this.highlight = highlight;
@@ -92,8 +94,7 @@ public class Battery extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        if(Math.random() > 0.9)
-        {highlight = Utils.highlightTxt.exists();}
+        highlight = Utils.highlightTxt.exists();
         if (height_ == 0) {
             this.height_ = Math.min(getWidth(), getHeight());
             this.width_= (int)(this.height_* 0.6);
@@ -113,8 +114,9 @@ public class Battery extends JPanel {
                     MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
         }
         g2d.fillRect(width_/4,height_ - (int)(height_ * donePercent),width_, (int)(height_ * donePercent));
-        g2d.setColor(Color.LIGHT_GRAY);
-        g2d.drawString(String.valueOf((int)(donePercent * 100)) + "%",width_/2, height_/2);
+        g2d.setColor(highlight ? Color.BLACK : Color.LIGHT_GRAY);
+        g2d.drawString(
+                formatter3.format(donePercent * 100) + "%",((int)(width_ * 0.4)), height_ / 2);
 
     }
 

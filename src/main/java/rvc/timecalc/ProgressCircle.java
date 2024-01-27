@@ -84,12 +84,13 @@ public class ProgressCircle extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        highlight = Utils.highlightTxt.exists();
         if (side == 0) {
             this.side = Math.min(getWidth(), getHeight());
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(FOREGROUND_COLOR);
+        g2d.setColor(highlight ? Color.darkGray : FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 //        if (highlight) {
@@ -105,7 +106,7 @@ public class ProgressCircle extends JPanel {
 
         g2d.fillArc(0,0,side,side,90, -(int) angleDouble);
         int side2 = ((int)(side/2));
-        g2d.setColor(FOREGROUND_COLOR2);
+        g2d.setColor(highlight ? new Color(105, 175, 236) : FOREGROUND_COLOR2);
         g2d.fillArc(0+(side2/2),0+(side2/2),side2, side2,90, -(int) angleDouble2);
     }
 
