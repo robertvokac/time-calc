@@ -182,8 +182,8 @@ public class TimeCalcWindow {
             double totalSecondsRemainsDouble = ((double)totalMillisecondsRemains)/1000;
             String msg = "Done=" + formatter5.format(done * 100) + "% Remains="
                          + String.format("%02d", hourRemains) + ":" + String
-                                 .format("%02d", minuteRemains) + ":" + String.format("%02d", secondsRemains) + " (" + formatter3
-                                 .format(totalSecondsRemainsDouble)
+                                 .format("%02d", minuteRemains) + /*":" + String.format("%02d", secondsRemains)+ */ " (" + formatter3
+                                 .format(totalSecondsRemainsDouble - 60)
                          + " s" + ")" + " End=" + String
                                  .format("%02d", endHour) + ":" + String
                                  .format("%02d", endMinute);
@@ -304,7 +304,7 @@ public class TimeCalcWindow {
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
 
         sb.append("||" + createSpaces(58 - 2) + (spacesTodo == 0 ? "          \n": "||======||\n"));
-        sb.append("||").append(createSpaces(spacesTotal + 4)).append("|        |").append("\n");
+        sb.append("||").append(createSpaces(spacesTotal + 4)).append(spacesTodo == 0 ? "" : "|        |").append("\n");
 
         NumberFormat formatter3 = new DecimalFormat("#0.00000");
         sb.append(

@@ -38,12 +38,8 @@ public class Main {
                             lastOvertime == null ? "0:00" : lastOvertime
                     );
 
-            if(!starttimeTxt.exists()) {
-                Utils.writeTextToFile(starttimeTxt, startTime);
-            }
-            if(!overtimeTxt.exists()) {
-                Utils.writeTextToFile(overtimeTxt, overTime);
-            }
+            Utils.writeTextToFile(starttimeTxt, startTime);
+            Utils.writeTextToFile(overtimeTxt, overTime);
             try {
                 TimeCalcWindow timeCalc =
                         new TimeCalcWindow(startTime, overTime);
