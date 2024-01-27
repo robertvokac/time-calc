@@ -30,9 +30,9 @@ public class Vtipy {
     static {
         try {
             array = VtipyTxt.getAsArray();
-            Set<String> set =new HashSet<>();
-            for(String vtip:array) {
-                if(vtip.trim().isEmpty()) {
+            Set<String> set = new HashSet<>();
+            for (String vtip : array) {
+                if (vtip.trim().isEmpty()) {
                     //nothing to do
                     continue;
                 }
@@ -46,23 +46,24 @@ public class Vtipy {
     }
 
     public static void main(String[] args) {
-        StringBuilder sb  =new StringBuilder();
-        Arrays.stream(array).forEach(l-> {
+        StringBuilder sb = new StringBuilder();
+        Arrays.stream(array).forEach(l -> {
             sb.append(l + "\n -----SEPARATOR-----\n");
         });
         JFrame window = new JFrame();
-        window.setSize(1400,1000);
+        window.setSize(1400, 1000);
         window.setVisible(true);
         JTextPane text = new JTextPane();
         text.setBounds(10, 10, 1300, 950);
         window.add(text);
         text.setText(sb.toString());
     }
+
     public static void showRandom() {
         Toaster t = new Toaster();
         t.setToasterWidth(800);
         t.setToasterHeight(800);
-        t.setDisplayTime(60000*5);
+        t.setDisplayTime(60000 * 5);
         t.setToasterColor(Color.GRAY);
         Font font = new Font("sans", Font.PLAIN, 16);
         t.setToasterMessageFont(font);

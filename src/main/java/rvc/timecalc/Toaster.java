@@ -49,7 +49,6 @@ import java.awt.Rectangle;
  * Class to show tosters in multiplatform
  *
  * @author daniele piras
- *
  */
 public class Toaster {
     private static final long serialVersionUID = 1L;
@@ -89,7 +88,6 @@ public class Toaster {
      * Constructor to initialized toaster component...
      *
      * @author daniele piras
-     *
      */
     public Toaster() {
         // Set default font...
@@ -102,7 +100,7 @@ public class Toaster {
         // Verify AlwaysOnTop Flag...
         try {
             JWindow.class
-                    .getMethod("setAlwaysOnTop", new Class[] {Boolean.class});
+                    .getMethod("setAlwaysOnTop", Boolean.class);
         } catch (Exception e) {
             useAlwaysOnTop = false;
         }
@@ -284,16 +282,15 @@ public class Toaster {
      * Class that rappresent a single toaster
      *
      * @author daniele piras
-     *
      */
     class SingleToaster extends JWindow {
         private static final long serialVersionUID = 1L;
 
         // Label to store Icon
-        private JLabel iconLabel = new JLabel();
+        private final JLabel iconLabel = new JLabel();
 
         // Text area for the message
-        private JTextArea message = new JTextArea();
+        private final JTextArea message = new JTextArea();
 
         /***
          * Simple costructor that initialized components...
@@ -370,6 +367,7 @@ public class Toaster {
         /**
          * Animate vertically the toaster. The toaster could be moved from bottom
          * to upper or to upper to bottom
+         *
          * @param posx
          * @param fromY
          * @param toY
@@ -400,7 +398,7 @@ public class Toaster {
                         .getLocalGraphicsEnvironment();
                 Rectangle screenRect = ge.getMaximumWindowBounds();
 
-                int screenHeight = (int) screenRect.height;
+                int screenHeight = screenRect.height;
 
                 int startYPosition;
                 int stopYPosition;
@@ -411,7 +409,7 @@ public class Toaster {
 
                 maxToasterInSceen = screenHeight / toasterHeight;
 
-                int posx = (int) screenRect.width - toasterWidth - 1;
+                int posx = screenRect.width - toasterWidth - 1;
 
                 toaster.setLocation(posx, screenHeight);
                 toaster.setVisible(true);

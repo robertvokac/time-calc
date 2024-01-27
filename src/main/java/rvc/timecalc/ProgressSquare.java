@@ -9,7 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 public class ProgressSquare extends JPanel {
 
@@ -78,42 +77,50 @@ public class ProgressSquare extends JPanel {
         //        System.out.println("x=" + x);
         //        System.out.println("y=" + y);
         if (y > 1) {
-            if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
+            if (Utils.highlighted.get() || mouseOver) {
+                g2d.setColor(Color.GRAY);
+            }
             g2d.fillRect(side - 4, side - 4, 4, 4);
             g2d.fillRect(1, side - 4, 4, 4);
 
             g2d.setColor(FOREGROUND_COLOR);
             g2d.fillRect(1, 1, side, y - 1);
             if (x > 1) {
-                if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
+                if (Utils.highlighted.get() || mouseOver) {
+                    g2d.setColor(Color.GRAY);
+                }
                 g2d.drawRect(1, y, x - 1, 1);
             }
-            if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
+            if (Utils.highlighted.get() || mouseOver) {
+                g2d.setColor(Color.GRAY);
+            }
             g2d.fillRect(side - 4, 1, 4, 4);
             g2d.fillRect(1, 1, 4, 4);
 
-            if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
+            if (Utils.highlighted.get() || mouseOver) {
+                g2d.setColor(Color.GRAY);
+            }
             g2d.drawLine(1, 1, x, y);
             //            g2d.drawLine(1+1, 1+1, x+1, y+1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
-            if(Utils.highlighted.get() || mouseOver) {
+            if (Utils.highlighted.get() || mouseOver) {
                 g2d.setColor(Color.BLUE);
                 g2d.drawLine(x - 10, y - 10, x + 10, y + 10);
                 g2d.drawLine(x + 10, y - 10, x - 10, y + 10);
             }
             g2d.setColor(FOREGROUND_COLOR);
         }
-//        int nextX = (int) (Math.random() * 200);
-//        int nextY = (int) (Math.random() * (yOrig- 1));
-//        for(int i = 0;i< yOrig / 8;i++) {
-//            g2d.setColor(Color.GRAY/*Utils.getRandomColor()*/);
-//            g2d.drawLine(x, y, nextX, nextY);
-//            x = nextX;
-//            y = nextY;
-//            nextX = (int) (Math.random() * 200);
-//            nextY = (int) (Math.random() * (yOrig - 1));
-//        }
+        //        int nextX = (int) (Math.random() * 200);
+        //        int nextY = (int) (Math.random() * (yOrig- 1));
+        //        for(int i = 0;i< yOrig / 8;i++) {
+        //            g2d.setColor(Color.GRAY/*Utils.getRandomColor()*/);
+        //            g2d.drawLine(x, y, nextX, nextY);
+        //            x = nextX;
+        //            y = nextY;
+        //            nextX = (int) (Math.random() * 200);
+        //            nextY = (int) (Math.random() * (yOrig - 1));
+        //        }
 
     }
 

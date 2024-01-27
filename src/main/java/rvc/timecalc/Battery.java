@@ -9,14 +9,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class Battery extends JPanel {
 
-    private static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
-    private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color LOW = new Color(253, 130, 130);
     public static final Color MEDIUM = new Color(255, 204, 153);
     public static final Color HIGH = new Color(204, 255, 204);
@@ -25,12 +22,13 @@ public class Battery extends JPanel {
     public static final Color MEDIUM_HIGHLIGHTED = Color.ORANGE;
     public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
+    private static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
+    private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
+    NumberFormat formatter3 = new DecimalFormat("#0.000");
     private int height_ = 0;
     private double donePercent = 0;
     private boolean mouseOver = false;
-
     private int width_;
-    NumberFormat formatter3 = new DecimalFormat("#0.000");
 
     public Battery() {
         setPreferredSize(new Dimension(40, 100));
@@ -72,28 +70,36 @@ public class Battery extends JPanel {
     public void paintComponent(Graphics g) {
         if (height_ == 0) {
             this.height_ = Math.min(getWidth(), getHeight());
-            this.width_= (int)(this.height_* 0.6);
+            this.width_ = (int) (this.height_ * 0.6);
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.YELLOW : FOREGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.YELLOW :
+                FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.fillRect(width_/4,1,width_, height_ - 2);
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : Color.LIGHT_GRAY);
-        g2d.drawRect(width_/4 - 1,0,width_+1, height_ + 0);
-        if(Utils.highlighted.get() || mouseOver) {
-            g2d.setColor(donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
-                    MEDIUM_HIGHLIGHTED : (donePercent < 0.9 ? HIGH_HIGHLIGHTED : HIGHEST_HIGHLIGHTED)));
+        g2d.fillRect(width_ / 4, 1, width_, height_ - 2);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
+                Color.LIGHT_GRAY);
+        g2d.drawRect(width_ / 4 - 1, 0, width_ + 1, height_ + 0);
+        if (Utils.highlighted.get() || mouseOver) {
+            g2d.setColor(
+                    donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
+                            MEDIUM_HIGHLIGHTED :
+                            (donePercent < 0.9 ? HIGH_HIGHLIGHTED :
+                                    HIGHEST_HIGHLIGHTED)));
         } else {
             g2d.setColor(donePercent < 0.1 ? LOW : (donePercent < 0.75 ?
                     MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
         }
-        g2d.fillRect(width_/4,height_ - (int)(height_ * donePercent),width_, (int)(height_ * donePercent));
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : Color.LIGHT_GRAY);
+        g2d.fillRect(width_ / 4, height_ - (int) (height_ * donePercent),
+                width_, (int) (height_ * donePercent));
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
+                Color.LIGHT_GRAY);
         g2d.drawString(
-                formatter3.format(donePercent * 100) + "%",((int)(width_ * 0.4)), height_ / 2);
+                formatter3.format(donePercent * 100) + "%",
+                ((int) (width_ * 0.4)), height_ / 2);
 
     }
 

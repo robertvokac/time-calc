@@ -2,10 +2,8 @@ package rvc.timecalc;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -14,18 +12,18 @@ import java.nio.file.Files;
  * @since 15.02.2024
  */
 public class Utils {
+    public static final BooleanHolder highlighted = new BooleanHolder();
+    /**
+     * Count of bytes per one kilobyte.
+     */
+    private static final int COUNT_OF_BYTES_PER_ONE_KILOBYTE = 1024;
     private Utils() {
         //Not meant to be instantiated.
     }
 
     /**
-     * Count of bytes per one kilobyte.
-     */
-    private static final int COUNT_OF_BYTES_PER_ONE_KILOBYTE = 1024;
-    public static final BooleanHolder highlighted = new BooleanHolder();
-
-    /**
      * Writes text to a file.
+     *
      * @param file file
      * @param text text
      */
@@ -46,26 +44,31 @@ public class Utils {
 
     /**
      * Reads text from file.
+     *
      * @param file file
      * @return String
      * @throws IOException thrown, if an error during reading happens
      */
     public static String readTextFromFile(final File file)
             throws IOException {
-        if(!file.exists()) {
+        if (!file.exists()) {
             //nothing to do
             return null;
         }
-        return new String(Files.readAllBytes(file.toPath()), "UTF-8");
+        return new String(Files.readAllBytes(file.toPath()),
+                StandardCharsets.UTF_8);
     }
+
     public static Color[] getRandomColors() {
         Color[] result = new Color[12];
-        for(int i = 0; i<12; i++) {
+        for (int i = 0; i < 12; i++) {
             result[i] = getRandomColor();
         }
         return result;
     }
+
     public static Color getRandomColor() {
-        return new Color(((int)(Math.random() * 256)),((int)(Math.random() * 256)),((int)(Math.random() * 256)));
+        return new Color(((int) (Math.random() * 256)),
+                ((int) (Math.random() * 256)), ((int) (Math.random() * 256)));
     }
 }

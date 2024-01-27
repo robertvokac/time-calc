@@ -21,16 +21,18 @@ public class HttpProxy {
     public HttpProxy(File proxyTxt) {
         try {
             String[] str = Utils.readTextFromFile(proxyTxt).split(":");
-            if(str.length < 4) {
+            if (str.length < 4) {
                 proxyTxt.delete();
-                throw new IOException("Invalid content of proxy.txt: str.length < 4");
+                throw new IOException(
+                        "Invalid content of proxy.txt: str.length < 4");
             }
             this.url = str[0];
             this.port = str[1];
             this.user = str[2];
             this.password = str[3];
         } catch (IOException e) {
-            throw new RuntimeException("Sorry, reading file proxy.txt failed. " + e.getMessage());
+            throw new RuntimeException(
+                    "Sorry, reading file proxy.txt failed. " + e.getMessage());
         }
     }
 

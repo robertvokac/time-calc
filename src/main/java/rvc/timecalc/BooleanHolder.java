@@ -6,12 +6,15 @@ package rvc.timecalc;
  */
 public class BooleanHolder {
     private boolean b;
+
     public void set(boolean b) {
         this.b = b;
     }
+
     public boolean get() {
         return b;
     }
+
     public void flip() {
         this.b = !b;
     }
