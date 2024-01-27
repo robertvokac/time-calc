@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 public class ProgressSquare extends JPanel {
 
@@ -22,6 +23,16 @@ public class ProgressSquare extends JPanel {
 
     public void setHighlight(boolean highlight) {
         this.highlight = highlight;
+        if(highlight && !Utils.highlightTxt.exists()) {
+            try {
+                Utils.highlightTxt.createNewFile();
+            } catch (IOException ioException) {
+                System.out.println(ioException);
+            }
+        }
+        if(!highlight && Utils.highlightTxt.exists()) {
+            Utils.highlightTxt.delete();
+        }
     }
 
     public ProgressSquare() {
@@ -32,6 +43,16 @@ public class ProgressSquare extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 highlight = !highlight;
+                if(highlight && !Utils.highlightTxt.exists()) {
+                    try {
+                        Utils.highlightTxt.createNewFile();
+                    } catch (IOException ioException) {
+                        System.out.println(e);
+                    }
+                }
+                if(!highlight && Utils.highlightTxt.exists()) {
+                    Utils.highlightTxt.delete();
+                }
             }
 
             @Override

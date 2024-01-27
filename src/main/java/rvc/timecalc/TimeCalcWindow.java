@@ -116,6 +116,11 @@ public class TimeCalcWindow {
                 .setBounds(10 + analogClock.getWidth() + 10, 10, 200, 200);
         window.add(progressSquare);
 
+
+        if(Utils.highlightTxt.exists()) {
+            analogClock.setHighlight(true);
+            progressSquare.setHighlight(true);
+        }
         StringBuilder sb = null;
         while (true) {
             if (stopBeforeEnd) {
@@ -226,6 +231,10 @@ public class TimeCalcWindow {
             } catch (InterruptedException e) {
 
             }
+
+            boolean exists = Utils.highlightTxt.exists();
+            analogClock.setHighlight(exists);
+            progressSquare.setHighlight(exists);
         }
         window.setVisible(false);
         window.dispose();

@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -32,6 +33,16 @@ public class AnalogClock extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 highlight = !highlight;
+                if(highlight && !Utils.highlightTxt.exists()) {
+                    try {
+                        Utils.highlightTxt.createNewFile();
+                    } catch (IOException ioException) {
+                        System.out.println(e);
+                    }
+                }
+                if(!highlight && Utils.highlightTxt.exists()) {
+                    Utils.highlightTxt.delete();
+                }
             }
 
             @Override
