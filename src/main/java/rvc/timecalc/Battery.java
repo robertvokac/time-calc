@@ -17,7 +17,7 @@ public class Battery extends JPanel {
 
     private static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
-    public static final Color LOW = new Color(255, 102, 102);
+    public static final Color LOW = new Color(253, 130, 130);
     public static final Color MEDIUM = new Color(255, 204, 153);
     public static final Color HIGH = new Color(204, 255, 204);
     public static final Color HIGHEST = new Color(153, 255, 153);
