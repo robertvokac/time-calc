@@ -18,6 +18,7 @@ public class ProgressSquare extends JPanel {
     private int side = 0;
     private int square;
     private double donePercent = 0;
+    private boolean mouseOver = false;
 
     public ProgressSquare() {
         setPreferredSize(new Dimension(400, 400));
@@ -41,12 +42,12 @@ public class ProgressSquare extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                mouseOver = true;
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                mouseOver = false;
             }
         });
     }
@@ -77,26 +78,26 @@ public class ProgressSquare extends JPanel {
         //        System.out.println("x=" + x);
         //        System.out.println("y=" + y);
         if (y > 1) {
-            if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
+            if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
             g2d.fillRect(side - 4, side - 4, 4, 4);
             g2d.fillRect(1, side - 4, 4, 4);
 
             g2d.setColor(FOREGROUND_COLOR);
             g2d.fillRect(1, 1, side, y - 1);
             if (x > 1) {
-                if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
+                if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
                 g2d.drawRect(1, y, x - 1, 1);
             }
-            if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
+            if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
             g2d.fillRect(side - 4, 1, 4, 4);
             g2d.fillRect(1, 1, 4, 4);
 
-            if(Utils.highlighted.get()) g2d.setColor(Color.GRAY);
+            if(Utils.highlighted.get() || mouseOver) g2d.setColor(Color.GRAY);
             g2d.drawLine(1, 1, x, y);
             //            g2d.drawLine(1+1, 1+1, x+1, y+1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
-            if(Utils.highlighted.get()) {
+            if(Utils.highlighted.get() || mouseOver) {
                 g2d.setColor(Color.BLUE);
                 g2d.drawLine(x - 10, y - 10, x + 10, y + 10);
                 g2d.drawLine(x + 10, y - 10, x - 10, y + 10);

@@ -19,6 +19,7 @@ public class ProgressCircle extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     private int side = 0;
     private double donePercent = 0;
+    private boolean mouseOver = false;
 
     public ProgressCircle() {
         setPreferredSize(new Dimension(200, 200));
@@ -42,12 +43,12 @@ public class ProgressCircle extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                mouseOver = true;
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                mouseOver = false;
             }
         });
     }
@@ -63,7 +64,7 @@ public class ProgressCircle extends JPanel {
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Utils.highlighted.get() ? Color.darkGray : FOREGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.darkGray : FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 //        if (highlight) {
@@ -79,7 +80,7 @@ public class ProgressCircle extends JPanel {
 
         g2d.fillArc(0,0,side,side,90, -(int) angleDouble);
         int side2 = ((int)(side/2));
-        g2d.setColor(Utils.highlighted.get() ? new Color(105, 175, 236) : FOREGROUND_COLOR2);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? new Color(105, 175, 236) : FOREGROUND_COLOR2);
         g2d.fillArc(0+(side2/2),0+(side2/2),side2, side2,90, -(int) angleDouble2);
     }
 

@@ -29,6 +29,7 @@ public class AnalogClock extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
 
     private boolean coloured = false;
+    private boolean mouseOver = false;
     private int side;
 
     public AnalogClock() {
@@ -55,11 +56,13 @@ public class AnalogClock extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 coloured = true;
+                mouseOver = true;
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 coloured = false;
+                mouseOver = false;
             }
         });
         
@@ -89,15 +92,25 @@ public class AnalogClock extends JPanel {
         int minute = time.get(Calendar.MINUTE);
         int hour = time.get(Calendar.HOUR_OF_DAY);
 
-        drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
-        drawHand(g2d, side / 2 - 20, minute / 60.0 + second / 60.0 / 60.0, 2.0f,
-                Color.BLUE);
-        drawHand(g2d, side / 2 - 40,
-                hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12, 4.0f,
-                Color.BLACK);
-
         // Draw clock numbers and circle
         drawClockFace(g2d, centerX, centerY, side / 2 - 40);
+
+        drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
+        drawHand(g2d, (side / 2 - 10) / 4, (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f, Color.RED);
+        //
+        double minutes = minute / 60.0 + second / 60.0 / 60.0;
+        drawHand(g2d, side / 2 - 20, minutes, 2.0f,
+                Color.BLUE);
+        drawHand(g2d, (side / 2 - 20)/4, minutes + minutes > 0.5 ?minutes - 0.5 : minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
+                Color.BLUE);
+        //
+        double hours = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
+        drawHand(g2d, side / 2 - 40,
+                hours, 4.0f,
+                Color.BLACK);
+        drawHand(g2d, (side / 2 - 40)/4, hours + hours > 0.5 ?hours - 0.5 : hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
+                Color.BLACK);
+
     }
 
     private void drawHand(Graphics2D g2d, int length, double value,
@@ -107,7 +120,7 @@ public class AnalogClock extends JPanel {
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        g2d.setColor(Utils.highlighted.get() ? color : FOREGROUND_COLOR);
+        g2d.setColor((Utils.highlighted.get() || mouseOver) ? color : FOREGROUND_COLOR);
         g2d.setStroke(new BasicStroke(stroke));
         g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
@@ -141,7 +154,7 @@ public class AnalogClock extends JPanel {
     private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.setColor(Utils.highlighted.get() ? Color.BLACK : FOREGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : FOREGROUND_COLOR);
         //        System.out.println("centerX=" + centerX);
         //        System.out.println("centerY=" + centerY);
         //        System.out.println("radius=" + radius);
@@ -159,32 +172,37 @@ public class AnalogClock extends JPanel {
                 //}
             }
         }
-        if(Math.random() >  (1 - (1/200))) {
-            for(int i = 0; i<12; i++) {
-                colors[i] = i == 11 ? colors[0] :colors[i + 1];
-            }
+//        if(Math.random() >  (1 - (1/200))) {
+//            for(int i = 0; i<12; i++) {
+//                colors[i] = i == 11 ? colors[0] :colors[i + 1];
+//            }
+//        }
+        DateFormat formatter2 = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+        String now = formatter2.format(new Date());
+
+        if (coloured) {
+            g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : FOREGROUND_COLOR);
+            g2d.setFont(new Font("sans", Font.PLAIN, 12));
+            DateFormat formatter = new SimpleDateFormat("EEEE : yyyy-MM-dd", Locale.ENGLISH);
+            g2d.drawString(formatter.format(new Date()), ((int) (side * 0.25)),
+                    ((int) (side * 0.35)));
+            //
+            g2d.drawString(now, ((int) (side * 0.25) + 30),
+                    ((int) (side * 0.35)) + 60);
         }
         for (int i = 1; i <= 12; i++) {
             double angle = Math.PI * 2 * (i / 12.0 - 0.25);
             int dx = centerX + (int) ((radius + 20) * Math.cos(angle)) - 4;
             int dy = centerY + (int) ((radius + 20) * Math.sin(angle)) + 4;
 
-            if(Utils.highlighted.get() && coloured) {g2d.setColor(colors[i - 1]);};
+            int seconds = Integer.valueOf(now.split(":")[2]);
+
+            //if(Utils.highlighted.get() && coloured && (seconds <= 5 || seconds >= 55)) {g2d.setColor(colors[i - 1]);}
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }
-        if (coloured) {
-            g2d.setColor(Utils.highlighted.get() ? Color.BLACK : FOREGROUND_COLOR);
-            g2d.setFont(new Font("sans", Font.BOLD, 12));
-            DateFormat formatter = new SimpleDateFormat("EEEE : yyyy-MM-dd", Locale.ENGLISH);
-            g2d.drawString(formatter.format(new Date()), ((int) (side * 0.25)),
-                    ((int) (side * 0.35)));
-            //
-            DateFormat formatter2 = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
 
-            g2d.drawString(formatter2.format(new Date()), ((int) (side * 0.25) + 30),
-                    ((int) (side * 0.35)) + 60);
-        }
+
     }
 
 

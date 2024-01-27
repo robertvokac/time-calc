@@ -27,6 +27,7 @@ public class Battery extends JPanel {
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
     private int height_ = 0;
     private double donePercent = 0;
+    private boolean mouseOver = false;
 
     private int width_;
     NumberFormat formatter3 = new DecimalFormat("#0.000");
@@ -53,12 +54,12 @@ public class Battery extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                mouseOver = true;
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                mouseOver = false;
             }
         });
     }
@@ -75,14 +76,14 @@ public class Battery extends JPanel {
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Utils.highlighted.get() ? Color.YELLOW : FOREGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.YELLOW : FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.fillRect(width_/4,1,width_, height_ - 2);
-        g2d.setColor(Utils.highlighted.get() ? Color.BLACK : Color.LIGHT_GRAY);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : Color.LIGHT_GRAY);
         g2d.drawRect(width_/4 - 1,0,width_+1, height_ + 0);
-        if(Utils.highlighted.get()) {
+        if(Utils.highlighted.get() || mouseOver) {
             g2d.setColor(donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
                     MEDIUM_HIGHLIGHTED : (donePercent < 0.9 ? HIGH_HIGHLIGHTED : HIGHEST_HIGHLIGHTED)));
         } else {
@@ -90,7 +91,7 @@ public class Battery extends JPanel {
                     MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
         }
         g2d.fillRect(width_/4,height_ - (int)(height_ * donePercent),width_, (int)(height_ * donePercent));
-        g2d.setColor(Utils.highlighted.get() ? Color.BLACK : Color.LIGHT_GRAY);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : Color.LIGHT_GRAY);
         g2d.drawString(
                 formatter3.format(donePercent * 100) + "%",((int)(width_ * 0.4)), height_ / 2);
 
