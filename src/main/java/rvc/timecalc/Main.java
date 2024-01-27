@@ -37,7 +37,7 @@ public class Main {
                             null,
                             lastOvertime == null ? "0:00" : lastOvertime
                     );
-            
+
             if(!starttimeTxt.exists()) {
                 Utils.writeTextToFile(starttimeTxt, startTime);
             }

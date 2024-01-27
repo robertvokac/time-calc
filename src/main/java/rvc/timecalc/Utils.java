@@ -49,6 +49,10 @@ public class Utils {
      */
     public static String readTextFromFile(final File file)
             throws IOException {
+        if(!file.exists()) {
+            //nothing to do
+            return null;
+        }
         return new String(Files.readAllBytes(file.toPath()));
     }
 }
