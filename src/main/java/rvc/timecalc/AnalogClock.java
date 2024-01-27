@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -23,11 +25,12 @@ public class AnalogClock extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
 
     private boolean highlight = false;
+    private boolean coloured = false;
 
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
         setBackground(BACKGROUND_COLOR);
-        new Timer(1000, e -> repaint()).start();
+        new Timer(20, e -> repaint()).start();
 
         addMouseListener(new MouseListener() {
             @Override
@@ -57,14 +60,15 @@ public class AnalogClock extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                coloured = true;
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                coloured = false;
             }
         });
+        
     }
 
     public static void main(String[] args) {
@@ -118,6 +122,32 @@ public class AnalogClock extends JPanel {
         g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
 
+    private Color[] colors = getRandomColors();
+    private static Color modifyColourALittleBit(Color colorIn) {
+        int r = colorIn.getRed();
+        int g = colorIn.getGreen();
+        int b = colorIn.getBlue();
+        Color color = new Color(
+                modifyByteALittleBit(r),
+                modifyByteALittleBit(g),
+                modifyByteALittleBit(b)
+        );
+        return color;
+    }
+    private static int modifyByteALittleBit(int n) {
+//        if(Math.random() <= 0.75) {
+//            return n;
+//        }
+        boolean negative = Math.random() > 0.5;
+        int result = n + ((negative ? (-1) : 1)) * ((int)(Math.random() * (Math.random() * 20)));
+        if(result > 255) {
+            return 255;
+        }
+        if(result < 0) {
+            return 0;
+        }
+        return result;
+    }
     private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
@@ -130,13 +160,35 @@ public class AnalogClock extends JPanel {
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
 
+
+//        if(highlight && Math.random()>0.9) {colors = getRandomColors();}
+        if(highlight && coloured) {
+            for(int i = 0; i<12; i++) {
+                //if(Math.random() > 0.75) {
+                    colors[i] = modifyColourALittleBit(colors[i]);
+                //}
+            }
+        }
         for (int i = 1; i <= 12; i++) {
             double angle = Math.PI * 2 * (i / 12.0 - 0.25);
             int dx = centerX + (int) ((radius + 20) * Math.cos(angle)) - 4;
             int dy = centerY + (int) ((radius + 20) * Math.sin(angle)) + 4;
 
+            if(highlight && coloured) {g2d.setColor(colors[i - 1]);};
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }
+        g2d.setColor(highlight ? Color.BLACK : FOREGROUND_COLOR);
     }
+    private Color[] getRandomColors() {
+        Color[] result = new Color[12];
+        for(int i = 0; i<12; i++) {
+            result[i] = getRandomColor();
+        }
+        return result;
+    }
+    private Color getRandomColor() {
+        return new Color(((int)(Math.random() * 256)),((int)(Math.random() * 256)),((int)(Math.random() * 256)));
+    }
+
 }
