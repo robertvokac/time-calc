@@ -235,6 +235,7 @@ public class TimeCalcWindow {
             boolean exists = Utils.highlightTxt.exists();
             analogClock.setHighlight(exists);
             progressSquare.setHighlight(exists);
+            text.setForeground(exists ? Color.BLACK : Color.GRAY);
         }
         window.setVisible(false);
         window.dispose();
