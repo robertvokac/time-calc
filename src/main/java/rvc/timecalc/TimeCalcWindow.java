@@ -122,11 +122,17 @@ public class TimeCalcWindow {
                 .setBounds(10 + progressSquare.getBounds().x + progressSquare.getWidth() + 10, 10, 80, 80);
         window.add(progressCircle);
 
+        Battery battery = new Battery();
+        battery.setBounds(progressCircle.getBounds().x, progressCircle.getY() + 10 + progressCircle.getHeight(), 90, 140);
+        window.add(battery);
+
+
 
         if(Utils.highlightTxt.exists()) {
             analogClock.setHighlight(true);
             progressSquare.setHighlight(true);
             progressCircle.setHighlight(true);
+            battery.setHighlight(true);
         }
         StringBuilder sb = null;
         while (true) {
@@ -183,6 +189,7 @@ public class TimeCalcWindow {
                           / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
             progressCircle.setDonePercent(done);
+            battery.setDonePercent(done);
 
             int totalSecondsRemains = (hourRemains * 60 * 60 + minuteRemains * 60 + secondsRemains);
             int totalMillisecondsRemains = totalSecondsRemains * 1000 + millisecondsRemains;
@@ -273,12 +280,12 @@ public class TimeCalcWindow {
         if (!alreadyShownPercents.contains((int) (percent * 100))) {
             alreadyShownPercents.add((int) (percent * 100));
             Toaster toasterManager = new Toaster();
-            Font font = new Font("sans", Font.BOLD, 32);
+            Font font = new Font("sans", Font.PLAIN, 16);
             toasterManager.setToasterMessageFont(font);
             toasterManager.setDisplayTime(10000);
             toasterManager.setToasterWidth(600);
             toasterManager.setToasterHeight(400);
-            toasterManager.setToasterColor(new Color(255,255,102));
+            toasterManager.setToasterColor(new Color(255,255,204));
             Base64.Decoder base64Decoder = Base64.getDecoder();
 
             byte[] btDataFile = base64Decoder
