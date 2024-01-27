@@ -122,7 +122,7 @@ public class AnalogClock extends JPanel {
         g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
 
-    private Color[] colors = getRandomColors();
+    private Color[] colors = Utils.getRandomColors();
     private static Color modifyColourALittleBit(Color colorIn) {
         int r = colorIn.getRed();
         int g = colorIn.getGreen();
@@ -180,15 +180,6 @@ public class AnalogClock extends JPanel {
         }
         g2d.setColor(highlight ? Color.BLACK : FOREGROUND_COLOR);
     }
-    private Color[] getRandomColors() {
-        Color[] result = new Color[12];
-        for(int i = 0; i<12; i++) {
-            result[i] = getRandomColor();
-        }
-        return result;
-    }
-    private Color getRandomColor() {
-        return new Color(((int)(Math.random() * 256)),((int)(Math.random() * 256)),((int)(Math.random() * 256)));
-    }
+
 
 }

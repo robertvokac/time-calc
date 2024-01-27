@@ -1,5 +1,6 @@
 package rvc.timecalc;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -54,5 +55,15 @@ public class Utils {
             return null;
         }
         return new String(Files.readAllBytes(file.toPath()));
+    }
+    public static Color[] getRandomColors() {
+        Color[] result = new Color[12];
+        for(int i = 0; i<12; i++) {
+            result[i] = getRandomColor();
+        }
+        return result;
+    }
+    public static Color getRandomColor() {
+        return new Color(((int)(Math.random() * 256)),((int)(Math.random() * 256)),((int)(Math.random() * 256)));
     }
 }

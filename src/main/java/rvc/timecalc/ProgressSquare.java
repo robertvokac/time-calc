@@ -96,6 +96,7 @@ public class ProgressSquare extends JPanel {
         //        System.out.println("square=" + square);
         int dotNumber = (int) (donePercent * square);
         int y = dotNumber / side;
+        int yOrig = y;
         int x = dotNumber - y * side;
 
         //        System.out.println("dotNumber=" + dotNumber);
@@ -128,6 +129,17 @@ public class ProgressSquare extends JPanel {
             }
             g2d.setColor(FOREGROUND_COLOR);
         }
+//        int nextX = (int) (Math.random() * 200);
+//        int nextY = (int) (Math.random() * (yOrig- 1));
+//        for(int i = 0;i< yOrig / 8;i++) {
+//            g2d.setColor(Color.GRAY/*Utils.getRandomColor()*/);
+//            g2d.drawLine(x, y, nextX, nextY);
+//            x = nextX;
+//            y = nextY;
+//            nextX = (int) (Math.random() * 200);
+//            nextY = (int) (Math.random() * (yOrig - 1));
+//        }
+
     }
 
 }
