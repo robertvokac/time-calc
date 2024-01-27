@@ -325,7 +325,7 @@ public class TimeCalcWindow {
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
         sb.append(createSpaces(58) + (spacesTodo == 0 ? "          \n": "||======||\n"));
 
-
+        NumberFormat formatter3 = new DecimalFormat("#0.00000");
         sb.append(
                 WALL + createSpaces(spacesDone) + " () " + createSpaces(
                         spacesTodo) + /*WALL +*/ (spacesTodo == 0 ? "  \\☼☼☼☼/   " :
@@ -337,7 +337,7 @@ public class TimeCalcWindow {
                         spacesTodo) + /*WALL +*/ (spacesTodo == 0 ? "  /☼☼☼☼\\   " :
                         "|        |") + /*WALL +*/ NEW_LINE +
                 "===================================================================="
-                + NEW_LINE
+                + NEW_LINE + "Steps: " + formatter3.format(percent * ((double)52)) + "/" + spacesTotal
         );
 
     }
