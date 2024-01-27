@@ -75,11 +75,13 @@ public class Battery extends JPanel {
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Utils.highlighted.get() ? Color.WHITE : FOREGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.get() ? Color.YELLOW : FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.fillRect(width_/4,0,width_, height_);
+        g2d.fillRect(width_/4,1,width_, height_ - 2);
+        g2d.setColor(Utils.highlighted.get() ? Color.BLACK : Color.LIGHT_GRAY);
+        g2d.drawRect(width_/4 - 1,0,width_+1, height_ + 0);
         if(Utils.highlighted.get()) {
             g2d.setColor(donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
                     MEDIUM_HIGHLIGHTED : (donePercent < 0.9 ? HIGH_HIGHLIGHTED : HIGHEST_HIGHLIGHTED)));
