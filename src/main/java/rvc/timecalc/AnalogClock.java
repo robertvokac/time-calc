@@ -179,6 +179,11 @@ public class AnalogClock extends JPanel {
             DateFormat formatter = new SimpleDateFormat("EEEE : yyyy-MM-dd", Locale.ENGLISH);
             g2d.drawString(formatter.format(new Date()), ((int) (side * 0.25)),
                     ((int) (side * 0.35)));
+            //
+            DateFormat formatter2 = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+
+            g2d.drawString(formatter2.format(new Date()), ((int) (side * 0.25) + 30),
+                    ((int) (side * 0.35)) + 60);
         }
     }
 
