@@ -65,7 +65,8 @@ public class TimeCalcWindow {
         int totalSeconds = totalMinutes * 60;
         int totalMilliseconds = totalSeconds * 1000;
 
-        NumberFormat formatter = new DecimalFormat("#0.00000");
+        NumberFormat formatter5 = new DecimalFormat("#0.00000");
+        NumberFormat formatter3 = new DecimalFormat("#0.000");
 
         JFrame window = new JFrame();
 
@@ -176,13 +177,14 @@ public class TimeCalcWindow {
                           / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
 
-            String msg = "Done=" + formatter.format(done * 100) + "% Remains="
+            int totalSecondsRemains = (hourRemains * 60 * 60 + minuteRemains * 60 + secondsRemains);
+            int totalMillisecondsRemains = totalSecondsRemains * 1000 + millisecondsRemains;
+            double totalSecondsRemainsDouble = ((double)totalMillisecondsRemains)/1000;
+            String msg = "Done=" + formatter5.format(done * 100) + "% Remains="
                          + String.format("%02d", hourRemains) + ":" + String
-                                 .format("%02d", minuteRemains) + " (" + String
-                                 .format("%03d",
-                                         (hourRemains * 60 + minuteRemains))
-                         + " minute" + ((hourRemains * 60 + minuteRemains) > 1 ?
-                    "s" : " ") + ")" + " End=" + String
+                                 .format("%02d", minuteRemains) + ":" + String.format("%02d", secondsRemains) + " (" + formatter3
+                                 .format(totalSecondsRemainsDouble)
+                         + " s" + ")" + " End=" + String
                                  .format("%02d", endHour) + ":" + String
                                  .format("%02d", endMinute);
 
@@ -295,36 +297,14 @@ public class TimeCalcWindow {
 
         }
 
-        int i1 = percentInt > 20 ? 10 : (int) (percentInt / 2);
-        int i2 = percentInt > 40 ? 10 : (int) ((percentInt - 20) / 2);
-        int i3 = percentInt > 60 ? 10 : (int) ((percentInt - 40) / 2);
-        int i4 = percentInt > 80 ? 10 : (int) ((percentInt - 60) / 2);
-        int i5 = (int) ((percentInt - 80) / 2);
-        int[] array = new int[] {i1, i2, i3, i4, i5};
-
-        int index = 0;
-        for (int i : array) {
-
-            if (i < 0) {
-                i = 0;
-            }
-            sb.append(index == 2 ? (msg + createSpaces(
-                    (percentInt < 0 ? -1 : 0) + 9 + (percentInt < 10 ? 1 : 0)
-                    + (percentInt == 100 ? -1 : 0) - 3)) : createSpaces(58));
-            for (int j = 1; j <= i; j++) {
-                sb.append(" "/*"#"*/);
-            }
-            for (int j = 10; j > i; j--) {
-                sb.append(" "/*"."*/);
-            }
-            sb.append("\n");
-            index++;
-        }
+        sb.append("\n" +msg + "\n\n");
 
         int spacesTotal = 52;
-        int spacesDone = (int) (percent * 52);
+        int spacesDone = (int) (percent * spacesTotal);
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
-        sb.append(createSpaces(58) + (spacesTodo == 0 ? "          \n": "||======||\n"));
+
+        sb.append("||" + createSpaces(58 - 2) + (spacesTodo == 0 ? "          \n": "||======||\n"));
+        sb.append("||").append(createSpaces(spacesTotal + 4)).append("|        |").append("\n");
 
         NumberFormat formatter3 = new DecimalFormat("#0.00000");
         sb.append(
