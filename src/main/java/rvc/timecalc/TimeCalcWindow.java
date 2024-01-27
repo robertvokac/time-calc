@@ -117,10 +117,16 @@ public class TimeCalcWindow {
                 .setBounds(10 + analogClock.getWidth() + 10, 10, 200, 200);
         window.add(progressSquare);
 
+        ProgressCircle progressCircle = new ProgressCircle();
+        progressCircle
+                .setBounds(10 + progressSquare.getBounds().x + progressSquare.getWidth() + 10, 10, 80, 80);
+        window.add(progressCircle);
+
 
         if(Utils.highlightTxt.exists()) {
             analogClock.setHighlight(true);
             progressSquare.setHighlight(true);
+            progressCircle.setHighlight(true);
         }
         StringBuilder sb = null;
         while (true) {
@@ -176,6 +182,7 @@ public class TimeCalcWindow {
             double done = ((double) totalMillisecondsDone)
                           / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
+            progressCircle.setDonePercent(done);
 
             int totalSecondsRemains = (hourRemains * 60 * 60 + minuteRemains * 60 + secondsRemains);
             int totalMillisecondsRemains = totalSecondsRemains * 1000 + millisecondsRemains;
@@ -271,7 +278,7 @@ public class TimeCalcWindow {
             toasterManager.setDisplayTime(10000);
             toasterManager.setToasterWidth(600);
             toasterManager.setToasterHeight(400);
-            toasterManager.setToasterColor(Color.YELLOW);
+            toasterManager.setToasterColor(new Color(255,255,102));
             Base64.Decoder base64Decoder = Base64.getDecoder();
 
             byte[] btDataFile = base64Decoder
