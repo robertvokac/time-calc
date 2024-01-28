@@ -60,6 +60,10 @@ public class Vtipy {
     }
 
     public static void showRandom() {
+        if(!TimeCalcConf.getInstance().isJokeVisible()) {
+            //nothing to do
+            return;
+        }
         Toaster t = new Toaster();
         t.setToasterWidth(800);
         t.setToasterHeight(800);

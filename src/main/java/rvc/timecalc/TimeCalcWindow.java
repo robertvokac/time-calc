@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -46,6 +48,7 @@ public class TimeCalcWindow {
     private int endMinute;
     private boolean stopBeforeEnd = false;
     private boolean vtipyShown = false;
+    private boolean everythingHidden = false;
 
     public TimeCalcWindow(String startTimeIn, String overTimeIn) {
         this.startTime = startTimeIn;
@@ -86,6 +89,19 @@ public class TimeCalcWindow {
         window.add(jokeButton);
         window.add(restartButton);
         window.add(exitButton);
+        window.setFocusable(true);
+        window.addKeyListener(new KeyAdapter() {
+            // Key Pressed method
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_UP){
+                    everythingHidden = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN){
+                    everythingHidden = true;
+                }
+                window.repaint();
+            }
+        });
         JTextPane text = new JTextPane();
         text.setBounds(10, 10 + 210 + 10, 540, 250);
         text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
@@ -187,6 +203,16 @@ public class TimeCalcWindow {
                 window.dispose();
                 break;
             }
+            text.setVisible(!everythingHidden);
+            progressSquare.setVisible(!everythingHidden);
+            progressCircle.setVisible(!everythingHidden);
+            analogClock.setVisible(!everythingHidden);
+            battery.setVisible(!everythingHidden);
+            batteryForWeek.setVisible(!everythingHidden);
+            jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !everythingHidden);
+            restartButton.setVisible(!everythingHidden);
+            exitButton.setVisible(!everythingHidden);
+            window.setTitle(everythingHidden ? "" : "Time Calc");
             sb = new StringBuilder();
             LocalDateTime now = LocalDateTime.now();
             String nowString = DATE_TIME_FORMATTER.format(now);

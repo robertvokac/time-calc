@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,7 +29,7 @@ public class AnalogClock extends JPanel {
     private boolean coloured = false;
     private boolean mouseOver = false;
     private int side;
-    private final Color[] colors = Utils.getRandomColors();
+    private Color[] colors = Utils.getRandomColors();
 
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
@@ -122,14 +123,14 @@ public class AnalogClock extends JPanel {
         drawClockFace(g2d, centerX, centerY, side / 2 - 40);
 
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
-        drawHand(g2d, (side / 2 - 10) / 4,
+        if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 10) / 4,
                 (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
                 Color.RED);
         //
         double minutes = minute / 60.0 + second / 60.0 / 60.0;
         drawHand(g2d, side / 2 - 20, minutes, 2.0f,
                 Color.BLUE);
-        drawHand(g2d, (side / 2 - 20) / 4,
+        if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 20) / 4,
                 minutes + minutes > 0.5 ? minutes - 0.5 :
                         minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
                 Color.BLUE);
@@ -138,7 +139,7 @@ public class AnalogClock extends JPanel {
         drawHand(g2d, side / 2 - 40,
                 hours, 4.0f,
                 Color.BLACK);
-        drawHand(g2d, (side / 2 - 40) / 4, hours + hours > 0.5 ? hours - 0.5 :
+        if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 40) / 4, hours + hours > 0.5 ? hours - 0.5 :
                         hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
                 Color.BLACK);
 
@@ -170,7 +171,7 @@ public class AnalogClock extends JPanel {
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
 
-        //        if(highlight && Math.random()>0.9) {colors = getRandomColors();}
+        if(Utils.highlighted.get() && TimeCalcConf.getInstance().isClockColorful() && Math.random()>0.9) {colors = Utils.getRandomColors();}
         if (Utils.highlighted.get() && coloured) {
             for (int i = 0; i < 12; i++) {
                 //if(Math.random() > 0.75) {
@@ -206,7 +207,8 @@ public class AnalogClock extends JPanel {
 
             int seconds = Integer.valueOf(now.split(":")[2]);
 
-            //if(Utils.highlighted.get() && coloured && (seconds <= 5 || seconds >= 55)) {g2d.setColor(colors[i - 1]);}
+            if (Utils.highlighted.get() && coloured && TimeCalcConf.getInstance()
+                    .isClockColorful()) {g2d.setColor(colors[i - 1]);}
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }

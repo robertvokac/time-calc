@@ -98,7 +98,8 @@ public class Battery extends JPanel {
         int todoHeight = totalHeight - doneHeight;
         double surfacePower = 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight = (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
-        if(waterSurfaceHeight <= 2) {
+        if(waterSurfaceHeight <= 2 || !TimeCalcConf.getInstance()
+                .areBatteryWavesEnabled()) {
             waterSurfaceHeight = 0;
         }
 
