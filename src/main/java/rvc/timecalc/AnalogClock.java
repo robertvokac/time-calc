@@ -53,6 +53,7 @@ public class AnalogClock extends Widget {
         drawClockFace(g2d, centerX, centerY, side / 2 - 40);
 
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
+
         if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 10) / 4,
                 (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
                 Color.RED);
@@ -72,7 +73,16 @@ public class AnalogClock extends Widget {
         if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 40) / 4, hours + hours > 0.5 ? hours - 0.5 :
                         hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
                 Color.BLACK);
+        drawCentre(g2d, centerX, centerY);
 
+    }
+
+    private void drawCentre(Graphics2D g2d, int centerX, int centerY) {
+        Color currentColor = g2d.getColor();
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.RED :
+                FOREGROUND_COLOR);
+        g2d.fillOval(centerX - 3, centerY - 3, 8, 8);
+        g2d.setColor(currentColor);
     }
 
     private void drawHand(Graphics2D g2d, int length, double value,
@@ -98,10 +108,9 @@ public class AnalogClock extends Widget {
         //        System.out.println("radius=" + radius);
         g2d.drawOval(1, 1, centerX * 2 - 4, centerY * 2 - 4);
         g2d.drawOval(2, 2, centerX * 2 - 4, centerY * 2 - 4);
+
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
-
-
 
         DateFormat formatter2 =
                 new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
