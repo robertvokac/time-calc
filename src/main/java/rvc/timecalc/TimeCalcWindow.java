@@ -83,6 +83,7 @@ public class TimeCalcWindow {
 
         JFrame window = new JFrame();
 
+        JButton focusButton = new JButton("F");
         JButton commandButton = new JButton("Command");
         JButton weatherButton = new JButton("Weather");
         JButton jokeButton = new JButton("Joke");
@@ -91,6 +92,7 @@ public class TimeCalcWindow {
 
         //window.add(weatherButton);
         window.add(commandButton);
+        window.add(focusButton);
 
         window.add(jokeButton);
         window.add(restartButton);
@@ -165,10 +167,13 @@ public class TimeCalcWindow {
         weatherButton
                 .setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
         commandButton.setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
+
         jokeButton.setBounds(140, text.getY() + text.getHeight() + 10, 100, 30);
         restartButton
                 .setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
         exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
+
+        focusButton.setBounds(exitButton.getX() + 10 + exitButton.getWidth() + 20, exitButton.getY(), 40, 30);
 
         window.setSize(520 + 20 + 100, 580);
         window.setLayout(null);
@@ -216,8 +221,9 @@ public class TimeCalcWindow {
                     }
                 });
 
-
-
+        focusButton.addActionListener(e -> {
+            window.requestFocus();
+        });
         jokeButton.addActionListener(e -> {
             for (int i = 1; i <= 1; i++) {
                 Jokes.showRandom();
@@ -305,6 +311,8 @@ public class TimeCalcWindow {
             batteryForWeek.setVisible(!Utils.everythingHidden.get());
             batteryForMonth.setVisible(!Utils.everythingHidden.get());
             jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !Utils.everythingHidden.get());
+            focusButton.setVisible(!Utils.everythingHidden.get());
+
             commandButton.setVisible(!Utils.everythingHidden.get());
             restartButton.setVisible(!Utils.everythingHidden.get());
             exitButton.setVisible(!Utils.everythingHidden.get());
