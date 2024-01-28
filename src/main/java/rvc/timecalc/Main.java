@@ -10,7 +10,9 @@ import java.io.IOException;
  */
 public class Main {
 
+    public static long startNanoTime;
     public static void main(String[] args) throws IOException {
+        startNanoTime = System.nanoTime();
         while (true) {
             boolean test = new File("test.txt").exists();
             File starttimeTxt = new File("starttime.txt");

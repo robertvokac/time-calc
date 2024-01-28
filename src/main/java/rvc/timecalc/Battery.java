@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class Battery extends Widget {
-
+    public static boolean wavesOff = false;
     public static final Color LOW = new Color(253, 130, 130);
     public static final Color MEDIUM = new Color(255, 204, 153);
     public static final Color HIGH = new Color(204, 255, 204);
@@ -70,7 +70,7 @@ public class Battery extends Widget {
         double surfacePower = 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight = (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
         if(waterSurfaceHeight <= 2 || !TimeCalcConf.getInstance()
-                .areBatteryWavesEnabled()) {
+                .areBatteryWavesEnabled() || wavesOff) {
             waterSurfaceHeight = 0;
         }
 

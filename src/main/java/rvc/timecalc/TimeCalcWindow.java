@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import java.awt.Color;
 import java.awt.Font;
@@ -82,12 +83,14 @@ public class TimeCalcWindow {
 
         JFrame window = new JFrame();
 
+        JButton commandButton = new JButton("Command");
         JButton weatherButton = new JButton("Weather");
         JButton jokeButton = new JButton("Joke");
         JButton restartButton = new JButton("Restart");
         JButton exitButton = new JButton("Exit");
 
         //window.add(weatherButton);
+        window.add(commandButton);
 
         window.add(jokeButton);
         window.add(restartButton);
@@ -112,6 +115,9 @@ public class TimeCalcWindow {
                 }
                 if(e.getKeyCode() == KeyEvent.VK_V){
                     everythingHidden = !everythingHidden;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_R){
+                    commandButton.doClick();
                 }
 
                 window.repaint();
@@ -155,6 +161,7 @@ public class TimeCalcWindow {
         window.add(text);
         weatherButton
                 .setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
+        commandButton.setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
         jokeButton.setBounds(140, text.getY() + text.getHeight() + 10, 100, 30);
         restartButton
                 .setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
@@ -174,6 +181,31 @@ public class TimeCalcWindow {
         });
         weatherButton
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
+        commandButton
+                .addActionListener(e ->
+                {
+                    String commands = (String) JOptionPane.showInputDialog(
+                            null,
+                            "Run a command:",
+                            "Command launching",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "test"
+                    );
+                    String[] commandsAsArray = commands.split(" ");
+                    switch(commandsAsArray[0]) {
+                        case "test": JOptionPane.showMessageDialog(null, "Test");break;
+                        case "color": Utils.highlighted.set(commandsAsArray[1].equals("1"));break;
+                        case "gray": Utils.ultraLight.set(commandsAsArray[1].equals("1"));break;
+                        case "waves": Battery.wavesOff = commandsAsArray[1].equals("0");break;
+                        case "uptime": JOptionPane.showMessageDialog(null, ((int)((System.nanoTime() -Main.startNanoTime)) / 1000000000 / 60) + " minutes");break;
+                        default: JOptionPane.showMessageDialog(null, "Unknown command: " + commandsAsArray[0]);
+                    }
+                });
+
+
+
         jokeButton.addActionListener(e -> {
             for (int i = 1; i <= 1; i++) {
                 Jokes.showRandom();
@@ -261,6 +293,7 @@ public class TimeCalcWindow {
             batteryForWeek.setVisible(!everythingHidden);
             batteryForMonth.setVisible(!everythingHidden);
             jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !everythingHidden);
+            commandButton.setVisible(!everythingHidden);
             restartButton.setVisible(!everythingHidden);
             exitButton.setVisible(!everythingHidden);
             window.setTitle(everythingHidden ? "" : "Time Calc");
