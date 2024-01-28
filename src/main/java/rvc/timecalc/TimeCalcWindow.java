@@ -273,7 +273,7 @@ public class TimeCalcWindow {
             }
 
             text.setForeground(
-                    Utils.highlighted.get() ? Color.BLACK : Color.GRAY);
+                    Utils.highlighted.get() ? Color.BLACK : Color.LIGHT_GRAY);
         }
         window.setVisible(false);
         window.dispose();
