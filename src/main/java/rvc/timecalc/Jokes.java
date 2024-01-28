@@ -10,10 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 09.02.2024
  */
-public class Vtipy {
+public class Jokes {
     /**
      * https://bestvtip.cz/
      * https://www.vtipbaze.cz/
@@ -29,7 +29,7 @@ public class Vtipy {
 
     static {
         try {
-            array = VtipyTxt.getAsArray();
+            array = JokesTxt.getAsArray();
             Set<String> set = new HashSet<>();
             for (String vtip : array) {
                 if (vtip.trim().isEmpty()) {

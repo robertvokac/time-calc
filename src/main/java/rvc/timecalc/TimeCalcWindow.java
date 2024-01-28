@@ -164,7 +164,7 @@ public class TimeCalcWindow {
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
         jokeButton.addActionListener(e -> {
             for (int i = 1; i <= 1; i++) {
-                Vtipy.showRandom();
+                Jokes.showRandom();
             }
         });
         exitButton.addActionListener(e -> System.exit(0));
@@ -223,9 +223,9 @@ public class TimeCalcWindow {
         boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY") || currentDayOfWeekAsString.equals("SUNDAY");
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
-        System.out.println("workDaysDone" + workDaysDone);
-        System.out.println("workDaysTodo" + workDaysTodo);
-        System.out.println("currentDayOfMonth" + currentDayOfMonth);
+//        System.out.println("workDaysDone" + workDaysDone);
+//        System.out.println("workDaysTodo" + workDaysTodo);
+//        System.out.println("currentDayOfMonth" + currentDayOfMonth);
 
 
 
@@ -334,7 +334,7 @@ public class TimeCalcWindow {
             //            }
             if (hourRemains == 0 && minuteRemains == 1 && !vtipyShown) {
                 vtipyShown = true;
-                Vtipy.showRandom();
+                Jokes.showRandom();
             }
             if (hourRemains == 0 && minuteRemains <= 3) {
                 Utils.highlighted.set(true);

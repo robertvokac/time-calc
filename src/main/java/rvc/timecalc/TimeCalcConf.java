@@ -10,7 +10,6 @@ import java.util.Properties;
  * @since 20.02.2024
  */
 public class TimeCalcConf {
-    private static final String CLOCK_COLORFUL = "clock.colorful";
     private static final String CLOCK_HANDS_LONG = "clock.hands.long";
     private static final String JOKE_VISIBLE = "jokes.visible";
     private static final String BATTERY_WAVES_ENABLED = "battery.waves.enabled";
@@ -34,12 +33,6 @@ public class TimeCalcConf {
         } catch (IOException e) {
             System.err.println(e);
         }
-    }
-    public boolean isClockColorful() {
-        if(!properties.containsKey(CLOCK_COLORFUL)) {
-            return false;
-        }
-        return properties.get(CLOCK_COLORFUL).equals("true");
     }
 
     public boolean areClockHandsLong() {

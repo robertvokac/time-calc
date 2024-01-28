@@ -10,9 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,49 +18,10 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
-public class AnalogClock extends JPanel {
-
-    private static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
-    private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
-
-    private boolean coloured = false;
-    private boolean mouseOver = false;
-    private int side;
-    private Color[] colors = Utils.getRandomColors();
+public class AnalogClock extends Widget {
 
     public AnalogClock() {
         setPreferredSize(new Dimension(400, 300));
-        setBackground(BACKGROUND_COLOR);
-        new Timer(20, e -> repaint()).start();
-
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Utils.highlighted.flip();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                coloured = true;
-                mouseOver = true;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                coloured = false;
-                mouseOver = false;
-            }
-        });
 
     }
 
@@ -73,34 +31,6 @@ public class AnalogClock extends JPanel {
         frame.add(new AnalogClock());
         frame.pack();
         frame.setVisible(true);
-    }
-
-    private static Color modifyColourALittleBit(Color colorIn) {
-        int r = colorIn.getRed();
-        int g = colorIn.getGreen();
-        int b = colorIn.getBlue();
-        Color color = new Color(
-                modifyByteALittleBit(r),
-                modifyByteALittleBit(g),
-                modifyByteALittleBit(b)
-        );
-        return color;
-    }
-
-    private static int modifyByteALittleBit(int n) {
-        //        if(Math.random() <= 0.75) {
-        //            return n;
-        //        }
-        boolean negative = Math.random() > 0.5;
-        int result = n + ((negative ? (-1) : 1)) * ((int) (Math.random() * (
-                Math.random() * 20)));
-        if (result > 255) {
-            return 255;
-        }
-        if (result < 0) {
-            return 0;
-        }
-        return result;
     }
 
     @Override
@@ -171,35 +101,12 @@ public class AnalogClock extends JPanel {
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
 
-        if(Utils.highlighted.get() && TimeCalcConf.getInstance().isClockColorful() && Math.random()>0.9) {colors = Utils.getRandomColors();}
-        if (Utils.highlighted.get() && coloured) {
-            for (int i = 0; i < 12; i++) {
-                //if(Math.random() > 0.75) {
-                colors[i] = modifyColourALittleBit(colors[i]);
-                //}
-            }
-        }
-        //        if(Math.random() >  (1 - (1/200))) {
-        //            for(int i = 0; i<12; i++) {
-        //                colors[i] = i == 11 ? colors[0] :colors[i + 1];
-        //            }
-        //        }
+
+
         DateFormat formatter2 =
                 new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
         String now = formatter2.format(new Date());
 
-        if (coloured) {
-            g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
-                    FOREGROUND_COLOR);
-            g2d.setFont(new Font("sans", Font.PLAIN, 12));
-            DateFormat formatter =
-                    new SimpleDateFormat("EEEE : yyyy-MM-dd", Locale.ENGLISH);
-            g2d.drawString(formatter.format(new Date()), ((int) (side * 0.25)),
-                    ((int) (side * 0.35)));
-            //
-            g2d.drawString(now, ((int) (side * 0.25) + 30),
-                    ((int) (side * 0.35)) + 60);
-        }
         for (int i = 1; i <= 12; i++) {
             double angle = Math.PI * 2 * (i / 12.0 - 0.25);
             int dx = centerX + (int) ((radius + 20) * Math.cos(angle)) - 4;
@@ -207,12 +114,13 @@ public class AnalogClock extends JPanel {
 
             int seconds = Integer.valueOf(now.split(":")[2]);
 
-            if (Utils.highlighted.get() && coloured && TimeCalcConf.getInstance()
-                    .isClockColorful()) {g2d.setColor(colors[i - 1]);}
+
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }
 
     }
-
+    public int getTimerDelay() {
+        return 20;
+    }
 }

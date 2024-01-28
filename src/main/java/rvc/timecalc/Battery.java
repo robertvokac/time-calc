@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class Battery extends JPanel {
+public class Battery extends Widget {
 
     public static final Color LOW = new Color(253, 130, 130);
     public static final Color MEDIUM = new Color(255, 204, 153);
@@ -22,48 +22,14 @@ public class Battery extends JPanel {
     public static final Color MEDIUM_HIGHLIGHTED = Color.ORANGE;
     public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
-    private static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
-    private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
+
     NumberFormat formatter3 = new DecimalFormat("#0.000");
     private int totalHeight = 0;
-    private double donePercent = 0;
-    private boolean mouseOver = false;
+
     private int width_;
 
     public Battery() {
         setPreferredSize(new Dimension(40, 100));
-        setBackground(BACKGROUND_COLOR);
-        new Timer(250, e -> repaint()).start();
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Utils.highlighted.flip();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                mouseOver = true;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                mouseOver = false;
-            }
-        });
-    }
-
-    public void setDonePercent(double donePercent) {
-        this.donePercent = donePercent;
     }
 
     @Override
@@ -140,5 +106,8 @@ public class Battery extends JPanel {
     private double getRandom(int index) {
         if(Math.random() > 0.7) {randomDoubles[index] = Math.random();}
         return randomDoubles[index];
+    }
+    public int getTimerDelay() {
+        return 250;
     }
 }

@@ -7,11 +7,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 15.02.2024
  */
-public class VtipyTxt {
-    private VtipyTxt() {
+public class JokesTxt {
+    private JokesTxt() {
         //Not meant to be instantiated.
     }
 
