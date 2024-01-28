@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
@@ -89,6 +91,36 @@ public class TimeCalcWindow {
         text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         text.setForeground(Color.GRAY);
         text.setBackground(new Color(238, 238, 238));
+        text.putClientProperty("mouseEntered", "false");
+
+
+        text.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Utils.highlighted.flip();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                text.putClientProperty("mouseEntered", "true");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                text.putClientProperty("mouseEntered", "false");
+            }
+        });
+
         window.add(text);
         weatherButton
                 .setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
@@ -275,7 +307,7 @@ public class TimeCalcWindow {
             }
 
             text.setForeground(
-                    Utils.highlighted.get() ? Color.BLACK : Color.LIGHT_GRAY);
+                    Utils.highlighted.get() || text.getClientProperty("mouseEntered").equals("true") ? Color.BLACK : Color.LIGHT_GRAY);
         }
         window.setVisible(false);
         window.dispose();

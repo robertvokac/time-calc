@@ -115,7 +115,7 @@ public class Battery extends JPanel {
                             intX + width_ / pointCount * 4,
                             intX + width_ / pointCount * 5,
                             intX + width_ / pointCount * 6,
-                            (int) (intX + width_ / pointCount * 7.9),
+                            (int) (intX + width_ / pointCount * 7),
                             intX + width_ / pointCount * 8},
                     new int[]{(int) (todoHeight + (waterSurfaceHeight * 1)),
                             todoHeight + (int) (waterSurfaceHeight * getRandom(0)),
