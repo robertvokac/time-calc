@@ -108,7 +108,7 @@ public class TimeCalcWindow {
         text.setForeground(Color.GRAY);
         text.setBackground(new Color(238, 238, 238));
         text.putClientProperty("mouseEntered", "false");
-
+        text.setFocusable(false);
 
         text.addMouseListener(new MouseListener() {
             @Override
