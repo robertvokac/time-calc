@@ -18,7 +18,7 @@ public class Main {
             String lastStartTime = Utils.readTextFromFile(starttimeTxt);
             String lastOvertime = Utils.readTextFromFile(overtimeTxt);
             String startTime =
-                    test ? "7:00" : (String) JOptionPane.showInputDialog(
+                    test ? (lastStartTime != null ? lastStartTime : "7:00") : (String) JOptionPane.showInputDialog(
                             null,
                             "Start Time:",
                             "Start Time",
@@ -28,7 +28,7 @@ public class Main {
                             lastStartTime == null ? "7:00" : lastStartTime
                     );
             String overTime =
-                    test ? "0:00" : (String) JOptionPane.showInputDialog(
+                    test ? (lastOvertime != null ? lastOvertime : "0:00") : (String) JOptionPane.showInputDialog(
                             null,
                             "Overtime:",
                             "Overtime",

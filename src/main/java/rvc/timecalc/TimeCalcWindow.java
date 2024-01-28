@@ -32,7 +32,7 @@ public class TimeCalcWindow {
     private final static DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
     private final String startTime;
-    private final String overTime;
+    private String overTime;
     private final int startHour;
     private final int startMinute;
     private final int overtimeHour;
@@ -53,11 +53,13 @@ public class TimeCalcWindow {
         this.startHour = Integer.valueOf(startTime.split(":")[0]);
         this.startMinute = Integer.valueOf(startTime.split(":")[1]);
 
-        this.overtimeHour = Integer.valueOf(overTime.split(":")[0]);
-        this.overtimeMinute = Integer.valueOf(overTime.split(":")[1]);
+        boolean overtimeIsNegative = overTime.startsWith("-");
+        if(overtimeIsNegative) {overTime = overTime.replace("-","");}
+        this.overtimeHour =(overtimeIsNegative ? (-1) : 1) * Integer.valueOf(overTime.split(":")[0]);
+        this.overtimeMinute = (overtimeIsNegative ? (-1) : 1) * Integer.valueOf(overTime.split(":")[1]);
 
-        this.endHour = startHour + WORKING_HOURS_LENGTH - overtimeHour;
-        this.endMinute = startMinute + WORKING_MINUTES_LENGTH - overtimeMinute;
+        this.endHour = startHour + WORKING_HOURS_LENGTH + overtimeHour;
+        this.endMinute = startMinute + WORKING_MINUTES_LENGTH + overtimeMinute;
         while (endMinute >= 60) {
             endMinute = endMinute - 60;
             endHour = endHour + 1;
@@ -180,8 +182,8 @@ public class TimeCalcWindow {
             int secondsRemains = 60 - secondNow;
             int millisecondsRemains = 1000 - millisecondNow;
 
-            int hourDone = WORKING_HOURS_LENGTH - overtimeHour - hourRemains;
-            int minutesDone = 30 - overtimeMinute - minuteRemains;
+            int hourDone = WORKING_HOURS_LENGTH + overtimeHour - hourRemains;
+            int minutesDone = 30 + overtimeMinute - minuteRemains;
             int secondsDone = secondNow;
             int millisecondsDone = millisecondNow;
 
@@ -207,7 +209,7 @@ public class TimeCalcWindow {
             cal.setTime(new Date());
             int weekDayWhenMondayIsOne = cal.get(Calendar.DAY_OF_WEEK) - 1;
             batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0
-                                           || weekDayWhenMondayIsOne == 6) ?
+         || weekDayWhenMondayIsOne == 6) ?
                     100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
 
             int totalSecondsRemains =

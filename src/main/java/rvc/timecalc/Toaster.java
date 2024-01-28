@@ -423,7 +423,7 @@ public class Toaster {
                     if (currentNumberOfToaster > 0) {
                         stopYPosition =
                                 stopYPosition - (maxToaster % maxToasterInSceen
-                                                 * toasterHeight);
+               * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -434,7 +434,7 @@ public class Toaster {
                     if (currentNumberOfToaster > 0) {
                         stopYPosition =
                                 stopYPosition + (maxToaster % maxToasterInSceen
-                                                 * toasterHeight);
+               * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
