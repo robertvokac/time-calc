@@ -111,7 +111,7 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-        if(TimeCalcConf.getInstance().isEverythingHidden()) {
+        if(Utils.everythingHidden.get() || !Utils.toastsAreEnabled.get()) {
             //nothing to do
             return;
         }

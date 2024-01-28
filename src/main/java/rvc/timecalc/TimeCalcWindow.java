@@ -51,10 +51,10 @@ public class TimeCalcWindow {
     private int endMinute;
     private boolean stopBeforeEnd = false;
     private boolean vtipyShown = false;
-    private boolean everythingHidden = false;
 
     public TimeCalcWindow(String startTimeIn, String overTimeIn) {
-        everythingHidden = TimeCalcConf.getInstance().isEverythingHidden();
+        Utils.everythingHidden.set(TimeCalcConf.getInstance().isEverythingHidden());
+        Utils.toastsAreEnabled.set(TimeCalcConf.getInstance().areToastsEnabled());
         this.startTime = startTimeIn;
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 DEFAULT_OVERTIME : overTimeIn;
@@ -100,10 +100,10 @@ public class TimeCalcWindow {
             // Key Pressed method
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP){
-                    everythingHidden = false;
+                    Utils.everythingHidden.set(false);
                 }
                 if(e.getKeyCode() == KeyEvent.VK_DOWN){
-                    everythingHidden = true;
+                    Utils.everythingHidden.set(true);
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_G){
@@ -114,10 +114,13 @@ public class TimeCalcWindow {
                     Utils.highlighted.flip();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_V){
-                    everythingHidden = !everythingHidden;
+                    Utils.everythingHidden.flip();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_R){
                     commandButton.doClick();
+                }
+                if(e.getKeyCode() == KeyEvent.VK_T){
+                    Utils.toastsAreEnabled.flip();
                 }
 
                 window.repaint();
@@ -200,6 +203,15 @@ public class TimeCalcWindow {
                         case "gray": Utils.ultraLight.set(commandsAsArray[1].equals("1"));break;
                         case "waves": Battery.wavesOff = commandsAsArray[1].equals("0");break;
                         case "uptime": JOptionPane.showMessageDialog(null, ((int)((System.nanoTime() -Main.startNanoTime)) / 1000000000 / 60) + " minutes");break;
+                        case "toast":
+                            Toaster t = new Toaster();
+                            t.setToasterWidth(800);
+                            t.setToasterHeight(800);
+                            t.setDisplayTime(60000 * 5);
+                            t.setToasterColor(Color.GRAY);
+                            Font font = new Font("sans", Font.PLAIN, 12);
+                            t.setToasterMessageFont(font);t.setDisplayTime(5000); t.showToaster(commands.substring(6));break;
+                        case "toasts": Utils.toastsAreEnabled.set(commandsAsArray[1].equals("1"));break;
                         default: JOptionPane.showMessageDialog(null, "Unknown command: " + commandsAsArray[0]);
                     }
                 });
@@ -285,18 +297,18 @@ public class TimeCalcWindow {
                 break;
             }
 
-            text.setVisible(!everythingHidden);
-            progressSquare.setVisible(!everythingHidden);
-            progressCircle.setVisible(!everythingHidden);
-            analogClock.setVisible(!everythingHidden);
-            battery.setVisible(!everythingHidden);
-            batteryForWeek.setVisible(!everythingHidden);
-            batteryForMonth.setVisible(!everythingHidden);
-            jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !everythingHidden);
-            commandButton.setVisible(!everythingHidden);
-            restartButton.setVisible(!everythingHidden);
-            exitButton.setVisible(!everythingHidden);
-            window.setTitle(everythingHidden ? "" : "Time Calc");
+            text.setVisible(!Utils.everythingHidden.get());
+            progressSquare.setVisible(!Utils.everythingHidden.get());
+            progressCircle.setVisible(!Utils.everythingHidden.get());
+            analogClock.setVisible(!Utils.everythingHidden.get());
+            battery.setVisible(!Utils.everythingHidden.get());
+            batteryForWeek.setVisible(!Utils.everythingHidden.get());
+            batteryForMonth.setVisible(!Utils.everythingHidden.get());
+            jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !Utils.everythingHidden.get());
+            commandButton.setVisible(!Utils.everythingHidden.get());
+            restartButton.setVisible(!Utils.everythingHidden.get());
+            exitButton.setVisible(!Utils.everythingHidden.get());
+            window.setTitle(Utils.everythingHidden.get() ? "" : "Time Calc");
             sb = new StringBuilder();
             LocalDateTime now = LocalDateTime.now();
             String nowString = DATE_TIME_FORMATTER.format(now);

@@ -7,6 +7,14 @@ package rvc.timecalc;
 public class BooleanHolder {
     private boolean b;
 
+    public BooleanHolder(boolean b) {
+        this.b = b;
+    }
+
+    public BooleanHolder() {
+        this(false);
+    }
+
     public void set(boolean b) {
         this.b = b;
     }
