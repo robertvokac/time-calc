@@ -202,7 +202,7 @@ public class TimeCalcWindow {
                         case "color": Utils.highlighted.set(commandsAsArray[1].equals("1"));break;
                         case "gray": Utils.ultraLight.set(commandsAsArray[1].equals("1"));break;
                         case "waves": Battery.wavesOff = commandsAsArray[1].equals("0");break;
-                        case "uptime": JOptionPane.showMessageDialog(null, ((int)((System.nanoTime() -Main.startNanoTime)) / 1000000000 / 60) + " minutes");break;
+                        case "uptime": JOptionPane.showMessageDialog(null, ((int)((System.nanoTime() - Main.startNanoTime) / 1000000000 / 60)) + " minutes");break;
                         case "toast":
                             Toaster t = new Toaster();
                             t.setToasterWidth(800);
