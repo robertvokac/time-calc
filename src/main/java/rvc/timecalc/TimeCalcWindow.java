@@ -55,6 +55,7 @@ public class TimeCalcWindow {
     public TimeCalcWindow(String startTimeIn, String overTimeIn) {
         Utils.everythingHidden.set(TimeCalcConf.getInstance().isEverythingHidden());
         Utils.toastsAreEnabled.set(TimeCalcConf.getInstance().areToastsEnabled());
+
         this.startTime = startTimeIn;
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 DEFAULT_OVERTIME : overTimeIn;
@@ -301,6 +302,10 @@ public class TimeCalcWindow {
                 window.setVisible(false);
                 window.dispose();
                 break;
+            }
+
+            if(Utils.highlighted.get()) {
+                Utils.ultraLight.set(false);
             }
 
             text.setVisible(!Utils.everythingHidden.get());
