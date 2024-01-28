@@ -107,6 +107,13 @@ public class TimeCalcWindow {
                     Utils.ultraLight.flip();
                 }
 
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    Utils.highlighted.flip();
+                }
+                if(e.getKeyCode() == KeyEvent.VK_V){
+                    everythingHidden = !everythingHidden;
+                }
+
                 window.repaint();
             }
         });
