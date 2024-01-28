@@ -45,7 +45,9 @@ public class Battery extends Widget {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.fillRect(width_ / 4, 1, width_, totalHeight - 2);
+        if(!Utils.ultraLight.get()) {
+            g2d.fillRect(width_ / 4, 1, width_, totalHeight - 2);
+        }
         g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
         g2d.drawRect(width_ / 4 - 1, 0, width_ + 1, totalHeight + 0);
@@ -58,6 +60,9 @@ public class Battery extends Widget {
         } else {
             g2d.setColor(donePercent < 0.1 ? LOW : (donePercent < 0.75 ?
                     MEDIUM : (donePercent < 0.9 ? HIGH : HIGHEST)));
+        }
+        if(Utils.ultraLight.get()) {
+            g2d.setColor(Utils.ULTRA_LIGHT_GRAY);
         }
         int doneHeight = (int) (totalHeight * donePercent);
         int intX = width_ / 4;

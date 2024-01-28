@@ -13,6 +13,8 @@ import java.nio.file.Files;
  */
 public class Utils {
     public static final BooleanHolder highlighted = new BooleanHolder();
+    public static final BooleanHolder ultraLight = new BooleanHolder();
+    public static final Color ULTRA_LIGHT_GRAY = new Color(216,216,216);
     /**
      * Count of bytes per one kilobyte.
      */

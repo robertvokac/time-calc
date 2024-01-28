@@ -102,6 +102,11 @@ public class TimeCalcWindow {
                 if(e.getKeyCode() == KeyEvent.VK_DOWN){
                     everythingHidden = true;
                 }
+
+                if(e.getKeyCode() == KeyEvent.VK_G){
+                    Utils.ultraLight.flip();
+                }
+
                 window.repaint();
             }
         });
@@ -203,7 +208,6 @@ public class TimeCalcWindow {
         calNow.setTime(new Date());
         LocalDate ld = LocalDate.of(calNow.get(Calendar.YEAR),calNow.get(Calendar.MONTH) + 1,1);
         DayOfWeek firstDayOfMonth = ld.getDayOfWeek();
-        System.out.println("dow=" + firstDayOfMonth);
         int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
 
         int workDaysDone = 0;
@@ -241,6 +245,7 @@ public class TimeCalcWindow {
                 window.dispose();
                 break;
             }
+
             text.setVisible(!everythingHidden);
             progressSquare.setVisible(!everythingHidden);
             progressCircle.setVisible(!everythingHidden);
