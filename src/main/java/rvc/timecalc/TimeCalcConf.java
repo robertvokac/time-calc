@@ -14,6 +14,7 @@ public class TimeCalcConf {
     private static final String CLOCK_HANDS_LONG = "clock.hands.long";
     private static final String JOKE_VISIBLE = "jokes.visible";
     private static final String BATTERY_WAVES_ENABLED = "battery.waves.enabled";
+    private static final String EVERYTHING_HIDDEN = "everything-hidden";
 
     private static TimeCalcConf INSTANCE;
     private Properties properties = new Properties();
@@ -58,6 +59,12 @@ public class TimeCalcConf {
             return true;
         }
         return properties.get(BATTERY_WAVES_ENABLED).equals("true");
+    }
+    public boolean isEverythingHidden() {
+        if(!properties.containsKey(EVERYTHING_HIDDEN)) {
+            return false;
+        }
+        return properties.get(EVERYTHING_HIDDEN).equals("true");
     }
 
 }

@@ -15,6 +15,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
@@ -51,6 +53,7 @@ public class TimeCalcWindow {
     private boolean everythingHidden = false;
 
     public TimeCalcWindow(String startTimeIn, String overTimeIn) {
+        everythingHidden = TimeCalcConf.getInstance().isEverythingHidden();
         this.startTime = startTimeIn;
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 DEFAULT_OVERTIME : overTimeIn;
@@ -103,7 +106,7 @@ public class TimeCalcWindow {
             }
         });
         JTextPane text = new JTextPane();
-        text.setBounds(10, 10 + 210 + 10, 540, 250);
+        text.setBounds(10, 10 + 210 + 10, 500, 250);
         text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         text.setForeground(Color.GRAY);
         text.setBackground(new Color(238, 238, 238));
@@ -196,6 +199,41 @@ public class TimeCalcWindow {
                 battery.getY(), 90, 140);
         window.add(batteryForWeek);
 
+        Calendar calNow = Calendar.getInstance();
+        calNow.setTime(new Date());
+        LocalDate ld = LocalDate.of(calNow.get(Calendar.YEAR),calNow.get(Calendar.MONTH) + 1,1);
+        DayOfWeek firstDayOfMonth = ld.getDayOfWeek();
+        System.out.println("dow=" + firstDayOfMonth);
+        int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
+
+        int workDaysDone = 0;
+        int workDaysTodo = 0;
+        int workDaysTotal;
+        for(int dayOfMonth=1; dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH); dayOfMonth++) {
+            DayOfWeek dayOfWeek = LocalDate.of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1, dayOfMonth).getDayOfWeek();
+            boolean weekend = dayOfWeek.toString().equals("SATURDAY") || dayOfWeek.toString().equals("SUNDAY");
+            if(dayOfMonth < currentDayOfMonth && !weekend) {
+                ++workDaysDone;
+            }
+            if(dayOfMonth > currentDayOfMonth && !weekend) {
+                ++workDaysTodo;
+            }
+        }
+        String currentDayOfWeekAsString = LocalDate.of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1, currentDayOfMonth).getDayOfWeek().toString();
+        boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY") || currentDayOfWeekAsString.equals("SUNDAY");
+        workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
+
+        System.out.println("workDaysDone" + workDaysDone);
+        System.out.println("workDaysTodo" + workDaysTodo);
+        System.out.println("currentDayOfMonth" + currentDayOfMonth);
+
+
+
+        Battery batteryForMonth = new Battery();
+        batteryForMonth.setBounds(battery.getBounds().x + battery.getWidth(),
+                battery.getY() + batteryForWeek.getHeight() + 10, 90, 140);
+        window.add(batteryForMonth);
+
         StringBuilder sb = null;
         while (true) {
             if (stopBeforeEnd) {
@@ -209,6 +247,7 @@ public class TimeCalcWindow {
             analogClock.setVisible(!everythingHidden);
             battery.setVisible(!everythingHidden);
             batteryForWeek.setVisible(!everythingHidden);
+            batteryForMonth.setVisible(!everythingHidden);
             jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !everythingHidden);
             restartButton.setVisible(!everythingHidden);
             exitButton.setVisible(!everythingHidden);
@@ -263,12 +302,13 @@ public class TimeCalcWindow {
             progressCircle.setDonePercent(done);
             battery.setDonePercent(done);
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            int weekDayWhenMondayIsOne = cal.get(Calendar.DAY_OF_WEEK) - 1;
+            int weekDayWhenMondayIsOne = calNow.get(Calendar.DAY_OF_WEEK) - 1;
             batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0
          || weekDayWhenMondayIsOne == 6) ?
                     100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
+
+            batteryForMonth.setDonePercent(weekDayWhenMondayIsOne == 0
+                                           || weekDayWhenMondayIsOne == 6 ? workDaysDone/workDaysTotal : (workDaysDone + done) / workDaysTotal);
 
             int totalSecondsRemains =
                     (hourRemains * 60 * 60 + minuteRemains * 60
