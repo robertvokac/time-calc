@@ -3,7 +3,7 @@ package org.nanoboot.utils.timecalc.gui.progress;
 import org.nanoboot.utils.timecalc.gui.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.TimeHoursMinutes;
+import org.nanoboot.utils.timecalc.utils.TimeHM;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.imageio.ImageIO;
@@ -60,7 +60,7 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
         });
     }
     public void printPercentToAscii(double percent, int hourRemains, int minuteRemains, double done,
-            double totalSecondsRemainsDouble, TimeHoursMinutes endTime) {
+            double totalSecondsRemainsDouble, TimeHM endTime) {
         StringBuilder sb = new StringBuilder();
         String msg = createMessage(hourRemains, minuteRemains, done, totalSecondsRemainsDouble, endTime);
         int percentInt = (int) (percent * 100);
@@ -146,7 +146,7 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
     }
 
     private String createMessage(int hourRemains, int minuteRemains, double done,
-            double totalSecondsRemainsDouble, TimeHoursMinutes endTime) {
+            double totalSecondsRemainsDouble, TimeHM endTime) {
         String msg = "Done=" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(
                 done * 100) + "% Remains="
                      + String.format("%02d", hourRemains) + ":" + String

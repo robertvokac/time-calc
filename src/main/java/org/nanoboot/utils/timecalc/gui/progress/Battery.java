@@ -33,6 +33,11 @@ public class Battery extends Widget {
         setPreferredSize(new Dimension(40, 100));
     }
 
+    public Battery(int i, int y, int height) {
+        this();
+        setBounds(i, y, height);
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         if (totalHeight == 0) {

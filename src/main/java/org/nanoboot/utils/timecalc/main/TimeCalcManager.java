@@ -7,14 +7,14 @@ import org.nanoboot.utils.timecalc.gui.common.Toaster;
 import org.nanoboot.utils.timecalc.gui.common.WeatherWindow;
 import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.gui.progress.Battery;
+import org.nanoboot.utils.timecalc.gui.progress.DayBattery;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.gui.progress.WalkingHumanProgressAsciiArt;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
-import org.nanoboot.utils.timecalc.utils.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.TimeHoursMinutes;
+import org.nanoboot.utils.timecalc.utils.TimeHM;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.swing.JOptionPane;
@@ -28,8 +28,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.nanoboot.utils.timecalc.utils.FileConstants.FOCUS_TXT;
 
@@ -43,9 +41,9 @@ public class TimeCalcManager {
     private final String windowTitle;
     private final int totalMinutes;
 
-    private final TimeHoursMinutes startTime;
-    private final TimeHoursMinutes overtime;
-    private final TimeHoursMinutes endTime;
+    private final TimeHM startTime;
+    private final TimeHM overtime;
+    private final TimeHM endTime;
     private boolean stopBeforeEnd = false;
     private boolean vtipyShown = false;
 
@@ -58,15 +56,15 @@ public class TimeCalcManager {
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
 
-        this.startTime = new TimeHoursMinutes(startTimeIn);
-        this.overtime = new TimeHoursMinutes(overTimeIn);
+        this.startTime = new TimeHM(startTimeIn);
+        this.overtime = new TimeHM(overTimeIn);
 
-        this.endTime = new TimeHoursMinutes(startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime.getHour(),
+        this.endTime = new TimeHM(startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime.getHour(),
                 startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH + overtime.getMinute());
 
-        this.totalMinutes = TimeHoursMinutes.countDiffInMinutes(startTime, endTime);
-        int totalSeconds = totalMinutes * TimeHoursMinutes.SECONDS_PER_MINUTE;
-        int totalMilliseconds = totalSeconds * TimeHoursMinutes.MILLISECONDS_PER_SECOND;
+        this.totalMinutes = TimeHM.countDiffInMinutes(startTime, endTime);
+        int totalSeconds = totalMinutes * TimeHM.SECONDS_PER_MINUTE;
+        int totalMilliseconds = totalSeconds * TimeHM.MILLISECONDS_PER_SECOND;
 
         TimeCalcWindow window = new TimeCalcWindow();
 
@@ -226,16 +224,14 @@ public class TimeCalcManager {
                                 .getWidth() + MARGIN, MARGIN, 80);
         window.add(progressCircle);
 
-        Battery batteryForDay = new Battery();
-        batteryForDay.setBounds(progressCircle.getBounds().x,
+        Battery dayBattery = new DayBattery(progressCircle.getBounds().x,
                 progressCircle.getY() + MARGIN + progressCircle.getHeight(), 140);
-        window.add(batteryForDay);
+        window.add(dayBattery);
 
-        Battery batteryForWeek = new Battery();
-        batteryForWeek.setBounds(
-                batteryForDay.getBounds().x + batteryForDay.getWidth(),
-                batteryForDay.getY(), 140);
-        window.add(batteryForWeek);
+        Battery weekBattery = new Battery(
+                dayBattery.getBounds().x + dayBattery.getWidth(),
+                dayBattery.getY(), 140);
+        window.add(weekBattery);
 
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
@@ -267,28 +263,22 @@ public class TimeCalcManager {
                                || currentDayOfWeekAsString.equals("SUNDAY");
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
-        //        System.out.println("workDaysDone" + workDaysDone);
-        //        System.out.println("workDaysTodo" + workDaysTodo);
-        //        System.out.println("currentDayOfMonth" + currentDayOfMonth);
+        Battery monthBattery = new Battery(
+                dayBattery.getBounds().x + dayBattery.getWidth(),
+                dayBattery.getY() + weekBattery.getHeight() + MARGIN, 140);
+        window.add(monthBattery);
 
-        Battery batteryForMonth = new Battery();
-        batteryForMonth.setBounds(
-                batteryForDay.getBounds().x + batteryForDay.getWidth(),
-                batteryForDay.getY() + batteryForWeek.getHeight() + MARGIN, 140);
-        window.add(batteryForMonth);
-
-        Battery batteryForHour = new Battery();
-        batteryForHour.setBounds(batteryForMonth.getBounds().x,
-                batteryForMonth.getY() + batteryForMonth.getHeight() + MARGIN, 140);
-        window.add(batteryForHour);
-        Rectangle hourRectangle = batteryForHour.getBounds();
-        Rectangle dayRectangle = batteryForDay.getBounds();
-        Rectangle weekRectangle = batteryForWeek.getBounds();
-        Rectangle monthRectangle = batteryForMonth.getBounds();
-        batteryForHour.setBounds(dayRectangle);
-        batteryForDay.setBounds(weekRectangle);
-        batteryForWeek.setBounds(monthRectangle);
-        batteryForMonth.setBounds(hourRectangle);
+        Battery hourBattery = new Battery(monthBattery.getBounds().x,
+                monthBattery.getY() + monthBattery.getHeight() + MARGIN, 140);
+        window.add(hourBattery);
+        Rectangle hourRectangle = hourBattery.getBounds();
+        Rectangle dayRectangle = dayBattery.getBounds();
+        Rectangle weekRectangle = weekBattery.getBounds();
+        Rectangle monthRectangle = monthBattery.getBounds();
+        hourBattery.setBounds(dayRectangle);
+        dayBattery.setBounds(weekRectangle);
+        weekBattery.setBounds(monthRectangle);
+        monthBattery.setBounds(hourRectangle);
 
         ComponentRegistry componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
@@ -296,10 +286,10 @@ public class TimeCalcManager {
                 progressSquare,
                 progressCircle,
                 analogClock,
-                batteryForDay,
-                batteryForWeek,
-                batteryForMonth,
-                batteryForHour,
+                dayBattery,
+                weekBattery,
+                monthBattery,
+                hourBattery,
                 jokeButton,
                 focusButton,
                 commandButton,
@@ -324,7 +314,6 @@ public class TimeCalcManager {
             }
 
             componentRegistry.setVisible(!Utils.everythingHidden.get());
-
             jokeButton.setVisible(
                     TimeCalcConf.getInstance().isJokeVisible()
                     && !Utils.everythingHidden.get());
@@ -349,17 +338,13 @@ public class TimeCalcManager {
             int minuteNow = Integer.parseInt(nowString.split(":")[1]);
             int secondNow = Integer.parseInt(nowString.split(":")[2]);
             int millisecondNow = Integer.parseInt(nowString.split(":")[3]);
-            int hourRemains = endTime.getHour() - hourNow;
-            int minuteRemains = endTime.getMinute() - minuteNow;
-            if (minuteRemains < 0) {
-                minuteRemains = minuteRemains + 60;
-                hourRemains = hourRemains - 1;
-            }
+            TimeHM timeRemains = new TimeHM(endTime.getHour() - hourNow, endTime.getMinute() - minuteNow);
+
             int secondsRemains = 60 - secondNow;
             int millisecondsRemains = 1000 - millisecondNow;
 
-            int hourDone = Constants.WORKING_HOURS_LENGTH + overtime.getHour() - hourRemains;
-            int minutesDone = Constants.WORKING_MINUTES_LENGTH + overtime.getMinute() - minuteRemains;
+            int hourDone = Constants.WORKING_HOURS_LENGTH + overtime.getHour() - timeRemains.getHour();
+            int minutesDone = Constants.WORKING_MINUTES_LENGTH + overtime.getMinute() - timeRemains.getMinute();
             int secondsDone = secondNow;
             int millisecondsDone = millisecondNow;
 
@@ -372,24 +357,24 @@ public class TimeCalcManager {
                           / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
             progressCircle.setDonePercent(done);
-            batteryForDay.setDonePercent(done);
+            dayBattery.setDonePercent(done);
 
             int weekDayWhenMondayIsOne = calNow.get(Calendar.DAY_OF_WEEK) - 1;
-            batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0
+            weekBattery.setDonePercent((weekDayWhenMondayIsOne == 0
                                            || weekDayWhenMondayIsOne == 6) ?
                     100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
-            batteryForWeek.setLabel(
+            weekBattery.setLabel(
                     nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
-            batteryForMonth.setDonePercent(weekDayWhenMondayIsOne == 0
+            monthBattery.setDonePercent(weekDayWhenMondayIsOne == 0
                                            || weekDayWhenMondayIsOne == 6 ?
                     workDaysDone / workDaysTotal :
                     (workDaysDone + done) / workDaysTotal);
-            batteryForMonth.setLabel(
+            monthBattery.setLabel(
                     (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
                     + (workDaysTotal));
 
-            double minutesRemainsD = minuteRemains;
+            double minutesRemainsD = timeRemains.getMinute();
             double secondsRemainsD = secondsRemains;
             double millisecondsRemainsD = millisecondsRemains;
             minutesRemainsD = minutesRemainsD + secondsRemainsD / 60d;
@@ -401,19 +386,19 @@ public class TimeCalcManager {
             if (millisecondsRemainsD > 0) {
                 minutesRemainsD = minutesRemainsD - 1d / 1000d;
             }
-            batteryForHour.setDonePercent(
+            hourBattery.setDonePercent(
                     done >= 1 ? 1 : (1 - ((minutesRemainsD % 60d) / 60d)));
             if (!nowIsWeekend) {
                 int hoursForLabel =
-                        (minuteRemains == 0 ? minuteRemains / 60 + 1 :
-                                minuteRemains / 60);
-                batteryForHour.setLabel(
+                        (timeRemains.getMinute() == 0 ? timeRemains.getMinute() / 60 + 1 :
+                                timeRemains.getMinute() / 60);
+                hourBattery.setLabel(
                         ((totalMinutes / 60) - hoursForLabel) + "/" + (
                                 totalMinutes / 60));
             }
 
             int totalSecondsRemains =
-                    (hourRemains * 60 * 60 + minuteRemains * 60
+                    (timeRemains.getHour() * 60 * 60 + timeRemains.getMinute() * 60
                      + secondsRemains);
             int totalMillisecondsRemains =
                     totalSecondsRemains * 1000 + millisecondsRemains;
@@ -428,21 +413,21 @@ public class TimeCalcManager {
             //            } else {
             //                sb.append(msg);
             //            }
-            if (hourRemains == 0 && minuteRemains == 1 && !vtipyShown) {
+            if (timeRemains.getHour() == 0 && timeRemains.getMinute() == 1 && !vtipyShown) {
                 vtipyShown = true;
                 Jokes.showRandom();
             }
-            if (hourRemains == 0 && minuteRemains <= 3) {
+            if (timeRemains.getHour() == 0 && timeRemains.getMinute() <= 3) {
                 Utils.highlighted.set(true);
                 walkingHumanProgressAsciiArt.setForeground(Color.BLUE);
             }
 
-            if (hourRemains <= 0 && minuteRemains <= 0) {
+            if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
                 Toaster toasterManager = new Toaster();
                 toasterManager.setDisplayTime(30000);
                 toasterManager.showToaster(
                         "Congratulation :-) It is the time to go home.");
-                walkingHumanProgressAsciiArt.printPercentToAscii(done, hourRemains, minuteRemains, done,totalSecondsRemainsDouble, endTime);
+                walkingHumanProgressAsciiArt.printPercentToAscii(done, timeRemains.getHour(), timeRemains.getMinute(), done,totalSecondsRemainsDouble, endTime);
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
@@ -456,7 +441,7 @@ public class TimeCalcManager {
                     }
                 }
             } else {
-                walkingHumanProgressAsciiArt.printPercentToAscii(done, hourRemains, minuteRemains, done,totalSecondsRemainsDouble, endTime);
+                walkingHumanProgressAsciiArt.printPercentToAscii(done, timeRemains.getHour(), timeRemains.getMinute(), done,totalSecondsRemainsDouble, endTime);
             }
 
             try {

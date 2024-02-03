@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 21.02.2024
  */
-public class TimeHoursMinutes {
+public class TimeHM {
     public static final int MINUTES_PER_HOUR = 60;
     public static final int MILLISECONDS_PER_SECOND = 1000;
     public static final int SECONDS_PER_MINUTE = 60;
@@ -17,7 +17,7 @@ public class TimeHoursMinutes {
     @Getter @Setter
     private Integer minute;
 
-    public TimeHoursMinutes(String string) {
+    public TimeHM(String string) {
         boolean isNegative = string.startsWith("-");
         if (isNegative) {
             string = string.replace("-", "");
@@ -27,16 +27,20 @@ public class TimeHoursMinutes {
         this.minute = (isNegative ? (-1) : 1) * Integer.valueOf(array[1]);
     }
 
-    public TimeHoursMinutes(int hourIn, int minuteIn) {
+    public TimeHM(int hourIn, int minuteIn) {
         this.hour = hourIn;
         this.minute = minuteIn;
         while (minute >= MINUTES_PER_HOUR) {
             minute = minute - MINUTES_PER_HOUR;
             hour = hour + 1;
         }
+        if (minute < 0) {
+            minute = minute + 60;
+            hour = hour - 1;
+        }
     }
 
-    public static int countDiffInMinutes(TimeHoursMinutes startTime, TimeHoursMinutes endTime) {
-        return (endTime.getHour() * TimeHoursMinutes.MINUTES_PER_HOUR + endTime.getMinute()) - (startTime.getHour() * TimeHoursMinutes.MINUTES_PER_HOUR + startTime.getMinute());
+    public static int countDiffInMinutes(TimeHM startTime, TimeHM endTime) {
+        return (endTime.getHour() * TimeHM.MINUTES_PER_HOUR + endTime.getMinute()) - (startTime.getHour() * TimeHM.MINUTES_PER_HOUR + startTime.getMinute());
     }
 }
