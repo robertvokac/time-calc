@@ -47,13 +47,13 @@ public class TimeCalcWindow {
     public static final String WALL = "||";
     private static final int MARGIN = 10;
 
+
     private final String windowTitle;
     private final int totalMinutes;
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private final TimeHoursMinutes startTime;
     private final TimeHoursMinutes overtime;
-    private int endHour;
-    private int endMinute;
+    private final TimeHoursMinutes endTime;
     private boolean stopBeforeEnd = false;
     private boolean vtipyShown = false;
 
@@ -69,16 +69,13 @@ public class TimeCalcWindow {
         this.startTime = new TimeHoursMinutes(startTimeIn);
         this.overtime = new TimeHoursMinutes(overTimeIn);
 
-        this.endHour = startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime.getHour();
-        this.endMinute = startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH + overtime.getMinute();
-        while (endMinute >= 60) {
-            endMinute = endMinute - 60;
-            endHour = endHour + 1;
-        }
+        this.endTime = new TimeHoursMinutes(startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime.getHour(),
+                startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH + overtime.getMinute());
+
         this.totalMinutes =
-                (endHour * 60 + endMinute) - (startTime.getHour() * 60 + startTime.getMinute());
+                (this.endTime.getHour() * TimeHoursMinutes.MINUTES_PER_HOUR + this.endTime.getMinute()) - (startTime.getHour() * TimeHoursMinutes.MINUTES_PER_HOUR + startTime.getMinute());
         int totalSeconds = totalMinutes * 60;
-        int totalMilliseconds = totalSeconds * 1000;
+        int totalMilliseconds = totalSeconds * TimeHoursMinutes.MILLISECONDS_PER_SECOND;
 
 
 
@@ -421,8 +418,8 @@ public class TimeCalcWindow {
             int minuteNow = Integer.parseInt(nowString.split(":")[1]);
             int secondNow = Integer.parseInt(nowString.split(":")[2]);
             int millisecondNow = Integer.parseInt(nowString.split(":")[3]);
-            int hourRemains = endHour - hourNow;
-            int minuteRemains = endMinute - minuteNow;
+            int hourRemains = endTime.getHour() - hourNow;
+            int minuteRemains = endTime.getMinute() - minuteNow;
             if (minuteRemains < 0) {
                 minuteRemains = minuteRemains + 60;
                 hourRemains = hourRemains - 1;
@@ -498,8 +495,8 @@ public class TimeCalcWindow {
                          + NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
                                  .format(totalSecondsRemainsDouble - 60)
                          + " s" + ")" + " End=" + String
-                                 .format("%02d", endHour) + ":" + String
-                                 .format("%02d", endMinute);
+                                 .format("%02d", endTime.getHour()) + ":" + String
+                                 .format("%02d", endTime.getMinute());
 
             //if(System.getProperty("progress")!=null) {
             printPercentToAscii(done, msg, sb);
