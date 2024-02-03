@@ -1,5 +1,6 @@
-package org.nanoboot.utils.timecalc.gui;
+package org.nanoboot.utils.timecalc.gui.progress;
 
+import org.nanoboot.utils.timecalc.gui.common.Widget;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import java.awt.Color;

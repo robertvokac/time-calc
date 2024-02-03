@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.gui;
+package org.nanoboot.utils.timecalc.gui.common;
 
 import org.nanoboot.utils.timecalc.utils.Utils;
 

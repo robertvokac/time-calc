@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.gui;
+package org.nanoboot.utils.timecalc.gui.common;
 
 import org.nanoboot.utils.timecalc.utils.Utils;
 
@@ -58,5 +58,7 @@ public class Widget extends JPanel {
         }
         this.donePercent = donePercent;
     }
-
+    public void setBounds(int x, int y, int side) {
+        setBounds(x, y, side, side);
+    }
 }

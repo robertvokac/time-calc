@@ -1,19 +1,19 @@
 package org.nanoboot.utils.timecalc.main;
 
-import org.nanoboot.utils.timecalc.gui.TimeCalcButton;
-import org.nanoboot.utils.timecalc.gui.Toaster;
-import org.nanoboot.utils.timecalc.gui.WeatherWindow;
-import org.nanoboot.utils.timecalc.gui.AnalogClock;
-import org.nanoboot.utils.timecalc.gui.Battery;
-import org.nanoboot.utils.timecalc.gui.ProgressCircle;
-import org.nanoboot.utils.timecalc.gui.ProgressSquare;
+import org.nanoboot.utils.timecalc.gui.common.TimeCalcButton;
+import org.nanoboot.utils.timecalc.gui.common.Toaster;
+import org.nanoboot.utils.timecalc.gui.common.WeatherWindow;
+import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
+import org.nanoboot.utils.timecalc.gui.progress.Battery;
+import org.nanoboot.utils.timecalc.gui.progress.ProgressCircle;
+import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.utils.Constants;
+import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
@@ -32,7 +32,6 @@ import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,11 +48,9 @@ public class TimeCalcWindow {
     private static final int WORKING_HOURS_LENGTH = 8;
     private static final int WORKING_MINUTES_LENGTH = 30;
     private static final String NEW_LINE = "\n";
-    private final static DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
+
     private static final int MARGIN = 10;
-    public static final int BUTTON_WIDTH = 100;
-    public static final int BUTTON_HEIGHT = 30;
+
     private final String startTime;
     private final String windowTitle;
     private String overTime;
@@ -62,7 +59,6 @@ public class TimeCalcWindow {
     private final int overtimeHour;
     private final int overtimeMinute;
     private final int totalMinutes;
-    private final Set<String> alreadyShownTimes = new HashSet<>();
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private int endHour;
     private int endMinute;
@@ -196,20 +192,18 @@ public class TimeCalcWindow {
 
         window.add(text);
         weatherButton
-                .setBounds(20, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH,
-                        BUTTON_HEIGHT);
-        commandButton.setBounds(20, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
+                .setBounds(20, text.getY() + text.getHeight() + MARGIN);
+        commandButton.setBounds(20, text.getY() + text.getHeight() + MARGIN);
 
-        jokeButton.setBounds(140, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
+        jokeButton.setBounds(140, text.getY() + text.getHeight() + MARGIN);
         restartButton
-                .setBounds(280, text.getY() + text.getHeight() + MARGIN,
-                        BUTTON_WIDTH, BUTTON_HEIGHT);
-        exitButton.setBounds(390, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
-        aboutButton.setBounds(exitButton.getX(), exitButton.getY() + exitButton.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
+                .setBounds(280, text.getY() + text.getHeight() + MARGIN);
+        exitButton.setBounds(390, text.getY() + text.getHeight() + MARGIN);
+        aboutButton.setBounds(exitButton.getX(), exitButton.getY() + exitButton.getHeight() + MARGIN);
 
-        focusButton.setBounds(exitButton.getX() + 3 * MARGIN + exitButton.getWidth() + 20, MARGIN, 60, BUTTON_HEIGHT);
+        focusButton.setBounds(exitButton.getX() + 3 * MARGIN + exitButton.getWidth() + 20, MARGIN, 60, aboutButton.getHeight());
 
-        window.setSize(520 + 20 + 100, 580 + MARGIN + BUTTON_WIDTH);
+        window.setSize(520 + 20 + 100, 580 + MARGIN + aboutButton.getHeight());
         window.setLayout(null);
         window.setVisible(true);
         this.windowTitle = createWindowTitle();
@@ -271,23 +265,23 @@ public class TimeCalcWindow {
         });
 
         AnalogClock analogClock = new AnalogClock();
-        analogClock.setBounds(10, 10, 200, 200);
+        analogClock.setBounds(MARGIN, MARGIN, 200);
         window.add(analogClock);
 
         ProgressSquare progressSquare = new ProgressSquare();
         progressSquare
-                .setBounds(10 + analogClock.getWidth() + 10, 10, 200, 200);
+                .setBounds(MARGIN + analogClock.getWidth() + MARGIN, MARGIN, 200);
         window.add(progressSquare);
 
         ProgressCircle progressCircle = new ProgressCircle();
         progressCircle
-                .setBounds(10 + progressSquare.getBounds().x + progressSquare
-                        .getWidth() + 10, 10, 80, 80);
+                .setBounds(MARGIN + progressSquare.getBounds().x + progressSquare
+                        .getWidth() + MARGIN, MARGIN, 80);
         window.add(progressCircle);
 
         Battery batteryForDay = new Battery();
         batteryForDay.setBounds(progressCircle.getBounds().x,
-                progressCircle.getY() + 10 + progressCircle.getHeight(), 90,
+                progressCircle.getY() + MARGIN + progressCircle.getHeight(), 90,
                 140);
         window.add(batteryForDay);
 
@@ -327,12 +321,12 @@ public class TimeCalcWindow {
 
         Battery batteryForMonth = new Battery();
         batteryForMonth.setBounds(batteryForDay.getBounds().x + batteryForDay.getWidth(),
-                batteryForDay.getY() + batteryForWeek.getHeight() + 10, 90, 140);
+                batteryForDay.getY() + batteryForWeek.getHeight() + MARGIN, 90, 140);
         window.add(batteryForMonth);
 
         Battery batteryForHour = new Battery();
         batteryForHour.setBounds(batteryForMonth.getBounds().x,
-                batteryForMonth.getY() + batteryForMonth.getHeight() + 10, 90, 140);
+                batteryForMonth.getY() + batteryForMonth.getHeight() + MARGIN, 90, 140);
         window.add(batteryForHour);
         Rectangle hourRectangle = batteryForHour.getBounds();
         Rectangle dayRectangle = batteryForDay.getBounds();
@@ -377,10 +371,10 @@ public class TimeCalcWindow {
             commandButton.setVisible(!Utils.everythingHidden.get());
             restartButton.setVisible(!Utils.everythingHidden.get());
             exitButton.setVisible(!Utils.everythingHidden.get());
-            window.setTitle(Utils.everythingHidden.get() ? "" : "Time Calc");
+            window.setTitle(Utils.everythingHidden.get() ? "" : windowTitle);
             sb = new StringBuilder();
             LocalDateTime now = LocalDateTime.now();
-            String nowString = DATE_TIME_FORMATTER.format(now);
+            String nowString = DateFormats.DATE_TIME_FORMATTER_HHmmssSSS.format(now);
             //            if (alreadyShownTimes.contains(nowString)) {
             //                //nothing to do
             //                try {

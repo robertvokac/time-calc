@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.gui;
+package org.nanoboot.utils.timecalc.gui.common;
 /**
  * Java Toaster is a java utility class for your swing applications
  * that show an animate box coming from the bottom of your screen
