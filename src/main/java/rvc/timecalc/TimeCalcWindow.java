@@ -418,8 +418,8 @@ public class TimeCalcWindow {
             if(millisecondsRemainsD > 0) {
                 minutesRemainsD = minutesRemainsD - 1d/1000d;
             }
-            batteryForHour.setDonePercent(1 - ((minutesRemainsD%60d)/60d));
-            if(done < 1 && !nowIsWeekend) {
+            batteryForHour.setDonePercent(done >= 1 ? 1 :(1 - ((minutesRemainsD%60d)/60d)));
+            if(!nowIsWeekend) {
                 int hoursForLabel = (minuteRemains == 0 ? minuteRemains / 60 + 1 : minuteRemains/ 60);
                 batteryForHour.setLabel( ((totalMinutes / 60) - hoursForLabel) + "/" + (totalMinutes / 60));
             }
@@ -548,11 +548,11 @@ public class TimeCalcWindow {
 
         sb.append("\n" + msg + "\n\n");
 
-        int spacesTotal = 52;
+        int spacesTotal = 48;
         int spacesDone = (int) (percent * spacesTotal);
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
 
-        sb.append("||" + createSpaces(58 - 2) + (spacesTodo == 0 ?
+        sb.append("||" + createSpaces(spacesTotal + 6 - 2) + (spacesTodo == 0 ?
                 "          \n" : "||======||\n"));
         sb.append("||").append(createSpaces(spacesTotal + 4))
                 .append(spacesTodo == 0 ? "" : "|        |").append("\n");
@@ -571,9 +571,9 @@ public class TimeCalcWindow {
                         spacesTodo) + /*WALL +*/ (spacesTodo == 0 ?
                         "  /☼☼☼☼\\   " :
                         "|        |") + /*WALL +*/ NEW_LINE +
-                "===================================================================="
+                "================================================================"
                 + NEW_LINE + "Steps: " + formatter3
-                        .format(percent * ((double) 52)) + "/" + spacesTotal
+                        .format(percent * ((double) spacesTotal)) + "/" + spacesTotal
         );
 
     }
