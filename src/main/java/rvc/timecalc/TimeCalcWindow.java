@@ -176,7 +176,7 @@ public class TimeCalcWindow {
                 .setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
         exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
 
-        focusButton.setBounds(exitButton.getX() + 10 + 10 + 10 + exitButton.getWidth() + 20, 10, 40, 30);
+        focusButton.setBounds(exitButton.getX() + 10 + 10 + 10 + exitButton.getWidth() + 20, 10, 60, 30);
 
         window.setSize(520 + 20 + 100, 580);
         window.setLayout(null);
@@ -550,6 +550,9 @@ public class TimeCalcWindow {
 
         int spacesTotal = 48;
         int spacesDone = (int) (percent * spacesTotal);
+        if(spacesDone > spacesTotal) {
+            spacesDone = spacesTotal;
+        }
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
 
         sb.append("||" + createSpaces(spacesTotal + 6 - 2) + (spacesTodo == 0 ?
