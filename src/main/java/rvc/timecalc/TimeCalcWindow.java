@@ -95,7 +95,7 @@ public class TimeCalcWindow {
 
         //window.add(weatherButton);
         window.add(commandButton);
-        //window.add(focusButton);
+        window.add(focusButton);
 
         window.add(jokeButton);
         window.add(restartButton);
