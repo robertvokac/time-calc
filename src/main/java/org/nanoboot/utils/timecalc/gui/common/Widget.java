@@ -59,6 +59,9 @@ public class Widget extends JPanel {
         if (donePercent > 1) {
             donePercent = 1;
         }
+        if (donePercent < 0) {
+            donePercent = 0;
+        }
         this.donePercent = donePercent;
     }
 

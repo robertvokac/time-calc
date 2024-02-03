@@ -10,6 +10,7 @@ import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
+import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.imageio.ImageIO;
@@ -26,8 +27,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,14 +44,8 @@ import static org.nanoboot.utils.timecalc.utils.FileConstants.FOCUS_TXT;
  */
 public class TimeCalcWindow {
     public static final String WALL = "||";
-
-    private static final int WORKING_HOURS_LENGTH = 8;
-    private static final int WORKING_MINUTES_LENGTH = 30;
-    private static final String NEW_LINE = "\n";
-
     private static final int MARGIN = 10;
 
-    private final String startTime;
     private final String windowTitle;
     private final int startHour;
     private final int startMinute;
@@ -60,7 +53,6 @@ public class TimeCalcWindow {
     private final int overtimeMinute;
     private final int totalMinutes;
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
-    private String overTime;
     private int endHour;
     private int endMinute;
     private boolean stopBeforeEnd = false;
@@ -72,25 +64,24 @@ public class TimeCalcWindow {
         Utils.toastsAreEnabled
                 .set(TimeCalcConf.getInstance().areToastsEnabled());
 
-        this.startTime = startTimeIn;
-        this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
+        overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
 
-        String[] startTimeAsArray = startTime.split(":");
+        String[] startTimeAsArray = startTimeIn.split(":");
         this.startHour = Integer.valueOf(startTimeAsArray[0]);
         this.startMinute = Integer.valueOf(startTimeAsArray[1]);
 
-        boolean overtimeIsNegative = overTime.startsWith("-");
+        boolean overtimeIsNegative = overTimeIn.startsWith("-");
         if (overtimeIsNegative) {
-            overTime = overTime.replace("-", "");
+            overTimeIn = overTimeIn.replace("-", "");
         }
         this.overtimeHour = (overtimeIsNegative ? (-1) : 1) * Integer
-                .valueOf(overTime.split(":")[0]);
+                .valueOf(overTimeIn.split(":")[0]);
         this.overtimeMinute = (overtimeIsNegative ? (-1) : 1) * Integer
-                .valueOf(overTime.split(":")[1]);
+                .valueOf(overTimeIn.split(":")[1]);
 
-        this.endHour = startHour + WORKING_HOURS_LENGTH + overtimeHour;
-        this.endMinute = startMinute + WORKING_MINUTES_LENGTH + overtimeMinute;
+        this.endHour = startHour + Constants.WORKING_HOURS_LENGTH + overtimeHour;
+        this.endMinute = startMinute + Constants.WORKING_MINUTES_LENGTH + overtimeMinute;
         while (endMinute >= 60) {
             endMinute = endMinute - 60;
             endHour = endHour + 1;
@@ -100,8 +91,7 @@ public class TimeCalcWindow {
         int totalSeconds = totalMinutes * 60;
         int totalMilliseconds = totalSeconds * 1000;
 
-        NumberFormat formatter5 = new DecimalFormat("#0.00000");
-        NumberFormat formatter3 = new DecimalFormat("#0.000");
+
 
         JFrame window = new JFrame();
 
@@ -451,8 +441,8 @@ public class TimeCalcWindow {
             int secondsRemains = 60 - secondNow;
             int millisecondsRemains = 1000 - millisecondNow;
 
-            int hourDone = WORKING_HOURS_LENGTH + overtimeHour - hourRemains;
-            int minutesDone = 30 + overtimeMinute - minuteRemains;
+            int hourDone = Constants.WORKING_HOURS_LENGTH + overtimeHour - hourRemains;
+            int minutesDone = Constants.WORKING_MINUTES_LENGTH + overtimeMinute - minuteRemains;
             int secondsDone = secondNow;
             int millisecondsDone = millisecondNow;
 
@@ -461,13 +451,6 @@ public class TimeCalcWindow {
             int totalMillisecondsDone =
                     totalSecondsDone * 1000 + millisecondsDone;
 
-            //            System.out.println(hourNow + " " + minuteNow + " " + secondNow + " " + millisecondNow);
-            //            System.out.println(hourRemains + " " + minuteRemains + " " + secondsRemains + " " + millisecondsRemains);
-            //            System.out.println(hourDone + " " + minutesDone + " " + secondsDone +  " " + totalMillisecondsDone + "\n");
-            //            System.out.println("totalSecondsDone=" + totalSecondsDone);
-            //            System.out.println("totalMillisecondsDone=" + totalMillisecondsDone);
-
-            //            double done = ((double)totalMinutesDone)/((double)totalMinutes);
             double done = ((double) totalMillisecondsDone)
                           / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
@@ -519,11 +502,11 @@ public class TimeCalcWindow {
                     totalSecondsRemains * 1000 + millisecondsRemains;
             double totalSecondsRemainsDouble =
                     ((double) totalMillisecondsRemains) / 1000;
-            String msg = "Done=" + formatter5.format(done * 100) + "% Remains="
+            String msg = "Done=" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(done * 100) + "% Remains="
                          + String.format("%02d", hourRemains) + ":" + String
                                  .format("%02d", minuteRemains)
                          + /*":" + String.format("%02d", secondsRemains)+ */ " ("
-                         + formatter3
+                         + NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
                                  .format(totalSecondsRemainsDouble - 60)
                          + " s" + ")" + " End=" + String
                                  .format("%02d", endHour) + ":" + String
@@ -601,11 +584,6 @@ public class TimeCalcWindow {
 
     private void printPercentToAscii(double percent,
             String msg, StringBuilder sb) {
-        NumberFormat formatter = new DecimalFormat("#00.00");
-        NumberFormat formatter2 = new DecimalFormat("##.##");
-        String s = formatter.format(percent * 100);
-        s = s.replace(",", "");
-
         int percentInt = (int) (percent * 100);
         if (!alreadyShownPercents.contains((int) (percent * 100))) {
             alreadyShownPercents.add((int) (percent * 100));
@@ -649,27 +627,27 @@ public class TimeCalcWindow {
         }
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
 
-        sb.append("||" + createSpaces(spacesTotal + 6 - 2) + (spacesTodo == 0 ?
+        sb.append(WALL + createSpaces(spacesTotal + 6 - 2) + (spacesTodo == 0 ?
                 "          \n" : "||======||\n"));
-        sb.append("||").append(createSpaces(spacesTotal + 4))
+        sb.append(WALL).append(createSpaces(spacesTotal + 4))
                 .append(spacesTodo == 0 ? "" : "|        |").append("\n");
 
-        NumberFormat formatter3 = new DecimalFormat("#0.00000");
+
         sb.append(
                 WALL + createSpaces(spacesDone) + " () " + createSpaces(
-                        spacesTodo) + /*WALL +*/ (spacesTodo == 0 ?
+                        spacesTodo) + (spacesTodo == 0 ?
                         "  \\☼☼☼☼/   " :
-                        "|     _  |") + /*WALL +*/ NEW_LINE +
+                        "|     _  |") + Constants.NEW_LINE +
                 WALL + createSpaces(spacesDone) + "/||\\" + createSpaces(
-                        spacesTodo) + /*WALL +*/ (spacesTodo == 0 ?
+                        spacesTodo) +  (spacesTodo == 0 ?
                         "  ☼☼☼☼☼☼  " :
-                        "|    |   |") + /*WALL +*/ NEW_LINE +
+                        "|    |   |") + Constants.NEW_LINE +
                 WALL + createSpaces(spacesDone) + " /\\ " + createSpaces(
-                        spacesTodo) + /*WALL +*/ (spacesTodo == 0 ?
+                        spacesTodo) +  (spacesTodo == 0 ?
                         "  /☼☼☼☼\\   " :
-                        "|        |") + /*WALL +*/ NEW_LINE +
+                        "|        |") + Constants.NEW_LINE +
                 "================================================================"
-                + NEW_LINE + "Steps: " + formatter3
+                + Constants.NEW_LINE + "Steps: " + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
                         .format(percent * ((double) spacesTotal)) + "/"
                 + spacesTotal
         );

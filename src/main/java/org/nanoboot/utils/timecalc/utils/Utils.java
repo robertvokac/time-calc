@@ -18,27 +18,24 @@ import java.util.jar.Manifest;
  * @since 15.02.2024
  */
 public class Utils {
+    private static long startNanoTime;
     public static final BooleanHolder highlighted = new BooleanHolder();
     public static final BooleanHolder ultraLight = new BooleanHolder();
     public static final BooleanHolder everythingHidden = new BooleanHolder();
-    public static final BooleanHolder toastsAreEnabled =
-            new BooleanHolder(true);
-    public static final Color ULTRA_LIGHT_GRAY = new Color(216, 216, 216);
+    public static final BooleanHolder toastsAreEnabled = new BooleanHolder(true);
+    public static final Color ULTRA_LIGHT_GRAY = new Color(216,216,216);
     /**
      * Count of bytes per one kilobyte.
      */
     private static final int COUNT_OF_BYTES_PER_ONE_KILOBYTE = 1024;
-    private static long startNanoTime;
-
-    private Utils() {
-        //Not meant to be instantiated.
-    }
-
     public static void startApp() {
-        if (startNanoTime == 0) {
+        if(startNanoTime == 0) {
             throw new TimeCalcException("App is already started.");
         }
         startNanoTime = System.nanoTime();
+    }
+    private Utils() {
+        //Not meant to be instantiated.
     }
 
     /**
@@ -92,22 +89,20 @@ public class Utils {
     }
 
     public static int getCountOfMinutesSinceAppStarted() {
-        return ((int) ((System.nanoTime() - startNanoTime) / 1000000000 / 60));
+        return ((int)((System.nanoTime() - startNanoTime) / 1000000000 / 60));
     }
 
     /**
      * Returns version of "Time Calc" from jar file.
-     *
      * @return version
      */
     public static String getVersion() {
         String version = Main.class.getPackage().getImplementationVersion();
-        return version;
+        return version == null ? "" : version;
     }
 
     /**
      * Returns build date of "Time Calc" from jar file.
-     *
      * @return build date
      */
     public static String getBuildDate() {
@@ -117,9 +112,8 @@ public class Utils {
         if (!classPath.startsWith("jar")) {
             return null;
         }
-        String manifestPath =
-                classPath.substring(0, classPath.lastIndexOf("!") + 1)
-                + "/META-INF/MANIFEST.MF";
+        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1)
+                              + "/META-INF/MANIFEST.MF";
         Manifest manifest;
         try {
             manifest = new Manifest(new URL(manifestPath).openStream());
