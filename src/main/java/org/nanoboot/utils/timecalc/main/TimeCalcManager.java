@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.main;
 
 import org.nanoboot.utils.timecalc.gui.common.TimeCalcButton;
+import org.nanoboot.utils.timecalc.gui.common.TimeCalcWindow;
 import org.nanoboot.utils.timecalc.gui.common.Toaster;
 import org.nanoboot.utils.timecalc.gui.common.WeatherWindow;
 import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
@@ -43,10 +44,9 @@ import static org.nanoboot.utils.timecalc.utils.FileConstants.FOCUS_TXT;
  * @author pc00289
  * @since 08.02.2024
  */
-public class TimeCalcWindow {
+public class TimeCalcManager {
     public static final String WALL = "||";
     private static final int MARGIN = 10;
-
 
     private final String windowTitle;
     private final int totalMinutes;
@@ -57,7 +57,7 @@ public class TimeCalcWindow {
     private boolean stopBeforeEnd = false;
     private boolean vtipyShown = false;
 
-    public TimeCalcWindow(String startTimeIn, String overTimeIn) {
+    public TimeCalcManager(String startTimeIn, String overTimeIn) {
         Utils.everythingHidden
                 .set(TimeCalcConf.getInstance().isEverythingHidden());
         Utils.toastsAreEnabled
@@ -72,14 +72,11 @@ public class TimeCalcWindow {
         this.endTime = new TimeHoursMinutes(startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime.getHour(),
                 startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH + overtime.getMinute());
 
-        this.totalMinutes =
-                (this.endTime.getHour() * TimeHoursMinutes.MINUTES_PER_HOUR + this.endTime.getMinute()) - (startTime.getHour() * TimeHoursMinutes.MINUTES_PER_HOUR + startTime.getMinute());
-        int totalSeconds = totalMinutes * 60;
+        this.totalMinutes = TimeHoursMinutes.countDiffInMinutes(startTime, endTime);
+        int totalSeconds = totalMinutes * TimeHoursMinutes.SECONDS_PER_MINUTE;
         int totalMilliseconds = totalSeconds * TimeHoursMinutes.MILLISECONDS_PER_SECOND;
 
-
-
-        JFrame window = new JFrame();
+        TimeCalcWindow window = new TimeCalcWindow();
 
         TimeCalcButton focusButton = new TimeCalcButton("F");
         TimeCalcButton commandButton = new TimeCalcButton("Command");
@@ -105,13 +102,8 @@ public class TimeCalcWindow {
         });
 
         //window.add(weatherButton);
-        window.add(commandButton);
-        window.add(focusButton);
-
-        window.add(jokeButton);
-        window.add(restartButton);
-        window.add(exitButton);
-        window.setFocusable(true);
+        window.addAll(commandButton, focusButton, jokeButton, restartButton,
+                exitButton);
         window.addKeyListener(new KeyAdapter() {
             // Key Pressed method
             public void keyPressed(KeyEvent e) {

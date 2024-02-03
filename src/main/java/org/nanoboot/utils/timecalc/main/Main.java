@@ -53,8 +53,8 @@ public class Main {
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
             try {
-                TimeCalcWindow timeCalc =
-                        new TimeCalcWindow(newStartTime, newOvertime);
+                TimeCalcManager timeCalc =
+                        new TimeCalcManager(newStartTime, newOvertime);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);
