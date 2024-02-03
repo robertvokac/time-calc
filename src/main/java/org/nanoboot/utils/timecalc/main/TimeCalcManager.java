@@ -9,6 +9,7 @@ import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.gui.progress.Battery;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
+import org.nanoboot.utils.timecalc.gui.progress.WalkingHumanProgressAsciiArt;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
@@ -20,7 +21,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
@@ -85,22 +85,7 @@ public class TimeCalcManager {
         TimeCalcButton jokeButton = new TimeCalcButton("Joke");
         TimeCalcButton restartButton = new TimeCalcButton("Restart");
         TimeCalcButton exitButton = new TimeCalcButton("Exit");
-        TimeCalcButton aboutButton = new TimeCalcButton("About");
-        aboutButton.addActionListener(e -> {
-            String version = Utils.getVersion();
-            String buildDate = Utils.getBuildDate();
-            if (version == null) {
-                version = "unknown";
-            }
-
-            if (buildDate == null) {
-                buildDate = "unknown";
-            }
-            JOptionPane.showMessageDialog(null,
-                    "Version: " + version + "\n" + "Built on (universal time): "
-                    + buildDate, "About \"Pdf DME Downloader\"",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
+        AboutButton aboutButton = new AboutButton();
 
         //window.add(weatherButton);
         window.addAll(commandButton, focusButton, jokeButton, restartButton,
@@ -135,15 +120,15 @@ public class TimeCalcManager {
                 window.repaint();
             }
         });
-        JTextPane text = new JTextPane();
-        text.setBounds(MARGIN, MARGIN + 210 + MARGIN, 500, 250);
-        text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-        text.setForeground(Color.GRAY);
-        text.setBackground(new Color(238, 238, 238));
-        text.putClientProperty("mouseEntered", "false");
-        text.setFocusable(false);
+        WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt = new WalkingHumanProgressAsciiArt();
+        walkingHumanProgressAsciiArt.setBounds(MARGIN, MARGIN + 210 + MARGIN, 500, 250);
 
-        text.addMouseListener(new MouseListener() {
+        walkingHumanProgressAsciiArt.setForeground(Color.GRAY);
+        walkingHumanProgressAsciiArt.setBackground(new Color(238, 238, 238));
+        walkingHumanProgressAsciiArt.putClientProperty("mouseEntered", "false");
+        walkingHumanProgressAsciiArt.setFocusable(false);
+
+        walkingHumanProgressAsciiArt.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Utils.highlighted.flip();
@@ -161,24 +146,24 @@ public class TimeCalcManager {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                text.putClientProperty("mouseEntered", "true");
+                walkingHumanProgressAsciiArt.putClientProperty("mouseEntered", "true");
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                text.putClientProperty("mouseEntered", "false");
+                walkingHumanProgressAsciiArt.putClientProperty("mouseEntered", "false");
             }
         });
 
-        window.add(text);
+        window.add(walkingHumanProgressAsciiArt);
         weatherButton
-                .setBounds(20, text.getY() + text.getHeight() + MARGIN);
-        commandButton.setBounds(20, text.getY() + text.getHeight() + MARGIN);
+                .setBounds(20, walkingHumanProgressAsciiArt.getY() + walkingHumanProgressAsciiArt.getHeight() + MARGIN);
+        commandButton.setBounds(20, walkingHumanProgressAsciiArt.getY() + walkingHumanProgressAsciiArt.getHeight() + MARGIN);
 
-        jokeButton.setBounds(140, text.getY() + text.getHeight() + MARGIN);
+        jokeButton.setBounds(140, walkingHumanProgressAsciiArt.getY() + walkingHumanProgressAsciiArt.getHeight() + MARGIN);
         restartButton
-                .setBounds(280, text.getY() + text.getHeight() + MARGIN);
-        exitButton.setBounds(390, text.getY() + text.getHeight() + MARGIN);
+                .setBounds(280, walkingHumanProgressAsciiArt.getY() + walkingHumanProgressAsciiArt.getHeight() + MARGIN);
+        exitButton.setBounds(390, walkingHumanProgressAsciiArt.getY() + walkingHumanProgressAsciiArt.getHeight() + MARGIN);
         aboutButton.setBounds(exitButton.getX(),
                 exitButton.getY() + exitButton.getHeight() + MARGIN);
 
@@ -351,7 +336,7 @@ public class TimeCalcManager {
 
         ComponentRegistry componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
-                text,
+                walkingHumanProgressAsciiArt,
                 progressSquare,
                 progressCircle,
                 analogClock,
@@ -499,7 +484,7 @@ public class TimeCalcManager {
             }
             if (hourRemains == 0 && minuteRemains <= 3) {
                 Utils.highlighted.set(true);
-                text.setForeground(Color.BLUE);
+                walkingHumanProgressAsciiArt.setForeground(Color.BLUE);
             }
 
             if (hourRemains <= 0 && minuteRemains <= 0) {
@@ -508,8 +493,7 @@ public class TimeCalcManager {
                 toasterManager.setDisplayTime(30000);
                 toasterManager.showToaster(
                         "Congratulation :-) It is the time to go home.");
-                //System.out.println(sb.toString());
-                text.setText(sb.toString());
+                walkingHumanProgressAsciiArt.setText(sb.toString());
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
@@ -523,8 +507,7 @@ public class TimeCalcManager {
                     }
                 }
             } else {
-                //System.out.println(sb.toString());
-                text.setText(sb.toString());
+                walkingHumanProgressAsciiArt.setText(sb.toString());
             }
 
             try {
@@ -533,8 +516,8 @@ public class TimeCalcManager {
 
             }
 
-            text.setForeground(
-                    Utils.highlighted.get() || text
+            walkingHumanProgressAsciiArt.setForeground(
+                    Utils.highlighted.get() || walkingHumanProgressAsciiArt
                             .getClientProperty("mouseEntered").equals("true") ?
                             Color.BLACK : Color.LIGHT_GRAY);
         }
