@@ -386,14 +386,10 @@ public class TimeCalcManager {
             if (millisecondsRemainsD > 0) {
                 minutesRemainsD = minutesRemainsD - 1d / 1000d;
             }
-            hourBattery.setDonePercent(
-                    done >= 1 ? 1 : (1 - ((minutesRemainsD % 60d) / 60d)));
+            hourBattery.setDonePercent(1 - ((minutesRemainsD % 60d) / 60d));
             if (!nowIsWeekend) {
-                int hoursForLabel =
-                        (timeRemains.getMinute() == 0 ? timeRemains.getMinute() / 60 + 1 :
-                                timeRemains.getMinute() / 60);
                 hourBattery.setLabel(
-                        ((totalMinutes / 60) - hoursForLabel) + "/" + (
+                        hourDone + "/" + (
                                 totalMinutes / 60));
             }
 

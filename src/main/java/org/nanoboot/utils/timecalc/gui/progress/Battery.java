@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.gui.progress;
 
 import org.nanoboot.utils.timecalc.gui.common.Widget;
 import org.nanoboot.utils.timecalc.main.TimeCalcConf;
+import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import java.awt.Color;
@@ -9,8 +10,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public class Battery extends Widget {
     public static final Color LOW = new Color(253, 130, 130);
@@ -22,7 +21,7 @@ public class Battery extends Widget {
     public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
     public static boolean wavesOff = false;
-    NumberFormat formatter3 = new DecimalFormat("#0.000");
+
     private int totalHeight = 0;
 
     private int width_;
@@ -119,7 +118,7 @@ public class Battery extends Widget {
         g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
         g2d.drawString(
-                formatter3.format(donePercent * 100) + "%",
+                NumberFormats.FORMATTER_THREE_DECIMAL_PLACES.format(donePercent * 100) + "%",
                 ((int) (width_ * 0.4)),
                 donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1);
 
