@@ -27,7 +27,7 @@ public class Battery extends Widget {
 
     private int totalHeight = 0;
 
-    private int width_;
+    private int totalWidth;
     private String label = null;
     private final double[] randomDoubles = new double[] {1d, 1d, 1d, 1d, 1d, 1d, 1};
 
@@ -44,22 +44,21 @@ public class Battery extends Widget {
     @Override
     public void paintComponent(Graphics g) {
         if (totalHeight == 0) {
-            this.totalHeight = Math.min(getWidth(), getHeight());
-            this.width_ = (int) (this.totalHeight * 0.6);
+            this.totalHeight = (int) (this.getHeight() / 10d * 7d);
+            this.totalWidth = this.getWidth();
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+
         g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.YELLOW :
                 FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (!Utils.ultraLight.get()) {
-            g2d.fillRect(width_ / 4, 1, width_, totalHeight - 2);
+            g2d.fillRect(1, 1, totalWidth, totalHeight - 2);
         }
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
-                Color.LIGHT_GRAY);
-        g2d.drawRect(width_ / 4 - 1, 0, width_ + 1, totalHeight + 0);
+
         if (Utils.highlighted.get() || mouseOver) {
             g2d.setColor(
                     donePercent < 0.1 ? LOW_HIGHLIGHTED : (donePercent < 0.75 ?
@@ -74,7 +73,7 @@ public class Battery extends Widget {
             g2d.setColor(Utils.ULTRA_LIGHT_GRAY);
         }
         int doneHeight = (int) (totalHeight * donePercent);
-        int intX = width_ / 4;
+        int intX = 1;
         int todoHeight = totalHeight - doneHeight;
         double surfacePower =
                 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
@@ -85,10 +84,10 @@ public class Battery extends Widget {
             waterSurfaceHeight = 0;
         }
 
-        g2d.fillRect(intX, doneHeight < waterSurfaceHeight || donePercent >= 1 ?
+        g2d.fillRect(intX+1, doneHeight < waterSurfaceHeight || donePercent >= 1 ?
                         todoHeight : todoHeight + waterSurfaceHeight,
-                width_, doneHeight < waterSurfaceHeight || donePercent >= 1 ?
-                        doneHeight : doneHeight - waterSurfaceHeight);
+                totalWidth - 3, doneHeight < waterSurfaceHeight || donePercent >= 1 ?
+                        doneHeight : doneHeight - waterSurfaceHeight + 1);
         int pointCount = 8;
         if (doneHeight >= waterSurfaceHeight
             && donePercent < 1) {// && todoHeight > waterSurfaceHeight) {
@@ -96,13 +95,13 @@ public class Battery extends Widget {
 
             g2d.fillPolygon(
                     new int[] {intX,
-                            (int) (intX + width_ / pointCount * 0.5),
-                            intX + width_ / pointCount * 3,
-                            intX + width_ / pointCount * 4,
-                            intX + width_ / pointCount * 5,
-                            intX + width_ / pointCount * 6,
-                            intX + width_ / pointCount * 7,
-                            intX + width_ / pointCount * 8},
+                            (int) (intX + totalWidth / pointCount * 0.5),
+                            intX + totalWidth / pointCount * 3,
+                            intX + totalWidth / pointCount * 4,
+                            intX + totalWidth / pointCount * 5,
+                            intX + totalWidth / pointCount * 6,
+                            intX + totalWidth / pointCount * 7,
+                            intX + totalWidth / pointCount * 8},
                     new int[] {todoHeight + (waterSurfaceHeight * 1),
                             todoHeight + (int) (waterSurfaceHeight * getRandom(
                                     0)),
@@ -123,22 +122,25 @@ public class Battery extends Widget {
                 Color.LIGHT_GRAY);
         g2d.drawString(
                 NumberFormats.FORMATTER_THREE_DECIMAL_PLACES.format(donePercent * 100) + "%",
-                ((int) (width_ * 0.4)),
+                ((int) (totalWidth * 0.15)),
                 donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1);
 
         if (label != null && !label.isEmpty()) {
             g2d.drawString(
                     label,
-                    ((int) (width_ * 0.4)),
+                    ((int) (totalWidth * 0.15)),
                     (donePercent > 0.5 ? totalHeight / 4 * 3 :
                             totalHeight / 4 * 1) + 20);
         }
         if (name != null && !name.isEmpty()) {
             g2d.drawString(
                     name,
-                    ((int) (width_ * 0.4)),
+                    ((int) (totalWidth * 0.15)),
                     (totalHeight / 4 * 3) + 20 + 20);
         }
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
+                Color.LIGHT_GRAY);
+        g2d.drawRect(1, 1, totalWidth - 2, totalHeight);
 
     }
 
@@ -162,6 +164,6 @@ public class Battery extends Widget {
     }
 
     public void setBounds(int x, int y, int height) {
-        setBounds(x, y, (int) (90d / 140d * height), height);
+        setBounds(x, y, (int) (40d / 100d * ((double)height)), height);
     }
 }

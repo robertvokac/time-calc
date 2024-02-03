@@ -232,7 +232,7 @@ public class TimeCalcManager {
         window.add(dayBattery);
 
         Battery weekBattery = new WeekBattery(
-                dayBattery.getBounds().x + dayBattery.getWidth(),
+                dayBattery.getBounds().x + dayBattery.getWidth() + MARGIN * 2,
                 dayBattery.getY(), 140);
         window.add(weekBattery);
 
@@ -282,6 +282,9 @@ public class TimeCalcManager {
         dayBattery.setBounds(weekRectangle);
         weekBattery.setBounds(monthRectangle);
         monthBattery.setBounds(hourRectangle);
+        //
+        weekBattery.setBounds(dayBattery.getX(), weekBattery.getY(), weekBattery.getWidth(), weekBattery.getHeight());
+        monthBattery.setBounds(dayBattery.getX(), monthBattery.getY(), monthBattery.getWidth(), monthBattery.getHeight());
 
         ComponentRegistry componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(

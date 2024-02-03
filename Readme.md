@@ -45,3 +45,7 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 
 ### focus.txt
 Requests focus for the window.
+
+## Key shortcuts
+
+## Command button
