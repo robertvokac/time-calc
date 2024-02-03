@@ -176,7 +176,7 @@ public class TimeCalcWindow {
                 .setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
         exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
 
-        focusButton.setBounds(exitButton.getX() + 10 + exitButton.getWidth() + 20, exitButton.getY(), 40, 30);
+        focusButton.setBounds(exitButton.getX() + 10 + 10 + 10 + exitButton.getWidth() + 20, 10, 40, 30);
 
         window.setSize(520 + 20 + 100, 580);
         window.setLayout(null);
@@ -410,6 +410,12 @@ public class TimeCalcWindow {
             double millisecondsRemainsD = (double) millisecondsRemains;
             minutesRemainsD = minutesRemainsD + secondsRemainsD / 60d;
             minutesRemainsD = minutesRemainsD + millisecondsRemainsD / 1000d / 60d;
+            if(secondsRemainsD > 0) {
+                minutesRemainsD = minutesRemainsD - 1d;
+            }
+            if(millisecondsRemainsD > 0) {
+                minutesRemainsD = minutesRemainsD - 1d/1000d;
+            }
             batteryForHour.setDonePercent(1 - ((minutesRemainsD%60d)/60d));
 
             int totalSecondsRemains =
