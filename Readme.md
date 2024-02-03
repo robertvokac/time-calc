@@ -4,7 +4,7 @@
 
 Time Calc is a desktop application used to track the remaining time until the end of some activity - like working hours.
 
-_Time Calc is written in Java programming language and using the Swing framework._
+_Time Calc is written in Java programming language and uses the Swing framework._
 
 ![Tux, the Linux mascot](images/screenshot.png)
 ## Usage
