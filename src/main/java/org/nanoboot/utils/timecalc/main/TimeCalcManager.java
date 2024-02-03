@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -326,17 +327,7 @@ public class TimeCalcManager {
             LocalDateTime now = LocalDateTime.now();
             String nowString =
                     DateFormats.DATE_TIME_FORMATTER_HHmmssSSS.format(now);
-            //            if (alreadyShownTimes.contains(nowString)) {
-            //                //nothing to do
-            //                try {
-            //                    Thread.sleep(100);
-            //                } catch (InterruptedException e) {
-            //
-            //                }
-            //                continue;
-            //            } else {
-            //                alreadyShownTimes.add(nowString);
-            //            }
+
             int hourNow = Integer.parseInt(nowString.split(":")[0]);
             int minuteNow = Integer.parseInt(nowString.split(":")[1]);
             int secondNow = Integer.parseInt(nowString.split(":")[2]);
@@ -367,10 +358,7 @@ public class TimeCalcManager {
             weekBattery.setLabel(
                     nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
-            monthBattery.setDonePercent(weekDayWhenMondayIsOne == 0
-                                           || weekDayWhenMondayIsOne == 6 ?
-                    workDaysDone / workDaysTotal :
-                    (workDaysDone + done) / workDaysTotal);
+            monthBattery.setDonePercent(MonthBattery.getMonthProgress(weekDayWhenMondayIsOne, workDaysDone, workDaysTotal, done));
             monthBattery.setLabel(
                     (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
                     + (workDaysTotal));
@@ -391,14 +379,6 @@ public class TimeCalcManager {
             double totalSecondsRemainsDouble =
                     ((double) totalMillisecondsRemains) / 1000;
 
-
-            //if(System.getProperty("progress")!=null) {
-
-
-
-            //            } else {
-            //                sb.append(msg);
-            //            }
             if (timeRemains.getHour() == 0 && timeRemains.getMinute() == 1 && !vtipyShown) {
                 vtipyShown = true;
                 Jokes.showRandom();

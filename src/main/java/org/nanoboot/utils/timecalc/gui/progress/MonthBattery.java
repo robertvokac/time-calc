@@ -8,9 +8,10 @@ public class MonthBattery extends Battery{
     public MonthBattery(int x, int i, int i1) {
         super("Month", x, i, i1);
     }
-    public static double getMonthProgress(int weekDayWhenMondayIsOne, double done) {
+    public static double getMonthProgress(int weekDayWhenMondayIsOne, int workDaysDone, int workDaysTotal, double done) {
 return weekDayWhenMondayIsOne == 0
        || weekDayWhenMondayIsOne == 6 ?
-        100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20);
+        workDaysDone / workDaysTotal :
+        (workDaysDone + done) / workDaysTotal;
     }
 }
