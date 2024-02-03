@@ -6,6 +6,6 @@ package org.nanoboot.utils.timecalc.gui.progress;
  */
 public class DayBattery extends Battery{
     public DayBattery(int x, int i, int i1) {
-        super(x, i, i1);
+        super("Day", x, i, i1);
     }
 }

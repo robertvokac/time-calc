@@ -9,9 +9,11 @@ import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.gui.progress.Battery;
 import org.nanoboot.utils.timecalc.gui.progress.DayBattery;
 import org.nanoboot.utils.timecalc.gui.progress.HourBattery;
+import org.nanoboot.utils.timecalc.gui.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.gui.progress.WalkingHumanProgressAsciiArt;
+import org.nanoboot.utils.timecalc.gui.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
@@ -229,7 +231,7 @@ public class TimeCalcManager {
                 progressCircle.getY() + MARGIN + progressCircle.getHeight(), 140);
         window.add(dayBattery);
 
-        Battery weekBattery = new Battery(
+        Battery weekBattery = new WeekBattery(
                 dayBattery.getBounds().x + dayBattery.getWidth(),
                 dayBattery.getY(), 140);
         window.add(weekBattery);
@@ -264,7 +266,7 @@ public class TimeCalcManager {
                                || currentDayOfWeekAsString.equals("SUNDAY");
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
-        Battery monthBattery = new Battery(
+        Battery monthBattery = new MonthBattery(
                 dayBattery.getBounds().x + dayBattery.getWidth(),
                 dayBattery.getY() + weekBattery.getHeight() + MARGIN, 140);
         window.add(monthBattery);
@@ -361,9 +363,7 @@ public class TimeCalcManager {
             dayBattery.setDonePercent(done);
 
             int weekDayWhenMondayIsOne = calNow.get(Calendar.DAY_OF_WEEK) - 1;
-            weekBattery.setDonePercent((weekDayWhenMondayIsOne == 0
-                                           || weekDayWhenMondayIsOne == 6) ?
-                    100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
+            weekBattery.setDonePercent(WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done));
             weekBattery.setLabel(
                     nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
@@ -444,7 +444,7 @@ public class TimeCalcManager {
         window.setVisible(false);
         window.dispose();
     }
-    
+
     private String createWindowTitle() {
         return "Time Calc " + Utils.getVersion();
     }

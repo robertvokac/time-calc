@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.gui.progress;
 
+import lombok.Getter;
 import org.nanoboot.utils.timecalc.gui.common.Widget;
 import org.nanoboot.utils.timecalc.main.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
@@ -21,6 +22,8 @@ public class Battery extends Widget {
     public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
     public static boolean wavesOff = false;
+    @Getter
+    private final String name;
 
     private int totalHeight = 0;
 
@@ -28,12 +31,13 @@ public class Battery extends Widget {
     private String label = null;
     private final double[] randomDoubles = new double[] {1d, 1d, 1d, 1d, 1d, 1d, 1};
 
-    public Battery() {
+    protected Battery(String name) {
+        this.name = name;
         setPreferredSize(new Dimension(40, 100));
     }
 
-    public Battery(int i, int y, int height) {
-        this();
+    protected Battery(String name, int i, int y, int height) {
+        this(name);
         setBounds(i, y, height);
     }
 
@@ -128,6 +132,12 @@ public class Battery extends Widget {
                     ((int) (width_ * 0.4)),
                     (donePercent > 0.5 ? totalHeight / 4 * 3 :
                             totalHeight / 4 * 1) + 20);
+        }
+        if (name != null && !name.isEmpty()) {
+            g2d.drawString(
+                    name,
+                    ((int) (width_ * 0.4)),
+                    (totalHeight / 4 * 3) + 20 + 20);
         }
 
     }
