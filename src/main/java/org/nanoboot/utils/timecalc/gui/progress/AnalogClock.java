@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.gui.progress;
 
 import org.nanoboot.utils.timecalc.gui.common.Widget;
 import org.nanoboot.utils.timecalc.main.TimeCalcConf;
+import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.swing.JFrame;
@@ -120,17 +121,19 @@ public class AnalogClock extends Widget {
 
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
+        if(this.mouseOver)
+        {
 
-        DateFormat formatter2 =
-                new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-        String now = formatter2.format(new Date());
-
+            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(new Date()), ((int) (side * 0.25)),
+                    ((int) (side * 0.35)));
+            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_TIME.format(new Date()),
+                    ((int) (side * 0.25) + 30),
+                    ((int) (side * 0.35)) + 60);
+        }
         for (int i = 1; i <= 12; i++) {
             double angle = Math.PI * 2 * (i / 12.0 - 0.25);
             int dx = centerX + (int) ((radius + 20) * Math.cos(angle)) - 4;
             int dy = centerY + (int) ((radius + 20) * Math.sin(angle)) + 4;
-
-            int seconds = Integer.valueOf(now.split(":")[2]);
 
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
