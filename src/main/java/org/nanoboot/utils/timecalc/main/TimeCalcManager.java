@@ -8,6 +8,7 @@ import org.nanoboot.utils.timecalc.gui.common.WeatherWindow;
 import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.gui.progress.Battery;
 import org.nanoboot.utils.timecalc.gui.progress.DayBattery;
+import org.nanoboot.utils.timecalc.gui.progress.HourBattery;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.gui.progress.WalkingHumanProgressAsciiArt;
@@ -268,7 +269,7 @@ public class TimeCalcManager {
                 dayBattery.getY() + weekBattery.getHeight() + MARGIN, 140);
         window.add(monthBattery);
 
-        Battery hourBattery = new Battery(monthBattery.getBounds().x,
+        Battery hourBattery = new HourBattery(monthBattery.getBounds().x,
                 monthBattery.getY() + monthBattery.getHeight() + MARGIN, 140);
         window.add(hourBattery);
         Rectangle hourRectangle = hourBattery.getBounds();
@@ -374,19 +375,8 @@ public class TimeCalcManager {
                     (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
                     + (workDaysTotal));
 
-            double minutesRemainsD = timeRemains.getMinute();
-            double secondsRemainsD = secondsRemains;
-            double millisecondsRemainsD = millisecondsRemains;
-            minutesRemainsD = minutesRemainsD + secondsRemainsD / 60d;
-            minutesRemainsD =
-                    minutesRemainsD + millisecondsRemainsD / 1000d / 60d;
-            if (secondsRemainsD > 0) {
-                minutesRemainsD = minutesRemainsD - 1d;
-            }
-            if (millisecondsRemainsD > 0) {
-                minutesRemainsD = minutesRemainsD - 1d / 1000d;
-            }
-            hourBattery.setDonePercent(1 - ((minutesRemainsD % 60d) / 60d));
+            hourBattery.setDonePercent(HourBattery.getHourProgress(timeRemains, secondsRemains,
+                    millisecondsRemains));
             if (!nowIsWeekend) {
                 hourBattery.setLabel(
                         hourDone + "/" + (
@@ -454,9 +444,7 @@ public class TimeCalcManager {
         window.setVisible(false);
         window.dispose();
     }
-
-
-
+    
     private String createWindowTitle() {
         return "Time Calc " + Utils.getVersion();
     }
