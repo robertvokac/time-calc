@@ -11,6 +11,7 @@ import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.TimeHoursMinutes;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.imageio.ImageIO;
@@ -47,12 +48,10 @@ public class TimeCalcWindow {
     private static final int MARGIN = 10;
 
     private final String windowTitle;
-    private final int startHour;
-    private final int startMinute;
-    private final int overtimeHour;
-    private final int overtimeMinute;
     private final int totalMinutes;
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
+    private final TimeHoursMinutes startTime;
+    private final TimeHoursMinutes overtime;
     private int endHour;
     private int endMinute;
     private boolean stopBeforeEnd = false;
@@ -67,27 +66,17 @@ public class TimeCalcWindow {
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
 
-        String[] startTimeAsArray = startTimeIn.split(":");
-        this.startHour = Integer.valueOf(startTimeAsArray[0]);
-        this.startMinute = Integer.valueOf(startTimeAsArray[1]);
+        this.startTime = new TimeHoursMinutes(startTimeIn);
+        this.overtime = new TimeHoursMinutes(overTimeIn);
 
-        boolean overtimeIsNegative = overTimeIn.startsWith("-");
-        if (overtimeIsNegative) {
-            overTimeIn = overTimeIn.replace("-", "");
-        }
-        this.overtimeHour = (overtimeIsNegative ? (-1) : 1) * Integer
-                .valueOf(overTimeIn.split(":")[0]);
-        this.overtimeMinute = (overtimeIsNegative ? (-1) : 1) * Integer
-                .valueOf(overTimeIn.split(":")[1]);
-
-        this.endHour = startHour + Constants.WORKING_HOURS_LENGTH + overtimeHour;
-        this.endMinute = startMinute + Constants.WORKING_MINUTES_LENGTH + overtimeMinute;
+        this.endHour = startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime.getHour();
+        this.endMinute = startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH + overtime.getMinute();
         while (endMinute >= 60) {
             endMinute = endMinute - 60;
             endHour = endHour + 1;
         }
         this.totalMinutes =
-                (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+                (endHour * 60 + endMinute) - (startTime.getHour() * 60 + startTime.getMinute());
         int totalSeconds = totalMinutes * 60;
         int totalMilliseconds = totalSeconds * 1000;
 
@@ -441,8 +430,8 @@ public class TimeCalcWindow {
             int secondsRemains = 60 - secondNow;
             int millisecondsRemains = 1000 - millisecondNow;
 
-            int hourDone = Constants.WORKING_HOURS_LENGTH + overtimeHour - hourRemains;
-            int minutesDone = Constants.WORKING_MINUTES_LENGTH + overtimeMinute - minuteRemains;
+            int hourDone = Constants.WORKING_HOURS_LENGTH + overtime.getHour() - hourRemains;
+            int minutesDone = Constants.WORKING_MINUTES_LENGTH + overtime.getMinute() - minuteRemains;
             int secondsDone = secondNow;
             int millisecondsDone = millisecondNow;
 
