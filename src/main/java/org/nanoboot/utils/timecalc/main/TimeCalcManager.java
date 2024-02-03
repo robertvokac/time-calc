@@ -281,14 +281,13 @@ public class TimeCalcManager {
 
         Battery batteryForDay = new Battery();
         batteryForDay.setBounds(progressCircle.getBounds().x,
-                progressCircle.getY() + MARGIN + progressCircle.getHeight(), 90,
-                140);
+                progressCircle.getY() + MARGIN + progressCircle.getHeight(), 140);
         window.add(batteryForDay);
 
         Battery batteryForWeek = new Battery();
         batteryForWeek.setBounds(
                 batteryForDay.getBounds().x + batteryForDay.getWidth(),
-                batteryForDay.getY(), 90, 140);
+                batteryForDay.getY(), 140);
         window.add(batteryForWeek);
 
         Calendar calNow = Calendar.getInstance();
@@ -331,14 +330,12 @@ public class TimeCalcManager {
         Battery batteryForMonth = new Battery();
         batteryForMonth.setBounds(
                 batteryForDay.getBounds().x + batteryForDay.getWidth(),
-                batteryForDay.getY() + batteryForWeek.getHeight() + MARGIN, 90,
-                140);
+                batteryForDay.getY() + batteryForWeek.getHeight() + MARGIN, 140);
         window.add(batteryForMonth);
 
         Battery batteryForHour = new Battery();
         batteryForHour.setBounds(batteryForMonth.getBounds().x,
-                batteryForMonth.getY() + batteryForMonth.getHeight() + MARGIN,
-                90, 140);
+                batteryForMonth.getY() + batteryForMonth.getHeight() + MARGIN, 140);
         window.add(batteryForHour);
         Rectangle hourRectangle = batteryForHour.getBounds();
         Rectangle dayRectangle = batteryForDay.getBounds();

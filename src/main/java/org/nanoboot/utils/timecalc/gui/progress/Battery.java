@@ -146,4 +146,8 @@ public class Battery extends Widget {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public void setBounds(int x, int y, int height) {
+        setBounds(x, y, (int) (90d / 140d * height), height);
+    }
 }
