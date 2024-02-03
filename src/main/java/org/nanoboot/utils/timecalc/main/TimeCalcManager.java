@@ -135,7 +135,7 @@ public class TimeCalcManager {
             }
         });
         JTextPane text = new JTextPane();
-        text.setBounds(10, 10 + 210 + 10, 500, 250);
+        text.setBounds(MARGIN, MARGIN + 210 + MARGIN, 500, 250);
         text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         text.setForeground(Color.GRAY);
         text.setBackground(new Color(238, 238, 238));
@@ -192,12 +192,6 @@ public class TimeCalcManager {
         window.setTitle(windowTitle);
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        window.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
-            }
-        });
         weatherButton
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
         commandButton
