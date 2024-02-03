@@ -420,7 +420,7 @@ public class TimeCalcWindow {
             }
             batteryForHour.setDonePercent(1 - ((minutesRemainsD%60d)/60d));
             if(done < 1 && !nowIsWeekend) {
-                batteryForHour.setLabel("#" + ((int)(minutesRemainsD / 60d)));
+                batteryForHour.setLabel("#" + (minuteRemains == 0 ? minuteRemains / 60 : minuteRemains/ 60 + 1));
             }
 
             int totalSecondsRemains =
