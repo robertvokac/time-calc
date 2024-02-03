@@ -38,6 +38,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.nanoboot.utils.timecalc.utils.FileConstants.FOCUS_TXT;
+
 /**
  * @author pc00289
  * @since 08.02.2024
@@ -73,8 +75,9 @@ public class TimeCalcWindow {
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
 
-        this.startHour = Integer.valueOf(startTime.split(":")[0]);
-        this.startMinute = Integer.valueOf(startTime.split(":")[1]);
+        String[] startTimeAsArray = startTime.split(":");
+        this.startHour = Integer.valueOf(startTimeAsArray[0]);
+        this.startMinute = Integer.valueOf(startTimeAsArray[1]);
 
         boolean overtimeIsNegative = overTime.startsWith("-");
         if(overtimeIsNegative) {overTime = overTime.replace("-","");}
@@ -339,7 +342,6 @@ public class TimeCalcWindow {
 
         StringBuilder sb = null;
 
-        File focusTxt = new File("focus.txt");
         while (true) {
             if (stopBeforeEnd) {
                 window.setVisible(false);
@@ -348,9 +350,9 @@ public class TimeCalcWindow {
             }
 
             if(Math.random() > 0.9) {
-                if(focusTxt.exists()) {
+                if(FOCUS_TXT.exists()) {
                     window.requestFocus();
-                    focusTxt.delete();
+                    FOCUS_TXT.delete();
                 }
             }
             if(Utils.highlighted.get()) {

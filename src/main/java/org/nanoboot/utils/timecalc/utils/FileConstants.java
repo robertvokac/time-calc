@@ -13,4 +13,5 @@ public class FileConstants {
     public static final File STARTTIME_TXT = new File("starttime.txt");
     public static final File OVERTIME_TXT = new File("overtime.txt");
     public static final File TEST_TXT = new File("test.txt");
+    public static final File FOCUS_TXT = new File("focus.txt");
 }
