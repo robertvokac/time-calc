@@ -27,6 +27,7 @@ public class Battery extends Widget {
     private int totalHeight = 0;
 
     private int width_;
+    private String label = null;
 
     public Battery() {
         setPreferredSize(new Dimension(40, 100));
@@ -105,6 +106,14 @@ public class Battery extends Widget {
                 formatter3.format(donePercent * 100) + "%",
                 ((int) (width_ * 0.4)), donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1);
 
+        if(label!= null && !label.isEmpty()) {
+            g2d.drawString(
+                    label,
+                    ((int) (width_ * 0.4)),
+                    (donePercent > 0.5 ? totalHeight / 4 * 3 :
+                            totalHeight / 4 * 1)+ 20);
+        }
+
     }
 
     private double[] randomDoubles = new double[]{1d,1d,1d,1d,1d,1d,1};
@@ -114,5 +123,11 @@ public class Battery extends Widget {
     }
     public int getTimerDelay() {
         return 250;
+    }
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    public String getLabel() {
+        return this.label;
     }
 }

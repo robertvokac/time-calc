@@ -400,9 +400,11 @@ public class TimeCalcWindow {
             batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0
          || weekDayWhenMondayIsOne == 6) ?
                     100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
+            batteryForWeek.setLabel("#" + (nowIsWeekend ? 0 : (6 - weekDayWhenMondayIsOne)));
 
             batteryForMonth.setDonePercent(weekDayWhenMondayIsOne == 0
                                            || weekDayWhenMondayIsOne == 6 ? workDaysDone/workDaysTotal : (workDaysDone + done) / workDaysTotal);
+            batteryForMonth.setLabel("#" + (nowIsWeekend ? workDaysTodo : (workDaysTodo + 1)));
 
 
             double minutesRemainsD = (double) minuteRemains;
@@ -417,6 +419,9 @@ public class TimeCalcWindow {
                 minutesRemainsD = minutesRemainsD - 1d/1000d;
             }
             batteryForHour.setDonePercent(1 - ((minutesRemainsD%60d)/60d));
+            if(done < 1 && !nowIsWeekend) {
+                batteryForHour.setLabel("#" + ((int)(minutesRemainsD / 60d)));
+            }
 
             int totalSecondsRemains =
                     (hourRemains * 60 * 60 + minuteRemains * 60
