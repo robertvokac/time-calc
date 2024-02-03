@@ -11,6 +11,7 @@ import java.awt.HeadlessException;
 public class TimeCalcWindow extends JFrame {
     public TimeCalcWindow() throws HeadlessException {
         setFocusable(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
