@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.main;
 
+import org.nanoboot.utils.timecalc.gui.common.ComponentRegistry;
 import org.nanoboot.utils.timecalc.gui.common.TimeCalcButton;
 import org.nanoboot.utils.timecalc.gui.common.TimeCalcWindow;
 import org.nanoboot.utils.timecalc.gui.common.Toaster;
@@ -348,6 +349,22 @@ public class TimeCalcManager {
 
         StringBuilder sb = null;
 
+        ComponentRegistry componentRegistry = new ComponentRegistry();
+        componentRegistry.addAll(
+                text,
+                progressSquare,
+                progressCircle,
+                analogClock,
+                batteryForDay,
+                batteryForWeek,
+                batteryForMonth,
+                batteryForHour,
+                jokeButton,
+                focusButton,
+                commandButton,
+                restartButton,
+                exitButton
+        );
         while (true) {
             if (stopBeforeEnd) {
                 window.setVisible(false);
@@ -365,22 +382,12 @@ public class TimeCalcManager {
                 Utils.ultraLight.set(false);
             }
 
-            text.setVisible(!Utils.everythingHidden.get());
-            progressSquare.setVisible(!Utils.everythingHidden.get());
-            progressCircle.setVisible(!Utils.everythingHidden.get());
-            analogClock.setVisible(!Utils.everythingHidden.get());
-            batteryForDay.setVisible(!Utils.everythingHidden.get());
-            batteryForWeek.setVisible(!Utils.everythingHidden.get());
-            batteryForMonth.setVisible(!Utils.everythingHidden.get());
-            batteryForHour.setVisible(!Utils.everythingHidden.get());
+            componentRegistry.setVisible(!Utils.everythingHidden.get());
+
             jokeButton.setVisible(
                     TimeCalcConf.getInstance().isJokeVisible()
                     && !Utils.everythingHidden.get());
-            focusButton.setVisible(!Utils.everythingHidden.get());
 
-            commandButton.setVisible(!Utils.everythingHidden.get());
-            restartButton.setVisible(!Utils.everythingHidden.get());
-            exitButton.setVisible(!Utils.everythingHidden.get());
             window.setTitle(Utils.everythingHidden.get() ? "" : windowTitle);
             sb = new StringBuilder();
             LocalDateTime now = LocalDateTime.now();
