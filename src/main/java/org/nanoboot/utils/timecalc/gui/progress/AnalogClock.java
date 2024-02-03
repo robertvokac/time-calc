@@ -56,25 +56,32 @@ public class AnalogClock extends Widget {
 
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
 
-        if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 10) / 4,
-                (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
-                Color.RED);
+        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+            drawHand(g2d, (side / 2 - 10) / 4,
+                    (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
+                    Color.RED);
+        }
         //
         double minutes = minute / 60.0 + second / 60.0 / 60.0;
         drawHand(g2d, side / 2 - 20, minutes, 2.0f,
                 Color.BLUE);
-        if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 20) / 4,
-                minutes + minutes > 0.5 ? minutes - 0.5 :
-                        minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
-                Color.BLUE);
+        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+            drawHand(g2d, (side / 2 - 20) / 4,
+                    minutes + minutes > 0.5 ? minutes - 0.5 :
+                            minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
+                    Color.BLUE);
+        }
         //
         double hours = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
         drawHand(g2d, side / 2 - 40,
                 hours, 4.0f,
                 Color.BLACK);
-        if(TimeCalcConf.getInstance().areClockHandsLong()) drawHand(g2d, (side / 2 - 40) / 4, hours + hours > 0.5 ? hours - 0.5 :
-                        hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
-                Color.BLACK);
+        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+            drawHand(g2d, (side / 2 - 40) / 4,
+                    hours + hours > 0.5 ? hours - 0.5 :
+                            hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
+                    Color.BLACK);
+        }
         drawCentre(g2d, centerX, centerY);
 
     }
@@ -125,12 +132,12 @@ public class AnalogClock extends Widget {
 
             int seconds = Integer.valueOf(now.split(":")[2]);
 
-
             g2d.setFont(new Font("sans", Font.BOLD, 16));
             g2d.drawString(Integer.toString(i), dx, dy);
         }
 
     }
+
     public int getTimerDelay() {
         return 20;
     }

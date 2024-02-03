@@ -13,12 +13,13 @@ import java.awt.event.MouseListener;
  * @since 20.02.2024
  */
 public class Widget extends JPanel {
-    protected int side = 0;
-    protected double donePercent = 0;
-    protected boolean mouseOver = false;
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
+    protected int side = 0;
+    protected double donePercent = 0;
+    protected boolean mouseOver = false;
+
     public Widget() {
         setBackground(BACKGROUND_COLOR);
         new Timer(getTimerDelay(), e -> repaint()).start();
@@ -49,15 +50,18 @@ public class Widget extends JPanel {
             }
         });
     }
+
     public int getTimerDelay() {
         return 100;
     }
+
     public final void setDonePercent(double donePercent) {
-        if(donePercent > 1) {
+        if (donePercent > 1) {
             donePercent = 1;
         }
         this.donePercent = donePercent;
     }
+
     public void setBounds(int x, int y, int side) {
         setBounds(x, y, side, side);
     }

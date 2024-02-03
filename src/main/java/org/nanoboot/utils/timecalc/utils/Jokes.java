@@ -63,7 +63,7 @@ public class Jokes {
     }
 
     public static void showRandom() {
-        if(!TimeCalcConf.getInstance().isJokeVisible()) {
+        if (!TimeCalcConf.getInstance().isJokeVisible()) {
             //nothing to do
             return;
         }

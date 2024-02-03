@@ -17,15 +17,10 @@ public class TimeCalcConf {
     private static final String TOASTS_ENABLED = "toasts.enabled";
 
     private static TimeCalcConf INSTANCE;
-    private Properties properties = new Properties();
-    public static TimeCalcConf getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new TimeCalcConf();
-        }
-        return INSTANCE;
-    }
+    private final Properties properties = new Properties();
+
     private TimeCalcConf() {
-        if(!new File("timecalc.conf").exists()) {
+        if (!new File("timecalc.conf").exists()) {
             //nothing to do;
             return;
         }
@@ -36,23 +31,35 @@ public class TimeCalcConf {
         }
     }
 
+    public static TimeCalcConf getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new TimeCalcConf();
+        }
+        return INSTANCE;
+    }
+
     public boolean areClockHandsLong() {
         return getBooleanProperty(CLOCK_HANDS_LONG, true);
     }
+
     public boolean isJokeVisible() {
         return getBooleanProperty(JOKE_VISIBLE, true);
     }
+
     public boolean areBatteryWavesEnabled() {
         return getBooleanProperty(BATTERY_WAVES_ENABLED, true);
     }
+
     public boolean isEverythingHidden() {
         return getBooleanProperty(EVERYTHING_HIDDEN, false);
     }
+
     public boolean areToastsEnabled() {
         return getBooleanProperty(TOASTS_ENABLED, true);
     }
+
     private boolean getBooleanProperty(String key, boolean defaultValue) {
-        if(!properties.containsKey(key)) {
+        if (!properties.containsKey(key)) {
             return defaultValue;
         }
         return properties.get(key).equals("true");

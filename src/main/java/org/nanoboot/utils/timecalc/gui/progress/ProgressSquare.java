@@ -29,7 +29,6 @@ public class ProgressSquare extends Widget {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-
         int dotNumber = (int) (donePercent * square);
         int y = dotNumber / side;
         int yOrig = y;

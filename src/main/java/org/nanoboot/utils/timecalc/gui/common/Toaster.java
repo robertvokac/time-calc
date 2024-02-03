@@ -113,7 +113,7 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-        if(Utils.everythingHidden.get() || !Utils.toastsAreEnabled.get()) {
+        if (Utils.everythingHidden.get() || !Utils.toastsAreEnabled.get()) {
             //nothing to do
             return;
         }
@@ -429,7 +429,7 @@ public class Toaster {
                     if (currentNumberOfToaster > 0) {
                         stopYPosition =
                                 stopYPosition - (maxToaster % maxToasterInSceen
-               * toasterHeight);
+                                                 * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -440,7 +440,7 @@ public class Toaster {
                     if (currentNumberOfToaster > 0) {
                         stopYPosition =
                                 stopYPosition + (maxToaster % maxToasterInSceen
-               * toasterHeight);
+                                                 * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }

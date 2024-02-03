@@ -26,7 +26,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
@@ -55,21 +54,23 @@ public class TimeCalcWindow {
 
     private final String startTime;
     private final String windowTitle;
-    private String overTime;
     private final int startHour;
     private final int startMinute;
     private final int overtimeHour;
     private final int overtimeMinute;
     private final int totalMinutes;
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
+    private String overTime;
     private int endHour;
     private int endMinute;
     private boolean stopBeforeEnd = false;
     private boolean vtipyShown = false;
 
     public TimeCalcWindow(String startTimeIn, String overTimeIn) {
-        Utils.everythingHidden.set(TimeCalcConf.getInstance().isEverythingHidden());
-        Utils.toastsAreEnabled.set(TimeCalcConf.getInstance().areToastsEnabled());
+        Utils.everythingHidden
+                .set(TimeCalcConf.getInstance().isEverythingHidden());
+        Utils.toastsAreEnabled
+                .set(TimeCalcConf.getInstance().areToastsEnabled());
 
         this.startTime = startTimeIn;
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
@@ -80,9 +81,13 @@ public class TimeCalcWindow {
         this.startMinute = Integer.valueOf(startTimeAsArray[1]);
 
         boolean overtimeIsNegative = overTime.startsWith("-");
-        if(overtimeIsNegative) {overTime = overTime.replace("-","");}
-        this.overtimeHour =(overtimeIsNegative ? (-1) : 1) * Integer.valueOf(overTime.split(":")[0]);
-        this.overtimeMinute = (overtimeIsNegative ? (-1) : 1) * Integer.valueOf(overTime.split(":")[1]);
+        if (overtimeIsNegative) {
+            overTime = overTime.replace("-", "");
+        }
+        this.overtimeHour = (overtimeIsNegative ? (-1) : 1) * Integer
+                .valueOf(overTime.split(":")[0]);
+        this.overtimeMinute = (overtimeIsNegative ? (-1) : 1) * Integer
+                .valueOf(overTime.split(":")[1]);
 
         this.endHour = startHour + WORKING_HOURS_LENGTH + overtimeHour;
         this.endMinute = startMinute + WORKING_MINUTES_LENGTH + overtimeMinute;
@@ -117,7 +122,10 @@ public class TimeCalcWindow {
             if (buildDate == null) {
                 buildDate = "unknown";
             }
-            JOptionPane.showMessageDialog(null, "Version: " + version + "\n" + "Built on (universal time): " + buildDate, "About \"Pdf DME Downloader\"", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Version: " + version + "\n" + "Built on (universal time): "
+                    + buildDate, "About \"Pdf DME Downloader\"",
+                    JOptionPane.INFORMATION_MESSAGE);
         });
 
         //window.add(weatherButton);
@@ -131,27 +139,27 @@ public class TimeCalcWindow {
         window.addKeyListener(new KeyAdapter() {
             // Key Pressed method
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_UP){
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
                     Utils.everythingHidden.set(false);
                 }
-                if(e.getKeyCode() == KeyEvent.VK_DOWN){
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     Utils.everythingHidden.set(true);
                 }
 
-                if(e.getKeyCode() == KeyEvent.VK_G){
+                if (e.getKeyCode() == KeyEvent.VK_G) {
                     Utils.ultraLight.flip();
                 }
 
-                if(e.getKeyCode() == KeyEvent.VK_C){
+                if (e.getKeyCode() == KeyEvent.VK_C) {
                     Utils.highlighted.flip();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_V){
+                if (e.getKeyCode() == KeyEvent.VK_V) {
                     Utils.everythingHidden.flip();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_R){
+                if (e.getKeyCode() == KeyEvent.VK_R) {
                     commandButton.doClick();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_T){
+                if (e.getKeyCode() == KeyEvent.VK_T) {
                     Utils.toastsAreEnabled.flip();
                 }
 
@@ -202,9 +210,12 @@ public class TimeCalcWindow {
         restartButton
                 .setBounds(280, text.getY() + text.getHeight() + MARGIN);
         exitButton.setBounds(390, text.getY() + text.getHeight() + MARGIN);
-        aboutButton.setBounds(exitButton.getX(), exitButton.getY() + exitButton.getHeight() + MARGIN);
+        aboutButton.setBounds(exitButton.getX(),
+                exitButton.getY() + exitButton.getHeight() + MARGIN);
 
-        focusButton.setBounds(exitButton.getX() + 3 * MARGIN + exitButton.getWidth() + 20, MARGIN, 60, aboutButton.getHeight());
+        focusButton.setBounds(
+                exitButton.getX() + 3 * MARGIN + exitButton.getWidth() + 20,
+                MARGIN, 60, aboutButton.getHeight());
 
         window.setSize(520 + 20 + 100, 580 + MARGIN + aboutButton.getHeight());
         window.setLayout(null);
@@ -234,12 +245,26 @@ public class TimeCalcWindow {
                             "test"
                     );
                     String[] commandsAsArray = commands.split(" ");
-                    switch(commandsAsArray[0]) {
-                        case "test": JOptionPane.showMessageDialog(null, "Test");break;
-                        case "color": Utils.highlighted.set(commandsAsArray[1].equals("1"));break;
-                        case "gray": Utils.ultraLight.set(commandsAsArray[1].equals("1"));break;
-                        case "waves": Battery.wavesOff = commandsAsArray[1].equals("0");break;
-                        case "uptime": JOptionPane.showMessageDialog(null, Utils.getCountOfMinutesSinceAppStarted() + " minutes");break;
+                    switch (commandsAsArray[0]) {
+                        case "test":
+                            JOptionPane.showMessageDialog(null, "Test");
+                            break;
+                        case "color":
+                            Utils.highlighted
+                                    .set(commandsAsArray[1].equals("1"));
+                            break;
+                        case "gray":
+                            Utils.ultraLight
+                                    .set(commandsAsArray[1].equals("1"));
+                            break;
+                        case "waves":
+                            Battery.wavesOff = commandsAsArray[1].equals("0");
+                            break;
+                        case "uptime":
+                            JOptionPane.showMessageDialog(null,
+                                    Utils.getCountOfMinutesSinceAppStarted()
+                                    + " minutes");
+                            break;
                         case "toast":
                             Toaster t = new Toaster();
                             t.setToasterWidth(800);
@@ -247,9 +272,17 @@ public class TimeCalcWindow {
                             t.setDisplayTime(60000 * 5);
                             t.setToasterColor(Color.GRAY);
                             Font font = new Font("sans", Font.PLAIN, 12);
-                            t.setToasterMessageFont(font);t.setDisplayTime(5000); t.showToaster(commands.substring(6));break;
-                        case "toasts": Utils.toastsAreEnabled.set(commandsAsArray[1].equals("1"));break;
-                        default: JOptionPane.showMessageDialog(null, "Unknown command: " + commandsAsArray[0]);
+                            t.setToasterMessageFont(font);
+                            t.setDisplayTime(5000);
+                            t.showToaster(commands.substring(6));
+                            break;
+                        case "toasts":
+                            Utils.toastsAreEnabled
+                                    .set(commandsAsArray[1].equals("1"));
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null,
+                                    "Unknown command: " + commandsAsArray[0]);
                     }
                 });
 
@@ -273,13 +306,15 @@ public class TimeCalcWindow {
 
         ProgressSquare progressSquare = new ProgressSquare();
         progressSquare
-                .setBounds(MARGIN + analogClock.getWidth() + MARGIN, MARGIN, 200);
+                .setBounds(MARGIN + analogClock.getWidth() + MARGIN, MARGIN,
+                        200);
         window.add(progressSquare);
 
         ProgressCircle progressCircle = new ProgressCircle();
         progressCircle
-                .setBounds(MARGIN + progressSquare.getBounds().x + progressSquare
-                        .getWidth() + MARGIN, MARGIN, 80);
+                .setBounds(
+                        MARGIN + progressSquare.getBounds().x + progressSquare
+                                .getWidth() + MARGIN, MARGIN, 80);
         window.add(progressCircle);
 
         Battery batteryForDay = new Battery();
@@ -289,47 +324,59 @@ public class TimeCalcWindow {
         window.add(batteryForDay);
 
         Battery batteryForWeek = new Battery();
-        batteryForWeek.setBounds(batteryForDay.getBounds().x + batteryForDay.getWidth(),
+        batteryForWeek.setBounds(
+                batteryForDay.getBounds().x + batteryForDay.getWidth(),
                 batteryForDay.getY(), 90, 140);
         window.add(batteryForWeek);
 
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
-        LocalDate ld = LocalDate.of(calNow.get(Calendar.YEAR),calNow.get(Calendar.MONTH) + 1,1);
+        LocalDate ld = LocalDate
+                .of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1,
+                        1);
 
         int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
 
         int workDaysDone = 0;
         int workDaysTodo = 0;
         int workDaysTotal;
-        for(int dayOfMonth=1; dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH); dayOfMonth++) {
-            DayOfWeek dayOfWeek = LocalDate.of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1, dayOfMonth).getDayOfWeek();
-            boolean weekend = dayOfWeek.toString().equals("SATURDAY") || dayOfWeek.toString().equals("SUNDAY");
-            if(dayOfMonth < currentDayOfMonth && !weekend) {
+        for (int dayOfMonth = 1;
+             dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH);
+             dayOfMonth++) {
+            DayOfWeek dayOfWeek = LocalDate.of(calNow.get(Calendar.YEAR),
+                    calNow.get(Calendar.MONTH) + 1, dayOfMonth).getDayOfWeek();
+            boolean weekend =
+                    dayOfWeek.toString().equals("SATURDAY") || dayOfWeek
+                            .toString().equals("SUNDAY");
+            if (dayOfMonth < currentDayOfMonth && !weekend) {
                 ++workDaysDone;
             }
-            if(dayOfMonth > currentDayOfMonth && !weekend) {
+            if (dayOfMonth > currentDayOfMonth && !weekend) {
                 ++workDaysTodo;
             }
         }
-        String currentDayOfWeekAsString = LocalDate.of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1, currentDayOfMonth).getDayOfWeek().toString();
-        boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY") || currentDayOfWeekAsString.equals("SUNDAY");
+        String currentDayOfWeekAsString = LocalDate
+                .of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1,
+                        currentDayOfMonth).getDayOfWeek().toString();
+        boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY")
+                               || currentDayOfWeekAsString.equals("SUNDAY");
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
-//        System.out.println("workDaysDone" + workDaysDone);
-//        System.out.println("workDaysTodo" + workDaysTodo);
-//        System.out.println("currentDayOfMonth" + currentDayOfMonth);
-
-
+        //        System.out.println("workDaysDone" + workDaysDone);
+        //        System.out.println("workDaysTodo" + workDaysTodo);
+        //        System.out.println("currentDayOfMonth" + currentDayOfMonth);
 
         Battery batteryForMonth = new Battery();
-        batteryForMonth.setBounds(batteryForDay.getBounds().x + batteryForDay.getWidth(),
-                batteryForDay.getY() + batteryForWeek.getHeight() + MARGIN, 90, 140);
+        batteryForMonth.setBounds(
+                batteryForDay.getBounds().x + batteryForDay.getWidth(),
+                batteryForDay.getY() + batteryForWeek.getHeight() + MARGIN, 90,
+                140);
         window.add(batteryForMonth);
 
         Battery batteryForHour = new Battery();
         batteryForHour.setBounds(batteryForMonth.getBounds().x,
-                batteryForMonth.getY() + batteryForMonth.getHeight() + MARGIN, 90, 140);
+                batteryForMonth.getY() + batteryForMonth.getHeight() + MARGIN,
+                90, 140);
         window.add(batteryForHour);
         Rectangle hourRectangle = batteryForHour.getBounds();
         Rectangle dayRectangle = batteryForDay.getBounds();
@@ -349,13 +396,13 @@ public class TimeCalcWindow {
                 break;
             }
 
-            if(Math.random() > 0.9) {
-                if(FOCUS_TXT.exists()) {
+            if (Math.random() > 0.9) {
+                if (FOCUS_TXT.exists()) {
                     window.requestFocus();
                     FOCUS_TXT.delete();
                 }
             }
-            if(Utils.highlighted.get()) {
+            if (Utils.highlighted.get()) {
                 Utils.ultraLight.set(false);
             }
 
@@ -367,7 +414,9 @@ public class TimeCalcWindow {
             batteryForWeek.setVisible(!Utils.everythingHidden.get());
             batteryForMonth.setVisible(!Utils.everythingHidden.get());
             batteryForHour.setVisible(!Utils.everythingHidden.get());
-            jokeButton.setVisible(!TimeCalcConf.getInstance().isJokeVisible()? false : !Utils.everythingHidden.get());
+            jokeButton.setVisible(
+                    TimeCalcConf.getInstance().isJokeVisible()
+                    && !Utils.everythingHidden.get());
             focusButton.setVisible(!Utils.everythingHidden.get());
 
             commandButton.setVisible(!Utils.everythingHidden.get());
@@ -376,7 +425,8 @@ public class TimeCalcWindow {
             window.setTitle(Utils.everythingHidden.get() ? "" : windowTitle);
             sb = new StringBuilder();
             LocalDateTime now = LocalDateTime.now();
-            String nowString = DateFormats.DATE_TIME_FORMATTER_HHmmssSSS.format(now);
+            String nowString =
+                    DateFormats.DATE_TIME_FORMATTER_HHmmssSSS.format(now);
             //            if (alreadyShownTimes.contains(nowString)) {
             //                //nothing to do
             //                try {
@@ -426,30 +476,40 @@ public class TimeCalcWindow {
 
             int weekDayWhenMondayIsOne = calNow.get(Calendar.DAY_OF_WEEK) - 1;
             batteryForWeek.setDonePercent((weekDayWhenMondayIsOne == 0
-         || weekDayWhenMondayIsOne == 6) ?
+                                           || weekDayWhenMondayIsOne == 6) ?
                     100 : ((weekDayWhenMondayIsOne - 1) * 0.20 + done * 0.20));
-            batteryForWeek.setLabel(nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
+            batteryForWeek.setLabel(
+                    nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
             batteryForMonth.setDonePercent(weekDayWhenMondayIsOne == 0
-                                           || weekDayWhenMondayIsOne == 6 ? workDaysDone/workDaysTotal : (workDaysDone + done) / workDaysTotal);
-            batteryForMonth.setLabel((nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/" + (workDaysTotal));
+                                           || weekDayWhenMondayIsOne == 6 ?
+                    workDaysDone / workDaysTotal :
+                    (workDaysDone + done) / workDaysTotal);
+            batteryForMonth.setLabel(
+                    (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
+                    + (workDaysTotal));
 
-
-            double minutesRemainsD = (double) minuteRemains;
-            double secondsRemainsD = (double) secondsRemains;
-            double millisecondsRemainsD = (double) millisecondsRemains;
+            double minutesRemainsD = minuteRemains;
+            double secondsRemainsD = secondsRemains;
+            double millisecondsRemainsD = millisecondsRemains;
             minutesRemainsD = minutesRemainsD + secondsRemainsD / 60d;
-            minutesRemainsD = minutesRemainsD + millisecondsRemainsD / 1000d / 60d;
-            if(secondsRemainsD > 0) {
+            minutesRemainsD =
+                    minutesRemainsD + millisecondsRemainsD / 1000d / 60d;
+            if (secondsRemainsD > 0) {
                 minutesRemainsD = minutesRemainsD - 1d;
             }
-            if(millisecondsRemainsD > 0) {
-                minutesRemainsD = minutesRemainsD - 1d/1000d;
+            if (millisecondsRemainsD > 0) {
+                minutesRemainsD = minutesRemainsD - 1d / 1000d;
             }
-            batteryForHour.setDonePercent(done >= 1 ? 1 :(1 - ((minutesRemainsD%60d)/60d)));
-            if(!nowIsWeekend) {
-                int hoursForLabel = (minuteRemains == 0 ? minuteRemains / 60 + 1 : minuteRemains/ 60);
-                batteryForHour.setLabel( ((totalMinutes / 60) - hoursForLabel) + "/" + (totalMinutes / 60));
+            batteryForHour.setDonePercent(
+                    done >= 1 ? 1 : (1 - ((minutesRemainsD % 60d) / 60d)));
+            if (!nowIsWeekend) {
+                int hoursForLabel =
+                        (minuteRemains == 0 ? minuteRemains / 60 + 1 :
+                                minuteRemains / 60);
+                batteryForHour.setLabel(
+                        ((totalMinutes / 60) - hoursForLabel) + "/" + (
+                                totalMinutes / 60));
             }
 
             int totalSecondsRemains =
@@ -515,14 +575,12 @@ public class TimeCalcWindow {
             }
 
             text.setForeground(
-                    Utils.highlighted.get() || text.getClientProperty("mouseEntered").equals("true") ? Color.BLACK : Color.LIGHT_GRAY);
+                    Utils.highlighted.get() || text
+                            .getClientProperty("mouseEntered").equals("true") ?
+                            Color.BLACK : Color.LIGHT_GRAY);
         }
         window.setVisible(false);
         window.dispose();
-    }
-
-    private String createWindowTitle() {
-        return "Time Calc " + Utils.getVersion();
     }
 
     private static final String createSpaces(int spaceCount) {
@@ -535,6 +593,10 @@ public class TimeCalcWindow {
             sb.append(ch);
         }
         return sb.toString();
+    }
+
+    private String createWindowTitle() {
+        return "Time Calc " + Utils.getVersion();
     }
 
     private void printPercentToAscii(double percent,
@@ -582,7 +644,7 @@ public class TimeCalcWindow {
 
         int spacesTotal = 48;
         int spacesDone = (int) (percent * spacesTotal);
-        if(spacesDone > spacesTotal) {
+        if (spacesDone > spacesTotal) {
             spacesDone = spacesTotal;
         }
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
@@ -608,7 +670,8 @@ public class TimeCalcWindow {
                         "|        |") + /*WALL +*/ NEW_LINE +
                 "================================================================"
                 + NEW_LINE + "Steps: " + formatter3
-                        .format(percent * ((double) spacesTotal)) + "/" + spacesTotal
+                        .format(percent * ((double) spacesTotal)) + "/"
+                + spacesTotal
         );
 
     }
