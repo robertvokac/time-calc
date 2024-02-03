@@ -1,4 +1,15 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.main;
+
+import org.nanoboot.utils.timecalc.gui.TimeCalcButton;
+import org.nanoboot.utils.timecalc.gui.Toaster;
+import org.nanoboot.utils.timecalc.gui.WeatherWindow;
+import org.nanoboot.utils.timecalc.gui.AnalogClock;
+import org.nanoboot.utils.timecalc.gui.Battery;
+import org.nanoboot.utils.timecalc.gui.ProgressCircle;
+import org.nanoboot.utils.timecalc.gui.ProgressSquare;
+import org.nanoboot.utils.timecalc.utils.Constants;
+import org.nanoboot.utils.timecalc.utils.Jokes;
+import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -34,13 +45,17 @@ import java.util.Set;
  */
 public class TimeCalcWindow {
     public static final String WALL = "||";
-    private static final String DEFAULT_OVERTIME = "0:00";
+
     private static final int WORKING_HOURS_LENGTH = 8;
     private static final int WORKING_MINUTES_LENGTH = 30;
     private static final String NEW_LINE = "\n";
     private final static DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
+    private static final int MARGIN = 10;
+    public static final int BUTTON_WIDTH = 100;
+    public static final int BUTTON_HEIGHT = 30;
     private final String startTime;
+    private final String windowTitle;
     private String overTime;
     private final int startHour;
     private final int startMinute;
@@ -60,7 +75,7 @@ public class TimeCalcWindow {
 
         this.startTime = startTimeIn;
         this.overTime = (overTimeIn == null || overTimeIn.isEmpty()) ?
-                DEFAULT_OVERTIME : overTimeIn;
+                Constants.DEFAULT_OVERTIME : overTimeIn;
 
         this.startHour = Integer.valueOf(startTime.split(":")[0]);
         this.startMinute = Integer.valueOf(startTime.split(":")[1]);
@@ -86,12 +101,25 @@ public class TimeCalcWindow {
 
         JFrame window = new JFrame();
 
-        JButton focusButton = new JButton("F");
-        JButton commandButton = new JButton("Command");
-        JButton weatherButton = new JButton("Weather");
-        JButton jokeButton = new JButton("Joke");
-        JButton restartButton = new JButton("Restart");
-        JButton exitButton = new JButton("Exit");
+        TimeCalcButton focusButton = new TimeCalcButton("F");
+        TimeCalcButton commandButton = new TimeCalcButton("Command");
+        TimeCalcButton weatherButton = new TimeCalcButton("Weather");
+        TimeCalcButton jokeButton = new TimeCalcButton("Joke");
+        TimeCalcButton restartButton = new TimeCalcButton("Restart");
+        TimeCalcButton exitButton = new TimeCalcButton("Exit");
+        TimeCalcButton aboutButton = new TimeCalcButton("About");
+        aboutButton.addActionListener(e -> {
+            String version = Utils.getVersion();
+            String buildDate = Utils.getBuildDate();
+            if (version == null) {
+                version = "unknown";
+            }
+
+            if (buildDate == null) {
+                buildDate = "unknown";
+            }
+            JOptionPane.showMessageDialog(null, "Version: " + version + "\n" + "Built on (universal time): " + buildDate, "About \"Pdf DME Downloader\"", JOptionPane.INFORMATION_MESSAGE);
+        });
 
         //window.add(weatherButton);
         window.add(commandButton);
@@ -168,20 +196,24 @@ public class TimeCalcWindow {
 
         window.add(text);
         weatherButton
-                .setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
-        commandButton.setBounds(20, text.getY() + text.getHeight() + 10, 100, 30);
+                .setBounds(20, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH,
+                        BUTTON_HEIGHT);
+        commandButton.setBounds(20, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-        jokeButton.setBounds(140, text.getY() + text.getHeight() + 10, 100, 30);
+        jokeButton.setBounds(140, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
         restartButton
-                .setBounds(280, text.getY() + text.getHeight() + 10, 100, 30);
-        exitButton.setBounds(390, text.getY() + text.getHeight() + 10, 100, 30);
+                .setBounds(280, text.getY() + text.getHeight() + MARGIN,
+                        BUTTON_WIDTH, BUTTON_HEIGHT);
+        exitButton.setBounds(390, text.getY() + text.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
+        aboutButton.setBounds(exitButton.getX(), exitButton.getY() + exitButton.getHeight() + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-        focusButton.setBounds(exitButton.getX() + 10 + 10 + 10 + exitButton.getWidth() + 20, 10, 60, 30);
+        focusButton.setBounds(exitButton.getX() + 3 * MARGIN + exitButton.getWidth() + 20, MARGIN, 60, BUTTON_HEIGHT);
 
-        window.setSize(520 + 20 + 100, 580);
+        window.setSize(520 + 20 + 100, 580 + MARGIN + BUTTON_WIDTH);
         window.setLayout(null);
         window.setVisible(true);
-        window.setTitle("Time Calc");
+        this.windowTitle = createWindowTitle();
+        window.setTitle(windowTitle);
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         window.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -210,7 +242,7 @@ public class TimeCalcWindow {
                         case "color": Utils.highlighted.set(commandsAsArray[1].equals("1"));break;
                         case "gray": Utils.ultraLight.set(commandsAsArray[1].equals("1"));break;
                         case "waves": Battery.wavesOff = commandsAsArray[1].equals("0");break;
-                        case "uptime": JOptionPane.showMessageDialog(null, ((int)((System.nanoTime() - Main.startNanoTime) / 1000000000 / 60)) + " minutes");break;
+                        case "uptime": JOptionPane.showMessageDialog(null, Utils.getCountOfMinutesSinceAppStarted() + " minutes");break;
                         case "toast":
                             Toaster t = new Toaster();
                             t.setToasterWidth(800);
@@ -491,6 +523,10 @@ public class TimeCalcWindow {
         }
         window.setVisible(false);
         window.dispose();
+    }
+
+    private String createWindowTitle() {
+        return "Time Calc " + Utils.getVersion();
     }
 
     private static final String createSpaces(int spaceCount) {

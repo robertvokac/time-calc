@@ -1,14 +1,12 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.gui;
 
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import org.nanoboot.utils.timecalc.utils.Utils;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class ProgressSquare extends Widget {
 

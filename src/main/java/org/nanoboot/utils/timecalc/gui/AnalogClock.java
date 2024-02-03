@@ -1,8 +1,9 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.gui;
+
+import org.nanoboot.utils.timecalc.main.TimeCalcConf;
+import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;

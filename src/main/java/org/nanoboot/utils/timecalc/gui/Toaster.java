@@ -1,4 +1,4 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.gui;
 /**
  * Java Toaster is a java utility class for your swing applications
  * that show an animate box coming from the bottom of your screen
@@ -27,6 +27,8 @@ package rvc.timecalc;
  * }
  * }
  */
+
+import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;

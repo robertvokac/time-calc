@@ -1,4 +1,6 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.gui;
+
+import org.nanoboot.utils.timecalc.utils.Utils;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -1,7 +1,7 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.utils;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 16.02.2024
  */
 public class BooleanHolder {

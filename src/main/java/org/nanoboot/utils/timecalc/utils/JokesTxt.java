@@ -1,4 +1,4 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

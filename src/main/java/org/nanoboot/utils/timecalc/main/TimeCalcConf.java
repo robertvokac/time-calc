@@ -1,4 +1,4 @@
-package rvc.timecalc;
+package org.nanoboot.utils.timecalc.main;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 20.02.2024
  */
 public class TimeCalcConf {
@@ -37,34 +37,25 @@ public class TimeCalcConf {
     }
 
     public boolean areClockHandsLong() {
-        if(!properties.containsKey(CLOCK_HANDS_LONG)) {
-            return true;
-        }
-        return properties.get(CLOCK_HANDS_LONG).equals("true");
+        return getBooleanProperty(CLOCK_HANDS_LONG, true);
     }
     public boolean isJokeVisible() {
-        if(!properties.containsKey(JOKE_VISIBLE)) {
-            return true;
-        }
-        return properties.get(JOKE_VISIBLE).equals("true");
+        return getBooleanProperty(JOKE_VISIBLE, true);
     }
     public boolean areBatteryWavesEnabled() {
-        if(!properties.containsKey(BATTERY_WAVES_ENABLED)) {
-            return true;
-        }
-        return properties.get(BATTERY_WAVES_ENABLED).equals("true");
+        return getBooleanProperty(BATTERY_WAVES_ENABLED, true);
     }
     public boolean isEverythingHidden() {
-        if(!properties.containsKey(EVERYTHING_HIDDEN)) {
-            return false;
-        }
-        return properties.get(EVERYTHING_HIDDEN).equals("true");
+        return getBooleanProperty(EVERYTHING_HIDDEN, false);
     }
     public boolean areToastsEnabled() {
-        if(!properties.containsKey(TOASTS_ENABLED)) {
-            return true;
+        return getBooleanProperty(TOASTS_ENABLED, true);
+    }
+    private boolean getBooleanProperty(String key, boolean defaultValue) {
+        if(!properties.containsKey(key)) {
+            return defaultValue;
         }
-        return properties.get(EVERYTHING_HIDDEN).equals("true");
+        return properties.get(key).equals("true");
     }
 
 }
