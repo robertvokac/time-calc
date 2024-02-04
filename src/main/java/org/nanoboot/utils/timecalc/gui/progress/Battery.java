@@ -206,7 +206,7 @@ public class Battery extends Widget {
         return getRandom(index, false);
     }
     private double getRandom(int index, boolean keepArray) {
-        if (!keepArray && Math.random() > 0.95) {
+        if (!keepArray && Math.random() > 0.975) {
             randomDoubles[index] = Math.random();
         }
         return randomDoubles[index];
