@@ -15,8 +15,9 @@ public class ReadOnlyProperty<T> extends Property<T> {
     public ReadOnlyProperty(Property<T> property) {
         super(property.getName(), null);
         this.innerProperty = property;
+        this.innerProperty.addListener((Property p) -> {markInvalid();} );
     }
-    public final void setValue(T valueIn) {
+    public final void setValue(T newValue) {
         throw new TimeCalcException("This is a read only property. New value cannot be set.");
     }
 
@@ -29,5 +30,9 @@ public class ReadOnlyProperty<T> extends Property<T> {
     public final void bindTo(Property<T> anotherProperty) {
         throw new TimeCalcException("This is a write only property. Bounding to another property is forbiden.");
     }
+    public boolean isValid() {
+        return this.innerProperty.isValid();
+    }
+
 
 }

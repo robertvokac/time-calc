@@ -1,18 +1,25 @@
 package org.nanoboot.utils.timecalc.utils.property;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Robert
  * @since 23.02.2024
  */
 public class Property <T>{
+    private boolean valid = true;
     @Getter
     private final String name;
     private T value;
     private Property<T> boundToProperty = null;
+    private List<InvalidationListener> invalidationListeners = new ArrayList<>();
+    private List<ChangeListener<T>>
+            changeListeners = new ArrayList<ChangeListener<T>>();
+
     public Property(String name, T valueIn) {
         this.name = name; this.value = valueIn;
     }
@@ -34,16 +41,51 @@ public class Property <T>{
     }
     public void bindTo(Property<T> anotherProperty) {
         this.boundToProperty = anotherProperty;
+        this.boundToProperty.addListener((Property<T> p, T oldValue, T newValue) -> {this.markInvalid();this.fireValueChangedEvent(oldValue);
+            //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
+        } );
     }
     public T getValue() {
         return isBound() ? this.boundToProperty.getValue() : value;
     }
 
-    public void setValue(T value) {
+    public void setValue(T newValue) {
         if(isBound()) {
-            this.boundToProperty.setValue(value);
+            this.boundToProperty.setValue(newValue);
         } else {
-            this.value = value;
+            T oldValue = value;
+            this.value = newValue;
+            if(!oldValue.equals(newValue))
+            {
+                fireValueChangedEvent(oldValue);
+                markInvalid();
+            }
         }
     }
+    public boolean isValid() {
+        return isBound() ? this.boundToProperty.isValid() : valid;
+    }
+    protected void markInvalid() {
+//        System.out.println(name + " is invalid now");
+        valid = false;
+        for (InvalidationListener listener : invalidationListeners) {
+            listener.invalidated(this);
+        }
+    }
+    protected void fireValueChangedEvent(T oldValue) {
+//        System.out.println(name + " was changed");
+        for (ChangeListener listener : changeListeners) {
+            listener.changed(this, oldValue, value);
+        }
+
+    }
+
+    public void addListener(InvalidationListener listener) {
+        this.invalidationListeners.add(listener);
+    }
+    public void addListener(ChangeListener<T> listener) {
+        this.changeListeners.add(listener);
+    }
+
+
 }

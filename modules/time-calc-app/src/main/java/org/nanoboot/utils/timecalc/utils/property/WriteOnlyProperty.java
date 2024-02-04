@@ -16,8 +16,8 @@ public class WriteOnlyProperty<T> extends Property<T> {
         super(property.getName(), null);
         this.innerProperty = property;
     }
-    public final void setValue(T valueIn) {
-        this.innerProperty.setValue(valueIn);
+    public final void setValue(T newValue) {
+        this.innerProperty.setValue(newValue);
     }
 
     public final T getValue(T valueIn) {

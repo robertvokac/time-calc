@@ -23,7 +23,7 @@ public class Widget extends JPanel {
     protected double donePercent = 0;
     protected boolean mouseOver = false;
 
-    public StringProperty visibilityProperty = new StringProperty("visibilityProperty", Visibility.STRONGLY_COLORED.name());
+    public StringProperty visibilityProperty = new StringProperty("widget.visibilityProperty", Visibility.STRONGLY_COLORED.name());
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);

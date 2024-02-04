@@ -14,6 +14,7 @@ import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
+import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgressAsciiArt;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
@@ -51,6 +52,7 @@ public class TimeCalcManager {
     private final TimeHM endTime;
     private final TimeCalcApp timeCalcApp;
     private boolean stopBeforeEnd = false;
+    private Time time = new Time();
 
     public TimeCalcManager(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
@@ -169,7 +171,6 @@ public class TimeCalcManager {
 
         this.windowTitle = createWindowTitle();
         window.setTitle(windowTitle);
-
 
         weatherButton
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
@@ -350,8 +351,15 @@ public class TimeCalcManager {
         restartButton.setVisible(!Visibility.valueOf(restartButton.visibilityProperty.getValue()).isNone());
         exitButton.setVisible(!Visibility.valueOf(exitButton.visibilityProperty.getValue()).isNone());
 
+//        timeCalcApp.visibilityProperty.addListener((Property<String> p, String oldValue, String newValue)-> {
+//            System.out.println("Visibility of timeCalcApp was changed FROM " + oldValue + " TO " + newValue);
+//        } );
+//        analogClock.visibilityProperty.addListener((Property<String> p, String oldValue, String newValue)-> {
+//            System.out.println("Visibility of analogClock was changed FROM " + oldValue + " TO " + newValue);
+//        } );
         window.setSize(520 + 20 + 100, exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
+            //time.writeString();
             if(Math.random() > 0.95) {
                 window.requestFocus();
             }
