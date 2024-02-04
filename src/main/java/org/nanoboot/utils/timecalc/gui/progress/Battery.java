@@ -23,7 +23,7 @@ public class Battery extends Widget {
     public static final Color MEDIUM_HIGHLIGHTED = Color.ORANGE;
     public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
     public static final Color HIGHEST_HIGHLIGHTED = Color.green;
-    public static final double CRITICAL_LOW_ENERGY = 0.08;
+    public static final double CRITICAL_LOW_ENERGY = 0.10;
     public static final double LOW_ENERGY = 0.15;
     public static final double HIGH_ENERGY = 0.75;
     public static final double VERY_HIGH_ENERGY = 0.9;
@@ -57,7 +57,7 @@ public class Battery extends Widget {
             this.totalHeight = (int) (this.getHeight() / 10d * 7d);
             this.totalWidth = this.getWidth();
         }
-        if(donePercent > 0 && donePercent < CRITICAL_LOW_ENERGY && (System.nanoTime() - tmpNanoTime) > 1000000000l / 2l) {
+        if(donePercent > 0 && donePercent < CRITICAL_LOW_ENERGY && (System.nanoTime() - tmpNanoTime) > (500000000l) / 2l) {
             blinking.flip();
             System.out.println(getName() + "donePercent=" + donePercent);
             tmpNanoTime = System.nanoTime();
