@@ -359,7 +359,7 @@ public class TimeCalcManager {
 //        } );
         window.setSize(520 + 20 + 100, exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
-            //time.writeString();
+            time.writeString();
             if(Math.random() > 0.95) {
                 window.requestFocus();
             }

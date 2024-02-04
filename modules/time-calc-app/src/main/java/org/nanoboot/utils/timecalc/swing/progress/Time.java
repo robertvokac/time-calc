@@ -49,7 +49,7 @@ public class Time extends Thread {
             dayOfWeekReadWriteProperty
                     .setValue(dayOfWeek == 1 ? 7 : dayOfWeek - 1);
             try {
-                Thread.sleep(1);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 System.out.println(e);
             }
