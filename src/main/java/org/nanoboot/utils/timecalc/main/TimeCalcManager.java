@@ -90,7 +90,9 @@ public class TimeCalcManager {
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     Utils.everythingHidden.set(true);
                 }
-
+                if (e.getKeyCode() == KeyEvent.VK_H) {
+                    Utils.everythingHidden.flip();
+                }
                 if (e.getKeyCode() == KeyEvent.VK_G) {
                     if(!Utils.ultraLight.get() && Utils.highlighted.isEnabled()) {
                         Utils.highlighted.disable();
