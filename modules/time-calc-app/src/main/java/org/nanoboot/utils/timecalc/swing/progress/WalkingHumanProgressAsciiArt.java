@@ -1,10 +1,10 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
-import org.nanoboot.utils.timecalc.utils.Constants;
-import org.nanoboot.utils.timecalc.utils.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.TimeHM;
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;

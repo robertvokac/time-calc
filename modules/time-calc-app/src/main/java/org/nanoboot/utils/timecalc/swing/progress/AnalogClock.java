@@ -1,10 +1,11 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
+import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.app.TimeCalcConf;
-import org.nanoboot.utils.timecalc.utils.DateFormats;
-import org.nanoboot.utils.timecalc.utils.TimeHM;
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.utils.common.DateFormats;
+import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JFrame;
 import java.awt.BasicStroke;
@@ -75,8 +76,9 @@ public class AnalogClock extends Widget {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintWidget(Graphics g) {
         super.paintComponent(g);
+        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);

@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.property;
 
 /**
  * @author Robert

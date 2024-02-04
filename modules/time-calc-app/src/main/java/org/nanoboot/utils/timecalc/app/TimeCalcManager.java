@@ -15,11 +15,11 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgressAsciiArt;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
-import org.nanoboot.utils.timecalc.utils.Constants;
-import org.nanoboot.utils.timecalc.utils.DateFormats;
-import org.nanoboot.utils.timecalc.utils.Jokes;
-import org.nanoboot.utils.timecalc.utils.TimeHM;
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.utils.common.DateFormats;
+import org.nanoboot.utils.timecalc.utils.common.Jokes;
+import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JOptionPane;
 import java.awt.Color;
@@ -48,10 +48,12 @@ public class TimeCalcManager {
     private final TimeHM startTime;
     private final TimeHM overtime;
     private final TimeHM endTime;
+    private final TimeCalcApp timeCalcApp;
     private boolean stopBeforeEnd = false;
-    private boolean vtipyShown = false;
 
-    public TimeCalcManager(String startTimeIn, String overTimeIn) {
+    public TimeCalcManager(String startTimeIn, String overTimeIn,
+            TimeCalcApp timeCalcApp) {
+        this.timeCalcApp = timeCalcApp;
         Utils.everythingHidden
                 .setValue(TimeCalcConf.getInstance().isEverythingHidden());
         Utils.toastsAreEnabled
@@ -189,7 +191,7 @@ public class TimeCalcManager {
                             break;
                         case "uptime":
                             JOptionPane.showMessageDialog(null,
-                                    Utils.getCountOfMinutesSinceAppStarted()
+                                    timeCalcApp.getCountOfMinutesSinceAppStarted()
                                     + " minutes");
                             break;
                         case "toast":
@@ -407,10 +409,6 @@ public class TimeCalcManager {
             double totalSecondsRemainsDouble =
                     ((double) totalMillisecondsRemains) / 1000;
 
-            if (timeRemains.getHour() == 0 && timeRemains.getMinute() == 1 && !vtipyShown) {
-                vtipyShown = true;
-                Jokes.showRandom();
-            }
 //            if (timeRemains.getHour() == 0 && timeRemains.getMinute() <= 3) {
 //                Utils.highlighted.set(true);
 //                walkingHumanProgressAsciiArt.setForeground(Color.BLUE);

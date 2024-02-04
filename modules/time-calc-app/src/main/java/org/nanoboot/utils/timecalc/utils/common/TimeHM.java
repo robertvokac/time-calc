@@ -1,10 +1,10 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class TimeHM {

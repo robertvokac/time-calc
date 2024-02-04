@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 15.02.2024
  */
 public class JokesTxt {

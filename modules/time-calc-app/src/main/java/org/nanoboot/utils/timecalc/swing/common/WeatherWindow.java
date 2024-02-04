@@ -1,6 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;

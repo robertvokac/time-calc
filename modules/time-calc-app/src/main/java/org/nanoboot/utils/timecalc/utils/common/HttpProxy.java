@@ -1,10 +1,10 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 16.02.2024
  */
 public class HttpProxy {

@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class DateFormats {

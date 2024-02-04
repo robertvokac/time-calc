@@ -1,6 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
-import org.nanoboot.utils.timecalc.utils.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 
 /**
  * @author Robert

@@ -1,6 +1,7 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import org.nanoboot.utils.timecalc.app.Main;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
 import java.awt.Color;
 import java.io.File;
@@ -14,7 +15,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 15.02.2024
  */
 public class Utils {

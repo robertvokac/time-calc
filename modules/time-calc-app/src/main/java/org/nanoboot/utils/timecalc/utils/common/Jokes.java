@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.app.TimeCalcConf;
@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 09.02.2024
  */
 public class Jokes {

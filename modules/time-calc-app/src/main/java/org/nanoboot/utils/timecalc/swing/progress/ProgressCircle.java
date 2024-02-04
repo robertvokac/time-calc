@@ -1,8 +1,8 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.utils.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +17,7 @@ public class ProgressCircle extends Widget {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintWidget(Graphics g) {
         if (side == 0) {
             this.side = Math.min(getWidth(), getHeight());
         }

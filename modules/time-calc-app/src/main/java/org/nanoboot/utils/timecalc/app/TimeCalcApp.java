@@ -1,8 +1,11 @@
 package org.nanoboot.utils.timecalc.app;
 
-import org.nanoboot.utils.timecalc.utils.Constants;
-import org.nanoboot.utils.timecalc.utils.FileConstants;
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.utils.common.FileConstants;
+import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
+import org.nanoboot.utils.timecalc.utils.property.StringProperty;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
@@ -14,6 +17,8 @@ import java.io.IOException;
 public class TimeCalcApp {
 
     private long startNanoTime = 0l;
+    private StringProperty visibilityReadWriteProperty = new StringProperty(Visibility.STRONGLY_COLORED.name());
+    public ReadOnlyProperty<String> visibilityProperty = visibilityReadWriteProperty.asReadOnlyProperty();
 
     public void start(String[] args) throws IOException {
 
@@ -60,7 +65,7 @@ public class TimeCalcApp {
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
             try {
                 TimeCalcManager timeCalc =
-                        new TimeCalcManager(newStartTime, newOvertime);
+                        new TimeCalcManager(newStartTime, newOvertime, this);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -77,10 +82,11 @@ public class TimeCalcApp {
     }
     public long getCountOfMillisecondsSinceAppStarted() {
         if(startNanoTime == 0l) {
-            throw new TimeCalcException("App was not yet started.");
+            throw new TimeCalcException("TimeCalcApp was not yet started.");
         }
         return System.nanoTime() - startNanoTime;
     }
 
 }
+
 

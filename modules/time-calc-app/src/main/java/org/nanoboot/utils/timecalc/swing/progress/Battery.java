@@ -3,9 +3,9 @@ package org.nanoboot.utils.timecalc.swing.progress;
 import lombok.Getter;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.app.TimeCalcConf;
-import org.nanoboot.utils.timecalc.utils.BooleanProperty;
-import org.nanoboot.utils.timecalc.utils.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.Utils;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -52,7 +52,7 @@ public class Battery extends Widget {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintWidget(Graphics g) {
         if (totalHeight == 0) {
             this.totalHeight = (int) (this.getHeight() / 10d * 7d);
             this.totalWidth = this.getWidth();
