@@ -101,7 +101,7 @@ public class TimeCalcManager {
                 if (e.getKeyCode() == KeyEvent.VK_C) {
                     Utils.highlighted.flip();
                 }
-                if (e.getKeyCode() == KeyEvent.VK_V) {
+                if (e.getKeyCode() == KeyEvent.VK_V || e.getKeyCode() == KeyEvent.VK_SPACE) {
                     Utils.everythingHidden.flip();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_R) {
@@ -133,7 +133,6 @@ public class TimeCalcManager {
                 exitButton.getX() + 2 * MARGIN + exitButton.getWidth() + 20,
                 exitButton.getY(), 80, aboutButton.getHeight());
 
-        window.setSize(520 + 20 + 100, 580 + MARGIN + aboutButton.getHeight());
         window.setLayout(null);
 
         window.setVisible(true);
@@ -301,7 +300,7 @@ public class TimeCalcManager {
                 restartButton,
                 exitButton
         );
-        window.setSize(window.getWidth(), exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
+        window.setSize(520 + 20 + 100, exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
             if (stopBeforeEnd) {
                 window.setVisible(false);
@@ -410,10 +409,10 @@ public class TimeCalcManager {
                 vtipyShown = true;
                 Jokes.showRandom();
             }
-            if (timeRemains.getHour() == 0 && timeRemains.getMinute() <= 3) {
-                Utils.highlighted.set(true);
-                walkingHumanProgressAsciiArt.setForeground(Color.BLUE);
-            }
+//            if (timeRemains.getHour() == 0 && timeRemains.getMinute() <= 3) {
+//                Utils.highlighted.set(true);
+//                walkingHumanProgressAsciiArt.setForeground(Color.BLUE);
+//            }
 
             if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
                 Toaster toasterManager = new Toaster();
