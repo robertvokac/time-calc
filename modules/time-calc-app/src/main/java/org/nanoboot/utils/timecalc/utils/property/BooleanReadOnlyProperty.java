@@ -6,8 +6,8 @@ package org.nanoboot.utils.timecalc.utils.property;
  */
 public class BooleanReadOnlyProperty extends ReadOnlyProperty<Boolean> {
 
-    public BooleanReadOnlyProperty(Boolean valueIn) {
-        super(valueIn);
+    public BooleanReadOnlyProperty(String name, Boolean valueIn) {
+        super(name, valueIn);
     }
     public BooleanReadOnlyProperty(Property<Boolean> property) {
         super(property);

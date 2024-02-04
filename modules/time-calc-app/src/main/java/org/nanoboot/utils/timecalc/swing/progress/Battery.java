@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import lombok.Getter;
+import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.app.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
@@ -27,9 +28,9 @@ public class Battery extends Widget {
     public static final double LOW_ENERGY = 0.15;
     public static final double HIGH_ENERGY = 0.75;
     public static final double VERY_HIGH_ENERGY = 0.9;
-    public static boolean wavesOff = false;
+    public BooleanProperty wavesProperty = new BooleanProperty("waves", true);
     private static final Font bigFont = new Font("sans", Font.BOLD, 24);
-    private BooleanProperty blinking = new BooleanProperty();
+    private BooleanProperty blinking = new BooleanProperty("blinking");
     private long tmpNanoTime = 0l;
 
     @Getter
@@ -64,19 +65,20 @@ public class Battery extends Widget {
         if(donePercent <= 0 && blinking.getValue()){
             blinking.setValue(false);
         }
-        super.paintComponent(g);
+
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.YELLOW :
+        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.YELLOW :
                 FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (!Utils.ultraLight.getValue()) {
+        if (!visibility.isGray()) {
             g2d.fillRect(1, 1, totalWidth, totalHeight);
         }
 
-        if (Utils.highlighted.getValue() || mouseOver) {
+        if (visibility.isStronglyColored() || mouseOver) {
             g2d.setColor(
                     donePercent < LOW_ENERGY ? LOW_HIGHLIGHTED : (donePercent < HIGH_ENERGY ?
                             MEDIUM_HIGHLIGHTED :
@@ -86,7 +88,7 @@ public class Battery extends Widget {
             g2d.setColor(donePercent < LOW_ENERGY ? LOW : (donePercent < HIGH_ENERGY ?
                     MEDIUM : (donePercent < VERY_HIGH_ENERGY ? HIGH : HIGHEST)));
         }
-        if (Utils.ultraLight.getValue()) {
+        if (visibility.isGray()) {
             g2d.setColor(Utils.ULTRA_LIGHT_GRAY);
         }
         if(blinking.getValue()) {
@@ -100,7 +102,7 @@ public class Battery extends Widget {
         int waterSurfaceHeight =
                 (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
         if (waterSurfaceHeight <= 2 || !TimeCalcConf.getInstance()
-                .areBatteryWavesEnabled() || wavesOff) {
+                .areBatteryWavesEnabled() || wavesProperty.isDisabled()) {
             waterSurfaceHeight = 0;
         }
 
@@ -138,7 +140,7 @@ public class Battery extends Widget {
                             todoHeight + (waterSurfaceHeight * 1)},
                     pointCount);
 
-            g2d.setColor((Utils.ultraLight.getValue() || !Utils.highlighted.getValue()) && !mouseOver ? Utils.ULTRA_LIGHT_GRAY : Color.DARK_GRAY);
+            g2d.setColor((visibility.isGray() || !visibility.isStronglyColored()) && !mouseOver ? Utils.ULTRA_LIGHT_GRAY : Color.DARK_GRAY);
 
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -169,7 +171,7 @@ public class Battery extends Widget {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK :
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
 
         if(donePercent <1) {
@@ -199,7 +201,7 @@ public class Battery extends Widget {
                     ((int) (totalWidth * 0.15)),
                     (totalHeight / 4 * 3) + 20 + 20);
         }
-        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK :
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
         g2d.drawRect(1, 1, totalWidth - 2, totalHeight);
 

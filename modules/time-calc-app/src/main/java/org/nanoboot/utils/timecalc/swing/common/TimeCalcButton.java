@@ -1,5 +1,8 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.property.StringProperty;
+
 import javax.swing.JButton;
 import javax.swing.Timer;
 import java.awt.Color;
@@ -13,6 +16,8 @@ public class TimeCalcButton extends JButton {
     private static final int BUTTON_HEIGHT = 30;
     private Color originalBackground;
     private Color originalForeground;
+
+    public StringProperty visibilityProperty = new StringProperty("visibilityProperty", Visibility.STRONGLY_COLORED.name());
 
     public TimeCalcButton(String label) {
         super(label);

@@ -5,7 +5,6 @@ import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.app.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JFrame;
 import java.awt.BasicStroke;
@@ -24,7 +23,6 @@ public class AnalogClock extends Widget {
 
     private TimeHM startTime;
     private TimeHM endTime;
-    private int angleDiff;
     private int startAngle;
     private int endAngle;
 
@@ -77,7 +75,7 @@ public class AnalogClock extends Widget {
 
     @Override
     public void paintWidget(Graphics g) {
-        super.paintComponent(g);
+
         Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -92,7 +90,7 @@ public class AnalogClock extends Widget {
         int minute = time.get(Calendar.MINUTE);
         int hour = time.get(Calendar.HOUR_OF_DAY);
 
-        if(mouseOver && Utils.highlighted.isEnabled()) {
+        if(mouseOver && visibility.isStronglyColored()) {
         this.startTime = new TimeHM(hour, minute);
         this.startAngle =
                 (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d * 360d);
@@ -107,35 +105,35 @@ public class AnalogClock extends Widget {
         }
 
         // Draw clock numbers and circle
-        drawClockFace(g2d, centerX, centerY, side / 2 - 40);
+        drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
 
-        drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED);
+        drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED, visibility);
 
         if (TimeCalcConf.getInstance().areClockHandsLong()) {
             drawHand(g2d, (side / 2 - 10) / 4,
                     (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
-                    Color.RED);
+                    Color.RED, visibility);
         }
         //
         double minutes = minute / 60.0 + second / 60.0 / 60.0;
         drawHand(g2d, side / 2 - 20, minutes, 2.0f,
-                Color.BLUE);
+                Color.BLUE, visibility);
         if (TimeCalcConf.getInstance().areClockHandsLong()) {
             drawHand(g2d, (side / 2 - 20) / 4,
                     minutes + minutes > 0.5 ? minutes - 0.5 :
                             minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
-                    Color.BLUE);
+                    Color.BLUE, visibility);
         }
         //
         double hours = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
         drawHand(g2d, side / 2 - 40,
                 hours, 4.0f,
-                Color.BLACK);
+                Color.BLACK, visibility);
         if (TimeCalcConf.getInstance().areClockHandsLong()) {
             drawHand(g2d, (side / 2 - 40) / 4,
                     hours + hours > 0.5 ? hours - 0.5 :
                             hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
-                    Color.BLACK);
+                    Color.BLACK, visibility);
         }
         drawCentre(g2d, centerX, centerY);
 
@@ -143,29 +141,30 @@ public class AnalogClock extends Widget {
 
     private void drawCentre(Graphics2D g2d, int centerX, int centerY) {
         Color currentColor = g2d.getColor();
-        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.RED :
+        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.RED :
                 FOREGROUND_COLOR);
         g2d.fillOval(centerX - 3, centerY - 3, 8, 8);
         g2d.setColor(currentColor);
     }
 
     private void drawHand(Graphics2D g2d, int length, double value,
-            float stroke, Color color) {
+            float stroke, Color color, Visibility visibility) {
         length = length - 4;
         double angle = Math.PI * 2 * (value - 0.25);
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        g2d.setColor((Utils.highlighted.getValue() || mouseOver) ? color :
+        g2d.setColor((visibility.isStronglyColored() || mouseOver) ? color :
                 FOREGROUND_COLOR);
         g2d.setStroke(new BasicStroke(stroke));
         g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
 
     private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
-            int radius) {
+            int radius, Visibility visibility) {
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK :
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 FOREGROUND_COLOR);
         //        System.out.println("centerX=" + centerX);
         //        System.out.println("centerY=" + centerY);

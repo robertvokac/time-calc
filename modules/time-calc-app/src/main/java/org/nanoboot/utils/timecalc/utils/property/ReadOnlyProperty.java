@@ -8,19 +8,19 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
  */
 public class ReadOnlyProperty<T> extends Property<T> {
     private Property<T> innerProperty;
-    public ReadOnlyProperty(T valueIn) {
-        super(valueIn);
+    public ReadOnlyProperty(String name, T valueIn) {
+        super(name, valueIn);
         throw new TimeCalcException("This constructor is forbidden in class " + getClass().getName() + ".");
     }
     public ReadOnlyProperty(Property<T> property) {
-        super(null);
+        super(property.getName(), null);
         this.innerProperty = property;
     }
     public final void setValue(T valueIn) {
         throw new TimeCalcException("This is a read only property. New value cannot be set.");
     }
 
-    public final T getValue(T valueIn) {
+    public final T getValue() {
         return innerProperty.getValue();
     }
     public final void unBound() {

@@ -116,7 +116,7 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-        if (Utils.everythingHidden.getValue() || !Utils.toastsAreEnabled.getValue()) {
+        if (!Utils.toastsAreEnabled.getValue()) {
             //nothing to do
             return;
         }

@@ -1,10 +1,12 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
+import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -25,6 +27,7 @@ import java.util.Set;
 public class WalkingHumanProgressAsciiArt extends JTextPane {
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private static final String WALL = "||";
+    public StringProperty visibilityProperty = new StringProperty("visibilityProperty", Visibility.STRONGLY_COLORED.name());
     public WalkingHumanProgressAsciiArt() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
         putClientProperty("mouseEntered", "false");
@@ -34,7 +37,12 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Utils.highlighted.flip();
+                Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+                if(visibility.isStronglyColored()) {
+                    visibilityProperty.setValue(Visibility.WEAKLY_COLORED.name());
+                } else {
+                    visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
+                }
             }
 
             @Override
@@ -60,6 +68,10 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
     }
     public void printPercentToAscii(double percent, int hourRemains, int minuteRemains, double done,
             double totalSecondsRemainsDouble, TimeHM endTime) {
+
+        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        this.setVisible(visibility != Visibility.NONE);
+
         StringBuilder sb = new StringBuilder();
         String msg = createMessage(hourRemains, minuteRemains, done, totalSecondsRemainsDouble, endTime);
         int percentInt = (int) (percent * 100);

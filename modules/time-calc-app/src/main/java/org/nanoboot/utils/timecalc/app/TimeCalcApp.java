@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.app;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
@@ -17,11 +18,11 @@ import java.io.IOException;
 public class TimeCalcApp {
 
     private long startNanoTime = 0l;
-    private StringProperty visibilityReadWriteProperty = new StringProperty(Visibility.STRONGLY_COLORED.name());
-    public ReadOnlyProperty<String> visibilityProperty = visibilityReadWriteProperty.asReadOnlyProperty();
+    public StringProperty visibilityProperty = new StringProperty("visibilityReadWriteProperty", Visibility.STRONGLY_COLORED.name());
+    public BooleanProperty
+            wavesProperty = new BooleanProperty("waves", true);
 
     public void start(String[] args) throws IOException {
-
         if(startNanoTime != 0l) {
             throw new TimeCalcException("TimeCalcApp was already started.");
         }

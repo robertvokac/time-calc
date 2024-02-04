@@ -6,11 +6,11 @@ package org.nanoboot.utils.timecalc.utils.property;
  */
 public class StringProperty extends Property<String> {
 
-    public StringProperty(String valueIn) {
-        super(valueIn);
+    public StringProperty(String name, String valueIn) {
+        super(name, valueIn);
     }
 
     public StringProperty() {
-        this("");
+        this("", "");
     }
 }

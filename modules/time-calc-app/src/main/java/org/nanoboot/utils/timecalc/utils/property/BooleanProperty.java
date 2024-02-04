@@ -6,14 +6,14 @@ package org.nanoboot.utils.timecalc.utils.property;
  */
 public class BooleanProperty extends Property<Boolean> {
 
-    public BooleanProperty() {
-        super(Boolean.FALSE);
+    public BooleanProperty(String name) {
+        super(name, Boolean.FALSE);
     }
-    public BooleanProperty(boolean valueIn) {
-        this(Boolean.valueOf(valueIn));
+    public BooleanProperty(String name, boolean valueIn) {
+        this(name, Boolean.valueOf(valueIn));
     }
-    public BooleanProperty(Boolean valueIn) {
-        super(valueIn);
+    public BooleanProperty(String name, Boolean valueIn) {
+        super(name, valueIn);
     }
 
     public boolean isEnabled() {

@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.app;
 
+import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.AboutButton;
 import org.nanoboot.utils.timecalc.swing.common.ComponentRegistry;
 import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
@@ -54,10 +55,10 @@ public class TimeCalcManager {
     public TimeCalcManager(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
         this.timeCalcApp = timeCalcApp;
-        Utils.everythingHidden
-                .setValue(TimeCalcConf.getInstance().isEverythingHidden());
-        Utils.toastsAreEnabled
-                .setValue(TimeCalcConf.getInstance().areToastsEnabled());
+//        Utils.everythingHidden
+//                .setValue(TimeCalcConf.getInstance().isEverythingHidden());
+//        Utils.toastsAreEnabled
+//                .setValue(TimeCalcConf.getInstance().areToastsEnabled());
 
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
@@ -87,43 +88,54 @@ public class TimeCalcManager {
         window.addKeyListener(new KeyAdapter() {
             // Key Pressed method
             public void keyPressed(KeyEvent e) {
+                Visibility visibility = Visibility.valueOf(timeCalcApp.visibilityProperty.getValue());
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    Utils.everythingHidden.setValue(false);
+                    timeCalcApp.visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    Utils.everythingHidden.setValue(true);
+                    timeCalcApp.visibilityProperty.setValue(Visibility.NONE.name());
                 }
                 if (e.getKeyCode() == KeyEvent.VK_H) {
-                    Utils.everythingHidden.flip();
+                    if(visibility.isNone()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
+                    } else {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.NONE.name());
+                    }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_G) {
-                    if(!Utils.ultraLight.getValue() && Utils.highlighted.isEnabled()) {
-                        Utils.highlighted.disable();
+                    if(visibility.isGray()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.WEAKLY_COLORED.name());
+                    } else {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
                     }
-                    Utils.ultraLight.flip();
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_C) {
-                    if(Utils.ultraLight.getValue() && !Utils.highlighted.isEnabled()) {
-                        Utils.ultraLight.disable();
+                    if(visibility.isStronglyColored()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.WEAKLY_COLORED.name());
+                    } else {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
                     }
-                    Utils.highlighted.flip();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_V) {
-                    Utils.everythingHidden.flip();
+                    if(visibility.isNone()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
+                    } else {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.NONE.name());
+                    }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    if(Utils.everythingHidden.isEnabled()) {
-                        Utils.everythingHidden.disable();
-                        Utils.highlighted.enable();
-                        Utils.ultraLight.disable();
-                    } else {
-                        if(Utils.highlighted.isEnabled()) {
-                            Utils.ultraLight.enable();
-                            Utils.highlighted.disable();
-                        } else {
-                            Utils.everythingHidden.enable();
-                        }
+                    if(visibility.isStronglyColored()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.WEAKLY_COLORED.name());
+                    }
+                    if(visibility.isWeaklyColored()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
+                    }
+                    if(visibility.isGray()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.NONE.name());
+                    }
+                    if(visibility.isNone()) {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
                     }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_R) {
@@ -179,15 +191,13 @@ public class TimeCalcManager {
                             JOptionPane.showMessageDialog(null, "Test");
                             break;
                         case "color":
-                            Utils.highlighted
-                                    .setValue(commandsAsArray[1].equals("1"));
+                            timeCalcApp.visibilityProperty.setValue(commandsAsArray[1].equals("1") ? Visibility.STRONGLY_COLORED.name() : Visibility.WEAKLY_COLORED.name());
                             break;
                         case "gray":
-                            Utils.ultraLight
-                                    .setValue(commandsAsArray[1].equals("1"));
+                            timeCalcApp.visibilityProperty.setValue(commandsAsArray[1].equals("1") ? Visibility.GRAY.name() : Visibility.WEAKLY_COLORED.name());
                             break;
                         case "waves":
-                            Battery.wavesOff = commandsAsArray[1].equals("0");
+                            timeCalcApp.wavesProperty.setValue(commandsAsArray[1].equals("1"));
                             break;
                         case "uptime":
                             JOptionPane.showMessageDialog(null,
@@ -228,12 +238,14 @@ public class TimeCalcManager {
 
         AnalogClock analogClock = new AnalogClock(startTime, endTime);
         analogClock.setBounds(MARGIN, MARGIN, 200);
+
         window.add(analogClock);
 
         ProgressSquare progressSquare = new ProgressSquare();
         progressSquare
                 .setBounds(MARGIN + analogClock.getWidth() + MARGIN, MARGIN,
                         200);
+
         window.add(progressSquare);
 
         ProgressCircle progressCircle = new ProgressCircle();
@@ -241,11 +253,13 @@ public class TimeCalcManager {
                 .setBounds(
                         MARGIN + progressSquare.getBounds().x + progressSquare
                                 .getWidth() + MARGIN, MARGIN, 80);
+
         window.add(progressCircle);
 
         Battery dayBattery = new DayBattery(progressCircle.getBounds().x,
                 progressCircle.getY() + MARGIN + progressCircle.getHeight(), 140);
         window.add(dayBattery);
+
 
         Battery weekBattery = new WeekBattery(
                 dayBattery.getBounds().x + dayBattery.getWidth() + MARGIN * 2,
@@ -298,6 +312,10 @@ public class TimeCalcManager {
         weekBattery.setBounds(hourBattery.getX(), hourBattery.getY() + hourBattery.getHeight() + MARGIN, hourBattery.getWidth(), hourBattery.getHeight());
         monthBattery.setBounds(hourBattery.getX() + hourBattery.getWidth() + MARGIN, hourBattery.getY() + hourBattery.getHeight() + MARGIN, hourBattery.getWidth(), hourBattery.getHeight());
 
+        hourBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
+        dayBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
+        weekBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
+        monthBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
 
         ComponentRegistry componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
@@ -314,6 +332,24 @@ public class TimeCalcManager {
                 restartButton,
                 exitButton
         );
+        walkingHumanProgressAsciiArt.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        progressSquare.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        progressCircle.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        analogClock.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        dayBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        weekBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        monthBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        hourBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        jokeButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        commandButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        restartButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        exitButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+
+        jokeButton.setVisible(!Visibility.valueOf(jokeButton.visibilityProperty.getValue()).isNone());
+        commandButton.setVisible(!Visibility.valueOf(commandButton.visibilityProperty.getValue()).isNone());
+        restartButton.setVisible(!Visibility.valueOf(restartButton.visibilityProperty.getValue()).isNone());
+        exitButton.setVisible(!Visibility.valueOf(exitButton.visibilityProperty.getValue()).isNone());
+
         window.setSize(520 + 20 + 100, exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
             if(Math.random() > 0.95) {
@@ -325,8 +361,9 @@ public class TimeCalcManager {
                 break;
             }
 
-            componentRegistry.setVisible(!Utils.everythingHidden.getValue());
-            if (!Utils.highlighted.getValue() || Utils.ultraLight.getValue()) {
+            Visibility visibility = Visibility.valueOf(timeCalcApp.visibilityProperty.getValue());
+            componentRegistry.setVisible(visibility.isNotNone());
+            if (!visibility.isStronglyColored() || visibility.isGray()) {
                 jokeButton.setBackground(BG);
                 commandButton.setBackground(BG);
                 restartButton.setBackground(BG);
@@ -349,9 +386,9 @@ public class TimeCalcManager {
             }
             jokeButton.setVisible(
                     TimeCalcConf.getInstance().isJokeVisible()
-                    && !Utils.everythingHidden.getValue());
+                    && !visibility.isNone());
 
-            window.setTitle(Utils.everythingHidden.getValue() ? "" : windowTitle);
+            window.setTitle(visibility.isNone() ? "" : windowTitle);
 
             LocalDateTime now = LocalDateTime.now();
             String nowString =
@@ -443,7 +480,7 @@ public class TimeCalcManager {
             }
 
             walkingHumanProgressAsciiArt.setForeground(
-                    Utils.highlighted.getValue() || walkingHumanProgressAsciiArt
+                    visibility.isStronglyColored() || walkingHumanProgressAsciiArt
                             .getClientProperty("mouseEntered").equals("true") ?
                             Color.BLACK : Color.LIGHT_GRAY);
         }

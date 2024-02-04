@@ -1,8 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
-import org.nanoboot.utils.timecalc.app.TimeCalcConf;
 import org.nanoboot.utils.timecalc.entity.Visibility;
-import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
@@ -10,12 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * @author Robert
@@ -29,7 +23,7 @@ public class Widget extends JPanel {
     protected double donePercent = 0;
     protected boolean mouseOver = false;
 
-    public StringProperty visibilityProperty = new StringProperty(Visibility.STRONGLY_COLORED.name());
+    public StringProperty visibilityProperty = new StringProperty("visibilityProperty", Visibility.STRONGLY_COLORED.name());
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);
@@ -37,7 +31,12 @@ public class Widget extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Utils.highlighted.flip();
+                Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+                if(visibility.isStronglyColored()) {
+                    visibilityProperty.setValue(Visibility.WEAKLY_COLORED.name());
+                } else {
+                    visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
+                }
             }
 
             @Override
@@ -83,6 +82,7 @@ public class Widget extends JPanel {
     @Override
     public final void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
         this.setVisible(visibility != Visibility.NONE);
         paintWidget(g);

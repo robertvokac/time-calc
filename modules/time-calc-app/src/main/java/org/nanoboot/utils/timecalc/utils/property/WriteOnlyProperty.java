@@ -8,12 +8,12 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
  */
 public class WriteOnlyProperty<T> extends Property<T> {
     private Property<T> innerProperty;
-    public WriteOnlyProperty(T valueIn) {
-        super(valueIn);
+    public WriteOnlyProperty(String name, T valueIn) {
+        super(name, valueIn);
         throw new TimeCalcException("This constructor is forbidden in class " + getClass().getName() + ".");
     }
     public WriteOnlyProperty(Property<T> property) {
-        super(null);
+        super(property.getName(), null);
         this.innerProperty = property;
     }
     public final void setValue(T valueIn) {
