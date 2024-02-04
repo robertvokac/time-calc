@@ -27,7 +27,7 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private static final String WALL = "||";
     public WalkingHumanProgressAsciiArt() {
-        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
         putClientProperty("mouseEntered", "false");
         setFocusable(false);
         setForeground(Color.GRAY);
@@ -99,7 +99,7 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
 
         sb.append("\n" + msg + "\n\n");
 
-        int spacesTotal = 48;
+        int spacesTotal = 40;
         int spacesDone = (int) (percent * spacesTotal);
         if (spacesDone > spacesTotal) {
             spacesDone = spacesTotal;
@@ -125,8 +125,8 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
                         spacesTodo) + (spacesTodo == 0 ?
                         "  /☼☼☼☼\\   " :
                         "|        |") + Constants.NEW_LINE +
-                "================================================================"
-                + Constants.NEW_LINE + "Steps: " + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
+                createRepeatedString(spacesTotal + 16, '=') +
+                Constants.NEW_LINE + "Steps: " + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
                         .format(percent * ((double) spacesTotal)) + "/"
                 + spacesTotal
         );

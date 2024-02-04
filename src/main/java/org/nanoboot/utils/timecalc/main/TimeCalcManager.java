@@ -71,7 +71,7 @@ public class TimeCalcManager {
 
         TimeCalcWindow window = new TimeCalcWindow();
 
-        TimeCalcButton focusButton = new TimeCalcButton("F");
+        TimeCalcButton focusButton = new TimeCalcButton("Focus");
         TimeCalcButton commandButton = new TimeCalcButton("Command");
         TimeCalcButton weatherButton = new TimeCalcButton("Weather");
         TimeCalcButton jokeButton = new TimeCalcButton("Joke");
@@ -113,7 +113,7 @@ public class TimeCalcManager {
             }
         });
         WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt = new WalkingHumanProgressAsciiArt();
-        walkingHumanProgressAsciiArt.setBounds(MARGIN, MARGIN + 210 + MARGIN, 500, 250);
+        walkingHumanProgressAsciiArt.setBounds(MARGIN, MARGIN + 210 + MARGIN, 450, 180);
 
         window.add(walkingHumanProgressAsciiArt);
         weatherButton
@@ -128,8 +128,8 @@ public class TimeCalcManager {
                 exitButton.getY() + exitButton.getHeight() + MARGIN);
 
         focusButton.setBounds(
-                exitButton.getX() + 3 * MARGIN + exitButton.getWidth() + 20,
-                MARGIN, 60, aboutButton.getHeight());
+                exitButton.getX() + 2 * MARGIN + exitButton.getWidth() + 20,
+                exitButton.getY(), 80, aboutButton.getHeight());
 
         window.setSize(520 + 20 + 100, 580 + MARGIN + aboutButton.getHeight());
         window.setLayout(null);
@@ -274,17 +274,14 @@ public class TimeCalcManager {
         Battery hourBattery = new HourBattery(monthBattery.getBounds().x,
                 monthBattery.getY() + monthBattery.getHeight() + MARGIN, 140);
         window.add(hourBattery);
-        Rectangle hourRectangle = hourBattery.getBounds();
+
         Rectangle dayRectangle = dayBattery.getBounds();
-        Rectangle weekRectangle = weekBattery.getBounds();
-        Rectangle monthRectangle = monthBattery.getBounds();
         hourBattery.setBounds(dayRectangle);
-        dayBattery.setBounds(weekRectangle);
-        weekBattery.setBounds(monthRectangle);
-        monthBattery.setBounds(hourRectangle);
-        //
-        weekBattery.setBounds(dayBattery.getX(), weekBattery.getY(), weekBattery.getWidth(), weekBattery.getHeight());
-        monthBattery.setBounds(dayBattery.getX(), monthBattery.getY(), monthBattery.getWidth(), monthBattery.getHeight());
+        hourBattery.setBounds(hourBattery.getX() + 2 * MARGIN, hourBattery.getY(), hourBattery.getWidth(), hourBattery.getHeight());
+        dayBattery.setBounds(hourBattery.getX() + hourBattery.getWidth() + MARGIN, hourBattery.getY(), hourBattery.getWidth(), hourBattery.getHeight());
+        weekBattery.setBounds(hourBattery.getX(), hourBattery.getY() + hourBattery.getHeight() + MARGIN, hourBattery.getWidth(), hourBattery.getHeight());
+        monthBattery.setBounds(hourBattery.getX() + hourBattery.getWidth() + MARGIN, hourBattery.getY() + hourBattery.getHeight() + MARGIN, hourBattery.getWidth(), hourBattery.getHeight());
+
 
         ComponentRegistry componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
@@ -302,6 +299,7 @@ public class TimeCalcManager {
                 restartButton,
                 exitButton
         );
+        window.setSize(window.getWidth(), exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
             if (stopBeforeEnd) {
                 window.setVisible(false);
