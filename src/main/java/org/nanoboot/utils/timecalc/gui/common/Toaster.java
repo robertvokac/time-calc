@@ -1,3 +1,6 @@
+/**
+ * This Java class named Toaster is licence under this licence: Apache License V2.0
+ */
 package org.nanoboot.utils.timecalc.gui.common;
 /**
  * Java Toaster is a java utility class for your swing applications
