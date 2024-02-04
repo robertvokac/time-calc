@@ -32,8 +32,6 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.nanoboot.utils.timecalc.utils.FileConstants.FOCUS_TXT;
-
 /**
  * @author pc00289
  * @since 08.02.2024
@@ -73,7 +71,6 @@ public class TimeCalcManager {
 
         TimeCalcWindow window = new TimeCalcWindow();
 
-        TimeCalcButton focusButton = new TimeCalcButton("Focus");
         TimeCalcButton commandButton = new TimeCalcButton("Command");
         TimeCalcButton weatherButton = new TimeCalcButton("Weather");
         TimeCalcButton jokeButton = new TimeCalcButton("Joke");
@@ -82,7 +79,7 @@ public class TimeCalcManager {
         AboutButton aboutButton = new AboutButton();
 
         //window.add(weatherButton);
-        window.addAll(commandButton, focusButton, jokeButton, restartButton,
+        window.addAll(commandButton, jokeButton, restartButton,
                 exitButton);
         window.addKeyListener(new KeyAdapter() {
             // Key Pressed method
@@ -128,10 +125,6 @@ public class TimeCalcManager {
         exitButton.setBounds(390, walkingHumanProgressAsciiArt.getY() + walkingHumanProgressAsciiArt.getHeight() + MARGIN);
         aboutButton.setBounds(exitButton.getX(),
                 exitButton.getY() + exitButton.getHeight() + MARGIN);
-
-        focusButton.setBounds(
-                exitButton.getX() + 2 * MARGIN + exitButton.getWidth() + 20,
-                exitButton.getY(), 80, aboutButton.getHeight());
 
         window.setLayout(null);
 
@@ -197,9 +190,6 @@ public class TimeCalcManager {
                     }
                 });
 
-        focusButton.addActionListener(e -> {
-            window.requestFocus();
-        });
         jokeButton.addActionListener(e -> {
             for (int i = 1; i <= 1; i++) {
                 Jokes.showRandom();
@@ -295,25 +285,21 @@ public class TimeCalcManager {
                 monthBattery,
                 hourBattery,
                 jokeButton,
-                focusButton,
                 commandButton,
                 restartButton,
                 exitButton
         );
         window.setSize(520 + 20 + 100, exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
+            if(Math.random() > 0.95) {
+                window.requestFocus();
+            }
             if (stopBeforeEnd) {
                 window.setVisible(false);
                 window.dispose();
                 break;
             }
 
-            if (Math.random() > 0.9) {
-                if (FOCUS_TXT.exists()) {
-                    window.requestFocus();
-                    FOCUS_TXT.delete();
-                }
-            }
             if (Utils.highlighted.get()) {
                 Utils.ultraLight.set(false);
             }
@@ -321,25 +307,21 @@ public class TimeCalcManager {
             componentRegistry.setVisible(!Utils.everythingHidden.get());
             if (!Utils.highlighted.get() || Utils.ultraLight.get()) {
                 jokeButton.setBackground(BG);
-                focusButton.setBackground(BG);
                 commandButton.setBackground(BG);
                 restartButton.setBackground(BG);
                 exitButton.setBackground(BG);
 
                 jokeButton.setForeground(FG);
-                focusButton.setForeground(FG);
                 commandButton.setForeground(FG);
                 restartButton.setForeground(FG);
                 exitButton.setForeground(FG);
             } else {
                 jokeButton.setOriginalBackground();
-                focusButton.setOriginalBackground();
                 commandButton.setOriginalBackground();
                 restartButton.setOriginalBackground();
                 exitButton.setOriginalBackground();
                 //
                 jokeButton.setOriginalForeground();
-                focusButton.setOriginalForeground();
                 commandButton.setOriginalForeground();
                 restartButton.setOriginalForeground();
                 exitButton.setOriginalForeground();

@@ -59,7 +59,6 @@ public class Battery extends Widget {
         }
         if(donePercent > 0 && donePercent < CRITICAL_LOW_ENERGY && (System.nanoTime() - tmpNanoTime) > (500000000l) / 2l) {
             blinking.flip();
-            System.out.println(getName() + "donePercent=" + donePercent);
             tmpNanoTime = System.nanoTime();
         }
         if(donePercent <= 0 && blinking.get()){
