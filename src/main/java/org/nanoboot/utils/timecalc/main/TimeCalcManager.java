@@ -40,6 +40,8 @@ import static org.nanoboot.utils.timecalc.utils.FileConstants.FOCUS_TXT;
  */
 public class TimeCalcManager {
     private static final int MARGIN = 10;
+    public static final Color BG = new Color(238, 238, 238);
+    public static final Color FG = new Color(210, 210, 210);
 
     private final String windowTitle;
     private final int totalMinutes;
@@ -318,6 +320,31 @@ public class TimeCalcManager {
             }
 
             componentRegistry.setVisible(!Utils.everythingHidden.get());
+            if (!Utils.highlighted.get() || Utils.ultraLight.get()) {
+                jokeButton.setBackground(BG);
+                focusButton.setBackground(BG);
+                commandButton.setBackground(BG);
+                restartButton.setBackground(BG);
+                exitButton.setBackground(BG);
+
+                jokeButton.setForeground(FG);
+                focusButton.setForeground(FG);
+                commandButton.setForeground(FG);
+                restartButton.setForeground(FG);
+                exitButton.setForeground(FG);
+            } else {
+                jokeButton.setOriginalBackground();
+                focusButton.setOriginalBackground();
+                commandButton.setOriginalBackground();
+                restartButton.setOriginalBackground();
+                exitButton.setOriginalBackground();
+                //
+                jokeButton.setOriginalForeground();
+                focusButton.setOriginalForeground();
+                commandButton.setOriginalForeground();
+                restartButton.setOriginalForeground();
+                exitButton.setOriginalForeground();
+            }
             jokeButton.setVisible(
                     TimeCalcConf.getInstance().isJokeVisible()
                     && !Utils.everythingHidden.get());
