@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -18,7 +19,7 @@ import java.util.jar.Manifest;
  * @since 15.02.2024
  */
 public class Utils {
-    private static long startNanoTime;
+    private static long startNanoTime = 0l;
     public static final BooleanHolder highlighted = new BooleanHolder();
     public static final BooleanHolder ultraLight = new BooleanHolder();
     public static final BooleanHolder everythingHidden = new BooleanHolder();
@@ -29,7 +30,7 @@ public class Utils {
      */
     private static final int COUNT_OF_BYTES_PER_ONE_KILOBYTE = 1024;
     public static void startApp() {
-        if(startNanoTime == 0) {
+        if(startNanoTime != 0) {
             throw new TimeCalcException("App is already started.");
         }
         startNanoTime = System.nanoTime();
@@ -88,8 +89,17 @@ public class Utils {
                 ((int) (Math.random() * 256)), ((int) (Math.random() * 256)));
     }
 
-    public static int getCountOfMinutesSinceAppStarted() {
-        return ((int)((System.nanoTime() - startNanoTime) / 1000000000 / 60));
+    public static long getCountOfMinutesSinceAppStarted() {
+        return getCountOfSecondsSinceAppStarted() / 60l;
+    }
+    public static long getCountOfSecondsSinceAppStarted() {
+        return getCountOfMillisecondsSinceAppStarted() / 1000000000l;
+    }
+    public static long getCountOfMillisecondsSinceAppStarted() {
+        if(startNanoTime == 0l) {
+            throw new TimeCalcException("App was not yet started.");
+        }
+        return System.nanoTime() - startNanoTime;
     }
 
     /**
@@ -123,5 +133,10 @@ public class Utils {
         }
         Attributes attr = manifest.getMainAttributes();
         return attr.getValue("Build-Date");
+    }
+    public static byte[] decodeBase64ToByteArray(String s) {
+        Base64.Decoder base64Decoder = Base64.getDecoder();
+        return base64Decoder
+                .decode(s.getBytes());
     }
 }

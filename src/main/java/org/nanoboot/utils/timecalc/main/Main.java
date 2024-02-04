@@ -15,6 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        Utils.startApp();
         while (true) {
             boolean test = FileConstants.TEST_TXT.exists();
             String oldStartTime = Utils.readTextFromFile(
