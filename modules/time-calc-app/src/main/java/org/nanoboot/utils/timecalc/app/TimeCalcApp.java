@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.main;
+package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.FileConstants;

@@ -1,7 +1,7 @@
 package org.nanoboot.utils.timecalc.utils;
 
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
-import org.nanoboot.utils.timecalc.main.TimeCalcConf;
+import org.nanoboot.utils.timecalc.app.TimeCalcConf;
 
 import javax.swing.JFrame;
 import javax.swing.JTextPane;

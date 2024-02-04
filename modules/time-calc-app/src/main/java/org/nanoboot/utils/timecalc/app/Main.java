@@ -1,9 +1,9 @@
-package org.nanoboot.utils.timecalc.main;
+package org.nanoboot.utils.timecalc.app;
 
 import java.io.IOException;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 31.01.2024
  */
 public class Main {

@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.main;
+package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.swing.common.AboutButton;
 import org.nanoboot.utils.timecalc.swing.common.ComponentRegistry;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 08.02.2024
  */
 public class TimeCalcManager {

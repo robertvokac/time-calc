@@ -1,7 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.main.TimeCalcConf;
+import org.nanoboot.utils.timecalc.app.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.TimeHM;
 import org.nanoboot.utils.timecalc.utils.Utils;

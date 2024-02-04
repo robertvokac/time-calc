@@ -2,7 +2,7 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import lombok.Getter;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.main.TimeCalcConf;
+import org.nanoboot.utils.timecalc.app.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;

@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.main;
+package org.nanoboot.utils.timecalc.app;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 20.02.2024
  */
 public class TimeCalcConf {

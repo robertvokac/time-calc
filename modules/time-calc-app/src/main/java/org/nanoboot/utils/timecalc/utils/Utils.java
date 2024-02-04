@@ -1,6 +1,6 @@
 package org.nanoboot.utils.timecalc.utils;
 
-import org.nanoboot.utils.timecalc.main.Main;
+import org.nanoboot.utils.timecalc.app.Main;
 
 import java.awt.Color;
 import java.io.File;

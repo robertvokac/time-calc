@@ -1,7 +1,7 @@
-package org.nanoboot.utils.timecalc.main;
+package org.nanoboot.utils.timecalc.app;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class TimeCalcException extends RuntimeException{
