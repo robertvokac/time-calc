@@ -19,11 +19,23 @@ public class BooleanHolder {
         this.b = b;
     }
 
+    public boolean isEnabled() {
+        return get();
+    }
+    public boolean isDisabled() {
+        return !get();
+    }
     public boolean get() {
         return b;
     }
 
     public void flip() {
         this.b = !b;
+    }
+    public void enable() {
+        set(true);
+    }
+    public void disable() {
+        set(false);
     }
 }

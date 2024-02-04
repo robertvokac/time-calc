@@ -92,14 +92,34 @@ public class TimeCalcManager {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_G) {
+                    if(!Utils.ultraLight.get() && Utils.highlighted.isEnabled()) {
+                        Utils.highlighted.disable();
+                    }
                     Utils.ultraLight.flip();
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_C) {
+                    if(Utils.ultraLight.get() && !Utils.highlighted.isEnabled()) {
+                        Utils.ultraLight.disable();
+                    }
                     Utils.highlighted.flip();
                 }
-                if (e.getKeyCode() == KeyEvent.VK_V || e.getKeyCode() == KeyEvent.VK_SPACE) {
+                if (e.getKeyCode() == KeyEvent.VK_V) {
                     Utils.everythingHidden.flip();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    if(Utils.everythingHidden.isEnabled()) {
+                        Utils.everythingHidden.disable();
+                        Utils.highlighted.enable();
+                        Utils.ultraLight.disable();
+                    } else {
+                        if(Utils.highlighted.isEnabled()) {
+                            Utils.ultraLight.enable();
+                            Utils.highlighted.disable();
+                        } else {
+                            Utils.everythingHidden.enable();
+                        }
+                    }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_R) {
                     commandButton.doClick();
@@ -298,10 +318,6 @@ public class TimeCalcManager {
                 window.setVisible(false);
                 window.dispose();
                 break;
-            }
-
-            if (Utils.highlighted.get()) {
-                Utils.ultraLight.set(false);
             }
 
             componentRegistry.setVisible(!Utils.everythingHidden.get());

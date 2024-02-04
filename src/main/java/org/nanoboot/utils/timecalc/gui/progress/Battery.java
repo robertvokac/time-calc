@@ -57,7 +57,7 @@ public class Battery extends Widget {
             this.totalHeight = (int) (this.getHeight() / 10d * 7d);
             this.totalWidth = this.getWidth();
         }
-        if(donePercent > 0 && donePercent < CRITICAL_LOW_ENERGY && (System.nanoTime() - tmpNanoTime) > (500000000l) / 2l) {
+        if(donePercent > 0 && donePercent < CRITICAL_LOW_ENERGY && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
             blinking.flip();
             tmpNanoTime = System.nanoTime();
         }
@@ -172,11 +172,14 @@ public class Battery extends Widget {
         g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
 
-        Font currentFont = g2d.getFont();
-        g2d.setFont(bigFont);
-        g2d.drawString("⚡", ((int) (totalWidth * 0.45)),(donePercent < 0.5 ? totalHeight / 4 * 3 :
-                totalHeight / 4 * 1) + 10);
-        g2d.setFont(currentFont);
+        if(donePercent <1) {
+            Font currentFont = g2d.getFont();
+            g2d.setFont(bigFont);
+            g2d.drawString("⚡", ((int) (totalWidth * 0.45)),
+                    (donePercent < 0.5 ? totalHeight / 4 * 3 :
+                            totalHeight / 4 * 1) + 10);
+            g2d.setFont(currentFont);
+        }
 
         g2d.drawString(
                 NumberFormats.FORMATTER_THREE_DECIMAL_PLACES.format(donePercent * 100) + "%",
