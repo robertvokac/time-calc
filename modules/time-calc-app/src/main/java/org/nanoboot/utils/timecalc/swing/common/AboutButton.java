@@ -1,12 +1,12 @@
-package org.nanoboot.utils.timecalc.main;
+package org.nanoboot.utils.timecalc.swing.common;
 
-import org.nanoboot.utils.timecalc.gui.common.TimeCalcButton;
+import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.swing.JOptionPane;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class AboutButton extends TimeCalcButton {

@@ -1,6 +1,6 @@
-package org.nanoboot.utils.timecalc.gui.progress;
+package org.nanoboot.utils.timecalc.swing.progress;
 
-import org.nanoboot.utils.timecalc.gui.common.Widget;
+import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.main.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.TimeHM;
@@ -141,7 +141,7 @@ public class AnalogClock extends Widget {
 
     private void drawCentre(Graphics2D g2d, int centerX, int centerY) {
         Color currentColor = g2d.getColor();
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.RED :
+        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.RED :
                 FOREGROUND_COLOR);
         g2d.fillOval(centerX - 3, centerY - 3, 8, 8);
         g2d.setColor(currentColor);
@@ -154,7 +154,7 @@ public class AnalogClock extends Widget {
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        g2d.setColor((Utils.highlighted.get() || mouseOver) ? color :
+        g2d.setColor((Utils.highlighted.getValue() || mouseOver) ? color :
                 FOREGROUND_COLOR);
         g2d.setStroke(new BasicStroke(stroke));
         g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
@@ -163,7 +163,7 @@ public class AnalogClock extends Widget {
     private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
             int radius) {
         g2d.setStroke(new BasicStroke(2.0f));
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
+        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK :
                 FOREGROUND_COLOR);
         //        System.out.println("centerX=" + centerX);
         //        System.out.println("centerY=" + centerY);

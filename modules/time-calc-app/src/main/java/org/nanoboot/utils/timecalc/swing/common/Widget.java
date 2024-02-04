@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.gui.common;
+package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.utils.Utils;
 
@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 20.02.2024
  */
 public class Widget extends JPanel {

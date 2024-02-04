@@ -1,9 +1,9 @@
-package org.nanoboot.utils.timecalc.gui.progress;
+package org.nanoboot.utils.timecalc.swing.progress;
 
 import lombok.Getter;
-import org.nanoboot.utils.timecalc.gui.common.Widget;
+import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.main.TimeCalcConf;
-import org.nanoboot.utils.timecalc.utils.BooleanHolder;
+import org.nanoboot.utils.timecalc.utils.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
@@ -29,7 +29,7 @@ public class Battery extends Widget {
     public static final double VERY_HIGH_ENERGY = 0.9;
     public static boolean wavesOff = false;
     private static final Font bigFont = new Font("sans", Font.BOLD, 24);
-    private BooleanHolder blinking = new BooleanHolder();
+    private BooleanProperty blinking = new BooleanProperty();
     private long tmpNanoTime = 0l;
 
     @Getter
@@ -61,22 +61,22 @@ public class Battery extends Widget {
             blinking.flip();
             tmpNanoTime = System.nanoTime();
         }
-        if(donePercent <= 0 && blinking.get()){
-            blinking.set(false);
+        if(donePercent <= 0 && blinking.getValue()){
+            blinking.setValue(false);
         }
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.YELLOW :
+        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.YELLOW :
                 FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (!Utils.ultraLight.get()) {
+        if (!Utils.ultraLight.getValue()) {
             g2d.fillRect(1, 1, totalWidth, totalHeight);
         }
 
-        if (Utils.highlighted.get() || mouseOver) {
+        if (Utils.highlighted.getValue() || mouseOver) {
             g2d.setColor(
                     donePercent < LOW_ENERGY ? LOW_HIGHLIGHTED : (donePercent < HIGH_ENERGY ?
                             MEDIUM_HIGHLIGHTED :
@@ -86,10 +86,10 @@ public class Battery extends Widget {
             g2d.setColor(donePercent < LOW_ENERGY ? LOW : (donePercent < HIGH_ENERGY ?
                     MEDIUM : (donePercent < VERY_HIGH_ENERGY ? HIGH : HIGHEST)));
         }
-        if (Utils.ultraLight.get()) {
+        if (Utils.ultraLight.getValue()) {
             g2d.setColor(Utils.ULTRA_LIGHT_GRAY);
         }
-        if(blinking.get()) {
+        if(blinking.getValue()) {
             g2d.setColor(BACKGROUND_COLOR);
         }
         int doneHeight = (int) (totalHeight * donePercent);
@@ -138,7 +138,7 @@ public class Battery extends Widget {
                             todoHeight + (waterSurfaceHeight * 1)},
                     pointCount);
 
-            g2d.setColor((Utils.ultraLight.get() || !Utils.highlighted.get()) && !mouseOver ? Utils.ULTRA_LIGHT_GRAY : Color.DARK_GRAY);
+            g2d.setColor((Utils.ultraLight.getValue() || !Utils.highlighted.getValue()) && !mouseOver ? Utils.ULTRA_LIGHT_GRAY : Color.DARK_GRAY);
 
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -169,7 +169,7 @@ public class Battery extends Widget {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
+        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
 
         if(donePercent <1) {
@@ -199,7 +199,7 @@ public class Battery extends Widget {
                     ((int) (totalWidth * 0.15)),
                     (totalHeight / 4 * 3) + 20 + 20);
         }
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK :
+        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
         g2d.drawRect(1, 1, totalWidth - 2, totalHeight);
 

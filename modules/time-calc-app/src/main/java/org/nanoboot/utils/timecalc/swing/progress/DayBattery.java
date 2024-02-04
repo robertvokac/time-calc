@@ -1,7 +1,7 @@
-package org.nanoboot.utils.timecalc.gui.progress;
+package org.nanoboot.utils.timecalc.swing.progress;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class DayBattery extends Battery{

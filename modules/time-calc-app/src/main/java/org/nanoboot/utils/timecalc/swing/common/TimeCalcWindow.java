@@ -1,11 +1,11 @@
-package org.nanoboot.utils.timecalc.gui.common;
+package org.nanoboot.utils.timecalc.swing.common;
 
 import javax.swing.JFrame;
 import java.awt.Component;
 import java.awt.HeadlessException;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class TimeCalcWindow extends JFrame {

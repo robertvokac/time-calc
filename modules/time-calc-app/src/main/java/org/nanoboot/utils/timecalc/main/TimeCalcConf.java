@@ -64,5 +64,11 @@ public class TimeCalcConf {
         }
         return properties.get(key).equals("true");
     }
+    public void load() {
+        //to be implemented
+    }
+    public void save() {
+        //to be implemented
+    }
 
 }

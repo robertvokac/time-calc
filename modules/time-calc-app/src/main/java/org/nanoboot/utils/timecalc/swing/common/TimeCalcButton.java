@@ -1,11 +1,11 @@
-package org.nanoboot.utils.timecalc.gui.common;
+package org.nanoboot.utils.timecalc.swing.common;
 
 import javax.swing.JButton;
 import javax.swing.Timer;
 import java.awt.Color;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class TimeCalcButton extends JButton {

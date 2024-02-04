@@ -1,7 +1,6 @@
 package org.nanoboot.utils.timecalc.utils;
 
 import org.nanoboot.utils.timecalc.main.Main;
-import org.nanoboot.utils.timecalc.main.TimeCalcException;
 
 import java.awt.Color;
 import java.io.File;
@@ -19,22 +18,17 @@ import java.util.jar.Manifest;
  * @since 15.02.2024
  */
 public class Utils {
-    private static long startNanoTime = 0l;
-    public static final BooleanHolder highlighted = new BooleanHolder();
-    public static final BooleanHolder ultraLight = new BooleanHolder();
-    public static final BooleanHolder everythingHidden = new BooleanHolder();
-    public static final BooleanHolder toastsAreEnabled = new BooleanHolder(true);
+
+    public static final BooleanProperty highlighted = new BooleanProperty();
+    public static final BooleanProperty ultraLight = new BooleanProperty();
+    public static final BooleanProperty everythingHidden = new BooleanProperty();
+    public static final BooleanProperty toastsAreEnabled = new BooleanProperty(true);
     public static final Color ULTRA_LIGHT_GRAY = new Color(216,216,216);
     /**
      * Count of bytes per one kilobyte.
      */
     private static final int COUNT_OF_BYTES_PER_ONE_KILOBYTE = 1024;
-    public static void startApp() {
-        if(startNanoTime != 0) {
-            throw new TimeCalcException("App is already started.");
-        }
-        startNanoTime = System.nanoTime();
-    }
+
     private Utils() {
         //Not meant to be instantiated.
     }
@@ -89,18 +83,7 @@ public class Utils {
                 ((int) (Math.random() * 256)), ((int) (Math.random() * 256)));
     }
 
-    public static long getCountOfMinutesSinceAppStarted() {
-        return getCountOfSecondsSinceAppStarted() / 60l;
-    }
-    public static long getCountOfSecondsSinceAppStarted() {
-        return getCountOfMillisecondsSinceAppStarted() / 1000000000l;
-    }
-    public static long getCountOfMillisecondsSinceAppStarted() {
-        if(startNanoTime == 0l) {
-            throw new TimeCalcException("App was not yet started.");
-        }
-        return System.nanoTime() - startNanoTime;
-    }
+
 
     /**
      * Returns version of "Time Calc" from jar file.

@@ -1,19 +1,20 @@
 package org.nanoboot.utils.timecalc.main;
 
-import org.nanoboot.utils.timecalc.gui.common.ComponentRegistry;
-import org.nanoboot.utils.timecalc.gui.common.TimeCalcButton;
-import org.nanoboot.utils.timecalc.gui.common.TimeCalcWindow;
-import org.nanoboot.utils.timecalc.gui.common.Toaster;
-import org.nanoboot.utils.timecalc.gui.common.WeatherWindow;
-import org.nanoboot.utils.timecalc.gui.progress.AnalogClock;
-import org.nanoboot.utils.timecalc.gui.progress.Battery;
-import org.nanoboot.utils.timecalc.gui.progress.DayBattery;
-import org.nanoboot.utils.timecalc.gui.progress.HourBattery;
-import org.nanoboot.utils.timecalc.gui.progress.MonthBattery;
-import org.nanoboot.utils.timecalc.gui.progress.ProgressCircle;
-import org.nanoboot.utils.timecalc.gui.progress.ProgressSquare;
-import org.nanoboot.utils.timecalc.gui.progress.WalkingHumanProgressAsciiArt;
-import org.nanoboot.utils.timecalc.gui.progress.WeekBattery;
+import org.nanoboot.utils.timecalc.swing.common.AboutButton;
+import org.nanoboot.utils.timecalc.swing.common.ComponentRegistry;
+import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
+import org.nanoboot.utils.timecalc.swing.common.TimeCalcWindow;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
+import org.nanoboot.utils.timecalc.swing.common.WeatherWindow;
+import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
+import org.nanoboot.utils.timecalc.swing.progress.Battery;
+import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
+import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
+import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
+import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgressAsciiArt;
+import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
 import org.nanoboot.utils.timecalc.utils.Jokes;
@@ -52,9 +53,9 @@ public class TimeCalcManager {
 
     public TimeCalcManager(String startTimeIn, String overTimeIn) {
         Utils.everythingHidden
-                .set(TimeCalcConf.getInstance().isEverythingHidden());
+                .setValue(TimeCalcConf.getInstance().isEverythingHidden());
         Utils.toastsAreEnabled
-                .set(TimeCalcConf.getInstance().areToastsEnabled());
+                .setValue(TimeCalcConf.getInstance().areToastsEnabled());
 
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
@@ -85,23 +86,23 @@ public class TimeCalcManager {
             // Key Pressed method
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    Utils.everythingHidden.set(false);
+                    Utils.everythingHidden.setValue(false);
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    Utils.everythingHidden.set(true);
+                    Utils.everythingHidden.setValue(true);
                 }
                 if (e.getKeyCode() == KeyEvent.VK_H) {
                     Utils.everythingHidden.flip();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_G) {
-                    if(!Utils.ultraLight.get() && Utils.highlighted.isEnabled()) {
+                    if(!Utils.ultraLight.getValue() && Utils.highlighted.isEnabled()) {
                         Utils.highlighted.disable();
                     }
                     Utils.ultraLight.flip();
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_C) {
-                    if(Utils.ultraLight.get() && !Utils.highlighted.isEnabled()) {
+                    if(Utils.ultraLight.getValue() && !Utils.highlighted.isEnabled()) {
                         Utils.ultraLight.disable();
                     }
                     Utils.highlighted.flip();
@@ -177,11 +178,11 @@ public class TimeCalcManager {
                             break;
                         case "color":
                             Utils.highlighted
-                                    .set(commandsAsArray[1].equals("1"));
+                                    .setValue(commandsAsArray[1].equals("1"));
                             break;
                         case "gray":
                             Utils.ultraLight
-                                    .set(commandsAsArray[1].equals("1"));
+                                    .setValue(commandsAsArray[1].equals("1"));
                             break;
                         case "waves":
                             Battery.wavesOff = commandsAsArray[1].equals("0");
@@ -204,7 +205,7 @@ public class TimeCalcManager {
                             break;
                         case "toasts":
                             Utils.toastsAreEnabled
-                                    .set(commandsAsArray[1].equals("1"));
+                                    .setValue(commandsAsArray[1].equals("1"));
                             break;
                         default:
                             JOptionPane.showMessageDialog(null,
@@ -322,8 +323,8 @@ public class TimeCalcManager {
                 break;
             }
 
-            componentRegistry.setVisible(!Utils.everythingHidden.get());
-            if (!Utils.highlighted.get() || Utils.ultraLight.get()) {
+            componentRegistry.setVisible(!Utils.everythingHidden.getValue());
+            if (!Utils.highlighted.getValue() || Utils.ultraLight.getValue()) {
                 jokeButton.setBackground(BG);
                 commandButton.setBackground(BG);
                 restartButton.setBackground(BG);
@@ -346,9 +347,9 @@ public class TimeCalcManager {
             }
             jokeButton.setVisible(
                     TimeCalcConf.getInstance().isJokeVisible()
-                    && !Utils.everythingHidden.get());
+                    && !Utils.everythingHidden.getValue());
 
-            window.setTitle(Utils.everythingHidden.get() ? "" : windowTitle);
+            window.setTitle(Utils.everythingHidden.getValue() ? "" : windowTitle);
 
             LocalDateTime now = LocalDateTime.now();
             String nowString =
@@ -444,7 +445,7 @@ public class TimeCalcManager {
             }
 
             walkingHumanProgressAsciiArt.setForeground(
-                    Utils.highlighted.get() || walkingHumanProgressAsciiArt
+                    Utils.highlighted.getValue() || walkingHumanProgressAsciiArt
                             .getClientProperty("mouseEntered").equals("true") ?
                             Color.BLACK : Color.LIGHT_GRAY);
         }

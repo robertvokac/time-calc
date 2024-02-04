@@ -1,7 +1,7 @@
 /**
  * This Java class named Toaster is licence under this licence: Apache License V2.0
  */
-package org.nanoboot.utils.timecalc.gui.common;
+package org.nanoboot.utils.timecalc.swing.common;
 /**
  * Java Toaster is a java utility class for your swing applications
  * that show an animate box coming from the bottom of your screen
@@ -116,7 +116,7 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-        if (Utils.everythingHidden.get() || !Utils.toastsAreEnabled.get()) {
+        if (Utils.everythingHidden.getValue() || !Utils.toastsAreEnabled.getValue()) {
             //nothing to do
             return;
         }

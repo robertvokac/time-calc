@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.gui.common;
+package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.utils.Utils;
 
@@ -21,7 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 16.02.2024
  */
 public class WeatherWindow extends JFrame {

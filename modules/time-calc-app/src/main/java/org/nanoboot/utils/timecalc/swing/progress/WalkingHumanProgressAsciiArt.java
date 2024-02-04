@@ -1,6 +1,6 @@
-package org.nanoboot.utils.timecalc.gui.progress;
+package org.nanoboot.utils.timecalc.swing.progress;
 
-import org.nanoboot.utils.timecalc.gui.common.Toaster;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.Constants;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.TimeHM;
@@ -15,12 +15,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author pc00289
+ * @author Robert
  * @since 21.02.2024
  */
 public class WalkingHumanProgressAsciiArt extends JTextPane {

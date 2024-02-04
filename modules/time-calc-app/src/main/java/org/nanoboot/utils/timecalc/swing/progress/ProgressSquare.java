@@ -1,6 +1,6 @@
-package org.nanoboot.utils.timecalc.gui.progress;
+package org.nanoboot.utils.timecalc.swing.progress;
 
-import org.nanoboot.utils.timecalc.gui.common.Widget;
+import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
@@ -39,7 +39,7 @@ public class ProgressSquare extends Widget {
         //        System.out.println("x=" + x);
         //        System.out.println("y=" + y);
         if (y > 1) {
-            if (Utils.highlighted.get() || mouseOver) {
+            if (Utils.highlighted.getValue() || mouseOver) {
                 g2d.setColor(Color.GRAY);
             }
             g2d.fillRect(side - 4, side - 4, 4, 4);
@@ -48,32 +48,32 @@ public class ProgressSquare extends Widget {
             g2d.setColor(FOREGROUND_COLOR);
             g2d.fillRect(1, 1, side, y - 1);
             if (x > 1) {
-                if (Utils.highlighted.get() || mouseOver) {
+                if (Utils.highlighted.getValue() || mouseOver) {
                     g2d.setColor(Color.GRAY);
                 }
                 g2d.drawRect(1, y, x - 1, 1);
             }
-            if (Utils.highlighted.get() || mouseOver) {
+            if (Utils.highlighted.getValue() || mouseOver) {
                 g2d.setColor(Color.GRAY);
             }
             g2d.fillRect(side - 4, 1, 4, 4);
             g2d.fillRect(1, 1, 4, 4);
 
-            if (Utils.highlighted.get() || mouseOver) {
+            if (Utils.highlighted.getValue() || mouseOver) {
                 g2d.setColor(Color.GRAY);
             }
             g2d.drawLine(1, 1, x, y);
             //            g2d.drawLine(1+1, 1+1, x+1, y+1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
             g2d.drawLine(1, 1 + 1, x, y + 1);
-            if (Utils.highlighted.get() || mouseOver) {
+            if (Utils.highlighted.getValue() || mouseOver) {
                 g2d.setColor(Color.BLUE);
                 g2d.drawLine(x - 10, y - 10, x + 10, y + 10);
                 g2d.drawLine(x + 10, y - 10, x - 10, y + 10);
             }
             g2d.setColor(FOREGROUND_COLOR);
         }
-        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.BLACK : BACKGROUND_COLOR);
+        g2d.setColor(Utils.highlighted.getValue() || mouseOver ? Color.BLACK : BACKGROUND_COLOR);
 
         g2d.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(donePercent * 100) + "%", (int)(side/8d*3d),(int)(side/8d*(donePercent > 0.5 ? 3d : 5d)));
 
