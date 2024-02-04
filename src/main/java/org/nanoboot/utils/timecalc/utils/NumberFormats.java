@@ -11,6 +11,7 @@ public class NumberFormats {
     private NumberFormats() {
         //Not meant to be instantiated.
     }
+    public static final NumberFormat FORMATTER_ZERO_DECIMAL_PLACES = new DecimalFormat("#00");
     public static final NumberFormat FORMATTER_TWO_DECIMAL_PLACES = new DecimalFormat("#00.00");
     public static final NumberFormat FORMATTER_FIVE_DECIMAL_PLACES = new DecimalFormat("#0.00000");
     public static final NumberFormat FORMATTER_THREE_DECIMAL_PLACES = new DecimalFormat("#0.000");

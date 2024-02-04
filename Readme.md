@@ -46,3 +46,7 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 ## Key shortcuts
 
 ## Command button
+
+## Todos
+
+Config window

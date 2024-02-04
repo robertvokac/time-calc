@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.gui.progress;
 
 import org.nanoboot.utils.timecalc.gui.common.Widget;
+import org.nanoboot.utils.timecalc.utils.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import java.awt.Color;
@@ -37,6 +38,10 @@ public class ProgressCircle extends Widget {
                 new Color(105, 175, 236) : FOREGROUND_COLOR2);
         g2d.fillArc(0 + (side2 / 2), 0 + (side2 / 2), side2, side2, 90,
                 -(int) angleDouble2);
+        g2d.setColor(Utils.highlighted.get() || mouseOver ? Color.blue :FOREGROUND_COLOR);
+
+        g2d.drawString(
+                NumberFormats.FORMATTER_ZERO_DECIMAL_PLACES.format(donePercent * 100) + "%", (int)(side / 8d * 0d),(int)(side / 8d * 7.5d));
     }
 
 }

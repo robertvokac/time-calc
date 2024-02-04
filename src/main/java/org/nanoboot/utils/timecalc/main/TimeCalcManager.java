@@ -223,7 +223,7 @@ public class TimeCalcManager {
             stopBeforeEnd = true;
         });
 
-        AnalogClock analogClock = new AnalogClock();
+        AnalogClock analogClock = new AnalogClock(startTime, endTime);
         analogClock.setBounds(MARGIN, MARGIN, 200);
         window.add(analogClock);
 
@@ -356,6 +356,7 @@ public class TimeCalcManager {
 
             int hourNow = Integer.parseInt(nowString.split(":")[0]);
             int minuteNow = Integer.parseInt(nowString.split(":")[1]);
+
             int secondNow = Integer.parseInt(nowString.split(":")[2]);
             int millisecondNow = Integer.parseInt(nowString.split(":")[3]);
             TimeHM timeRemains = new TimeHM(endTime.getHour() - hourNow, endTime.getMinute() - minuteNow);

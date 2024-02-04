@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.gui.progress;
 import org.nanoboot.utils.timecalc.gui.common.Widget;
 import org.nanoboot.utils.timecalc.main.TimeCalcConf;
 import org.nanoboot.utils.timecalc.utils.DateFormats;
+import org.nanoboot.utils.timecalc.utils.TimeHM;
 import org.nanoboot.utils.timecalc.utils.Utils;
 
 import javax.swing.JFrame;
@@ -13,27 +14,64 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
 
-    public AnalogClock() {
-        setPreferredSize(new Dimension(400, 300));
+    private TimeHM startTime;
+    private TimeHM endTime;
+    private int angleDiff;
+    private int startAngle;
+    private int endAngle;
+
+    public AnalogClock(TimeHM startTimeIn,
+            TimeHM endTimeIn) {
+
+        this.endTime = endTimeIn.cloneInstance();
+        this.endAngle =
+                (int) ((endTime.getHour() + endTime.getMinute() / 60d) / 12d * 360d);
+        if(endTime.getHour() >12) {
+            endTime.setHour(endTime.getHour() - 12);
+        }
+        this.startTime = startTimeIn.cloneInstance();
+        this.startAngle =
+                (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d * 360d);
+
+
+
+        setPreferredSize(new Dimension(200, 200));
 
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Analog Clock");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new AnalogClock());
-        frame.pack();
-        frame.setVisible(true);
+        JFrame window = new JFrame("Analog Clock");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        AnalogClock clock =
+                new AnalogClock(new TimeHM("6:30"), new TimeHM("19:00"));
+        window.add(clock);
+        window.pack();
+        window.setVisible(true);
+//        window.addKeyListener(new KeyAdapter() {
+//            // Key Pressed method
+//            public void keyPressed(KeyEvent e) {
+//                if (e.getKeyCode() == KeyEvent.VK_UP) {
+//                    clock.startAngle_++;
+//                }
+//                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+//                    clock.startAngle_--;
+//                }
+//
+//                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+//                    clock.arcAngle_++;
+//                }
+//                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+//                    clock.arcAngle_--;
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -51,6 +89,20 @@ public class AnalogClock extends Widget {
         int second = time.get(Calendar.SECOND);
         int minute = time.get(Calendar.MINUTE);
         int hour = time.get(Calendar.HOUR_OF_DAY);
+
+        if(mouseOver && Utils.highlighted.isEnabled()) {
+        this.startTime = new TimeHM(hour, minute);
+        this.startAngle =
+                (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d * 360d);
+
+            Color currentColor = g2d.getColor();
+            g2d.setColor(Color.YELLOW);
+            g2d.fillArc(0, 0, side, side, -startAngle +90, startAngle - endAngle);
+
+        //System.out.println("ANGLES: " + startAngle + " " + endAngle + " " + angleDiff );
+
+            g2d.setColor(currentColor);
+        }
 
         // Draw clock numbers and circle
         drawClockFace(g2d, centerX, centerY, side / 2 - 40);
