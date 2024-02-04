@@ -1,83 +1,82 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.nanoboot.utils</groupId>
     <artifactId>time-calc</artifactId>
     <version>0.1.0-SNAPSHOT</version>
-
-    <name>time-calc</name>
-    <description>time-calc</description>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+    <name>Time Calc</name>
+    <description>Tool to track time</description>
 
     <properties>
+        <time-calc.version>0.1.0-SNAPSHOT</time-calc.version>
         <java.version>1.8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <lib.dir>${basedir}/lib</lib.dir>
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
         <lombok.version>1.18.22</lombok.version>
+        <checkstyle.config.location>src/main/resources/sun_checks.xml</checkstyle.config.location>
+        <checkstyle.skip>true</checkstyle.skip><!-- TODO : to be removed -->
+
     </properties>
 
+    <developers>
+        <developer>
+            <id>robertvokac</id>
+            <name>Robert Vokáč</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <modules>
+<!--        <module>modules/time-calc-entity</module>-->
+<!--        <module>modules/time-calc-utils</module>-->
+<!--        <module>modules/time-calc-persistence-api</module>-->
+<!--        <module>modules/time-calc-persistence-impl-mock</module>-->
+<!--        <module>modules/time-calc-persistence-impl-sqlite</module>-->
+<!--        <module>modules/time-calc-swing</module>-->
+        <module>modules/time-calc-app</module>
+
+    </modules>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+<!--            <dependency>-->
+<!--                <groupId>private.dme</groupId>-->
+<!--                <artifactId>jfreechart</artifactId>-->
+<!--                <version>1.5.3</version>-->
+<!--                <scope>system</scope>-->
+<!--                <systemPath>${lib.dir}/jfreechart-1.5.3.jar</systemPath>-->
+<!--            </dependency>-->
+
+        </dependencies>
+    </dependencyManagement>
+
     <build>
+        <!--        <finalName>time-calc</finalName>-->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>org.nanoboot.utils.timecalc.main.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <!-- Here come other details
-                ...
-                -->
             </plugin>
-<!--            <plugin>-->
-<!--                <artifactId>maven-assembly-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-<!--                            <mainClass>Main</mainClass>-->
-<!--                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
-<!--                        </manifest>-->
-<!--                        <manifestEntries>-->
-<!--                            <Build-Date>${timestamp}</Build-Date>-->
-<!--                        </manifestEntries>-->
-<!--                    </archive>-->
-<!--                    &lt;!&ndash;                    <descriptorRefs>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        <descriptorRef>jar-with-dependencies</descriptorRef>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </descriptorRefs>&ndash;&gt;-->
-<!--                    <descriptors>-->
-<!--                        <descriptor>./src/main/resources/install.xml</descriptor>-->
-<!--                    </descriptors>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-<!--                        <phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
-<!--                        <goals>-->
-<!--                            <goal>single</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -96,14 +95,37 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <consoleOutput>true</consoleOutput>
+                            <failsOnError>true</failsOnError>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
