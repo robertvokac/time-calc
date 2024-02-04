@@ -49,4 +49,11 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 
 ## Todos
 
-Config window
+ * Config window
+ * Split to Maven modules
+ * Junit, Mockito, etc.
+ * Checkstyle
+ * Sonarlint
+ * Sonarqube
+ * Add SQLite support and store times of arrivals and departures and time of activities
+
