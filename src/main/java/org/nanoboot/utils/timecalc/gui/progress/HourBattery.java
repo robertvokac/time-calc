@@ -12,6 +12,9 @@ public class HourBattery extends Battery{
     }
     public static double getHourProgress(TimeHM timeRemains, int secondsRemains,
             int millisecondsRemains) {
+        if(secondsRemains < 0 || millisecondsRemains < 0 || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {
+            return 1;
+        }
         double minutesRemainsD = timeRemains.getMinute();
         double secondsRemainsD = secondsRemains;
         double millisecondsRemainsD = millisecondsRemains;
