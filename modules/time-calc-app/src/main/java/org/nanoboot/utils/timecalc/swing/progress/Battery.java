@@ -183,13 +183,29 @@ public class Battery extends Widget {
         g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
 
-        if (donePercent < 1) {
-            Font currentFont = g2d.getFont();
-            g2d.setFont(bigFont);
-            g2d.drawString("⚡", ((int) (totalWidth * 0.45)),
-                    (donePercent < 0.5 ? totalHeight / 4 * 3 :
-                            totalHeight / 4 * 1) + 10);
-            g2d.setFont(currentFont);
+        if (donePercent < 1 && donePercent > 0) {
+            {
+                Font currentFont = g2d.getFont();
+                g2d.setFont(bigFont);
+                g2d.drawString(
+                        "⚡", ((int) (totalWidth * 0.45)),
+                        (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 10
+                );
+                g2d.setFont(currentFont);
+            }
+            {
+                Color currentColor = g2d.getColor();
+                g2d.setColor(
+                        visibility.isStronglyColored() || mouseOver ? Color.darkGray : FOREGROUND_COLOR);
+
+                double angleDouble = donePercent * 360;
+
+                g2d.fillArc(((int) (totalWidth * 0.45)) + 15,
+                        (donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 28,
+                        15, 15, 90, -(int) angleDouble);
+
+                g2d.setColor(currentColor);
+            }
         }
 
         g2d.drawString(
@@ -208,7 +224,7 @@ public class Battery extends Widget {
         if (name != null && !name.isEmpty()) {
             g2d.drawString(
                     name,
-                    ((int) (totalWidth * 0.15)),
+                    ((int) (totalWidth * 0.10)),
                     (totalHeight / 4 * 3) + 20 + 20);
         }
         g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
