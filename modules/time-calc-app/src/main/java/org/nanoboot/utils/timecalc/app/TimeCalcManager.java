@@ -285,13 +285,31 @@ public class TimeCalcManager {
         } else {
             analogClock.dayOfWeekProperty.bindTo(time.dayOfWeek);
         }
+        if(testProperties.containsKey("current.hour")) {
+            calNow.set(Calendar.HOUR, Integer.parseInt((String) testProperties.get("current.hour")));
+            analogClock.hourProperty.setValue(Integer.valueOf((String) testProperties.get("current.hour")));
+        } else {
+            analogClock.hourProperty.bindTo(time.hourProperty);
+        }
+        if(testProperties.containsKey("current.minute")) {
+            calNow.set(Calendar.MINUTE, Integer.parseInt((String) testProperties.get("current.minute")));
+            analogClock.minuteProperty.setValue(Integer.valueOf((String) testProperties.get("current.minute")));
+        } else {
+            analogClock.minuteProperty.bindTo(time.minuteProperty);
+        }
+        if(testProperties.containsKey("current.second")) {
+            calNow.set(Calendar.SECOND, Integer.parseInt((String) testProperties.get("current.second")));
+            analogClock.secondProperty.setValue(Integer.valueOf((String) testProperties.get("current.second")));
+        } else {
+            analogClock.secondProperty.bindTo(time.secondProperty);
+        }
         
-        
-        analogClock.hourProperty.bindTo(time.hourProperty);
-        analogClock.minuteProperty.bindTo(time.minuteProperty);
-        analogClock.secondProperty.bindTo(time.secondProperty);
-        analogClock.millisecondProperty.bindTo(time.millisecondProperty);
-        
+        if(testProperties.containsKey("current.millisecond")) {
+            calNow.set(Calendar.MILLISECOND, Integer.parseInt((String) testProperties.get("current.millisecond")));
+            analogClock.millisecondProperty.setValue(Integer.valueOf((String) testProperties.get("current.millisecond")));
+        } else {
+            analogClock.millisecondProperty.bindTo(time.millisecondProperty);
+        }
         
 
         window.add(analogClock);
