@@ -56,7 +56,6 @@ public class TimeCalcManager {
     private final TimeHM startTime;
     private final TimeHM overtime;
     private final TimeHM endTime;
-    private final TimeCalcApp timeCalcApp;
     private boolean stopBeforeEnd = false;
     private final Time time = new Time();
     private final TimeCalcConfiguration timeCalcConfiguration =
@@ -64,7 +63,6 @@ public class TimeCalcManager {
 
     public TimeCalcManager(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
-        this.timeCalcApp = timeCalcApp;
         timeCalcConfiguration
                 .setFromTimeCalcProperties(TimeCalcProperties.getInstance());
         //        Utils.everythingHidden
@@ -101,6 +99,10 @@ public class TimeCalcManager {
         //window.add(weatherButton);
         window.addAll(configButton, commandButton, jokeButton, restartButton,
                 exitButton);
+        boolean onlyGreyOrNone = timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled();
+        if(onlyGreyOrNone) {
+            timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
+        }
         window.addKeyListener(new KeyAdapter() {
             // Key Pressed method
             public void keyPressed(KeyEvent e) {
@@ -108,7 +110,7 @@ public class TimeCalcManager {
                         .valueOf(timeCalcApp.visibilityProperty.getValue());
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     timeCalcApp.visibilityProperty
-                            .setValue(Visibility.STRONGLY_COLORED.name());
+                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     timeCalcApp.visibilityProperty
@@ -117,14 +119,14 @@ public class TimeCalcManager {
                 if (e.getKeyCode() == KeyEvent.VK_H) {
                     if (visibility.isNone()) {
                         timeCalcApp.visibilityProperty
-                                .setValue(Visibility.STRONGLY_COLORED.name());
+                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
                     } else {
                         timeCalcApp.visibilityProperty
                                 .setValue(Visibility.NONE.name());
                     }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_G) {
-                    if (visibility.isGray()) {
+                    if (visibility.isGray() && !onlyGreyOrNone) {
                         timeCalcApp.visibilityProperty
                                 .setValue(Visibility.WEAKLY_COLORED.name());
                     } else {
@@ -134,18 +136,25 @@ public class TimeCalcManager {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_C) {
-                    if (visibility.isStronglyColored()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.WEAKLY_COLORED.name());
-                    } else {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.STRONGLY_COLORED.name());
+                    if(!onlyGreyOrNone) {
+                        if (visibility.isStronglyColored()) {
+                            timeCalcApp.visibilityProperty
+                                    .setValue(Visibility.WEAKLY_COLORED.name());
+                        } else {
+                            timeCalcApp.visibilityProperty
+                                    .setValue(
+                                            Visibility.STRONGLY_COLORED.name());
+                        }
+                    }
+                    else {
+                        timeCalcApp.visibilityProperty.setValue(Visibility.GRAY
+                                .name());
                     }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_V) {
                     if (visibility.isNone()) {
                         timeCalcApp.visibilityProperty
-                                .setValue(Visibility.STRONGLY_COLORED.name());
+                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
                     } else {
                         timeCalcApp.visibilityProperty
                                 .setValue(Visibility.NONE.name());
@@ -154,7 +163,7 @@ public class TimeCalcManager {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     if (visibility.isStronglyColored()) {
                         timeCalcApp.visibilityProperty
-                                .setValue(Visibility.WEAKLY_COLORED.name());
+                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.WEAKLY_COLORED.name());
                     }
                     if (visibility.isWeaklyColored()) {
                         timeCalcApp.visibilityProperty
@@ -166,7 +175,7 @@ public class TimeCalcManager {
                     }
                     if (visibility.isNone()) {
                         timeCalcApp.visibilityProperty
-                                .setValue(Visibility.STRONGLY_COLORED.name());
+                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
                     }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_R) {

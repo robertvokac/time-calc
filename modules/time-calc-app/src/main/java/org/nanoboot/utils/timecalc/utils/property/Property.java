@@ -20,6 +20,7 @@ public class Property<T> {
             new ArrayList<>();
     private final List<ChangeListener<T>>
             changeListeners = new ArrayList<ChangeListener<T>>();
+    private ChangeListener<T> boundChangeListener = null;
 
     public Property(String name, T valueIn) {
         this.name = name;
@@ -43,17 +44,21 @@ public class Property<T> {
             throw new TimeCalcException("No bound property");
         }
         this.value = boundToProperty.value;
+        this.boundToProperty.removeListener(this.boundChangeListener);
+        this.boundChangeListener = null;
         this.boundToProperty = null;
     }
 
     public void bindTo(Property<T> anotherProperty) {
         this.boundToProperty = anotherProperty;
-        this.boundToProperty
-                .addListener((Property<T> p, T oldValue, T newValue) -> {
+        this.boundChangeListener =
+                (Property<T> p, T oldValue, T newValue) -> {
                     this.markInvalid();
                     this.fireValueChangedEvent(oldValue);
                     //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
-                });
+                };
+        this.boundToProperty
+                .addListener(boundChangeListener);
     }
 
     public T getValue() {
@@ -99,6 +104,10 @@ public class Property<T> {
 
     public void addListener(ChangeListener<T> listener) {
         this.changeListeners.add(listener);
+    }
+
+    public void removeListener(ChangeListener<T> listener) {
+        this.changeListeners.remove(listener);
     }
 
 }

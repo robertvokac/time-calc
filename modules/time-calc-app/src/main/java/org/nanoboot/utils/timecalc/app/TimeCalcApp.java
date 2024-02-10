@@ -16,7 +16,7 @@ import java.io.IOException;
 public class TimeCalcApp {
 
     public StringProperty visibilityProperty =
-            new StringProperty("timeCalcApp.visibilityReadWriteProperty",
+            new StringProperty("timeCalcApp.visibilityProperty",
                     Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
 
