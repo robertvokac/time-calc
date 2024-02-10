@@ -11,6 +11,8 @@ import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 public class TimeCalcConfiguration {
     public final BooleanProperty clockHandLongProperty =
             new BooleanProperty("clockHandLongProperty", true);
+    public final BooleanProperty clockHandMinuteEnabledProperty =
+            new BooleanProperty("clockHandMinuteEnabledProperty", true);
     public final BooleanProperty clockHandSecondEnabledProperty =
             new BooleanProperty("clockHandSecondEnabledProperty", true);
     public final BooleanProperty clockHandMillisecondEnabledProperty =
@@ -38,6 +40,8 @@ public class TimeCalcConfiguration {
     public void setFromTimeCalcProperties(
             TimeCalcProperties timeCalcProperties) {
         clockHandLongProperty.setValue(timeCalcProperties.areClockHandsLong());
+        clockHandMinuteEnabledProperty
+                .setValue(timeCalcProperties.isMinuteEnabled());
         clockHandSecondEnabledProperty
                 .setValue(timeCalcProperties.isSecondEnabled());
         clockHandMillisecondEnabledProperty

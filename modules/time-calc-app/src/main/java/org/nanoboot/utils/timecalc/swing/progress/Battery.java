@@ -60,10 +60,13 @@ public class Battery extends Widget {
             this.totalHeight = (int) (this.getHeight() / 10d * 7d);
             this.totalWidth = this.getWidth();
         }
-        if (donePercent > 0 && donePercent < CRITICAL_LOW_ENERGY
+        if (donePercent > 0 && donePercent <= CRITICAL_LOW_ENERGY
             && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
             blinking.flip();
             tmpNanoTime = System.nanoTime();
+        }
+        if (donePercent > CRITICAL_LOW_ENERGY && blinking.isEnabled()) {
+            blinking.disable();
         }
         if (donePercent <= 0 && blinking.getValue()) {
             blinking.setValue(false);
@@ -200,7 +203,7 @@ public class Battery extends Widget {
             {
                 Color currentColor = g2d.getColor();
                 g2d.setColor(
-                        visibility.isStronglyColored() || mouseOver ? Color.darkGray : Color.lightGray);
+                        visibility.isStronglyColored() || mouseOver ? HIGH_HIGHLIGHTED : (visibility.isWeaklyColored() ? HIGH : Color.lightGray));
 
 
                 double angleDouble = donePercent * 360;

@@ -44,6 +44,8 @@ public class AnalogClock extends Widget {
             new IntegerProperty("millisecondProperty");
     public IntegerProperty dayOfWeekProperty =
             new IntegerProperty("dayOfWeekProperty");
+    public BooleanProperty minuteEnabledProperty =
+            new BooleanProperty("minuteEnabledProperty", true);
     public BooleanProperty secondEnabledProperty =
             new BooleanProperty("secondEnabledProperty", true);
     public BooleanProperty millisecondEnabledProperty =
@@ -163,17 +165,18 @@ public class AnalogClock extends Widget {
                         Color.RED, visibility);
             }
         }
-        //
-        double minutes = minute / 60.0 + second / 60.0 / 60.0;
-        drawHand(g2d, side / 2 - 20, minutes, 2.0f,
-                Color.BLUE, visibility);
-        if (handsLongProperty.isEnabled()) {
-            drawHand(g2d, (side / 2 - 20) / 4,
-                    minutes + minutes > 0.5 ? minutes - 0.5 :
-                            minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
+        if (minuteEnabledProperty.isEnabled()) {
+            double minutes = minute / 60.0 + second / 60.0 / 60.0;
+            drawHand(g2d, side / 2 - 20, minutes, 2.0f,
                     Color.BLUE, visibility);
+            if (handsLongProperty.isEnabled()) {
+                drawHand(g2d, (side / 2 - 20) / 4,
+                        minutes + minutes > 0.5 ? minutes - 0.5 :
+                                minutes + (minutes > 0.5 ? (-1) : 1) * 0.5,
+                        2.0f,
+                        Color.BLUE, visibility);
+            }
         }
-        //
         double hours = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
         drawHand(g2d, side / 2 - 40,
                 hours, 4.0f,

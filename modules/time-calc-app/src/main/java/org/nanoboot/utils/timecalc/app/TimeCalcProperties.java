@@ -13,6 +13,8 @@ import java.util.Properties;
  */
 public class TimeCalcProperties {
     private static final String CLOCK_HANDS_LONG = "clock.hands.long";
+    private static final String CLOCK_HANDS_MINUTE_ENABLED =
+            "clock.hands.minute.enabled";
     private static final String CLOCK_HANDS_SECOND_ENABLED =
             "clock.hands.second.enabled";
     private static final String CLOCK_HANDS_MILLISECOND_ENABLED =
@@ -45,6 +47,21 @@ public class TimeCalcProperties {
                     TimeCalcProperties.CLOCK_HANDS_MILLISECOND_ENABLED,
                     "false");
         }
+        if (!isMinuteEnabled() && isSecondEnabled()) {
+            System.out.println(
+                    "Sorry, minutes are disabled, second must be disabled too.");
+            this.properties.setProperty(
+                    TimeCalcProperties.CLOCK_HANDS_SECOND_ENABLED,
+                    "false");
+        }
+
+        if (!isMinuteEnabled() && isMillisecondEnabled()) {
+            System.out.println(
+                    "Sorry, minutes are disabled, millisecond must be disabled too.");
+            this.properties.setProperty(
+                    TimeCalcProperties.CLOCK_HANDS_MILLISECOND_ENABLED,
+                    "false");
+        }
     }
 
     public static TimeCalcProperties getInstance() {
@@ -58,6 +75,9 @@ public class TimeCalcProperties {
         return getBooleanProperty(CLOCK_HANDS_LONG, true);
     }
 
+    public boolean isMinuteEnabled() {
+        return getBooleanProperty(CLOCK_HANDS_MINUTE_ENABLED, true);
+    }
     public boolean isSecondEnabled() {
         return getBooleanProperty(CLOCK_HANDS_SECOND_ENABLED, true);
     }
