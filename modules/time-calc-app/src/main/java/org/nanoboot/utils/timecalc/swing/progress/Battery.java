@@ -29,6 +29,10 @@ public class Battery extends Widget {
     public static final double HIGH_ENERGY = 0.75;
     public static final double VERY_HIGH_ENERGY = 0.9;
     private static final Font bigFont = new Font("sans", Font.BOLD, 24);
+    public static final Color LIGHT_RED = new Color(
+            229, 168, 168);
+    public static final Color ULTRA_LIGHT_RED = new Color(
+            238, 196, 196);
     @Getter
     private final String name;
     private final double[] randomDoubles =
@@ -196,13 +200,20 @@ public class Battery extends Widget {
             {
                 Color currentColor = g2d.getColor();
                 g2d.setColor(
-                        visibility.isStronglyColored() || mouseOver ? Color.darkGray : FOREGROUND_COLOR);
+                        visibility.isStronglyColored() || mouseOver ? Color.darkGray : Color.lightGray);
+
 
                 double angleDouble = donePercent * 360;
 
                 g2d.fillArc(((int) (totalWidth * 0.45)) + 15,
-                        (donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 28,
+                        totalHeight / 4 * 3 + 28,
                         15, 15, 90, -(int) angleDouble);
+                g2d.setColor(
+                        visibility.isStronglyColored() || mouseOver ? LIGHT_RED :
+                                visibility.isWeaklyColored() ? ULTRA_LIGHT_RED : BACKGROUND_COLOR);
+                g2d.fillArc(((int) (totalWidth * 0.45)) + 15,
+                        totalHeight / 4 * 3 + 28,
+                        15, 15, 90, +(int) (360 - angleDouble));
 
                 g2d.setColor(currentColor);
             }
