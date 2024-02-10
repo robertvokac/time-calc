@@ -3,7 +3,7 @@ package org.nanoboot.utils.timecalc.swing.progress;
 import lombok.Getter;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.app.TimeCalcConf;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
@@ -101,7 +101,7 @@ public class Battery extends Widget {
                 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight =
                 (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
-        if (waterSurfaceHeight <= 2 || !TimeCalcConf.getInstance()
+        if (waterSurfaceHeight <= 2 || !TimeCalcProperties.getInstance()
                 .areBatteryWavesEnabled() || wavesProperty.isDisabled()) {
             waterSurfaceHeight = 0;
         }

@@ -261,7 +261,7 @@ public class TimeCalcManager {
         } catch (IOException rex) {
             Logger.getLogger(TimeCalcManager.class.getName()).log(Level.SEVERE, null, rex);
         }
-        System.out.println("current dir=" + new File(".").getAbsolutePath());
+
         if(testProperties.containsKey("current.day")) {
             calNow.set(Calendar.DAY_OF_MONTH, Integer.parseInt((String) testProperties.get("current.day")));
             analogClock.dayProperty.setValue(Integer.valueOf((String) testProperties.get("current.day")));
@@ -310,6 +310,10 @@ public class TimeCalcManager {
         } else {
             analogClock.millisecondProperty.bindTo(time.millisecondProperty);
         }
+        analogClock.millisecondEnabledProperty.setValue(
+                TimeCalcProperties.getInstance().isMillisecondEnabled());
+        analogClock.secondEnabledProperty.setValue(
+                TimeCalcProperties.getInstance().isSecondEnabled());
         
 
         window.add(analogClock);
@@ -462,7 +466,7 @@ public class TimeCalcManager {
                 exitButton.setOriginalForeground();
             }
             jokeButton.setVisible(
-                    TimeCalcConf.getInstance().isJokeVisible()
+                    TimeCalcProperties.getInstance().areJokesEnabled()
                     && !visibility.isNone());
 
             window.setTitle(visibility.isNone() ? "" : windowTitle);

@@ -2,7 +2,7 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.app.TimeCalcConf;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 
@@ -16,7 +16,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
@@ -40,7 +41,9 @@ public class AnalogClock extends Widget {
     public IntegerProperty minuteProperty = new IntegerProperty("minuteProperty");
     public IntegerProperty secondProperty = new IntegerProperty("secondProperty");
     public IntegerProperty millisecondProperty = new IntegerProperty("millisecondProperty");
-    public IntegerProperty dayOfWeekProperty = new IntegerProperty("dayOfWeek");
+    public IntegerProperty dayOfWeekProperty = new IntegerProperty("dayOfWeekProperty");
+    public BooleanProperty secondEnabledProperty = new BooleanProperty("secondEnabledProperty", true);
+    public BooleanProperty millisecondEnabledProperty = new BooleanProperty("millisecondEnabledProperty", false);
 
     public AnalogClock(TimeHM startTimeIn,
             TimeHM endTimeIn) {
@@ -125,27 +128,33 @@ public class AnalogClock extends Widget {
         drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
 
         //
-        drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
-                COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
-
-        if (TimeCalcConf.getInstance().areClockHandsLong()) {
-            drawHand(g2d, (side / 2 - 10) / 4,
-                    (millisecond > 500 ? millisecond - 500 : millisecond + 500) / 1000.0, 1.0f,
+        if(millisecondEnabledProperty.isEnabled()) {
+            drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
+
+            if (TimeCalcProperties.getInstance().areClockHandsLong()) {
+                drawHand(g2d, (side / 2 - 10) / 4,
+                        (millisecond > 500 ? millisecond - 500 :
+                                millisecond + 500) / 1000.0, 1.0f,
+                        COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED,
+                        visibility);
+            }
         }
-        //
+
+        if(secondEnabledProperty.isEnabled()) {
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED, visibility);
 
-        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+        if (TimeCalcProperties.getInstance().areClockHandsLong()) {
             drawHand(g2d, (side / 2 - 10) / 4,
                     (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
                     Color.RED, visibility);
+        }
         }
         //
         double minutes = minute / 60.0 + second / 60.0 / 60.0;
         drawHand(g2d, side / 2 - 20, minutes, 2.0f,
                 Color.BLUE, visibility);
-        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+        if (TimeCalcProperties.getInstance().areClockHandsLong()) {
             drawHand(g2d, (side / 2 - 20) / 4,
                     minutes + minutes > 0.5 ? minutes - 0.5 :
                             minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
@@ -156,7 +165,7 @@ public class AnalogClock extends Widget {
         drawHand(g2d, side / 2 - 40,
                 hours, 4.0f,
                 Color.BLACK, visibility);
-        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+        if (TimeCalcProperties.getInstance().areClockHandsLong()) {
             drawHand(g2d, (side / 2 - 40) / 4,
                     hours + hours > 0.5 ? hours - 0.5 :
                             hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
