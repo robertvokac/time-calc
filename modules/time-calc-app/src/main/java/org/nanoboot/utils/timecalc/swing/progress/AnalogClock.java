@@ -110,7 +110,6 @@ public class AnalogClock extends Widget {
         // Draw clock numbers and circle
         drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
 
-        System.out.println("millisecond=" + millisecond);
         //
         drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                 COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);

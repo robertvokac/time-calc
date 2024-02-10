@@ -29,11 +29,18 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Robert Vokac
@@ -270,6 +277,27 @@ public class TimeCalcManager {
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
 
+        Properties testProperties = new Properties();
+        File testPropertiesFile = new File("test.txt");
+        try {
+            if(testPropertiesFile.exists()) {
+                testProperties.load(new FileInputStream(testPropertiesFile));
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TimeCalcManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException rex) {
+            Logger.getLogger(TimeCalcManager.class.getName()).log(Level.SEVERE, null, rex);
+        }
+        System.out.println("current dir=" + new File(".").getAbsolutePath());
+        if(testProperties.containsKey("current.day")) {
+            calNow.set(Calendar.DAY_OF_MONTH, Integer.parseInt((String) testProperties.get("current.day")));
+        }
+        if(testProperties.containsKey("current.month")) {
+            calNow.set(Calendar.MONTH, Integer.parseInt((String) testProperties.get("current.month")) - 1);
+        }
+        if(testProperties.containsKey("current.year")) {
+            calNow.set(Calendar.YEAR, Integer.parseInt((String) testProperties.get("current.year")));
+        }
         int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
 
         int workDaysDone = 0;
