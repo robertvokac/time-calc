@@ -529,9 +529,6 @@ public class TimeCalcManager {
                 exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
             //time.writeString();
-            if (Math.random() > 0.95) {
-                window.requestFocus();
-            }
             if (stopBeforeEnd) {
                 window.setVisible(false);
                 window.dispose();
