@@ -8,7 +8,7 @@ import javax.swing.Timer;
 import java.awt.Color;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 21.02.2024
  */
 public class TimeCalcButton extends JButton {

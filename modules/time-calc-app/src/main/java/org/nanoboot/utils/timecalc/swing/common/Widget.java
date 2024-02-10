@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 20.02.2024
  */
 public class Widget extends JPanel {

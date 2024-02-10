@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 23.02.2024
  */
 public class Property <T>{

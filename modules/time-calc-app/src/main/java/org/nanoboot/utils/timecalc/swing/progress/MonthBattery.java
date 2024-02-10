@@ -1,7 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 21.02.2024
  */
 public class MonthBattery extends Battery{

@@ -15,7 +15,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 15.02.2024
  */
 public class Utils {

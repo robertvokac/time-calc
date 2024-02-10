@@ -5,7 +5,7 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 21.02.2024
  */
 public class TimeCalcWindow extends JFrame {

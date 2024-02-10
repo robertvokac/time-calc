@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 21.02.2024
  */
 public class NumberFormats {

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import java.io.IOException;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 31.01.2024
  */
 public class TimeCalcApp {

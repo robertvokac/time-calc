@@ -3,7 +3,7 @@ package org.nanoboot.utils.timecalc.swing.progress;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 21.02.2024
  */
 public class HourBattery extends Battery{

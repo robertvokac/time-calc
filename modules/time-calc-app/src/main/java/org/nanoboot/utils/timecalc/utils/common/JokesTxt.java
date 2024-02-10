@@ -1,13 +1,11 @@
 package org.nanoboot.utils.timecalc.utils.common;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 15.02.2024
  */
 public class JokesTxt {
@@ -16,17 +14,11 @@ public class JokesTxt {
     }
 
     public static String[] getAsArray() throws IOException {
-        InputStream inputStream = ClassLoader.getSystemClassLoader().
-                getSystemResourceAsStream("vtipy.txt");
-        InputStreamReader
-                streamReader = new InputStreamReader(inputStream,
-                StandardCharsets.UTF_8);
-        BufferedReader in = new BufferedReader(streamReader);
-
-        StringBuilder sb = new StringBuilder();
-        for (String line; (line = in.readLine()) != null; ) {
-            sb.append(line).append("\n");
+        File jokeTxtFile = new File("jokes.txt");
+        if(!jokeTxtFile.exists()) {
+            //nothing to do
+            return new String[]{"A","B","C"};
         }
-        return sb.toString().split("-----SEPARATOR-----");
+        return Utils.readTextFromFile(jokeTxtFile).split("-----SEPARATOR-----");
     }
 }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 20.02.2024
  */
 public class TimeCalcConf {

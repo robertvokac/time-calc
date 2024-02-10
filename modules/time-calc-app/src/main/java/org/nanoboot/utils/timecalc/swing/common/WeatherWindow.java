@@ -21,7 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 16.02.2024
  */
 public class WeatherWindow extends JFrame {

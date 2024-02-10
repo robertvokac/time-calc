@@ -3,7 +3,7 @@ package org.nanoboot.utils.timecalc.utils.common;
 import java.io.File;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 21.02.2024
  */
 public class FileConstants {

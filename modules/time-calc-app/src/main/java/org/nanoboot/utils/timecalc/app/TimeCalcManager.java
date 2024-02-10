@@ -36,7 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 08.02.2024
  */
 public class TimeCalcManager {

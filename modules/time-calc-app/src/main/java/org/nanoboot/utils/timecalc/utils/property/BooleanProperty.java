@@ -1,7 +1,7 @@
 package org.nanoboot.utils.timecalc.utils.property;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 16.02.2024
  */
 public class BooleanProperty extends Property<Boolean> {
