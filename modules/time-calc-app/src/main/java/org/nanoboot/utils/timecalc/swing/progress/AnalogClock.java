@@ -17,6 +17,7 @@ import java.awt.RenderingHints;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
@@ -27,6 +28,19 @@ public class AnalogClock extends Widget {
     private TimeHM endTime;
     private int startAngle;
     private int endAngle;
+    
+    public IntegerProperty startHourProperty = new IntegerProperty("startHourProperty");
+    public IntegerProperty startMinuteProperty = new IntegerProperty("startMinuteProperty");
+    public IntegerProperty endHourProperty = new IntegerProperty("endHourProperty");
+    public IntegerProperty endMinuteProperty = new IntegerProperty("endMinuteProperty");
+    public IntegerProperty yearProperty = new IntegerProperty("yearProperty");
+    public IntegerProperty monthProperty = new IntegerProperty("monthProperty");
+    public IntegerProperty dayProperty = new IntegerProperty("dayProperty");
+    public IntegerProperty hourProperty = new IntegerProperty("hourProperty");
+    public IntegerProperty minuteProperty = new IntegerProperty("minuteProperty");
+    public IntegerProperty secondProperty = new IntegerProperty("secondProperty");
+    public IntegerProperty millisecondProperty = new IntegerProperty("millisecondProperty");
+    public IntegerProperty dayOfWeekProperty = new IntegerProperty("dayOfWeek");
 
     public AnalogClock(TimeHM startTimeIn,
             TimeHM endTimeIn) {
@@ -87,11 +101,11 @@ public class AnalogClock extends Widget {
         int centerX = getWidth() / 2;
         int centerY = getHeight() / 2;
 
-        GregorianCalendar time = new GregorianCalendar();
-        int millisecond = time.get(Calendar.MILLISECOND);
-        int second = time.get(Calendar.SECOND);
-        int minute = time.get(Calendar.MINUTE);
-        int hour = time.get(Calendar.HOUR_OF_DAY);
+        
+        int millisecond = millisecondProperty.getValue();
+        int second = secondProperty.getValue();
+        int minute = minuteProperty.getValue();
+        int hour = hourProperty.getValue();
 
         if(mouseOver && visibility.isStronglyColored()) {
         this.startTime = new TimeHM(hour, minute);

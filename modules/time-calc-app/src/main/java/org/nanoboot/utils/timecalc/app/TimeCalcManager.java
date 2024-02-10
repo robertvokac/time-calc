@@ -246,6 +246,9 @@ public class TimeCalcManager {
 
         AnalogClock analogClock = new AnalogClock(startTime, endTime);
         analogClock.setBounds(MARGIN, MARGIN, 200);
+        analogClock.hourProperty.bindTo(time.hourProperty);
+        analogClock.minuteProperty.bindTo(time.minuteProperty);
+        analogClock.secondProperty.bindTo(time.secondProperty);
 
         window.add(analogClock);
 
