@@ -1,9 +1,11 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcManager;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.Timer;
 import java.awt.Color;
 
@@ -37,5 +39,14 @@ public class TimeCalcButton extends JButton {
 
     public void setOriginalForeground() {
         this.setForeground(originalForeground);
+    }
+
+    public void setBoundsFromLeft(JComponent jComponent) {
+        setBounds(jComponent.getX() + jComponent.getWidth() + TimeCalcManager.MARGIN, jComponent.getY());
+    }
+    public void setBoundsFromTop(JComponent jComponent) {
+        setBounds(TimeCalcManager.MARGIN, jComponent.getY()
+                + jComponent.getHeight()
+                + TimeCalcManager.MARGIN);
     }
 }

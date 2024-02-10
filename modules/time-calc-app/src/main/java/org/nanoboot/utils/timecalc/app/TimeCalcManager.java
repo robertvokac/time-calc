@@ -49,7 +49,7 @@ import java.util.logging.Logger;
 public class TimeCalcManager {
     public static final Color BG = new Color(238, 238, 238);
     public static final Color FG = new Color(210, 210, 210);
-    private static final int MARGIN = 10;
+    public static final int MARGIN = 10;
     private final String windowTitle;
     private final int totalMinutes;
 
@@ -90,6 +90,7 @@ public class TimeCalcManager {
 
         TimeCalcWindow window = new TimeCalcWindow();
 
+        TimeCalcButton configButton = new TimeCalcButton("Config");
         TimeCalcButton commandButton = new TimeCalcButton("Command");
         TimeCalcButton weatherButton = new TimeCalcButton("Weather");
         TimeCalcButton jokeButton = new TimeCalcButton("Joke");
@@ -98,7 +99,7 @@ public class TimeCalcManager {
         AboutButton aboutButton = new AboutButton();
 
         //window.add(weatherButton);
-        window.addAll(commandButton, jokeButton, restartButton,
+        window.addAll(configButton, commandButton, jokeButton, restartButton,
                 exitButton);
         window.addKeyListener(new KeyAdapter() {
             // Key Pressed method
@@ -185,23 +186,15 @@ public class TimeCalcManager {
 
         window.add(walkingHumanProgressAsciiArt);
         weatherButton
-                .setBounds(20, walkingHumanProgressAsciiArt.getY()
-                               + walkingHumanProgressAsciiArt.getHeight()
-                               + MARGIN);
-        commandButton.setBounds(20, walkingHumanProgressAsciiArt.getY()
-                                    + walkingHumanProgressAsciiArt.getHeight()
-                                    + MARGIN);
+                .setBounds(MARGIN, walkingHumanProgressAsciiArt.getY()
+                                   + walkingHumanProgressAsciiArt.getHeight()
+                                   + MARGIN);
+        configButton.setBoundsFromTop(walkingHumanProgressAsciiArt);
+        commandButton.setBoundsFromLeft(configButton);
 
-        jokeButton.setBounds(140, walkingHumanProgressAsciiArt.getY()
-                                  + walkingHumanProgressAsciiArt.getHeight()
-                                  + MARGIN);
-        restartButton
-                .setBounds(280, walkingHumanProgressAsciiArt.getY()
-                                + walkingHumanProgressAsciiArt.getHeight()
-                                + MARGIN);
-        exitButton.setBounds(390, walkingHumanProgressAsciiArt.getY()
-                                  + walkingHumanProgressAsciiArt.getHeight()
-                                  + MARGIN);
+        jokeButton.setBoundsFromLeft(commandButton);
+        restartButton.setBoundsFromLeft(jokeButton);
+        exitButton.setBoundsFromLeft(restartButton);
         aboutButton.setBounds(exitButton.getX(),
                 exitButton.getY() + exitButton.getHeight() + MARGIN);
 
@@ -478,6 +471,7 @@ public class TimeCalcManager {
                 weekBattery,
                 monthBattery,
                 hourBattery,
+                configButton,
                 jokeButton,
                 commandButton,
                 restartButton,
@@ -494,11 +488,15 @@ public class TimeCalcManager {
         weekBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         monthBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         hourBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        configButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         jokeButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         commandButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         restartButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         exitButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
 
+        configButton.setVisible(
+                !Visibility.valueOf(configButton.visibilityProperty.getValue())
+                        .isNone());
         jokeButton.setVisible(
                 !Visibility.valueOf(jokeButton.visibilityProperty.getValue())
                         .isNone());
@@ -535,21 +533,25 @@ public class TimeCalcManager {
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
             componentRegistry.setVisible(visibility.isNotNone());
             if (!visibility.isStronglyColored() || visibility.isGray()) {
+                configButton.setBackground(BG);
                 jokeButton.setBackground(BG);
                 commandButton.setBackground(BG);
                 restartButton.setBackground(BG);
                 exitButton.setBackground(BG);
 
+                configButton.setForeground(FG);
                 jokeButton.setForeground(FG);
                 commandButton.setForeground(FG);
                 restartButton.setForeground(FG);
                 exitButton.setForeground(FG);
             } else {
+                configButton.setOriginalBackground();
                 jokeButton.setOriginalBackground();
                 commandButton.setOriginalBackground();
                 restartButton.setOriginalBackground();
                 exitButton.setOriginalBackground();
                 //
+                configButton.setOriginalForeground();
                 jokeButton.setOriginalForeground();
                 commandButton.setOriginalForeground();
                 restartButton.setOriginalForeground();
