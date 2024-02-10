@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
+import org.nanoboot.utils.timecalc.utils.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
@@ -28,11 +29,11 @@ public class Battery extends Widget {
     public static final double LOW_ENERGY = 0.15;
     public static final double HIGH_ENERGY = 0.75;
     public static final double VERY_HIGH_ENERGY = 0.9;
-    private static final Font bigFont = new Font("sans", Font.BOLD, 24);
     public static final Color LIGHT_RED = new Color(
             229, 168, 168);
     public static final Color ULTRA_LIGHT_RED = new Color(
             238, 196, 196);
+    public static final String CHARCHING = "⚡";
     @Getter
     private final String name;
     private final double[] randomDoubles =
@@ -193,11 +194,26 @@ public class Battery extends Widget {
         if (donePercent < 1 && donePercent > 0) {
             {
                 Font currentFont = g2d.getFont();
-                g2d.setFont(bigFont);
+                g2d.setFont(BIG_FONT);
                 g2d.drawString(
-                        "⚡", ((int) (totalWidth * 0.45)),
+                        CHARCHING, ((int) (totalWidth * 0.45)),
                         (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 10
                 );
+                if(mouseOver){
+                    if(!visibility.isStronglyColored()) {
+                        g2d.setColor(Color.GRAY);
+                    }
+                    if(visibility.isGray()) {
+                        g2d.setColor(Color.LIGHT_GRAY);
+                    }
+                    g2d.setFont(MEDIUM_FONT);
+                    g2d.drawString(
+                            ProgressSmiley.forProgress(donePercent).getCharacter(),
+                            ((int) (totalWidth * 0.45)) + 15,
+                            (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 8
+                    );
+
+                }
                 g2d.setFont(currentFont);
             }
             {
