@@ -21,6 +21,8 @@ import java.util.GregorianCalendar;
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
 
+    public static final Color COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED = new Color(246,
+            152, 51);
     private TimeHM startTime;
     private TimeHM endTime;
     private int startAngle;
@@ -86,6 +88,7 @@ public class AnalogClock extends Widget {
         int centerY = getHeight() / 2;
 
         GregorianCalendar time = new GregorianCalendar();
+        int millisecond = time.get(Calendar.MILLISECOND);
         int second = time.get(Calendar.SECOND);
         int minute = time.get(Calendar.MINUTE);
         int hour = time.get(Calendar.HOUR_OF_DAY);
@@ -107,6 +110,17 @@ public class AnalogClock extends Widget {
         // Draw clock numbers and circle
         drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
 
+        System.out.println("millisecond=" + millisecond);
+        //
+        drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
+                COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
+
+        if (TimeCalcConf.getInstance().areClockHandsLong()) {
+            drawHand(g2d, (side / 2 - 10) / 4,
+                    (millisecond > 500 ? millisecond - 500 : millisecond + 500) / 1000.0, 1.0f,
+                    COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
+        }
+        //
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED, visibility);
 
         if (TimeCalcConf.getInstance().areClockHandsLong()) {
