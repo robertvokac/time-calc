@@ -44,6 +44,7 @@ public class AnalogClock extends Widget {
     public IntegerProperty dayOfWeekProperty = new IntegerProperty("dayOfWeekProperty");
     public BooleanProperty secondEnabledProperty = new BooleanProperty("secondEnabledProperty", true);
     public BooleanProperty millisecondEnabledProperty = new BooleanProperty("millisecondEnabledProperty", false);
+    public BooleanProperty handsLongProperty = new BooleanProperty("handsLongProperty", true);
 
     public AnalogClock(TimeHM startTimeIn,
             TimeHM endTimeIn) {
@@ -132,7 +133,7 @@ public class AnalogClock extends Widget {
             drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
 
-            if (TimeCalcProperties.getInstance().areClockHandsLong()) {
+            if (handsLongProperty.isEnabled()) {
                 drawHand(g2d, (side / 2 - 10) / 4,
                         (millisecond > 500 ? millisecond - 500 :
                                 millisecond + 500) / 1000.0, 1.0f,
@@ -144,7 +145,7 @@ public class AnalogClock extends Widget {
         if(secondEnabledProperty.isEnabled()) {
         drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED, visibility);
 
-        if (TimeCalcProperties.getInstance().areClockHandsLong()) {
+        if (handsLongProperty.isEnabled()) {
             drawHand(g2d, (side / 2 - 10) / 4,
                     (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
                     Color.RED, visibility);
@@ -154,7 +155,7 @@ public class AnalogClock extends Widget {
         double minutes = minute / 60.0 + second / 60.0 / 60.0;
         drawHand(g2d, side / 2 - 20, minutes, 2.0f,
                 Color.BLUE, visibility);
-        if (TimeCalcProperties.getInstance().areClockHandsLong()) {
+        if (handsLongProperty.isEnabled()) {
             drawHand(g2d, (side / 2 - 20) / 4,
                     minutes + minutes > 0.5 ? minutes - 0.5 :
                             minutes + (minutes > 0.5 ? (-1) : 1) * 0.5, 2.0f,
@@ -165,7 +166,7 @@ public class AnalogClock extends Widget {
         drawHand(g2d, side / 2 - 40,
                 hours, 4.0f,
                 Color.BLACK, visibility);
-        if (TimeCalcProperties.getInstance().areClockHandsLong()) {
+        if (handsLongProperty.isEnabled()) {
             drawHand(g2d, (side / 2 - 40) / 4,
                     hours + hours > 0.5 ? hours - 0.5 :
                             hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,

@@ -314,6 +314,7 @@ public class TimeCalcManager {
         }
         analogClock.millisecondEnabledProperty.bindTo(timeCalcConfiguration.clockHandMillisecondEnabledProperty);
         analogClock.secondEnabledProperty.bindTo(timeCalcConfiguration.clockHandSecondEnabledProperty);
+        analogClock.handsLongProperty.bindTo(timeCalcConfiguration.clockHandLongProperty);
 
         window.add(analogClock);
 
