@@ -27,5 +27,4 @@ public class WorkingDay {
     private int overtimeHoursToBeCompensatedUntilThisDay;
     private int overtimeMinutesToBeCompensatedUntilThisDay;
 
-
 }

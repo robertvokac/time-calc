@@ -1,7 +1,7 @@
 package org.nanoboot.utils.timecalc.utils.common;
 
-import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
 
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
@@ -63,7 +63,7 @@ public class Jokes {
     }
 
     public static void showRandom() {
-        if(!TimeCalcProperties.getInstance().areJokesEnabled()) {
+        if (!TimeCalcProperties.getInstance().areJokesEnabled()) {
             //nothing to do
             return;
         }

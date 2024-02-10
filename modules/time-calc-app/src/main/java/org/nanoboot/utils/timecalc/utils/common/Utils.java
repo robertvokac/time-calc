@@ -20,8 +20,9 @@ import java.util.jar.Manifest;
  */
 public class Utils {
 
-    public static final BooleanProperty toastsAreEnabled = new BooleanProperty("toastsAreEnabled", true);
-    public static final Color ULTRA_LIGHT_GRAY = new Color(216,216,216);
+    public static final BooleanProperty toastsAreEnabled =
+            new BooleanProperty("toastsAreEnabled", true);
+    public static final Color ULTRA_LIGHT_GRAY = new Color(216, 216, 216);
     /**
      * Count of bytes per one kilobyte.
      */
@@ -81,10 +82,9 @@ public class Utils {
                 ((int) (Math.random() * 256)), ((int) (Math.random() * 256)));
     }
 
-
-
     /**
      * Returns version of "Time Calc" from jar file.
+     *
      * @return version
      */
     public static String getVersion() {
@@ -94,6 +94,7 @@ public class Utils {
 
     /**
      * Returns build date of "Time Calc" from jar file.
+     *
      * @return build date
      */
     public static String getBuildDate() {
@@ -103,8 +104,9 @@ public class Utils {
         if (!classPath.startsWith("jar")) {
             return null;
         }
-        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1)
-                              + "/META-INF/MANIFEST.MF";
+        String manifestPath =
+                classPath.substring(0, classPath.lastIndexOf("!") + 1)
+                + "/META-INF/MANIFEST.MF";
         Manifest manifest;
         try {
             manifest = new Manifest(new URL(manifestPath).openStream());
@@ -115,6 +117,7 @@ public class Utils {
         Attributes attr = manifest.getMainAttributes();
         return attr.getValue("Build-Date");
     }
+
     public static byte[] decodeBase64ToByteArray(String s) {
         Base64.Decoder base64Decoder = Base64.getDecoder();
         return base64Decoder

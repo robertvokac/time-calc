@@ -2,9 +2,10 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 import javax.swing.JFrame;
 import java.awt.BasicStroke;
@@ -17,49 +18,57 @@ import java.awt.RenderingHints;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
-import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
-
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
 
-    public static final Color COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED = new Color(246,
-            152, 51);
-    private TimeHM startTime;
-    private TimeHM endTime;
-    private int startAngle;
-    private int endAngle;
-    
-    public IntegerProperty startHourProperty = new IntegerProperty("startHourProperty");
-    public IntegerProperty startMinuteProperty = new IntegerProperty("startMinuteProperty");
-    public IntegerProperty endHourProperty = new IntegerProperty("endHourProperty");
-    public IntegerProperty endMinuteProperty = new IntegerProperty("endMinuteProperty");
+    public static final Color COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED =
+            new Color(246,
+                    152, 51);
+    public IntegerProperty startHourProperty =
+            new IntegerProperty("startHourProperty");
+    public IntegerProperty startMinuteProperty =
+            new IntegerProperty("startMinuteProperty");
+    public IntegerProperty endHourProperty =
+            new IntegerProperty("endHourProperty");
+    public IntegerProperty endMinuteProperty =
+            new IntegerProperty("endMinuteProperty");
     public IntegerProperty yearProperty = new IntegerProperty("yearProperty");
     public IntegerProperty monthProperty = new IntegerProperty("monthProperty");
     public IntegerProperty dayProperty = new IntegerProperty("dayProperty");
     public IntegerProperty hourProperty = new IntegerProperty("hourProperty");
-    public IntegerProperty minuteProperty = new IntegerProperty("minuteProperty");
-    public IntegerProperty secondProperty = new IntegerProperty("secondProperty");
-    public IntegerProperty millisecondProperty = new IntegerProperty("millisecondProperty");
-    public IntegerProperty dayOfWeekProperty = new IntegerProperty("dayOfWeekProperty");
-    public BooleanProperty secondEnabledProperty = new BooleanProperty("secondEnabledProperty", true);
-    public BooleanProperty millisecondEnabledProperty = new BooleanProperty("millisecondEnabledProperty", false);
-    public BooleanProperty handsLongProperty = new BooleanProperty("handsLongProperty", true);
+    public IntegerProperty minuteProperty =
+            new IntegerProperty("minuteProperty");
+    public IntegerProperty secondProperty =
+            new IntegerProperty("secondProperty");
+    public IntegerProperty millisecondProperty =
+            new IntegerProperty("millisecondProperty");
+    public IntegerProperty dayOfWeekProperty =
+            new IntegerProperty("dayOfWeekProperty");
+    public BooleanProperty secondEnabledProperty =
+            new BooleanProperty("secondEnabledProperty", true);
+    public BooleanProperty millisecondEnabledProperty =
+            new BooleanProperty("millisecondEnabledProperty", false);
+    public BooleanProperty handsLongProperty =
+            new BooleanProperty("handsLongProperty", true);
+    private TimeHM startTime;
+    private final TimeHM endTime;
+    private int startAngle;
+    private final int endAngle;
 
     public AnalogClock(TimeHM startTimeIn,
             TimeHM endTimeIn) {
 
         this.endTime = endTimeIn.cloneInstance();
         this.endAngle =
-                (int) ((endTime.getHour() + endTime.getMinute() / 60d) / 12d * 360d);
-        if(endTime.getHour() >12) {
+                (int) ((endTime.getHour() + endTime.getMinute() / 60d) / 12d
+                       * 360d);
+        if (endTime.getHour() > 12) {
             endTime.setHour(endTime.getHour() - 12);
         }
         this.startTime = startTimeIn.cloneInstance();
         this.startAngle =
-                (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d * 360d);
-
-
+                (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d
+                       * 360d);
 
         setPreferredSize(new Dimension(200, 200));
 
@@ -73,30 +82,31 @@ public class AnalogClock extends Widget {
         window.add(clock);
         window.pack();
         window.setVisible(true);
-//        window.addKeyListener(new KeyAdapter() {
-//            // Key Pressed method
-//            public void keyPressed(KeyEvent e) {
-//                if (e.getKeyCode() == KeyEvent.VK_UP) {
-//                    clock.startAngle_++;
-//                }
-//                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//                    clock.startAngle_--;
-//                }
-//
-//                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//                    clock.arcAngle_++;
-//                }
-//                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-//                    clock.arcAngle_--;
-//                }
-//            }
-//        });
+        //        window.addKeyListener(new KeyAdapter() {
+        //            // Key Pressed method
+        //            public void keyPressed(KeyEvent e) {
+        //                if (e.getKeyCode() == KeyEvent.VK_UP) {
+        //                    clock.startAngle_++;
+        //                }
+        //                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+        //                    clock.startAngle_--;
+        //                }
+        //
+        //                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        //                    clock.arcAngle_++;
+        //                }
+        //                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        //                    clock.arcAngle_--;
+        //                }
+        //            }
+        //        });
     }
 
     @Override
     public void paintWidget(Graphics g) {
 
-        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        Visibility visibility =
+                Visibility.valueOf(visibilityProperty.getValue());
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -105,22 +115,23 @@ public class AnalogClock extends Widget {
         int centerX = getWidth() / 2;
         int centerY = getHeight() / 2;
 
-        
         int millisecond = millisecondProperty.getValue();
         int second = secondProperty.getValue();
         int minute = minuteProperty.getValue();
         int hour = hourProperty.getValue();
 
-        if(mouseOver && visibility.isStronglyColored()) {
-        this.startTime = new TimeHM(hour, minute);
-        this.startAngle =
-                (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d * 360d);
+        if (mouseOver && visibility.isStronglyColored()) {
+            this.startTime = new TimeHM(hour, minute);
+            this.startAngle =
+                    (int) ((startTime.getHour() + startTime.getMinute() / 60d)
+                           / 12d * 360d);
 
             Color currentColor = g2d.getColor();
             g2d.setColor(Color.YELLOW);
-            g2d.fillArc(0, 0, side, side, -startAngle +90, startAngle - endAngle);
+            g2d.fillArc(0, 0, side, side, -startAngle + 90,
+                    startAngle - endAngle);
 
-        //System.out.println("ANGLES: " + startAngle + " " + endAngle + " " + angleDiff );
+            //System.out.println("ANGLES: " + startAngle + " " + endAngle + " " + angleDiff );
 
             g2d.setColor(currentColor);
         }
@@ -129,7 +140,7 @@ public class AnalogClock extends Widget {
         drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
 
         //
-        if(millisecondEnabledProperty.isEnabled()) {
+        if (millisecondEnabledProperty.isEnabled()) {
             drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
 
@@ -142,14 +153,15 @@ public class AnalogClock extends Widget {
             }
         }
 
-        if(secondEnabledProperty.isEnabled()) {
-        drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED, visibility);
+        if (secondEnabledProperty.isEnabled()) {
+            drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED,
+                    visibility);
 
-        if (handsLongProperty.isEnabled()) {
-            drawHand(g2d, (side / 2 - 10) / 4,
-                    (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
-                    Color.RED, visibility);
-        }
+            if (handsLongProperty.isEnabled()) {
+                drawHand(g2d, (side / 2 - 10) / 4,
+                        (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
+                        Color.RED, visibility);
+            }
         }
         //
         double minutes = minute / 60.0 + second / 60.0 / 60.0;
@@ -178,7 +190,8 @@ public class AnalogClock extends Widget {
 
     private void drawCentre(Graphics2D g2d, int centerX, int centerY) {
         Color currentColor = g2d.getColor();
-        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        Visibility visibility =
+                Visibility.valueOf(visibilityProperty.getValue());
         g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.RED :
                 FOREGROUND_COLOR);
         g2d.fillOval(centerX - 3, centerY - 3, 8, 8);
@@ -211,15 +224,15 @@ public class AnalogClock extends Widget {
 
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
-        if(this.mouseOver)
-        {
+        if (this.mouseOver) {
 
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, yearProperty.getValue());
-            cal.set(Calendar.MONTH, monthProperty.getValue() -1);
+            cal.set(Calendar.MONTH, monthProperty.getValue() - 1);
             cal.set(Calendar.DAY_OF_MONTH, dayProperty.getValue());
             Date date = cal.getTime();
-            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(date), ((int) (side * 0.25)),
+            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(date),
+                    ((int) (side * 0.25)),
                     ((int) (side * 0.35)));
             g2d.drawString(DateFormats.DATE_TIME_FORMATTER_TIME.format(date),
                     ((int) (side * 0.25) + 30),

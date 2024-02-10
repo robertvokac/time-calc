@@ -21,7 +21,7 @@ public class TimeCalcWindow extends JFrame {
     }
 
     public Component[] addAll(Component... comp) {
-        for(Component c:comp) {
+        for (Component c : comp) {
             add(c);
         }
         return comp;

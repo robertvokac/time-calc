@@ -10,9 +10,6 @@ import java.util.Locale;
  * @since 21.02.2024
  */
 public class DateFormats {
-    private DateFormats() {
-        //Not meant to be instantiated.
-    }
     public final static DateTimeFormatter DATE_TIME_FORMATTER_HHmmssSSS =
             DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
     public static DateFormat DATE_TIME_FORMATTER_LONG =
@@ -22,4 +19,7 @@ public class DateFormats {
             new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
     public static DateFormat DATE_TIME_FORMATTER_VERY_LONG =
             new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss:EEEE", Locale.ENGLISH);
+    private DateFormats() {
+        //Not meant to be instantiated.
+    }
 }

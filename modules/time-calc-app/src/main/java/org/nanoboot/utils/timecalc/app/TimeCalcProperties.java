@@ -13,11 +13,14 @@ import java.util.Properties;
  */
 public class TimeCalcProperties {
     private static final String CLOCK_HANDS_LONG = "clock.hands.long";
-    private static final String CLOCK_HANDS_SECOND_ENABLED = "clock.hands.second.enabled";
-    private static final String CLOCK_HANDS_MILLISECOND_ENABLED = "clock.hands.millisecond.enabled";
+    private static final String CLOCK_HANDS_SECOND_ENABLED =
+            "clock.hands.second.enabled";
+    private static final String CLOCK_HANDS_MILLISECOND_ENABLED =
+            "clock.hands.millisecond.enabled";
     private static final String BATTERY_WAVES_ENABLED = "battery.waves.enabled";
     private static final String DEFAULT_VISIBILITY = "default-visibility";
-    private static final String VISIBILITY_ONLY_GREY_OR_NONE_ENABLED = "visibility.only-grey-or-none.enabled";
+    private static final String VISIBILITY_ONLY_GREY_OR_NONE_ENABLED =
+            "visibility.only-grey-or-none.enabled";
     private static final String JOKES_ENABLED = "jokes.enabled";
     private static final String COMMANDS_ENABLED = "commands-enabled";
     private static final String TOASTS_ENABLED = "toasts.enabled";
@@ -35,9 +38,12 @@ public class TimeCalcProperties {
         } catch (IOException e) {
             System.err.println(e);
         }
-        if(!isSecondEnabled() && isMillisecondEnabled()) {
-            System.out.println("Sorry, seconds are disabled, millisecond must be disabled too.");
-            this.properties.setProperty(TimeCalcProperties.CLOCK_HANDS_MILLISECOND_ENABLED, "false");
+        if (!isSecondEnabled() && isMillisecondEnabled()) {
+            System.out.println(
+                    "Sorry, seconds are disabled, millisecond must be disabled too.");
+            this.properties.setProperty(
+                    TimeCalcProperties.CLOCK_HANDS_MILLISECOND_ENABLED,
+                    "false");
         }
     }
 
@@ -55,6 +61,7 @@ public class TimeCalcProperties {
     public boolean isSecondEnabled() {
         return getBooleanProperty(CLOCK_HANDS_SECOND_ENABLED, true);
     }
+
     public boolean isMillisecondEnabled() {
         return getBooleanProperty(CLOCK_HANDS_MILLISECOND_ENABLED, false);
     }
@@ -85,15 +92,18 @@ public class TimeCalcProperties {
     public Boolean areCommandsEnabled() {
         return getBooleanProperty(COMMANDS_ENABLED, true);
     }
+
     private boolean getBooleanProperty(String key, boolean defaultValue) {
         if (!properties.containsKey(key)) {
             return defaultValue;
         }
         return properties.get(key).equals("true");
     }
+
     public void load() {
         //to be implemented
     }
+
     public void save() {
         //to be implemented
     }

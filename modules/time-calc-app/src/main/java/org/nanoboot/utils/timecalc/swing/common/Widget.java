@@ -2,7 +2,6 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -19,11 +18,12 @@ public class Widget extends JPanel {
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
+    public StringProperty visibilityProperty =
+            new StringProperty("widget.visibilityProperty",
+                    Visibility.STRONGLY_COLORED.name());
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
-
-    public StringProperty visibilityProperty = new StringProperty("widget.visibilityProperty", Visibility.STRONGLY_COLORED.name());
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);
@@ -31,11 +31,14 @@ public class Widget extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
-                if(visibility.isStronglyColored()) {
-                    visibilityProperty.setValue(Visibility.WEAKLY_COLORED.name());
+                Visibility visibility =
+                        Visibility.valueOf(visibilityProperty.getValue());
+                if (visibility.isStronglyColored()) {
+                    visibilityProperty
+                            .setValue(Visibility.WEAKLY_COLORED.name());
                 } else {
-                    visibilityProperty.setValue(Visibility.STRONGLY_COLORED.name());
+                    visibilityProperty
+                            .setValue(Visibility.STRONGLY_COLORED.name());
                 }
             }
 
@@ -83,7 +86,8 @@ public class Widget extends JPanel {
     public final void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        Visibility visibility =
+                Visibility.valueOf(visibilityProperty.getValue());
         this.setVisible(visibility != Visibility.NONE);
         paintWidget(g);
 

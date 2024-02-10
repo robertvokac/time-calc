@@ -3,8 +3,8 @@ package org.nanoboot.utils.timecalc.app;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
-import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
@@ -15,11 +15,13 @@ import java.io.IOException;
  */
 public class TimeCalcApp {
 
+    public StringProperty visibilityProperty =
+            new StringProperty("timeCalcApp.visibilityReadWriteProperty",
+                    Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
-    public StringProperty visibilityProperty = new StringProperty("timeCalcApp.visibilityReadWriteProperty", Visibility.WEAKLY_COLORED.name());
 
     public void start(String[] args) throws IOException {
-        if(startNanoTime != 0l) {
+        if (startNanoTime != 0l) {
             throw new TimeCalcException("TimeCalcApp was already started.");
         }
         startNanoTime = System.nanoTime();
@@ -74,11 +76,13 @@ public class TimeCalcApp {
     public long getCountOfMinutesSinceAppStarted() {
         return getCountOfSecondsSinceAppStarted() / 60l;
     }
+
     public long getCountOfSecondsSinceAppStarted() {
         return getCountOfMillisecondsSinceAppStarted() / 1000000000l;
     }
+
     public long getCountOfMillisecondsSinceAppStarted() {
-        if(startNanoTime == 0l) {
+        if (startNanoTime == 0l) {
             throw new TimeCalcException("TimeCalcApp was not yet started.");
         }
         return System.nanoTime() - startNanoTime;

@@ -11,20 +11,23 @@ import java.util.Set;
  */
 public class ComponentRegistry {
     private final Set<Component> set = new HashSet<>();
+
     public ComponentRegistry() {
 
     }
+
     public void add(JComponent component) {
         this.set.add(component);
     }
+
     public void addAll(JComponent... component) {
-        for(JComponent c:component) {
+        for (JComponent c : component) {
             add(c);
         }
     }
 
     public void setVisible(boolean b) {
-        for(Component c:set) {
+        for (Component c : set) {
             c.setVisible(b);
         }
     }

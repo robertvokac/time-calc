@@ -9,6 +9,7 @@ public class StringReadOnlyProperty extends ReadOnlyProperty<String> {
     public StringReadOnlyProperty(String name, String valueIn) {
         super(name, valueIn);
     }
+
     public StringReadOnlyProperty(Property<String> property) {
         super(property);
     }

@@ -12,9 +12,11 @@ public class TimeHM {
     public static final int MILLISECONDS_PER_SECOND = 1000;
     public static final int SECONDS_PER_MINUTE = 60;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private Integer hour;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Integer minute;
 
     public TimeHM(String string) {
@@ -41,8 +43,11 @@ public class TimeHM {
     }
 
     public static int countDiffInMinutes(TimeHM startTime, TimeHM endTime) {
-        return (endTime.getHour() * TimeHM.MINUTES_PER_HOUR + endTime.getMinute()) - (startTime.getHour() * TimeHM.MINUTES_PER_HOUR + startTime.getMinute());
+        return (endTime.getHour() * TimeHM.MINUTES_PER_HOUR + endTime
+                .getMinute()) - (startTime.getHour() * TimeHM.MINUTES_PER_HOUR
+                                 + startTime.getMinute());
     }
+
     public TimeHM cloneInstance() {
         return new TimeHM(hour, minute);
     }

@@ -14,10 +14,11 @@ import java.awt.Color;
 public class TimeCalcButton extends JButton {
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 30;
+    public StringProperty visibilityProperty =
+            new StringProperty("visibilityProperty",
+                    Visibility.STRONGLY_COLORED.name());
     private Color originalBackground;
     private Color originalForeground;
-
-    public StringProperty visibilityProperty = new StringProperty("visibilityProperty", Visibility.STRONGLY_COLORED.name());
 
     public TimeCalcButton(String label) {
         super(label);
@@ -29,11 +30,12 @@ public class TimeCalcButton extends JButton {
         this.originalForeground = getForeground();
         new Timer(100, e -> repaint()).start();
     }
+
     public void setOriginalBackground() {
-        this.setBackground(originalBackground);;
+        this.setBackground(originalBackground);
     }
 
     public void setOriginalForeground() {
-        this.setForeground(originalForeground);;
+        this.setForeground(originalForeground);
     }
 }

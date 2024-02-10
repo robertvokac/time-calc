@@ -3,7 +3,6 @@ package org.nanoboot.utils.timecalc.swing.progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -75,9 +74,13 @@ public class ProgressSquare extends Widget {
             }
             g2d.setColor(FOREGROUND_COLOR);
         }
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK : BACKGROUND_COLOR);
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
+                BACKGROUND_COLOR);
 
-        g2d.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(donePercent * 100) + "%", (int)(side/8d*3d),(int)(side/8d*(donePercent > 0.5 ? 3d : 5d)));
+        g2d.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
+                               .format(donePercent * 100) + "%",
+                (int) (side / 8d * 3d),
+                (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)));
 
     }
 

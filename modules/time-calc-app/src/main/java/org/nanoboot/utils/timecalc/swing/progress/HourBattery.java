@@ -6,13 +6,15 @@ import org.nanoboot.utils.timecalc.utils.common.TimeHM;
  * @author Robert Vokac
  * @since 21.02.2024
  */
-public class HourBattery extends Battery{
+public class HourBattery extends Battery {
     public HourBattery(int x, int i, int i1) {
         super("Hour", x, i, i1);
     }
+
     public static double getHourProgress(TimeHM timeRemains, int secondsRemains,
             int millisecondsRemains) {
-        if(secondsRemains < 0 || millisecondsRemains < 0 || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {
+        if (secondsRemains < 0 || millisecondsRemains < 0
+            || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {
             return 1;
         }
         double minutesRemainsD = timeRemains.getMinute();

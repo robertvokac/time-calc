@@ -3,7 +3,6 @@ package org.nanoboot.utils.timecalc.swing.progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,10 +21,12 @@ public class ProgressCircle extends Widget {
         if (side == 0) {
             this.side = Math.min(getWidth(), getHeight());
         }
-        Visibility visibility = Visibility.valueOf(visibilityProperty.getValue());
+        Visibility visibility =
+                Visibility.valueOf(visibilityProperty.getValue());
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.darkGray :
-                FOREGROUND_COLOR);
+        g2d.setColor(
+                visibility.isStronglyColored() || mouseOver ? Color.darkGray :
+                        FOREGROUND_COLOR);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -39,10 +40,13 @@ public class ProgressCircle extends Widget {
                 new Color(105, 175, 236) : FOREGROUND_COLOR2);
         g2d.fillArc(0 + (side2 / 2), 0 + (side2 / 2), side2, side2, 90,
                 -(int) angleDouble2);
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.blue :FOREGROUND_COLOR);
+        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.blue :
+                FOREGROUND_COLOR);
 
         g2d.drawString(
-                NumberFormats.FORMATTER_ZERO_DECIMAL_PLACES.format(donePercent * 100) + "%", (int)(side / 8d * 0d),(int)(side / 8d * 7.5d));
+                NumberFormats.FORMATTER_ZERO_DECIMAL_PLACES
+                        .format(donePercent * 100) + "%",
+                (int) (side / 8d * 0d), (int) (side / 8d * 7.5d));
     }
 
 }
