@@ -204,9 +204,14 @@ public class AnalogClock extends Widget {
         if(this.mouseOver)
         {
 
-            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(new Date()), ((int) (side * 0.25)),
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, yearProperty.getValue());
+            cal.set(Calendar.MONTH, monthProperty.getValue() -1);
+            cal.set(Calendar.DAY_OF_MONTH, dayProperty.getValue());
+            Date date = cal.getTime();
+            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(date), ((int) (side * 0.25)),
                     ((int) (side * 0.35)));
-            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_TIME.format(new Date()),
+            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_TIME.format(date),
                     ((int) (side * 0.25) + 30),
                     ((int) (side * 0.35)) + 60);
         }
