@@ -3,8 +3,6 @@ package org.nanoboot.utils.timecalc.app;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
-import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
-import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
@@ -19,8 +17,6 @@ public class TimeCalcApp {
 
     private long startNanoTime = 0l;
     public StringProperty visibilityProperty = new StringProperty("timeCalcApp.visibilityReadWriteProperty", Visibility.WEAKLY_COLORED.name());
-    public BooleanProperty
-            wavesProperty = new BooleanProperty("waves", true);
 
     public void start(String[] args) throws IOException {
         if(startNanoTime != 0l) {

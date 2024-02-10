@@ -1,5 +1,7 @@
 package org.nanoboot.utils.timecalc.app;
 
+import org.nanoboot.utils.timecalc.entity.Visibility;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -69,6 +71,20 @@ public class TimeCalcProperties {
         return getBooleanProperty(TOASTS_ENABLED, true);
     }
 
+    public Visibility getDefaultVisibility() {
+        if (!properties.containsKey(DEFAULT_VISIBILITY)) {
+            return Visibility.STRONGLY_COLORED;
+        }
+        return Visibility.valueOf((String) properties.get(DEFAULT_VISIBILITY));
+    }
+
+    public boolean isVisibilityOnlyGreyOrNoneEnabled() {
+        return getBooleanProperty(VISIBILITY_ONLY_GREY_OR_NONE_ENABLED, false);
+    }
+
+    public Boolean areCommandsEnabled() {
+        return getBooleanProperty(COMMANDS_ENABLED, true);
+    }
     private boolean getBooleanProperty(String key, boolean defaultValue) {
         if (!properties.containsKey(key)) {
             return defaultValue;
@@ -81,5 +97,4 @@ public class TimeCalcProperties {
     public void save() {
         //to be implemented
     }
-
 }

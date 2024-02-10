@@ -60,10 +60,12 @@ public class TimeCalcManager {
     private final TimeCalcApp timeCalcApp;
     private boolean stopBeforeEnd = false;
     private Time time = new Time();
+    private TimeCalcConfiguration timeCalcConfiguration = new TimeCalcConfiguration();
 
     public TimeCalcManager(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
         this.timeCalcApp = timeCalcApp;
+        timeCalcConfiguration.setFromTimeCalcProperties(TimeCalcProperties.getInstance());
 //        Utils.everythingHidden
 //                .setValue(TimeCalcConf.getInstance().isEverythingHidden());
 //        Utils.toastsAreEnabled
@@ -205,7 +207,7 @@ public class TimeCalcManager {
                             timeCalcApp.visibilityProperty.setValue(commandsAsArray[1].equals("1") ? Visibility.GRAY.name() : Visibility.WEAKLY_COLORED.name());
                             break;
                         case "waves":
-                            timeCalcApp.wavesProperty.setValue(commandsAsArray[1].equals("1"));
+                            timeCalcConfiguration.batteryWavesEnabledProperty.setValue(commandsAsArray[1].equals("1"));
                             break;
                         case "uptime":
                             JOptionPane.showMessageDialog(null,
@@ -310,11 +312,8 @@ public class TimeCalcManager {
         } else {
             analogClock.millisecondProperty.bindTo(time.millisecondProperty);
         }
-        analogClock.millisecondEnabledProperty.setValue(
-                TimeCalcProperties.getInstance().isMillisecondEnabled());
-        analogClock.secondEnabledProperty.setValue(
-                TimeCalcProperties.getInstance().isSecondEnabled());
-        
+        analogClock.millisecondEnabledProperty.bindTo(timeCalcConfiguration.clockHandMillisecondEnabledProperty);
+        analogClock.secondEnabledProperty.bindTo(timeCalcConfiguration.clockHandSecondEnabledProperty);
 
         window.add(analogClock);
 
@@ -386,10 +385,10 @@ public class TimeCalcManager {
         weekBattery.setBounds(hourBattery.getX(), hourBattery.getY() + hourBattery.getHeight() + MARGIN, hourBattery.getWidth(), hourBattery.getHeight());
         monthBattery.setBounds(hourBattery.getX() + hourBattery.getWidth() + MARGIN, hourBattery.getY() + hourBattery.getHeight() + MARGIN, hourBattery.getWidth(), hourBattery.getHeight());
 
-        hourBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
-        dayBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
-        weekBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
-        monthBattery.wavesProperty.bindTo(timeCalcApp.wavesProperty.asReadOnlyProperty());
+        hourBattery.wavesProperty.bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
+        dayBattery.wavesProperty.bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
+        weekBattery.wavesProperty.bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
+        monthBattery.wavesProperty.bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
 
         ComponentRegistry componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
