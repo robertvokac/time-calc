@@ -23,10 +23,11 @@ import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 
 import javax.swing.JComponent;
 import java.awt.Color;
-import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -155,39 +156,21 @@ public class TimeCalcManager {
             if (testPropertiesFile.exists()) {
                 testProperties.load(new FileInputStream(testPropertiesFile));
             }
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(TimeCalcManager.class.getName())
                     .log(Level.SEVERE, null, ex);
-        } catch (IOException rex) {
-            Logger.getLogger(TimeCalcManager.class.getName())
-                    .log(Level.SEVERE, null, rex);
         }
 
         Time time = new Time();
-        if (testProperties.containsKey("current.day")) {
-            calNow.set(Calendar.DAY_OF_MONTH, Integer.parseInt(
-                    (String) testProperties.get("current.day")));
-            analogClock.dayProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.day")));
-        } else {
-            analogClock.dayProperty.bindTo(time.dayProperty);
-        }
-        if (testProperties.containsKey("current.month")) {
-            calNow.set(Calendar.MONTH, Integer.parseInt(
-                    (String) testProperties.get("current.month")) - 1);
-            analogClock.monthProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.month")));
-        } else {
-            analogClock.monthProperty.bindTo(time.monthProperty);
-        }
-        if (testProperties.containsKey("current.year")) {
-            calNow.set(Calendar.YEAR, Integer.parseInt(
-                    (String) testProperties.get("current.year")));
-            analogClock.yearProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.year")));
-        } else {
-            analogClock.yearProperty.bindTo(time.yearProperty);
-        }
+
+        bindToIfPropertyMissing(testProperties, "current.day", calNow, Calendar.DAY_OF_MONTH, analogClock.dayProperty, time.dayProperty);
+        bindToIfPropertyMissing(testProperties, "current.month", calNow, Calendar.MONTH, analogClock.monthProperty, time.monthProperty);
+        bindToIfPropertyMissing(testProperties, "current.year", calNow, Calendar.YEAR, analogClock.yearProperty, time.yearProperty);
+        bindToIfPropertyMissing(testProperties, "current.hour", calNow, Calendar.HOUR, analogClock.hourProperty, time.hourProperty);
+        bindToIfPropertyMissing(testProperties, "current.minute", calNow, Calendar.MINUTE, analogClock.minuteProperty, time.minuteProperty);
+        bindToIfPropertyMissing(testProperties, "current.second", calNow, Calendar.SECOND, analogClock.secondProperty, time.secondProperty);
+        bindToIfPropertyMissing(testProperties, "current.millisecond", calNow, Calendar.MILLISECOND, analogClock.millisecondProperty, time.millisecondProperty);
+
         if (testProperties.containsKey("current.year") || testProperties
                 .containsKey("current.month") || testProperties
                     .containsKey("current.day")) {
@@ -196,39 +179,7 @@ public class TimeCalcManager {
         } else {
             analogClock.dayOfWeekProperty.bindTo(time.dayOfWeek);
         }
-        if (testProperties.containsKey("current.hour")) {
-            calNow.set(Calendar.HOUR, Integer.parseInt(
-                    (String) testProperties.get("current.hour")));
-            analogClock.hourProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.hour")));
-        } else {
-            analogClock.hourProperty.bindTo(time.hourProperty);
-        }
-        if (testProperties.containsKey("current.minute")) {
-            calNow.set(Calendar.MINUTE, Integer.parseInt(
-                    (String) testProperties.get("current.minute")));
-            analogClock.minuteProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.minute")));
-        } else {
-            analogClock.minuteProperty.bindTo(time.minuteProperty);
-        }
-        if (testProperties.containsKey("current.second")) {
-            calNow.set(Calendar.SECOND, Integer.parseInt(
-                    (String) testProperties.get("current.second")));
-            analogClock.secondProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.second")));
-        } else {
-            analogClock.secondProperty.bindTo(time.secondProperty);
-        }
 
-        if (testProperties.containsKey("current.millisecond")) {
-            calNow.set(Calendar.MILLISECOND, Integer.parseInt(
-                    (String) testProperties.get("current.millisecond")));
-            analogClock.millisecondProperty.setValue(Integer.valueOf(
-                    (String) testProperties.get("current.millisecond")));
-        } else {
-            analogClock.millisecondProperty.bindTo(time.millisecondProperty);
-        }
         analogClock.millisecondEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandMillisecondEnabledProperty);
         analogClock.secondEnabledProperty
@@ -398,11 +349,6 @@ public class TimeCalcManager {
             double totalSecondsRemainsDouble =
                     ((double) totalMillisecondsRemains) / 1000;
 
-            //            if (timeRemains.getHour() == 0 && timeRemains.getMinute() <= 3) {
-            //                Utils.highlighted.set(true);
-            //                walkingHumanProgressAsciiArt.setForeground(Color.BLUE);
-            //            }
-
             if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
                 Toaster toasterManager = new Toaster();
                 toasterManager.setDisplayTime(30000);
@@ -449,6 +395,16 @@ public class TimeCalcManager {
 
     private String createWindowTitle() {
         return "Time Calc " + Utils.getVersion();
+    }
+    private void bindToIfPropertyMissing(Properties properties, String key, Calendar cal, int timeUnit, IntegerProperty firstProperty, Property secondProperty) {
+        if (properties.containsKey(key)) {
+            cal.set(timeUnit, Integer.parseInt(
+                    (String) properties.get(key)) + (timeUnit == Calendar.MONTH ? -1 : 0));
+            firstProperty.setValue(Integer.valueOf(
+                    (String) properties.get(key)));
+        } else {
+            firstProperty.bindTo(secondProperty);
+        }
     }
 
 }
