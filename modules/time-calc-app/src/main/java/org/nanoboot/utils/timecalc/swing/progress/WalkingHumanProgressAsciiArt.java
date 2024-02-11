@@ -14,6 +14,7 @@ import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
+import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
@@ -76,6 +77,15 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
             }
         });
         setBounds(x, y, width, height);
+        new Timer(100, e -> {
+            Visibility visibility =
+                    Visibility.valueOf(visibilityProperty.getValue());
+            setForeground(
+                    visibility.isStronglyColored()
+                    || getClientProperty("mouseEntered").equals("true") ?
+                            Color.BLACK : Color.LIGHT_GRAY);
+        }).start();
+
     }
 
     private static final String createSpaces(int spaceCount) {

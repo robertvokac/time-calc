@@ -126,7 +126,7 @@ public class TimeCalcManager {
         window.setLayout(null);
         window.setVisible(true);
 
-        String windowTitle = createWindowTitle();
+        String windowTitle = "Time Calc " + Utils.getVersion();
         window.setTitle(windowTitle);
 
         weatherButton
@@ -201,7 +201,7 @@ public class TimeCalcManager {
                 dayBattery.getY() + dayBattery.getHeight() + SwingUtils.MARGIN, 140);
         window.add(weekBattery);
 
-        int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
+        int currentDayOfMonth = analogClock.dayProperty.getValue();
 
         int workDaysDone = 0;
         int workDaysTodo = 0;
@@ -209,8 +209,8 @@ public class TimeCalcManager {
         for (int dayOfMonth = 1;
              dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH);
              dayOfMonth++) {
-            DayOfWeek dayOfWeek = LocalDate.of(calNow.get(Calendar.YEAR),
-                    calNow.get(Calendar.MONTH) + 1, dayOfMonth).getDayOfWeek();
+            DayOfWeek dayOfWeek = LocalDate.of(analogClock.yearProperty.getValue(),
+                    analogClock.monthProperty.getValue(), dayOfMonth).getDayOfWeek();
             boolean weekend =
                     dayOfWeek.toString().equals("SATURDAY") || dayOfWeek
                             .toString().equals("SUNDAY");
@@ -375,20 +375,11 @@ public class TimeCalcManager {
             } catch (InterruptedException e) {
 
             }
-
-            walkingHumanProgressAsciiArt.setForeground(
-                    currentVisibility.isStronglyColored()
-                    || walkingHumanProgressAsciiArt
-                            .getClientProperty("mouseEntered").equals("true") ?
-                            Color.BLACK : Color.LIGHT_GRAY);
         }
         window.setVisible(false);
         window.dispose();
     }
 
-    private String createWindowTitle() {
-        return "Time Calc " + Utils.getVersion();
-    }
     private void bindToIfPropertyMissing(Properties properties, String key, Calendar cal, int timeUnit, IntegerProperty firstProperty, Property secondProperty) {
         if (properties.containsKey(key)) {
             cal.set(timeUnit, Integer.parseInt(
