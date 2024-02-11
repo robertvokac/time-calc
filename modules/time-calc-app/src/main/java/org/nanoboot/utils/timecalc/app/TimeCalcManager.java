@@ -528,6 +528,11 @@ public class TimeCalcManager {
         window.setSize(520 + 20 + 100,
                 exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
         while (true) {
+            Visibility visibility = Visibility
+                    .valueOf(timeCalcApp.visibilityProperty.getValue());
+            if(timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled() && visibility.isColored() ){
+                timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
+            }
             //time.writeString();
             if (stopBeforeEnd) {
                 window.setVisible(false);
@@ -535,8 +540,7 @@ public class TimeCalcManager {
                 break;
             }
 
-            Visibility visibility = Visibility
-                    .valueOf(timeCalcApp.visibilityProperty.getValue());
+
             componentRegistry.setVisible(visibility.isNotNone());
             if (!visibility.isStronglyColored() || visibility.isGray()) {
                 configButton.setBackground(BG);

@@ -24,13 +24,13 @@ public class TimeCalcButton extends JButton {
 
     public TimeCalcButton(String label) {
         super(label);
+        new Timer(100, e -> repaint()).start();
     }
 
     public void setBounds(int x, int y) {
         setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.originalBackground = getBackground();
         this.originalForeground = getForeground();
-        new Timer(100, e -> repaint()).start();
     }
 
     public void setOriginalBackground() {
