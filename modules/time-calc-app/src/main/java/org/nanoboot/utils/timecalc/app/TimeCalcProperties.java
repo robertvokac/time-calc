@@ -42,28 +42,7 @@ public class TimeCalcProperties {
         } catch (IOException e) {
             System.err.println(e);
         }
-        if (!isSecondEnabled() && isMillisecondEnabled()) {
-            System.out.println(
-                    "Sorry, seconds are disabled, millisecond must be disabled too.");
-            this.properties.setProperty(
-                    TimeCalcProperties.CLOCK_HANDS_MILLISECOND_ENABLED,
-                    "false");
-        }
-        if (!isMinuteEnabled() && isSecondEnabled()) {
-            System.out.println(
-                    "Sorry, minutes are disabled, second must be disabled too.");
-            this.properties.setProperty(
-                    TimeCalcProperties.CLOCK_HANDS_SECOND_ENABLED,
-                    "false");
-        }
 
-        if (!isMinuteEnabled() && isMillisecondEnabled()) {
-            System.out.println(
-                    "Sorry, minutes are disabled, millisecond must be disabled too.");
-            this.properties.setProperty(
-                    TimeCalcProperties.CLOCK_HANDS_MILLISECOND_ENABLED,
-                    "false");
-        }
     }
 
     public static TimeCalcProperties getInstance() {

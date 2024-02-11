@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.app;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.AboutButton;
 import org.nanoboot.utils.timecalc.swing.common.ComponentRegistry;
+import org.nanoboot.utils.timecalc.swing.common.ConfigWindow;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
 import org.nanoboot.utils.timecalc.swing.common.TimeCalcWindow;
@@ -46,6 +47,7 @@ import java.util.logging.Logger;
 public class TimeCalcManager {
     public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
+    private ConfigWindow configWindow = null;
 
     private boolean stopBeforeEnd = false;
     private final TimeCalcConfiguration timeCalcConfiguration =
@@ -146,6 +148,12 @@ public class TimeCalcManager {
             stopBeforeEnd = true;
         });
 
+        configButton.addActionListener(e -> {
+            if(configWindow == null) {
+                this.configWindow = new ConfigWindow(timeCalcConfiguration);
+            }
+            configWindow.setVisible(true);
+        });
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
 
@@ -266,14 +274,17 @@ public class TimeCalcManager {
         window.setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
                 exitButton.getY() + 3 * exitButton.getHeight() + SwingUtils.MARGIN);
         while (true) {
+            //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
             Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
             if(timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled() && currentVisibility.isColored() ){
                 timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
             }
             if (stopBeforeEnd) {
+                if(configWindow != null) {configWindow.setVisible(false);configWindow.dispose();}
                 window.setVisible(false);
                 window.dispose();
+
                 break;
             }
 
@@ -380,6 +391,7 @@ public class TimeCalcManager {
 
             }
         }
+        if(configWindow != null) {configWindow.setVisible(false);configWindow.dispose();}
         window.setVisible(false);
         window.dispose();
     }

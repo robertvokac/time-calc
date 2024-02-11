@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
@@ -107,6 +108,7 @@ public class AnalogClock extends Widget {
     @Override
     public void paintWidget(Graphics g) {
 
+        //System.out.println("clock.handsLongProperty=" + handsLongProperty.isEnabled());
         Visibility visibility =
                 Visibility.valueOf(visibilityProperty.getValue());
         Graphics2D g2d = (Graphics2D) g;
@@ -142,7 +144,7 @@ public class AnalogClock extends Widget {
         drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
 
         //
-        if (millisecondEnabledProperty.isEnabled()) {
+        if (millisecondEnabledProperty.isEnabled() && secondEnabledProperty.isEnabled() && minuteEnabledProperty.isEnabled()) {
             drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
 
@@ -155,7 +157,7 @@ public class AnalogClock extends Widget {
             }
         }
 
-        if (secondEnabledProperty.isEnabled()) {
+        if (secondEnabledProperty.isEnabled() && minuteEnabledProperty.isEnabled()) {
             drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED,
                     visibility);
 
