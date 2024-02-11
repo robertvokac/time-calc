@@ -6,9 +6,12 @@ import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -124,5 +127,19 @@ public class Utils {
         Base64.Decoder base64Decoder = Base64.getDecoder();
         return base64Decoder
                 .decode(s.getBytes());
+    }
+    public static String readTextFromTextResourceInJar(String pathToFile) throws IOException {
+        InputStream inputStream = ClassLoader.getSystemClassLoader().
+                getSystemResourceAsStream(pathToFile);
+        InputStreamReader
+                streamReader = new InputStreamReader(inputStream,
+                StandardCharsets.UTF_8);
+        BufferedReader in = new BufferedReader(streamReader);
+
+        StringBuilder sb = new StringBuilder();
+        for (String line; (line = in.readLine()) != null; ) {
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
     }
 }

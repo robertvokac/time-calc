@@ -53,7 +53,7 @@ public class CommandActionListener
                                     Visibility.WEAKLY_COLORED.name());
                     break;
                 case "waves":
-                    timeCalcConfiguration.batteryWavesEnabledProperty
+                    timeCalcConfiguration.batteryWavesVisibleProperty
                             .setValue(commandsAsArray[1].equals("1"));
                     break;
                 case "uptime":

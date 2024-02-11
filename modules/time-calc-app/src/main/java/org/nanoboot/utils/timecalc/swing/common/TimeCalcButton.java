@@ -1,7 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
-import org.nanoboot.utils.timecalc.app.TimeCalcManager;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
@@ -31,8 +30,8 @@ public class TimeCalcButton extends JButton implements GetProperty {
                     Visibility.valueOf(visibilityProperty.getValue());
             setVisible(visibility.isNotNone());
             if (!visibility.isStronglyColored() || visibility.isGray()) {
-            setBackground(TimeCalcManager.BACKGROUND_COLOR);
-            setForeground(TimeCalcManager.FOREGROUND_COLOR);
+            setBackground(MainWindow.BACKGROUND_COLOR);
+            setForeground(MainWindow.FOREGROUND_COLOR);
         } else {
                 setOriginalBackground();
                 setOriginalForeground();

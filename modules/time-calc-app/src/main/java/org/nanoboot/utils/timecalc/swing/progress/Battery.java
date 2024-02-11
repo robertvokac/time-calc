@@ -2,15 +2,13 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import lombok.Getter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -117,7 +115,7 @@ public class Battery extends Widget {
         int waterSurfaceHeight =
                 (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
         if (waterSurfaceHeight <= 2 || !TimeCalcProperties.getInstance()
-                .areBatteryWavesEnabled() || wavesProperty.isDisabled()) {
+                .getBooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE) || wavesProperty.isDisabled()) {
             waterSurfaceHeight = 0;
         }
 

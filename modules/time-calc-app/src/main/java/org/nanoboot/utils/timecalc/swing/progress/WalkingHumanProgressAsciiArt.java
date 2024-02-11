@@ -1,7 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
-import org.nanoboot.utils.timecalc.app.TimeCalcManager;
+import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
@@ -41,7 +41,7 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
         putClientProperty("mouseEntered", "false");
         setFocusable(false);
         setForeground(Color.GRAY);
-        setBackground(TimeCalcManager.BACKGROUND_COLOR);
+        setBackground(MainWindow.BACKGROUND_COLOR);
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

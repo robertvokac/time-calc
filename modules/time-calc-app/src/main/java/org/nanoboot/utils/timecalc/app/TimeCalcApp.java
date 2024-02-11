@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
@@ -63,8 +64,8 @@ public class TimeCalcApp {
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
             try {
-                TimeCalcManager timeCalc =
-                        new TimeCalcManager(newStartTime, newOvertime, this);
+                MainWindow timeCalc =
+                        new MainWindow(newStartTime, newOvertime, this);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);

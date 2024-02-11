@@ -1,10 +1,14 @@
 package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -12,25 +16,10 @@ import java.util.Properties;
  * @since 20.02.2024
  */
 public class TimeCalcProperties {
-    private static final String CLOCK_HANDS_LONG = "clock.hands.long";
-    private static final String CLOCK_HANDS_MINUTE_ENABLED =
-            "clock.hands.minute.enabled";
-    private static final String CLOCK_HANDS_SECOND_ENABLED =
-            "clock.hands.second.enabled";
-    private static final String CLOCK_HANDS_MILLISECOND_ENABLED =
-            "clock.hands.millisecond.enabled";
-    private static final String BATTERY_WAVES_ENABLED = "battery.waves.enabled";
-    private static final String VISIBILITY_CURRENT = "visibility.current";
-    private static final String VISIBILITY_ONLY_GREY_OR_NONE_ENABLED =
-            "visibility.only-grey-or-none.enabled";
-    private static final String JOKES_ENABLED = "jokes.enabled";
-    private static final String COMMANDS_ENABLED = "commands-enabled";
-    private static final String TOASTS_ENABLED = "toasts.enabled";
-    private static final String SMILEYS_COLORED = "smileys.colored";
-
 
     private static TimeCalcProperties INSTANCE;
     private final Properties properties = new Properties();
+    private final Map<String, String> defaultProperties = new HashMap<>();
 
     private TimeCalcProperties() {
         if (!new File("timecalc.conf").exists()) {
@@ -42,6 +31,22 @@ public class TimeCalcProperties {
         } catch (IOException e) {
             System.err.println(e);
         }
+        try {
+            String defaultConfiguration = Utils.readTextFromTextResourceInJar(
+                    "timecalc-default.conf");
+            Arrays.stream(defaultConfiguration.split("\n"))
+                    .filter(l -> !l.trim().isEmpty())
+                    .filter(l -> !l.trim().startsWith("#"))
+                    .filter(l -> l.contains("="))
+                    .forEach(l -> {
+                        String[] array = l.split("=");
+                        defaultProperties.put(array[0], array[1]);
+                    });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new TimeCalcException(e.getMessage());
+        }
 
     }
 
@@ -52,57 +57,57 @@ public class TimeCalcProperties {
         return INSTANCE;
     }
 
-    public boolean areClockHandsLong() {
-        return getBooleanProperty(CLOCK_HANDS_LONG, true);
+    public boolean getBooleanProperty(TimeCalcProperty timeCalcProperty) {
+        return getBooleanProperty(timeCalcProperty, Boolean.valueOf(
+                getDefaultStringValue(timeCalcProperty)));
     }
-
-    public boolean isMinuteEnabled() {
-        return getBooleanProperty(CLOCK_HANDS_MINUTE_ENABLED, true);
-    }
-    public boolean isSecondEnabled() {
-        return getBooleanProperty(CLOCK_HANDS_SECOND_ENABLED, true);
-    }
-
-    public boolean isMillisecondEnabled() {
-        return getBooleanProperty(CLOCK_HANDS_MILLISECOND_ENABLED, false);
-    }
-
-    public boolean areJokesEnabled() {
-        return getBooleanProperty(COMMANDS_ENABLED, true);
-    }
-
-    public boolean areBatteryWavesEnabled() {
-        return getBooleanProperty(BATTERY_WAVES_ENABLED, true);
-    }
-
-    public boolean areToastsEnabled() {
-        return getBooleanProperty(TOASTS_ENABLED, true);
-    }
-
-    public boolean areSmileysColored() {
-        return getBooleanProperty(SMILEYS_COLORED, true);
-    }
-
-    public Visibility getVisibilityCurrent() {
-        if (!properties.containsKey(VISIBILITY_CURRENT)) {
-            return Visibility.STRONGLY_COLORED;
+    private String getDefaultStringValue(TimeCalcProperty timeCalcProperty) {
+        if(!defaultProperties.containsKey(timeCalcProperty.getKey())) {
+            throw new TimeCalcException("timecalc-default.conf is missing key: " + timeCalcProperty.getKey());
         }
-        return Visibility.valueOf((String) properties.get(VISIBILITY_CURRENT));
+        return defaultProperties.get(timeCalcProperty.getKey());
     }
-
-    public boolean isVisibilityOnlyGreyOrNoneEnabled() {
-        return getBooleanProperty(VISIBILITY_ONLY_GREY_OR_NONE_ENABLED, false);
-    }
-
-    public Boolean areCommandsEnabled() {
-        return getBooleanProperty(COMMANDS_ENABLED, true);
-    }
-
-    private boolean getBooleanProperty(String key, boolean defaultValue) {
+    private boolean getBooleanProperty(TimeCalcProperty timeCalcProperty,
+            Boolean defaultValue) {
+        String key = timeCalcProperty.getKey();
         if (!properties.containsKey(key)) {
             return defaultValue;
         }
         return properties.get(key).equals("true");
+    }
+
+    public String getStringProperty(TimeCalcProperty timeCalcProperty) {
+        return getStringProperty(timeCalcProperty, getDefaultStringValue(timeCalcProperty));
+    }
+    private String getStringProperty(TimeCalcProperty timeCalcProperty,
+            String defaultValue) {
+        String key = timeCalcProperty.getKey();
+        if (!properties.containsKey(key)) {
+            return defaultValue;
+        }
+        return (String) properties.get(key);
+    }
+
+    private String getVisibilityProperty(TimeCalcProperty timeCalcProperty) {
+        return getStringProperty(timeCalcProperty, Visibility.STRONGLY_COLORED.name());
+    }
+
+    private void setBooleanProperty(TimeCalcProperty timeCalcProperty,
+            Boolean value) {
+        String key = timeCalcProperty.getKey();
+        properties.replace(key, value.toString());
+    }
+
+    private void setStringProperty(TimeCalcProperty timeCalcProperty,
+            String value) {
+        String key = timeCalcProperty.getKey();
+        properties.replace(key, value);
+    }
+
+    private void setVisibilityProperty(TimeCalcProperty timeCalcProperty,
+            Visibility value) {
+        String key = timeCalcProperty.getKey();
+        properties.replace(key, value.name());
     }
 
     public void load() {

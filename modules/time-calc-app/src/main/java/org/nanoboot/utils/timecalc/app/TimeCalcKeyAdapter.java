@@ -32,7 +32,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
 
     public void keyPressed(KeyEvent e) {
         boolean onlyGreyOrNone =
-                timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty
+                timeCalcConfiguration.visibilitySupportedColoredProperty
                         .isEnabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());

@@ -9,8 +9,11 @@ public class StringProperty extends Property<String> {
     public StringProperty(String name, String valueIn) {
         super(name, valueIn);
     }
+    public StringProperty(String name) {
+        this(name, "");
+    }
 
     public StringProperty() {
-        this("", "");
+        this("");
     }
 }
