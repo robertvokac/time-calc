@@ -20,7 +20,7 @@ public class TimeCalcConfiguration {
     public final BooleanProperty batteryWavesEnabledProperty =
             new BooleanProperty("batteryWavesEnabledProperty", true);
     public final StringProperty
-            defaultVisibilityProperty =
+            visibilityCurrentProperty =
             new StringProperty("defaultVisibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
     public final BooleanProperty visibilityOnlyGreyOrNoneEnabledProperty =
@@ -50,8 +50,8 @@ public class TimeCalcConfiguration {
                 .setValue(timeCalcProperties.isMillisecondEnabled());
         batteryWavesEnabledProperty
                 .setValue(timeCalcProperties.areBatteryWavesEnabled());
-        defaultVisibilityProperty
-                .setValue(timeCalcProperties.getDefaultVisibility().name());
+        visibilityCurrentProperty
+                .setValue(timeCalcProperties.getVisibilityCurrent().name());
         visibilityOnlyGreyOrNoneEnabledProperty.setValue(
                 timeCalcProperties.isVisibilityOnlyGreyOrNoneEnabled());
         jokesEnabledProperty.setValue(timeCalcProperties.areJokesEnabled());

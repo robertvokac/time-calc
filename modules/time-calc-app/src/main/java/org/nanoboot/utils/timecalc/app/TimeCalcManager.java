@@ -91,6 +91,7 @@ public class TimeCalcManager {
         if(timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
+        timeCalcApp.visibilityProperty.bindTo(timeCalcConfiguration.visibilityCurrentProperty);
         TimeCalcKeyAdapter timeCalcKeyAdapter = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp, commandButton, window);
         window.addKeyListener(timeCalcKeyAdapter);
 

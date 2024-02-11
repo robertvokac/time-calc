@@ -20,7 +20,7 @@ public class TimeCalcProperties {
     private static final String CLOCK_HANDS_MILLISECOND_ENABLED =
             "clock.hands.millisecond.enabled";
     private static final String BATTERY_WAVES_ENABLED = "battery.waves.enabled";
-    private static final String DEFAULT_VISIBILITY = "default-visibility";
+    private static final String VISIBILITY_CURRENT = "visibility.current";
     private static final String VISIBILITY_ONLY_GREY_OR_NONE_ENABLED =
             "visibility.only-grey-or-none.enabled";
     private static final String JOKES_ENABLED = "jokes.enabled";
@@ -83,11 +83,11 @@ public class TimeCalcProperties {
         return getBooleanProperty(SMILEYS_COLORED, true);
     }
 
-    public Visibility getDefaultVisibility() {
-        if (!properties.containsKey(DEFAULT_VISIBILITY)) {
+    public Visibility getVisibilityCurrent() {
+        if (!properties.containsKey(VISIBILITY_CURRENT)) {
             return Visibility.STRONGLY_COLORED;
         }
-        return Visibility.valueOf((String) properties.get(DEFAULT_VISIBILITY));
+        return Visibility.valueOf((String) properties.get(VISIBILITY_CURRENT));
     }
 
     public boolean isVisibilityOnlyGreyOrNoneEnabled() {
