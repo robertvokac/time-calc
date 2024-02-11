@@ -212,7 +212,7 @@ public class Battery extends Widget {
             {
                 Color currentColor = brush.getColor();
                 brush.setColor(
-                        visibility.isStronglyColored() || mouseOver ? HIGH_HIGHLIGHTED : (visibility.isWeaklyColored() ? HIGH : Color.lightGray));
+                        visibility.isStronglyColored() ? HIGH_HIGHLIGHTED : (visibility.isWeaklyColored() ? HIGH : Color.lightGray));
 
 
                 double angleDouble = donePercent * 360;
@@ -221,7 +221,7 @@ public class Battery extends Widget {
                         totalHeight / 4 * 3 + 28,
                         15, 15, 90, -(int) angleDouble);
                 brush.setColor(
-                        visibility.isStronglyColored() || mouseOver ? LIGHT_RED :
+                        visibility.isStronglyColored() ? LIGHT_RED :
                                 visibility.isWeaklyColored() ? ULTRA_LIGHT_RED : BACKGROUND_COLOR);
                 brush.fillArc(((int) (totalWidth * 0.45)) + 15,
                         totalHeight / 4 * 3 + 28,
