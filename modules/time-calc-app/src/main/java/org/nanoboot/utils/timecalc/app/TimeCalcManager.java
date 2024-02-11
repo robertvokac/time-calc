@@ -284,15 +284,11 @@ public class TimeCalcManager {
 
             window.setTitle(currentVisibility.isNone() ? "" : windowTitle);
 
-            LocalDateTime now = LocalDateTime.now();
-            String nowString =
-                    DateFormats.DATE_TIME_FORMATTER_HHmmssSSS.format(now);
+            int hourNow = analogClock.hourProperty.getValue();
+            int minuteNow = analogClock.minuteProperty.getValue();
 
-            int hourNow = Integer.parseInt(nowString.split(":")[0]);
-            int minuteNow = Integer.parseInt(nowString.split(":")[1]);
-
-            int secondNow = Integer.parseInt(nowString.split(":")[2]);
-            int millisecondNow = Integer.parseInt(nowString.split(":")[3]);
+            int secondNow = analogClock.secondProperty.getValue();
+            int millisecondNow = analogClock.millisecondProperty.getValue();
             TimeHM timeRemains = new TimeHM(endTime.getHour() - hourNow,
                     endTime.getMinute() - minuteNow);
 
