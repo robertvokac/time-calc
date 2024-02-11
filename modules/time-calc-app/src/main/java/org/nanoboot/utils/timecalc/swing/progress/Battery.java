@@ -46,7 +46,6 @@ public class Battery extends Widget {
     private int totalHeight = 0;
     private int totalWidth;
     private String label = null;
-    private JLabel smileyIcon;
 
     protected Battery(String name) {
         this.name = name;
@@ -200,53 +199,15 @@ public class Battery extends Widget {
                 brush.setFont(BIG_FONT);
                 brush.drawString(
                         CHARCHING, ((int) (totalWidth * 0.45)),
-                        (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 10
+                        (donePercent < 0.5 ? totalHeight / 4 * 3 :
+                                totalHeight / 4 * 1) + 10
                 );
-                if(mouseOver  && smileysColoredProperty.isDisabled()){//no colored
-                    //paint smiley
-                    if(!visibility.isStronglyColored()) {
-                        brush.setColor(Color.GRAY);
-                    }
-                    if(visibility.isGray()) {
-                        brush.setColor(Color.LIGHT_GRAY);
-                    }
-                    if(visibility.isStronglyColored()) {
-                        brush.setColor(Color.BLACK);
-                    }
 
-                    Color currentColor= brush.getColor();
-                    brush.setColor(visibility.isStronglyColored() ? Color.WHITE : BACKGROUND_COLOR);
-                    brush.fillRect(
-                            ((int) (totalWidth * 0.45)) + 15,
-                            (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 8 - 16,
-                            20,
-                            20
-                    );
-                    brush.setColor(currentColor);
-                    brush.setColor(Color.BLACK);
-                    brush.setFont(MEDIUM_FONT);
-                    brush.drawString(
-                            ProgressSmiley.forProgress(donePercent).getCharacter(),
-                            ((int) (totalWidth * 0.45)) + 15,
-                            (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 8
-                    );
-
-                }
+                paintSmiley(visibility, brush, ((int) (totalWidth * 0.45)) + 15,
+                        (donePercent < 0.5 ? totalHeight / 4 * 3 :
+                                totalHeight / 4 * 1) + 8 - 16);
                 brush.setFont(currentFont);
-            }
-            if(mouseOver && smileysColoredProperty.isEnabled()) {//colored
-                ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
-                if(this.smileyIcon != null) {
-                    this.remove(smileyIcon);
-                }
-                this.smileyIcon = new JLabel(imageIcon);
-                smileyIcon.setBounds(((int) (totalWidth * 0.45)) + 15,
-                        (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) - 7,15, 15);
-                this.add(smileyIcon);
-            } else {
-                if(this.smileyIcon != null) {
-                    this.remove(smileyIcon);
-                }
+
             }
             {
                 Color currentColor = brush.getColor();

@@ -16,7 +16,6 @@ import java.awt.RenderingHints;
 public class ProgressSquare extends Widget {
 
     private int square;
-    private JLabel smileyIcon;
 
     public ProgressSquare() {
         setPreferredSize(new Dimension(400, 400));
@@ -85,46 +84,8 @@ public class ProgressSquare extends Widget {
                                .format(donePercent * 100) + "%",
                 (int) (side / 8d * 3d),
                 (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)));
-        if(mouseOver  && smileysColoredProperty.isDisabled()){//no colored
-            if(!visibility.isStronglyColored()) {
-                brush.setColor(Color.GRAY);
-            }
-            if(visibility.isGray()) {
-                brush.setColor(Color.LIGHT_GRAY);
-            }
-            if(visibility.isStronglyColored()) {
-                brush.setColor(Color.BLACK);
-            }
-            Color currentColor= brush.getColor();
-            brush.setColor(visibility.isStronglyColored() ? Color.WHITE : BACKGROUND_COLOR);
-            brush.fillRect(
-                    (int) (side / 8d * 3d) + 65,
-                    (int) ((side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 16d),
-                    20,
-                    20
-            );
-            brush.setColor(currentColor);
-            brush.setFont(MEDIUM_FONT);
-            brush.drawString(
-                    ProgressSmiley.forProgress(donePercent).getCharacter(),
-                    (int) (side / 8d * 3d) + 65,
-                    (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d))
-            );
-        }
-        if(mouseOver && smileysColoredProperty.isEnabled()) {//colored
-            ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
-            if(this.smileyIcon != null) {
-                this.remove(smileyIcon);
-            }
-            this.smileyIcon = new JLabel(imageIcon);
-            smileyIcon.setBounds((int) (side / 8d * 3d) + 65,
-                    (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 15,15, 15);
-            this.add(smileyIcon);
-        } else {
-            if(this.smileyIcon != null) {
-                this.remove(smileyIcon);
-            }
-        }
+        paintSmiley(visibility, brush, (int) (side / 8d * 3d) + 65,
+                (int) ((side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 16d));
 
     }
 

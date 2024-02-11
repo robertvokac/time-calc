@@ -2,15 +2,20 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
+import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -33,6 +38,7 @@ public class Widget extends JPanel implements
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
+    protected JLabel smileyIcon;
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);
@@ -108,5 +114,54 @@ public class Widget extends JPanel implements
     @Override
     public Property getProperty() {
         return visibilityProperty;
+    }
+
+    protected void paintSmiley(Visibility visibility, Graphics2D brush, int x, int y) {
+        if(!mouseOver) {
+            if(this.smileyIcon != null) {
+                this.remove(smileyIcon);
+            }
+
+            //nothing more to do
+            return;
+        }
+        boolean colored = smileysColoredProperty.isEnabled();
+        if(visibility.isGray()) {
+            colored = false;
+        }
+
+        if(!colored){
+            if(!visibility.isStronglyColored()) {
+                brush.setColor(Color.GRAY);
+            }
+            if(visibility.isGray()) {
+                brush.setColor(Color.LIGHT_GRAY);
+            }
+            if(visibility.isStronglyColored()) {
+                brush.setColor(Color.BLACK);
+            }
+            Color currentColor= brush.getColor();
+            brush.setColor(visibility.isStronglyColored() ? Color.WHITE : BACKGROUND_COLOR);
+            brush.fillRect(
+                    x,y,
+                    20,
+                    20
+            );
+            brush.setColor(currentColor);
+            brush.setFont(MEDIUM_FONT);
+            brush.drawString(
+                    ProgressSmiley.forProgress(donePercent).getCharacter(),
+                    x,y + 16
+            );
+        }
+        if(colored) {
+            ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
+            if(this.smileyIcon != null) {
+                this.remove(smileyIcon);
+            }
+            this.smileyIcon = new JLabel(imageIcon);
+            smileyIcon.setBounds(x,y,15, 15);
+            this.add(smileyIcon);
+        }
     }
 }
