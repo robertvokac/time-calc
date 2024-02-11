@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcManager;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
@@ -31,12 +32,12 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
             new StringProperty("visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
 
-    public WalkingHumanProgressAsciiArt() {
+    public WalkingHumanProgressAsciiArt(int x, int y, int width, int height) {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
         putClientProperty("mouseEntered", "false");
         setFocusable(false);
         setForeground(Color.GRAY);
-        setBackground(new Color(238, 238, 238));
+        setBackground(TimeCalcManager.BACKGROUND_COLOR);
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -71,6 +72,7 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
                 putClientProperty("mouseEntered", "false");
             }
         });
+        setBounds(x, y, width, height);
     }
 
     private static final String createSpaces(int spaceCount) {

@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.app;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.AboutButton;
 import org.nanoboot.utils.timecalc.swing.common.ComponentRegistry;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
 import org.nanoboot.utils.timecalc.swing.common.TimeCalcWindow;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
@@ -23,12 +24,11 @@ import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,17 +47,10 @@ import java.util.logging.Logger;
  * @since 08.02.2024
  */
 public class TimeCalcManager {
-    public static final Color BG = new Color(238, 238, 238);
-    public static final Color FG = new Color(210, 210, 210);
-    public static final int MARGIN = 10;
-    private final String windowTitle;
-    private final int totalMinutes;
+    public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
+    public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
 
-    private final TimeHM startTime;
-    private final TimeHM overtime;
-    private final TimeHM endTime;
     private boolean stopBeforeEnd = false;
-    private final Time time = new Time();
     private final TimeCalcConfiguration timeCalcConfiguration =
             new TimeCalcConfiguration();
 
@@ -65,24 +58,20 @@ public class TimeCalcManager {
             TimeCalcApp timeCalcApp) {
         timeCalcConfiguration
                 .setFromTimeCalcProperties(TimeCalcProperties.getInstance());
-        //        Utils.everythingHidden
-        //                .setValue(TimeCalcConf.getInstance().isEverythingHidden());
-        //        Utils.toastsAreEnabled
-        //                .setValue(TimeCalcConf.getInstance().areToastsEnabled());
 
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
 
-        this.startTime = new TimeHM(startTimeIn);
-        this.overtime = new TimeHM(overTimeIn);
+        TimeHM startTime = new TimeHM(startTimeIn);
+        TimeHM overtime = new TimeHM(overTimeIn);
 
-        this.endTime = new TimeHM(
+        TimeHM endTime = new TimeHM(
                 startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime
                         .getHour(),
                 startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH
                 + overtime.getMinute());
 
-        this.totalMinutes = TimeHM.countDiffInMinutes(startTime, endTime);
+        int totalMinutes = TimeHM.countDiffInMinutes(startTime, endTime);
         int totalSeconds = totalMinutes * TimeHM.SECONDS_PER_MINUTE;
         int totalMilliseconds = totalSeconds * TimeHM.MILLISECONDS_PER_SECOND;
 
@@ -99,105 +88,36 @@ public class TimeCalcManager {
         //window.add(weatherButton);
         window.addAll(configButton, commandButton, jokeButton, restartButton,
                 exitButton);
-        boolean onlyGreyOrNone = timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled();
-        if(onlyGreyOrNone) {
+
+        if(timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
-        window.addKeyListener(new KeyAdapter() {
-            // Key Pressed method
-            public void keyPressed(KeyEvent e) {
-                Visibility visibility = Visibility
-                        .valueOf(timeCalcApp.visibilityProperty.getValue());
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    timeCalcApp.visibilityProperty
-                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    timeCalcApp.visibilityProperty
-                            .setValue(Visibility.NONE.name());
-                }
-                if (e.getKeyCode() == KeyEvent.VK_H) {
-                    if (visibility.isNone()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
-                    } else {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.NONE.name());
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_G) {
-                    if (visibility.isGray() && !onlyGreyOrNone) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.WEAKLY_COLORED.name());
-                    } else {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.GRAY.name());
-                    }
-                }
+        TimeCalcKeyAdapter timeCalcKeyAdapter = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp, commandButton, window);
+        window.addKeyListener(timeCalcKeyAdapter);
 
-                if (e.getKeyCode() == KeyEvent.VK_C) {
-                    if(!onlyGreyOrNone) {
-                        if (visibility.isStronglyColored()) {
-                            timeCalcApp.visibilityProperty
-                                    .setValue(Visibility.WEAKLY_COLORED.name());
-                        } else {
-                            timeCalcApp.visibilityProperty
-                                    .setValue(
-                                            Visibility.STRONGLY_COLORED.name());
-                        }
-                    }
-                    else {
-                        timeCalcApp.visibilityProperty.setValue(Visibility.GRAY
-                                .name());
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_V) {
-                    if (visibility.isNone()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
-                    } else {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.NONE.name());
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    if (visibility.isStronglyColored()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.WEAKLY_COLORED.name());
-                    }
-                    if (visibility.isWeaklyColored()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.GRAY.name());
-                    }
-                    if (visibility.isGray()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(Visibility.NONE.name());
-                    }
-                    if (visibility.isNone()) {
-                        timeCalcApp.visibilityProperty
-                                .setValue(onlyGreyOrNone ? Visibility.GRAY.name() : Visibility.STRONGLY_COLORED.name());
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_R) {
-                    commandButton.doClick();
-                }
-                if (e.getKeyCode() == KeyEvent.VK_T) {
-                    Utils.toastsAreEnabled.flip();
-                }
+        AnalogClock analogClock = new AnalogClock(startTime, endTime);
+        analogClock.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 200);
+        window.add(analogClock);
 
-                window.repaint();
-            }
-        });
+        ProgressSquare progressSquare = new ProgressSquare();
+        progressSquare
+                .setBounds(analogClock.getX() + analogClock.getWidth() + SwingUtils.MARGIN, analogClock.getY(),
+                        200);
+        window.add(progressSquare);
+
+        ProgressCircle progressCircle = new ProgressCircle();
+        progressCircle
+                .setBounds(
+                        progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, progressSquare.getY(), 80);
+        window.add(progressCircle);
+
         WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt =
-                new WalkingHumanProgressAsciiArt();
-        walkingHumanProgressAsciiArt
-                .setBounds(MARGIN, MARGIN + 210 + MARGIN, 450, 180);
-
+                new WalkingHumanProgressAsciiArt(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
         window.add(walkingHumanProgressAsciiArt);
         weatherButton
-                .setBounds(MARGIN, walkingHumanProgressAsciiArt.getY()
-                                   + walkingHumanProgressAsciiArt.getHeight()
-                                   + MARGIN);
+                .setBounds(SwingUtils.MARGIN, walkingHumanProgressAsciiArt.getY()
+                                              + walkingHumanProgressAsciiArt.getHeight()
+                                              + SwingUtils.MARGIN);
         configButton.setBoundsFromTop(walkingHumanProgressAsciiArt);
         commandButton.setBoundsFromLeft(configButton);
 
@@ -205,13 +125,12 @@ public class TimeCalcManager {
         restartButton.setBoundsFromLeft(jokeButton);
         exitButton.setBoundsFromLeft(restartButton);
         aboutButton.setBounds(exitButton.getX(),
-                exitButton.getY() + exitButton.getHeight() + MARGIN);
+                exitButton.getY() + exitButton.getHeight() + SwingUtils.MARGIN);
 
         window.setLayout(null);
-
         window.setVisible(true);
 
-        this.windowTitle = createWindowTitle();
+        String windowTitle = createWindowTitle();
         window.setTitle(windowTitle);
 
         weatherButton
@@ -290,9 +209,6 @@ public class TimeCalcManager {
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
 
-        AnalogClock analogClock = new AnalogClock(startTime, endTime);
-        analogClock.setBounds(MARGIN, MARGIN, 200);
-
         Properties testProperties = new Properties();
         File testPropertiesFile = new File("test.txt");
         try {
@@ -307,6 +223,7 @@ public class TimeCalcManager {
                     .log(Level.SEVERE, null, rex);
         }
 
+        Time time = new Time();
         if (testProperties.containsKey("current.day")) {
             calNow.set(Calendar.DAY_OF_MONTH, Integer.parseInt(
                     (String) testProperties.get("current.day")));
@@ -381,31 +298,19 @@ public class TimeCalcManager {
         analogClock.handsLongProperty
                 .bindTo(timeCalcConfiguration.clockHandLongProperty);
 
-        window.add(analogClock);
+        Battery hourBattery = new HourBattery(progressCircle.getBounds().x,
+                progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(),
+                140);
+        window.add(hourBattery);
 
-        ProgressSquare progressSquare = new ProgressSquare();
-        progressSquare
-                .setBounds(MARGIN + analogClock.getWidth() + MARGIN, MARGIN,
-                        200);
-
-        window.add(progressSquare);
-
-        ProgressCircle progressCircle = new ProgressCircle();
-        progressCircle
-                .setBounds(
-                        MARGIN + progressSquare.getBounds().x + progressSquare
-                                .getWidth() + MARGIN, MARGIN, 80);
-
-        window.add(progressCircle);
-
-        Battery dayBattery = new DayBattery(progressCircle.getBounds().x,
-                progressCircle.getY() + MARGIN + progressCircle.getHeight(),
+        Battery dayBattery = new DayBattery(hourBattery.getBounds().x + hourBattery.getWidth() + SwingUtils.MARGIN,
+                hourBattery.getY(),
                 140);
         window.add(dayBattery);
 
         Battery weekBattery = new WeekBattery(
-                dayBattery.getBounds().x + dayBattery.getWidth() + MARGIN * 2,
-                dayBattery.getY(), 140);
+                hourBattery.getBounds().x,
+                dayBattery.getY() + dayBattery.getHeight() + SwingUtils.MARGIN, 140);
         window.add(weekBattery);
 
         int currentDayOfMonth = calNow.get(Calendar.DAY_OF_MONTH);
@@ -436,30 +341,9 @@ public class TimeCalcManager {
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
         Battery monthBattery = new MonthBattery(
-                dayBattery.getBounds().x + dayBattery.getWidth(),
-                dayBattery.getY() + weekBattery.getHeight() + MARGIN, 140);
+                dayBattery.getBounds().x,
+                weekBattery.getY(), 140);
         window.add(monthBattery);
-
-        Battery hourBattery = new HourBattery(monthBattery.getBounds().x,
-                monthBattery.getY() + monthBattery.getHeight() + MARGIN, 140);
-        window.add(hourBattery);
-
-        Rectangle dayRectangle = dayBattery.getBounds();
-        hourBattery.setBounds(dayRectangle);
-        hourBattery
-                .setBounds(hourBattery.getX() + 2 * MARGIN, hourBattery.getY(),
-                        hourBattery.getWidth(), hourBattery.getHeight());
-        dayBattery
-                .setBounds(hourBattery.getX() + hourBattery.getWidth() + MARGIN,
-                        hourBattery.getY(), hourBattery.getWidth(),
-                        hourBattery.getHeight());
-        weekBattery.setBounds(hourBattery.getX(),
-                hourBattery.getY() + hourBattery.getHeight() + MARGIN,
-                hourBattery.getWidth(), hourBattery.getHeight());
-        monthBattery
-                .setBounds(hourBattery.getX() + hourBattery.getWidth() + MARGIN,
-                        hourBattery.getY() + hourBattery.getHeight() + MARGIN,
-                        hourBattery.getWidth(), hourBattery.getHeight());
 
         hourBattery.wavesProperty
                 .bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
@@ -470,7 +354,7 @@ public class TimeCalcManager {
         monthBattery.wavesProperty
                 .bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
 
-        ComponentRegistry componentRegistry = new ComponentRegistry();
+        ComponentRegistry<JComponent> componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
                 walkingHumanProgressAsciiArt,
                 progressSquare,
@@ -486,6 +370,12 @@ public class TimeCalcManager {
                 restartButton,
                 exitButton
         );
+        ComponentRegistry<TimeCalcButton> buttonRegistry = new ComponentRegistry();
+        for(Component c:componentRegistry.getSet()) {
+            if(c instanceof TimeCalcButton) {
+                buttonRegistry.add((TimeCalcButton)c);
+            }
+        }
         walkingHumanProgressAsciiArt.visibilityProperty
                 .bindTo(timeCalcApp.visibilityProperty);
         progressSquare.visibilityProperty
@@ -503,30 +393,8 @@ public class TimeCalcManager {
         restartButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
         exitButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
 
-        configButton.setVisible(
-                !Visibility.valueOf(configButton.visibilityProperty.getValue())
-                        .isNone());
-        jokeButton.setVisible(
-                !Visibility.valueOf(jokeButton.visibilityProperty.getValue())
-                        .isNone());
-        commandButton.setVisible(
-                !Visibility.valueOf(commandButton.visibilityProperty.getValue())
-                        .isNone());
-        restartButton.setVisible(
-                !Visibility.valueOf(restartButton.visibilityProperty.getValue())
-                        .isNone());
-        exitButton.setVisible(
-                !Visibility.valueOf(exitButton.visibilityProperty.getValue())
-                        .isNone());
-
-        //        timeCalcApp.visibilityProperty.addListener((Property<String> p, String oldValue, String newValue)-> {
-        //            System.out.println("Visibility of timeCalcApp was changed FROM " + oldValue + " TO " + newValue);
-        //        } );
-        //        analogClock.visibilityProperty.addListener((Property<String> p, String oldValue, String newValue)-> {
-        //            System.out.println("Visibility of analogClock was changed FROM " + oldValue + " TO " + newValue);
-        //        } );
-        window.setSize(520 + 20 + 100,
-                exitButton.getY() + 3 * exitButton.getHeight() + MARGIN);
+        window.setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
+                exitButton.getY() + 3 * exitButton.getHeight() + SwingUtils.MARGIN);
         while (true) {
             Visibility visibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
@@ -543,17 +411,17 @@ public class TimeCalcManager {
 
             componentRegistry.setVisible(visibility.isNotNone());
             if (!visibility.isStronglyColored() || visibility.isGray()) {
-                configButton.setBackground(BG);
-                jokeButton.setBackground(BG);
-                commandButton.setBackground(BG);
-                restartButton.setBackground(BG);
-                exitButton.setBackground(BG);
+                configButton.setBackground(BACKGROUND_COLOR);
+                jokeButton.setBackground(BACKGROUND_COLOR);
+                commandButton.setBackground(BACKGROUND_COLOR);
+                restartButton.setBackground(BACKGROUND_COLOR);
+                exitButton.setBackground(BACKGROUND_COLOR);
 
-                configButton.setForeground(FG);
-                jokeButton.setForeground(FG);
-                commandButton.setForeground(FG);
-                restartButton.setForeground(FG);
-                exitButton.setForeground(FG);
+                configButton.setForeground(FOREGROUND_COLOR);
+                jokeButton.setForeground(FOREGROUND_COLOR);
+                commandButton.setForeground(FOREGROUND_COLOR);
+                restartButton.setForeground(FOREGROUND_COLOR);
+                exitButton.setForeground(FOREGROUND_COLOR);
             } else {
                 configButton.setOriginalBackground();
                 jokeButton.setOriginalBackground();

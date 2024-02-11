@@ -1,6 +1,5 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
-import org.nanoboot.utils.timecalc.app.TimeCalcManager;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -24,7 +23,7 @@ public class TimeCalcButton extends JButton {
 
     public TimeCalcButton(String label) {
         super(label);
-        new Timer(100, e -> repaint()).start();
+        new Timer(100, e -> setVisible(Visibility.valueOf(visibilityProperty.getValue()).isNotNone())).start();
     }
 
     public void setBounds(int x, int y) {
@@ -42,11 +41,11 @@ public class TimeCalcButton extends JButton {
     }
 
     public void setBoundsFromLeft(JComponent jComponent) {
-        setBounds(jComponent.getX() + jComponent.getWidth() + TimeCalcManager.MARGIN, jComponent.getY());
+        setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN, jComponent.getY());
     }
     public void setBoundsFromTop(JComponent jComponent) {
-        setBounds(TimeCalcManager.MARGIN, jComponent.getY()
-                + jComponent.getHeight()
-                + TimeCalcManager.MARGIN);
+        setBounds(SwingUtils.MARGIN, jComponent.getY()
+                                     + jComponent.getHeight()
+                                     + SwingUtils.MARGIN);
     }
 }
