@@ -1,6 +1,8 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JPanel;
@@ -15,7 +17,8 @@ import java.awt.event.MouseListener;
  * @author Robert Vokac
  * @since 20.02.2024
  */
-public class Widget extends JPanel {
+public class Widget extends JPanel implements
+        GetProperty {
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
@@ -97,5 +100,10 @@ public class Widget extends JPanel {
     }
 
     protected void paintWidget(Graphics g) {
+    }
+
+    @Override
+    public Property getProperty() {
+        return visibilityProperty;
     }
 }

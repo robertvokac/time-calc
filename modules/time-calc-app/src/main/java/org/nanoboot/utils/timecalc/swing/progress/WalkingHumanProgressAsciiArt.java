@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
+import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcManager;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
@@ -7,6 +8,7 @@ import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.imageio.ImageIO;
@@ -25,7 +27,8 @@ import java.util.Set;
  * @author Robert Vokac
  * @since 21.02.2024
  */
-public class WalkingHumanProgressAsciiArt extends JTextPane {
+public class WalkingHumanProgressAsciiArt extends JTextPane implements
+        GetProperty {
     private static final String WALL = "||";
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     public StringProperty visibilityProperty =
@@ -184,4 +187,8 @@ public class WalkingHumanProgressAsciiArt extends JTextPane {
         return msg;
     }
 
+    @Override
+    public Property getProperty() {
+        return visibilityProperty;
+    }
 }

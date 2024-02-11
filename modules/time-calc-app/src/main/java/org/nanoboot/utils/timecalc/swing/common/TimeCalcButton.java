@@ -1,6 +1,9 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.app.GetProperty;
+import org.nanoboot.utils.timecalc.app.TimeCalcManager;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JButton;
@@ -12,7 +15,7 @@ import java.awt.Color;
  * @author Robert Vokac
  * @since 21.02.2024
  */
-public class TimeCalcButton extends JButton {
+public class TimeCalcButton extends JButton implements GetProperty {
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 30;
     public StringProperty visibilityProperty =
@@ -23,7 +26,18 @@ public class TimeCalcButton extends JButton {
 
     public TimeCalcButton(String label) {
         super(label);
-        new Timer(100, e -> setVisible(Visibility.valueOf(visibilityProperty.getValue()).isNotNone())).start();
+        new Timer(100, e -> {
+            Visibility visibility =
+                    Visibility.valueOf(visibilityProperty.getValue());
+            setVisible(visibility.isNotNone());
+            if (!visibility.isStronglyColored() || visibility.isGray()) {
+            setBackground(TimeCalcManager.BACKGROUND_COLOR);
+            setForeground(TimeCalcManager.FOREGROUND_COLOR);
+        } else {
+                setOriginalBackground();
+                setOriginalForeground();
+            }
+        }).start();
     }
 
     public void setBounds(int x, int y) {
@@ -47,5 +61,10 @@ public class TimeCalcButton extends JButton {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
                                      + jComponent.getHeight()
                                      + SwingUtils.MARGIN);
+    }
+
+    @Override
+    public Property getProperty() {
+        return visibilityProperty;
     }
 }

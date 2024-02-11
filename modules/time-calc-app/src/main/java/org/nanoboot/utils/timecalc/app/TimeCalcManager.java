@@ -25,10 +25,8 @@ import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -135,65 +133,7 @@ public class TimeCalcManager {
 
         weatherButton
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
-        commandButton
-                .addActionListener(e ->
-                {
-                    String commands = (String) JOptionPane.showInputDialog(
-                            null,
-                            "Run a command:",
-                            "Command launching",
-                            JOptionPane.PLAIN_MESSAGE,
-                            null,
-                            null,
-                            "test"
-                    );
-                    String[] commandsAsArray = commands.split(" ");
-                    switch (commandsAsArray[0]) {
-                        case "test":
-                            JOptionPane.showMessageDialog(null, "Test");
-                            break;
-                        case "color":
-                            timeCalcApp.visibilityProperty.setValue(
-                                    commandsAsArray[1].equals("1") ?
-                                            Visibility.STRONGLY_COLORED.name() :
-                                            Visibility.WEAKLY_COLORED.name());
-                            break;
-                        case "gray":
-                            timeCalcApp.visibilityProperty.setValue(
-                                    commandsAsArray[1].equals("1") ?
-                                            Visibility.GRAY.name() :
-                                            Visibility.WEAKLY_COLORED.name());
-                            break;
-                        case "waves":
-                            timeCalcConfiguration.batteryWavesEnabledProperty
-                                    .setValue(commandsAsArray[1].equals("1"));
-                            break;
-                        case "uptime":
-                            JOptionPane.showMessageDialog(null,
-                                    timeCalcApp
-                                            .getCountOfMinutesSinceAppStarted()
-                                    + " minutes");
-                            break;
-                        case "toast":
-                            Toaster t = new Toaster();
-                            t.setToasterWidth(800);
-                            t.setToasterHeight(800);
-                            t.setDisplayTime(60000 * 5);
-                            t.setToasterColor(Color.GRAY);
-                            Font font = new Font("sans", Font.PLAIN, 12);
-                            t.setToasterMessageFont(font);
-                            t.setDisplayTime(5000);
-                            t.showToaster(commands.substring(6));
-                            break;
-                        case "toasts":
-                            Utils.toastsAreEnabled
-                                    .setValue(commandsAsArray[1].equals("1"));
-                            break;
-                        default:
-                            JOptionPane.showMessageDialog(null,
-                                    "Unknown command: " + commandsAsArray[0]);
-                    }
-                });
+        commandButton.addActionListener(new CommandActionListener(timeCalcApp, timeCalcConfiguration));
 
         jokeButton.addActionListener(e -> {
             for (int i = 1; i <= 1; i++) {
@@ -345,15 +285,6 @@ public class TimeCalcManager {
                 weekBattery.getY(), 140);
         window.add(monthBattery);
 
-        hourBattery.wavesProperty
-                .bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
-        dayBattery.wavesProperty
-                .bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
-        weekBattery.wavesProperty
-                .bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
-        monthBattery.wavesProperty
-                .bindTo(timeCalcConfiguration.batteryWavesEnabledProperty);
-
         ComponentRegistry<JComponent> componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(
                 walkingHumanProgressAsciiArt,
@@ -371,75 +302,36 @@ public class TimeCalcManager {
                 exitButton
         );
         ComponentRegistry<TimeCalcButton> buttonRegistry = new ComponentRegistry();
-        for(Component c:componentRegistry.getSet()) {
-            if(c instanceof TimeCalcButton) {
-                buttonRegistry.add((TimeCalcButton)c);
-            }
-        }
-        walkingHumanProgressAsciiArt.visibilityProperty
-                .bindTo(timeCalcApp.visibilityProperty);
-        progressSquare.visibilityProperty
-                .bindTo(timeCalcApp.visibilityProperty);
-        progressCircle.visibilityProperty
-                .bindTo(timeCalcApp.visibilityProperty);
-        analogClock.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        dayBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        weekBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        monthBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        hourBattery.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        configButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        jokeButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        commandButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        restartButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
-        exitButton.visibilityProperty.bindTo(timeCalcApp.visibilityProperty);
+        componentRegistry.getSet().stream().filter(c-> c instanceof TimeCalcButton).forEach(c->
+                buttonRegistry.add((TimeCalcButton)c));
+        componentRegistry.getSet().stream().filter(c ->
+            GetProperty.class.isAssignableFrom(c.getClass())).forEach(c->
+                ((GetProperty<String>)c).getProperty().bindTo(timeCalcApp.visibilityProperty));
+
+        componentRegistry.getSet().stream().filter(c-> c instanceof Battery).forEach(c ->
+            ((Battery)c).wavesProperty.bindTo(timeCalcConfiguration.batteryWavesEnabledProperty));
 
         window.setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
                 exitButton.getY() + 3 * exitButton.getHeight() + SwingUtils.MARGIN);
         while (true) {
-            Visibility visibility = Visibility
+            Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
-            if(timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled() && visibility.isColored() ){
+            if(timeCalcConfiguration.visibilityOnlyGreyOrNoneEnabledProperty.isEnabled() && currentVisibility.isColored() ){
                 timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
             }
-            //time.writeString();
             if (stopBeforeEnd) {
                 window.setVisible(false);
                 window.dispose();
                 break;
             }
 
+            componentRegistry.setVisible(currentVisibility.isNotNone());
 
-            componentRegistry.setVisible(visibility.isNotNone());
-            if (!visibility.isStronglyColored() || visibility.isGray()) {
-                configButton.setBackground(BACKGROUND_COLOR);
-                jokeButton.setBackground(BACKGROUND_COLOR);
-                commandButton.setBackground(BACKGROUND_COLOR);
-                restartButton.setBackground(BACKGROUND_COLOR);
-                exitButton.setBackground(BACKGROUND_COLOR);
-
-                configButton.setForeground(FOREGROUND_COLOR);
-                jokeButton.setForeground(FOREGROUND_COLOR);
-                commandButton.setForeground(FOREGROUND_COLOR);
-                restartButton.setForeground(FOREGROUND_COLOR);
-                exitButton.setForeground(FOREGROUND_COLOR);
-            } else {
-                configButton.setOriginalBackground();
-                jokeButton.setOriginalBackground();
-                commandButton.setOriginalBackground();
-                restartButton.setOriginalBackground();
-                exitButton.setOriginalBackground();
-                //
-                configButton.setOriginalForeground();
-                jokeButton.setOriginalForeground();
-                commandButton.setOriginalForeground();
-                restartButton.setOriginalForeground();
-                exitButton.setOriginalForeground();
-            }
             jokeButton.setVisible(
                     TimeCalcProperties.getInstance().areJokesEnabled()
-                    && !visibility.isNone());
+                    && !currentVisibility.isNone());
 
-            window.setTitle(visibility.isNone() ? "" : windowTitle);
+            window.setTitle(currentVisibility.isNone() ? "" : windowTitle);
 
             LocalDateTime now = LocalDateTime.now();
             String nowString =
@@ -546,7 +438,7 @@ public class TimeCalcManager {
             }
 
             walkingHumanProgressAsciiArt.setForeground(
-                    visibility.isStronglyColored()
+                    currentVisibility.isStronglyColored()
                     || walkingHumanProgressAsciiArt
                             .getClientProperty("mouseEntered").equals("true") ?
                             Color.BLACK : Color.LIGHT_GRAY);
