@@ -54,6 +54,7 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 
 ### Widgets
 
+ * 
 #### Analog Clock
 
  * hour hand
@@ -82,6 +83,7 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 ### Smileys
 
 Progress in square, circle or batteries is represented also by smileys (only, if the widget is hovered by mouse cursor):
+ * smileys can be colored or white-black (can be set in configuration)
 
 * ? ... face screaming in fear ... less than 6.25%
 * ? ... pouting face ... less than 12.5%
