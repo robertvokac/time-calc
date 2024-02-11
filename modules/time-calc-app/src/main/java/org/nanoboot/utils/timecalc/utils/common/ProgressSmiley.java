@@ -1,7 +1,9 @@
-package org.nanoboot.utils.timecalc.utils;
+package org.nanoboot.utils.timecalc.utils.common;
 
 import lombok.Getter;
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
+
+import java.util.Arrays;
 
 /**
  * @author Robert

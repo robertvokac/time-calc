@@ -26,6 +26,8 @@ public class TimeCalcProperties {
     private static final String JOKES_ENABLED = "jokes.enabled";
     private static final String COMMANDS_ENABLED = "commands-enabled";
     private static final String TOASTS_ENABLED = "toasts.enabled";
+    private static final String SMILEYS_COLORED = "smileys.colored";
+
 
     private static TimeCalcProperties INSTANCE;
     private final Properties properties = new Properties();
@@ -96,6 +98,10 @@ public class TimeCalcProperties {
 
     public boolean areToastsEnabled() {
         return getBooleanProperty(TOASTS_ENABLED, true);
+    }
+
+    public boolean areSmileysColored() {
+        return getBooleanProperty(SMILEYS_COLORED, true);
     }
 
     public Visibility getDefaultVisibility() {

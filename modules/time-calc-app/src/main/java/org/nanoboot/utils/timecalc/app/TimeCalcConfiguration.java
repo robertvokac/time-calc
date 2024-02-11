@@ -32,6 +32,8 @@ public class TimeCalcConfiguration {
             new BooleanProperty("commandsEnabledProperty", true);
     public final BooleanProperty toastsEnabledProperty =
             new BooleanProperty("toastsEnabledProperty", true);
+    public final BooleanProperty smileysColoredProperty =
+            new BooleanProperty("smileysColoredProperty", true);
 
     public TimeCalcConfiguration() {
 
@@ -56,6 +58,7 @@ public class TimeCalcConfiguration {
         commandsEnabledProperty
                 .setValue(timeCalcProperties.areCommandsEnabled());
         toastsEnabledProperty.setValue(timeCalcProperties.areToastsEnabled());
+        smileysColoredProperty.setValue(timeCalcProperties.areSmileysColored());
     }
 
 }

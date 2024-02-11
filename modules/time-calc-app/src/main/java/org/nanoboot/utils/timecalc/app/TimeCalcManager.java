@@ -8,6 +8,7 @@ import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
 import org.nanoboot.utils.timecalc.swing.common.TimeCalcWindow;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.swing.common.WeatherWindow;
+import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
@@ -114,6 +115,7 @@ public class TimeCalcManager {
                 .setBounds(SwingUtils.MARGIN, walkingHumanProgressAsciiArt.getY()
                                               + walkingHumanProgressAsciiArt.getHeight()
                                               + SwingUtils.MARGIN);
+
         configButton.setBoundsFromTop(walkingHumanProgressAsciiArt);
         commandButton.setBoundsFromLeft(configButton);
 
@@ -160,17 +162,17 @@ public class TimeCalcManager {
 
         Time time = new Time();
 
-        bindToIfPropertyMissing(testProperties, "current.day", calNow, Calendar.DAY_OF_MONTH, analogClock.dayProperty, time.dayProperty);
-        bindToIfPropertyMissing(testProperties, "current.month", calNow, Calendar.MONTH, analogClock.monthProperty, time.monthProperty);
-        bindToIfPropertyMissing(testProperties, "current.year", calNow, Calendar.YEAR, analogClock.yearProperty, time.yearProperty);
-        bindToIfPropertyMissing(testProperties, "current.hour", calNow, Calendar.HOUR, analogClock.hourProperty, time.hourProperty);
-        bindToIfPropertyMissing(testProperties, "current.minute", calNow, Calendar.MINUTE, analogClock.minuteProperty, time.minuteProperty);
-        bindToIfPropertyMissing(testProperties, "current.second", calNow, Calendar.SECOND, analogClock.secondProperty, time.secondProperty);
-        bindToIfPropertyMissing(testProperties, "current.millisecond", calNow, Calendar.MILLISECOND, analogClock.millisecondProperty, time.millisecondProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.day", calNow, Calendar.DAY_OF_MONTH, analogClock.dayProperty, time.dayProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.month", calNow, Calendar.MONTH, analogClock.monthProperty, time.monthProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.year", calNow, Calendar.YEAR, analogClock.yearProperty, time.yearProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.hour", calNow, Calendar.HOUR, analogClock.hourProperty, time.hourProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.minute", calNow, Calendar.MINUTE, analogClock.minuteProperty, time.minuteProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.second", calNow, Calendar.SECOND, analogClock.secondProperty, time.secondProperty);
+        bindToIfPropertyMissing(testProperties, "test.current.millisecond", calNow, Calendar.MILLISECOND, analogClock.millisecondProperty, time.millisecondProperty);
 
-        if (testProperties.containsKey("current.year") || testProperties
-                .containsKey("current.month") || testProperties
-                    .containsKey("current.day")) {
+        if (testProperties.containsKey("test.current.year") || testProperties
+                .containsKey("test.current.month") || testProperties
+                    .containsKey("test.current.day")) {
             analogClock.dayOfWeekProperty
                     .setValue(calNow.get(Calendar.DAY_OF_WEEK));
         } else {
@@ -259,6 +261,8 @@ public class TimeCalcManager {
         componentRegistry.getSet().stream().filter(c-> c instanceof Battery).forEach(c ->
             ((Battery)c).wavesProperty.bindTo(timeCalcConfiguration.batteryWavesEnabledProperty));
 
+        componentRegistry.getSet().stream().filter(c-> c instanceof Widget).forEach(c ->
+                ((Widget)c).smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty));
         window.setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
                 exitButton.getY() + 3 * exitButton.getHeight() + SwingUtils.MARGIN);
         while (true) {

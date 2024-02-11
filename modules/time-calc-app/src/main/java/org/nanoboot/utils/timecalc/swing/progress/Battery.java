@@ -4,11 +4,13 @@ import lombok.Getter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.utils.ProgressSmiley;
+import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -44,6 +46,7 @@ public class Battery extends Widget {
     private int totalHeight = 0;
     private int totalWidth;
     private String label = null;
+    private JLabel smileyIcon;
 
     protected Battery(String name) {
         this.name = name;
@@ -73,22 +76,22 @@ public class Battery extends Widget {
             blinking.setValue(false);
         }
 
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D brush = (Graphics2D) g;
 
         Visibility visibility =
                 Visibility.valueOf(visibilityProperty.getValue());
-        g2d.setColor(
+        brush.setColor(
                 visibility.isStronglyColored() || mouseOver ? Color.YELLOW :
                         FOREGROUND_COLOR);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (!visibility.isGray()) {
-            g2d.fillRect(1, 1, totalWidth, totalHeight);
+            brush.fillRect(1, 1, totalWidth, totalHeight);
         }
 
         if (visibility.isStronglyColored() || mouseOver) {
-            g2d.setColor(
+            brush.setColor(
                     donePercent < LOW_ENERGY ? LOW_HIGHLIGHTED :
                             (donePercent < HIGH_ENERGY ?
                                     MEDIUM_HIGHLIGHTED :
@@ -96,16 +99,16 @@ public class Battery extends Widget {
                                             HIGH_HIGHLIGHTED :
                                             HIGHEST_HIGHLIGHTED)));
         } else {
-            g2d.setColor(donePercent < LOW_ENERGY ? LOW :
+            brush.setColor(donePercent < LOW_ENERGY ? LOW :
                     (donePercent < HIGH_ENERGY ?
                             MEDIUM :
                             (donePercent < VERY_HIGH_ENERGY ? HIGH : HIGHEST)));
         }
         if (visibility.isGray()) {
-            g2d.setColor(Utils.ULTRA_LIGHT_GRAY);
+            brush.setColor(Utils.ULTRA_LIGHT_GRAY);
         }
         if (blinking.getValue()) {
-            g2d.setColor(BACKGROUND_COLOR);
+            brush.setColor(BACKGROUND_COLOR);
         }
         int doneHeight = (int) (totalHeight * donePercent);
         int intX = 1;
@@ -119,7 +122,7 @@ public class Battery extends Widget {
             waterSurfaceHeight = 0;
         }
 
-        g2d.fillRect(intX + 1,
+        brush.fillRect(intX + 1,
                 doneHeight < waterSurfaceHeight || donePercent >= 1 ?
                         todoHeight : todoHeight + waterSurfaceHeight,
                 totalWidth - 3,
@@ -130,7 +133,7 @@ public class Battery extends Widget {
             && donePercent < 1) {// && todoHeight > waterSurfaceHeight) {
             //g2d.fillArc(intX, intY, width_, intHeight - waterSurfaceHeight, 30, 60);
 
-            g2d.fillPolygon(
+            brush.fillPolygon(
                     new int[] {intX,
                             (int) (intX + totalWidth / pointCount * 0.5),
                             intX + totalWidth / pointCount * 3,
@@ -155,13 +158,13 @@ public class Battery extends Widget {
                             todoHeight + (waterSurfaceHeight * 1)},
                     pointCount);
 
-            g2d.setColor(
+            brush.setColor(
                     (visibility.isGray() || !visibility.isStronglyColored())
                     && !mouseOver ? Utils.ULTRA_LIGHT_GRAY : Color.DARK_GRAY);
 
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
-            g2d.drawPolyline(
+            brush.drawPolyline(
                     new int[] {intX,
                             (int) (intX + totalWidth / pointCount * 0.5),
                             intX + totalWidth / pointCount * 3,
@@ -185,81 +188,110 @@ public class Battery extends Widget {
                                     5, true)),
                             todoHeight + (waterSurfaceHeight * 1)},
                     pointCount);
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
+        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
 
         if (donePercent < 1 && donePercent > 0) {
             {
-                Font currentFont = g2d.getFont();
-                g2d.setFont(BIG_FONT);
-                g2d.drawString(
+                Font currentFont = brush.getFont();
+                brush.setFont(BIG_FONT);
+                brush.drawString(
                         CHARCHING, ((int) (totalWidth * 0.45)),
                         (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 10
                 );
-                if(mouseOver){
+                if(mouseOver  && smileysColoredProperty.isDisabled()){//no colored
+                    //paint smiley
                     if(!visibility.isStronglyColored()) {
-                        g2d.setColor(Color.GRAY);
+                        brush.setColor(Color.GRAY);
                     }
                     if(visibility.isGray()) {
-                        g2d.setColor(Color.LIGHT_GRAY);
+                        brush.setColor(Color.LIGHT_GRAY);
                     }
-                    g2d.setFont(MEDIUM_FONT);
-                    g2d.drawString(
+                    if(visibility.isStronglyColored()) {
+                        brush.setColor(Color.BLACK);
+                    }
+
+                    Color currentColor= brush.getColor();
+                    brush.setColor(visibility.isStronglyColored() ? Color.WHITE : BACKGROUND_COLOR);
+                    brush.fillRect(
+                            ((int) (totalWidth * 0.45)) + 15,
+                            (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 8 - 16,
+                            20,
+                            20
+                    );
+                    brush.setColor(currentColor);
+                    brush.setColor(Color.BLACK);
+                    brush.setFont(MEDIUM_FONT);
+                    brush.drawString(
                             ProgressSmiley.forProgress(donePercent).getCharacter(),
                             ((int) (totalWidth * 0.45)) + 15,
                             (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) + 8
                     );
 
                 }
-                g2d.setFont(currentFont);
+                brush.setFont(currentFont);
+            }
+            if(mouseOver && smileysColoredProperty.isEnabled()) {//colored
+                ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
+                if(this.smileyIcon != null) {
+                    this.remove(smileyIcon);
+                }
+                this.smileyIcon = new JLabel(imageIcon);
+                smileyIcon.setBounds(((int) (totalWidth * 0.45)) + 15,
+                        (donePercent < 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1) - 7,15, 15);
+                this.add(smileyIcon);
+            } else {
+                if(this.smileyIcon != null) {
+                    this.remove(smileyIcon);
+                }
             }
             {
-                Color currentColor = g2d.getColor();
-                g2d.setColor(
+                Color currentColor = brush.getColor();
+                brush.setColor(
                         visibility.isStronglyColored() || mouseOver ? HIGH_HIGHLIGHTED : (visibility.isWeaklyColored() ? HIGH : Color.lightGray));
 
 
                 double angleDouble = donePercent * 360;
 
-                g2d.fillArc(((int) (totalWidth * 0.45)) + 15,
+                brush.fillArc(((int) (totalWidth * 0.45)) + 15,
                         totalHeight / 4 * 3 + 28,
                         15, 15, 90, -(int) angleDouble);
-                g2d.setColor(
+                brush.setColor(
                         visibility.isStronglyColored() || mouseOver ? LIGHT_RED :
                                 visibility.isWeaklyColored() ? ULTRA_LIGHT_RED : BACKGROUND_COLOR);
-                g2d.fillArc(((int) (totalWidth * 0.45)) + 15,
+                brush.fillArc(((int) (totalWidth * 0.45)) + 15,
                         totalHeight / 4 * 3 + 28,
                         15, 15, 90, +(int) (360 - angleDouble));
 
-                g2d.setColor(currentColor);
+                brush.setColor(currentColor);
             }
         }
 
-        g2d.drawString(
+        brush.drawString(
                 NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
                         .format(donePercent * 100) + "%",
                 ((int) (totalWidth * 0.15)),
                 donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1);
 
         if (label != null && !label.isEmpty()) {
-            g2d.drawString(
+            brush.drawString(
                     label,
                     ((int) (totalWidth * 0.15)),
                     (donePercent > 0.5 ? totalHeight / 4 * 3 :
                             totalHeight / 4 * 1) + 20);
         }
         if (name != null && !name.isEmpty()) {
-            g2d.drawString(
+            brush.drawString(
                     name,
                     ((int) (totalWidth * 0.10)),
                     (totalHeight / 4 * 3) + 20 + 20);
         }
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
+        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 Color.LIGHT_GRAY);
-        g2d.drawRect(1, 1, totalWidth - 2, totalHeight);
+        brush.drawRect(1, 1, totalWidth - 2, totalHeight);
 
     }
 

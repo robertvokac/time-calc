@@ -2,9 +2,11 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.utils.ProgressSmiley;
+import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,6 +16,7 @@ import java.awt.RenderingHints;
 public class ProgressSquare extends Widget {
 
     private int square;
+    private JLabel smileyIcon;
 
     public ProgressSquare() {
         setPreferredSize(new Dimension(400, 400));
@@ -26,9 +29,9 @@ public class ProgressSquare extends Widget {
             this.square = side * side;
         }
 
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(FOREGROUND_COLOR);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        Graphics2D brush = (Graphics2D) g;
+        brush.setColor(FOREGROUND_COLOR);
+        brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         int dotNumber = (int) (donePercent * square);
@@ -42,59 +45,85 @@ public class ProgressSquare extends Widget {
         Visibility visibility = Visibility.ofProperty(visibilityProperty);
         if (y > 1) {
             if (visibility.isStronglyColored() || mouseOver) {
-                g2d.setColor(Color.GRAY);
+                brush.setColor(Color.GRAY);
             }
-            g2d.fillRect(side - 4, side - 4, 4, 4);
-            g2d.fillRect(1, side - 4, 4, 4);
+            brush.fillRect(side - 4, side - 4, 4, 4);
+            brush.fillRect(1, side - 4, 4, 4);
 
-            g2d.setColor(FOREGROUND_COLOR);
-            g2d.fillRect(1, 1, side, y - 1);
+            brush.setColor(FOREGROUND_COLOR);
+            brush.fillRect(1, 1, side, y - 1);
             if (x > 1) {
                 if (visibility.isStronglyColored() || mouseOver) {
-                    g2d.setColor(Color.GRAY);
+                    brush.setColor(Color.GRAY);
                 }
-                g2d.drawRect(1, y, x - 1, 1);
+                brush.drawRect(1, y, x - 1, 1);
             }
             if (visibility.isStronglyColored() || mouseOver) {
-                g2d.setColor(Color.GRAY);
+                brush.setColor(Color.GRAY);
             }
-            g2d.fillRect(side - 4, 1, 4, 4);
-            g2d.fillRect(1, 1, 4, 4);
+            brush.fillRect(side - 4, 1, 4, 4);
+            brush.fillRect(1, 1, 4, 4);
 
             if (visibility.isStronglyColored() || mouseOver) {
-                g2d.setColor(Color.GRAY);
+                brush.setColor(Color.GRAY);
             }
-            g2d.drawLine(1, 1, x, y);
+            brush.drawLine(1, 1, x, y);
             //            g2d.drawLine(1+1, 1+1, x+1, y+1);
-            g2d.drawLine(1, 1 + 1, x, y + 1);
-            g2d.drawLine(1, 1 + 1, x, y + 1);
+            brush.drawLine(1, 1 + 1, x, y + 1);
+            brush.drawLine(1, 1 + 1, x, y + 1);
             if (visibility.isStronglyColored() || mouseOver) {
-                g2d.setColor(Color.BLUE);
-                g2d.drawLine(x - 10, y - 10, x + 10, y + 10);
-                g2d.drawLine(x + 10, y - 10, x - 10, y + 10);
+                brush.setColor(Color.BLUE);
+                brush.drawLine(x - 10, y - 10, x + 10, y + 10);
+                brush.drawLine(x + 10, y - 10, x - 10, y + 10);
             }
-            g2d.setColor(FOREGROUND_COLOR);
+            brush.setColor(FOREGROUND_COLOR);
         }
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
+        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 BACKGROUND_COLOR);
 
-        g2d.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
+        brush.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
                                .format(donePercent * 100) + "%",
                 (int) (side / 8d * 3d),
                 (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)));
-        if(mouseOver){
+        if(mouseOver  && smileysColoredProperty.isDisabled()){//no colored
             if(!visibility.isStronglyColored()) {
-                g2d.setColor(Color.GRAY);
+                brush.setColor(Color.GRAY);
             }
             if(visibility.isGray()) {
-                g2d.setColor(Color.LIGHT_GRAY);
+                brush.setColor(Color.LIGHT_GRAY);
             }
-            g2d.setFont(MEDIUM_FONT);
-            g2d.drawString(
+            if(visibility.isStronglyColored()) {
+                brush.setColor(Color.BLACK);
+            }
+            Color currentColor= brush.getColor();
+            brush.setColor(visibility.isStronglyColored() ? Color.WHITE : BACKGROUND_COLOR);
+            brush.fillRect(
+                    (int) (side / 8d * 3d) + 65,
+                    (int) ((side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 16d),
+                    20,
+                    20
+            );
+            brush.setColor(currentColor);
+            brush.setFont(MEDIUM_FONT);
+            brush.drawString(
                     ProgressSmiley.forProgress(donePercent).getCharacter(),
                     (int) (side / 8d * 3d) + 65,
                     (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d))
             );
+        }
+        if(mouseOver && smileysColoredProperty.isEnabled()) {//colored
+            ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
+            if(this.smileyIcon != null) {
+                this.remove(smileyIcon);
+            }
+            this.smileyIcon = new JLabel(imageIcon);
+            smileyIcon.setBounds((int) (side / 8d * 3d) + 65,
+                    (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 15,15, 15);
+            this.add(smileyIcon);
+        } else {
+            if(this.smileyIcon != null) {
+                this.remove(smileyIcon);
+            }
         }
 
     }

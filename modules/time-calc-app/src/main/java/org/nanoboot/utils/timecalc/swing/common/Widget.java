@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -23,10 +24,12 @@ public class Widget extends JPanel implements
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
-    protected static final Font MEDIUM_FONT = new Font("sans", Font.PLAIN, 16);
+    protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
     public StringProperty visibilityProperty =
             new StringProperty("widget.visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
+    public final BooleanProperty smileysColoredProperty =
+            new BooleanProperty("smileysColoredProperty", true);
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
