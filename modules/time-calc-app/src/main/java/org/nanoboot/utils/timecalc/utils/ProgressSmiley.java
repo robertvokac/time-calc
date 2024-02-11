@@ -56,9 +56,6 @@ public enum ProgressSmiley {
                 return forNumber(i);
             }
         }
-        if (progress >= 99) {
-            return SMILEY_16;
-        }
-        throw new IllegalStateException();
+        return SMILEY_16;
     }
 }
