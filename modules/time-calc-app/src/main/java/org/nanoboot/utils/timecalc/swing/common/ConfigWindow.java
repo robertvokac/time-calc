@@ -11,11 +11,14 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -74,7 +77,6 @@ public class ConfigWindow extends TimeCalcWindow {
                 smileysColoredProperty));
         //
         propertiesList.stream().forEach(p -> {
-            System.out.println("Found form item: " + p.getClass());
             if(p == visibilityDefaultProperty) {
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.VISIBILITY_DEFAULT.getKey());
                 addToNextRow(new JLabel(TimeCalcProperty.VISIBILITY_DEFAULT.getDescription()));
@@ -91,8 +93,6 @@ public class ConfigWindow extends TimeCalcWindow {
                     ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty))
                             .setValue(
                             (String) jComboBox.getSelectedItem());
-                    System.out.println("configWindow.visibilityCurrentProperty="
-                                       + visibilityDefaultProperty.getSelectedItem());
                 });
             }
 
@@ -102,9 +102,15 @@ public class ConfigWindow extends TimeCalcWindow {
                 checkBox.putClientProperty(CLIENT_PROPERTY_KEY, timeCalcPropertyKey);
                 TimeCalcProperty timeCalcProperty =
                         TimeCalcProperty.forKey(timeCalcPropertyKey);
+
                 checkBox.setText(timeCalcProperty.getDescription());
+
+                BooleanProperty property =
+                        (BooleanProperty) timeCalcConfiguration
+                                .getProperty(timeCalcProperty);
+                checkBox.setSelected(property.isEnabled());
                 checkBox.addActionListener(e -> {
-                    ((BooleanProperty)timeCalcConfiguration.getProperty(timeCalcProperty))
+                    property
                             .setValue(checkBox.isSelected());
                 });
             }
@@ -114,10 +120,56 @@ public class ConfigWindow extends TimeCalcWindow {
         });
 
         Arrays.stream(getComponents()).forEach(c->c.getClass().getName());
+        ConfigWindow configWindow = this;
+        class ConfigThread implements Runnable {
+            public final AtomicBoolean stopped = new AtomicBoolean();
+
+            public void run() {
+                while (true) {
+                    if (stopped.get()) {
+                        break;
+                    }
+                    if (!configWindow.visibilitySupportedColoredProperty
+                                .isSelected()
+                        && configWindow.visibilityDefaultProperty.isEnabled()) {
+                        configWindow.visibilityDefaultProperty.disable();
+                    }
+                    if (configWindow.visibilitySupportedColoredProperty
+                            .isSelected()
+                        && !configWindow.visibilityDefaultProperty
+                            .isEnabled()) {
+                        configWindow.visibilityDefaultProperty.enable();
+                    }
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.out.println(e);
+                }
+            }
+        }
+        ConfigThread configThread = new ConfigThread();
+        Thread thread = new Thread(configThread);
+
+        thread.start();
+        addWindowListener(new WindowAdapter() {
+            //for closing
+            @Override
+            public void windowClosing(WindowEvent e) {
+            }
+            //for closed
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                configThread.stopped.set(true);
+            }
+        });
 
     }
 
     private void addToNextRow(JComponent jComponent) {
+        add(jComponent);
         jComponent.setBounds(SwingUtils.MARGIN, currentY, WIDTH1,
                 HEIGHT1);
         nextRow();

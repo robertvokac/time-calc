@@ -96,10 +96,9 @@ public class TimeCalcConfiguration {
             throw new TimeCalcException("Unsupported Property class: " + p.getClass().getName());
 
         }
-        for(Property p:allProperties) {
-            System.out.println(p.getName() + "=" + p.getValue());
-        }
-        System.out.println("clockHandsMinuteVisibleProperty=" + clockHandsMinuteVisibleProperty.isEnabled());
+//        for(Property p:allProperties) {
+//            System.out.println(p.getName() + "=" + p.getValue());
+//        }
     }
 
 }
