@@ -63,11 +63,12 @@ public class MainWindow extends TimeCalcWindow{
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
+                timeCalcConfiguration.saveToTimeCalcProperties();
                 System.exit(0);
             }
         });
         timeCalcConfiguration
-                .setFromTimeCalcProperties(TimeCalcProperties.getInstance());
+                .loadFromTimeCalcProperties(TimeCalcProperties.getInstance());
 
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
                 Constants.DEFAULT_OVERTIME : overTimeIn;
@@ -319,6 +320,7 @@ public class MainWindow extends TimeCalcWindow{
                 if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
                 if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
 
+                timeCalcConfiguration.saveToTimeCalcProperties();
                 setVisible(false);
                 dispose();
 
@@ -434,6 +436,7 @@ public class MainWindow extends TimeCalcWindow{
         if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
         if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
 
+        timeCalcConfiguration.saveToTimeCalcProperties();
         setVisible(false);
         dispose();
     }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Robert Vokac
@@ -51,6 +52,8 @@ public class TimeCalcConfiguration {
 
     private final Map<TimeCalcProperty, Property> mapOfProperties = new HashMap<>();
     private List<Property> allProperties = new ArrayList<>();
+    private TimeCalcProperties timeCalcProperties;
+
     public TimeCalcConfiguration() {
         for(Property p:new Property[] {
                 visibilityDefaultProperty,
@@ -77,8 +80,18 @@ public class TimeCalcConfiguration {
         return mapOfProperties.get(timeCalcProperty);
     }
 
-    public void setFromTimeCalcProperties(
+    public void saveToTimeCalcProperties() {
+        if(timeCalcProperties == null) {
+            throw new TimeCalcException("Cannot save properties, because timeCalcProperties is null.");
+        }
+        Properties properties = new Properties();
+        this.allProperties.stream().forEach(p -> properties.put(p.getName(), p.getValue()));
+        this.timeCalcProperties.save(properties);
+
+    }
+    public void loadFromTimeCalcProperties(
             TimeCalcProperties timeCalcProperties) {
+        this.timeCalcProperties = timeCalcProperties;
         for(Property p:allProperties) {
             if(p instanceof BooleanProperty) {
                 ((BooleanProperty)p).setValue(timeCalcProperties.getBooleanProperty(TimeCalcProperty.forKey(p.getName())));

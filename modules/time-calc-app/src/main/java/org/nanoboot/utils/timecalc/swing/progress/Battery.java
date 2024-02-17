@@ -38,7 +38,8 @@ public class Battery extends Widget {
     private final String name;
     private final double[] randomDoubles =
             new double[] {1d, 1d, 1d, 1d, 1d, 1d, 1};
-    public BooleanProperty wavesProperty = new BooleanProperty("waves", true);
+    public BooleanProperty wavesProperty = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
+            .getKey(), true);
     private final BooleanProperty blinking = new BooleanProperty("blinking");
     private long tmpNanoTime = 0l;
     private int totalHeight = 0;

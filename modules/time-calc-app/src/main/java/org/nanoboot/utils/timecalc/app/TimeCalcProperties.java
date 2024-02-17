@@ -5,6 +5,7 @@ import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,12 +18,13 @@ import java.util.Properties;
  */
 public class TimeCalcProperties {
 
+    public static final File FILE = new File("timecalc.conf");
     private static TimeCalcProperties INSTANCE;
     private final Properties properties = new Properties();
     private final Map<String, String> defaultProperties = new HashMap<>();
 
     private TimeCalcProperties() {
-        if (!new File("timecalc.conf").exists()) {
+        if (!FILE.exists()) {
             //nothing to do;
             return;
         }
@@ -110,11 +112,14 @@ public class TimeCalcProperties {
         properties.replace(key, value.name());
     }
 
-    public void load() {
-        //to be implemented
-    }
-
-    public void save() {
-        //to be implemented
+    public void save(Properties properties) {
+        properties.entrySet().stream().forEach(e-> this.properties.replace(e.getKey(), e.getValue().toString()));
+        try {
+            this.properties.store(new FileOutputStream(FILE), null);
+            System.out.println("Saving to " + FILE + " was successful");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Saving to " + FILE + " failed: " + e.getMessage());
+        }
     }
 }

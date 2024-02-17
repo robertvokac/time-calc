@@ -13,6 +13,6 @@ proxy.txt
 out.txt
 pocasi.txt
 test.txt
-timecalc.conf
+timecalc.template.conf
 focus.txt
 dist/*

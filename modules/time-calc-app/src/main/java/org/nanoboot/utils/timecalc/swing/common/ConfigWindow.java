@@ -121,48 +121,49 @@ public class ConfigWindow extends TimeCalcWindow {
 
         Arrays.stream(getComponents()).forEach(c->c.getClass().getName());
         ConfigWindow configWindow = this;
-        class ConfigThread implements Runnable {
-            public final AtomicBoolean stopped = new AtomicBoolean();
-
-            public void run() {
-                while (true) {
-                    if (stopped.get()) {
-                        break;
-                    }
-                    if (!configWindow.visibilitySupportedColoredProperty
-                                .isSelected()
-                        && configWindow.visibilityDefaultProperty.isEnabled()) {
-                        configWindow.visibilityDefaultProperty.disable();
-                    }
-                    if (configWindow.visibilitySupportedColoredProperty
-                            .isSelected()
-                        && !configWindow.visibilityDefaultProperty
-                            .isEnabled()) {
-                        configWindow.visibilityDefaultProperty.enable();
-                    }
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    System.out.println(e);
-                }
-            }
-        }
-        ConfigThread configThread = new ConfigThread();
-        Thread thread = new Thread(configThread);
-
-        thread.start();
+//        class ConfigThread implements Runnable {
+//            public final AtomicBoolean stopped = new AtomicBoolean();
+//
+//            public void run() {
+//                while (true) {
+//                    if (stopped.get()) {
+//                        System.out.println("stopping thread");
+//                        break;
+//                    }
+//                    if (!configWindow.visibilitySupportedColoredProperty
+//                                .isSelected()
+//                        && configWindow.visibilityDefaultProperty.isEnabled()) {
+//                        configWindow.visibilityDefaultProperty.disable();
+//                    }
+//                    if (configWindow.visibilitySupportedColoredProperty
+//                            .isSelected()
+//                        && !configWindow.visibilityDefaultProperty
+//                            .isEnabled()) {
+//                        configWindow.visibilityDefaultProperty.enable();
+//                    }
+//                }
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                    System.out.println(e);
+//                }
+//            }
+//        }
+//        ConfigThread configThread = new ConfigThread();
+//        Thread thread = new Thread(configThread);
+//
+//        thread.start();
         addWindowListener(new WindowAdapter() {
-            //for closing
+
             @Override
             public void windowClosing(WindowEvent e) {
+                //configThread.stopped.set(true);
             }
-            //for closed
 
             @Override
             public void windowClosed(WindowEvent e) {
-                configThread.stopped.set(true);
+
             }
         });
 
