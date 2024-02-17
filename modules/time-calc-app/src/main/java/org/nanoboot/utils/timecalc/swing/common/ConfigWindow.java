@@ -74,6 +74,7 @@ public class ConfigWindow extends TimeCalcWindow {
                 smileysColoredProperty));
         //
         propertiesList.stream().forEach(p -> {
+            System.out.println("Found form item: " + p.getClass());
             if(p == visibilityDefaultProperty) {
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.VISIBILITY_DEFAULT.getKey());
                 addToNextRow(new JLabel(TimeCalcProperty.VISIBILITY_DEFAULT.getDescription()));

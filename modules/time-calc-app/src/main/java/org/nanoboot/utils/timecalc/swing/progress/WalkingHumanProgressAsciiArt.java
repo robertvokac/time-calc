@@ -8,6 +8,7 @@ import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -35,6 +36,8 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
     public StringProperty visibilityProperty =
             new StringProperty("visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
+    public final BooleanProperty visibilitySupportedColoredProperty =
+            new BooleanProperty("visibilitySupportedColoredProperty", true);
 
     public WalkingHumanProgressAsciiArt(int x, int y, int width, int height) {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
@@ -45,6 +48,10 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(visibilitySupportedColoredProperty.isDisabled()) {
+                    //nothing to do
+                    return;
+                }
                 Visibility visibility =
                         Visibility.valueOf(visibilityProperty.getValue());
                 if (visibility.isStronglyColored()) {
@@ -198,7 +205,12 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
     }
 
     @Override
-    public Property getProperty() {
+    public Property getVisibilityProperty() {
         return visibilityProperty;
+    }
+
+    @Override
+    public Property getVisibilitySupportedColoredProperty() {
+        return visibilitySupportedColoredProperty;
     }
 }

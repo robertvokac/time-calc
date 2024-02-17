@@ -6,6 +6,7 @@ import org.nanoboot.utils.timecalc.utils.property.Property;
  * @author Robert
  * @since 26.02.2024
  */
-public interface GetProperty<T> {
-    Property<T> getProperty();
+public interface GetProperty {
+    Property getVisibilityProperty();
+    Property getVisibilitySupportedColoredProperty();
 }

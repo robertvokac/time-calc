@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -20,6 +21,9 @@ public class TimeCalcButton extends JButton implements GetProperty {
     public StringProperty visibilityProperty =
             new StringProperty("visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
+
+    public final BooleanProperty visibilitySupportedColoredProperty =
+            new BooleanProperty("visibilitySupportedColoredProperty", true);
     private Color originalBackground;
     private Color originalForeground;
 
@@ -67,7 +71,12 @@ public class TimeCalcButton extends JButton implements GetProperty {
     }
 
     @Override
-    public Property getProperty() {
+    public Property getVisibilityProperty() {
         return visibilityProperty;
+    }
+
+    @Override
+    public Property getVisibilitySupportedColoredProperty() {
+        return visibilitySupportedColoredProperty;
     }
 }

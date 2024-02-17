@@ -25,7 +25,6 @@ import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
@@ -34,13 +33,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * @author Robert Vokac
@@ -105,10 +102,11 @@ public class MainWindow extends TimeCalcWindow{
         addAll(configButton, workDaysButton, activitiesButton, restartButton,
                 exitButton, focusButton, helpButton, commandButton, jokeButton);
 
-        if(timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
+
+        timeCalcApp.visibilityProperty.bindTo(timeCalcConfiguration.visibilityDefaultProperty);
+        if(!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
-        timeCalcApp.visibilityProperty.bindTo(timeCalcConfiguration.visibilityDefaultProperty);
         TimeCalcKeyAdapter timeCalcKeyAdapter = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp, commandButton, this);
         addKeyListener(timeCalcKeyAdapter);
 
@@ -296,7 +294,10 @@ public class MainWindow extends TimeCalcWindow{
                 buttonRegistry.add((TimeCalcButton)c));
         componentRegistry.getSet().stream().filter(c ->
             GetProperty.class.isAssignableFrom(c.getClass())).forEach(c->
-                ((GetProperty<String>)c).getProperty().bindTo(timeCalcApp.visibilityProperty));
+        {
+            ((GetProperty) c).getVisibilityProperty().bindTo(timeCalcApp.visibilityProperty);
+            ((GetProperty) c).getVisibilitySupportedColoredProperty().bindTo(timeCalcConfiguration.visibilitySupportedColoredProperty);
+        });
 
         componentRegistry.getSet().stream().filter(c-> c instanceof Battery).forEach(c ->
             ((Battery)c).wavesProperty.bindTo(timeCalcConfiguration.batteryWavesVisibleProperty));

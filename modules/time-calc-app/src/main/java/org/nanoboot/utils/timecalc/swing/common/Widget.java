@@ -35,6 +35,9 @@ public class Widget extends JPanel implements
                     Visibility.STRONGLY_COLORED.name());
     public final BooleanProperty smileysColoredProperty =
             new BooleanProperty("smileysColoredProperty", true);
+    public final BooleanProperty visibilitySupportedColoredProperty =
+            new BooleanProperty("visibilitySupportedColoredProperty", true);
+
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
@@ -46,6 +49,10 @@ public class Widget extends JPanel implements
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(visibilitySupportedColoredProperty.isDisabled()) {
+                    //nothing to do
+                    return;
+                }
                 Visibility visibility =
                         Visibility.valueOf(visibilityProperty.getValue());
                 if (visibility.isStronglyColored()) {
@@ -112,8 +119,13 @@ public class Widget extends JPanel implements
     }
 
     @Override
-    public Property getProperty() {
+    public Property getVisibilityProperty() {
         return visibilityProperty;
+    }
+
+    @Override
+    public Property getVisibilitySupportedColoredProperty() {
+        return visibilitySupportedColoredProperty;
     }
 
     protected void paintSmiley(Visibility visibility, Graphics2D brush, int x, int y) {
@@ -164,4 +176,5 @@ public class Widget extends JPanel implements
             this.add(smileyIcon);
         }
     }
+
 }
