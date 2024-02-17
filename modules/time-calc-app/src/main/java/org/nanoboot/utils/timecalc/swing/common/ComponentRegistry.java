@@ -2,7 +2,6 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import lombok.Getter;
 
-import javax.swing.JComponent;
 import java.awt.Component;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,4 +33,5 @@ public class ComponentRegistry<T extends Component> {
             c.setVisible(b);
         }
     }
+
 }

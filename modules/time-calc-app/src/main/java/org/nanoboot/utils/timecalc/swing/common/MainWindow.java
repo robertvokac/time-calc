@@ -28,16 +28,19 @@ import org.nanoboot.utils.timecalc.utils.property.Property;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * @author Robert Vokac
@@ -47,6 +50,7 @@ public class MainWindow extends TimeCalcWindow{
 
     public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
+    private HelpWindow helpWindow = null;
     private WorkDaysWindow workDaysWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -91,6 +95,7 @@ public class MainWindow extends TimeCalcWindow{
         TimeCalcButton restartButton = new TimeCalcButton("Restart");
         TimeCalcButton exitButton = new TimeCalcButton("Exit");
         TimeCalcButton focusButton = new TimeCalcButton("Focus");
+        TimeCalcButton helpButton = new TimeCalcButton("Help");
         TimeCalcButton weatherButton = new TimeCalcButton("Weather");
         TimeCalcButton commandButton = new TimeCalcButton("Command");
         TimeCalcButton jokeButton = new TimeCalcButton("Joke");
@@ -98,7 +103,7 @@ public class MainWindow extends TimeCalcWindow{
 
         //window.add(weatherButton);
         addAll(configButton, workDaysButton, activitiesButton, restartButton,
-                exitButton, focusButton, commandButton, jokeButton);
+                exitButton, focusButton, helpButton, commandButton, jokeButton);
 
         if(timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
@@ -138,7 +143,9 @@ public class MainWindow extends TimeCalcWindow{
         exitButton.setBoundsFromLeft(restartButton);
 
         //
-        focusButton.setBoundsFromTop(exitButton);
+
+        helpButton.setBoundsFromTop(exitButton, 2);
+        focusButton.setBoundsFromLeft(helpButton);
         commandButton.setBoundsFromLeft(focusButton);
         jokeButton.setBoundsFromLeft(commandButton);
         //
@@ -184,6 +191,13 @@ public class MainWindow extends TimeCalcWindow{
                 this.configWindow = new ConfigWindow(timeCalcConfiguration);
             }
             configWindow.setVisible(true);
+        });
+
+        helpButton.addActionListener(e -> {
+            if(helpWindow == null) {
+                this.helpWindow = new HelpWindow();
+            }
+            helpWindow.setVisible(true);
         });
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
@@ -274,25 +288,28 @@ public class MainWindow extends TimeCalcWindow{
                 weekBattery.getY(), 140);
         add(monthBattery);
 
-        ComponentRegistry<JComponent> componentRegistry = new ComponentRegistry();
-        componentRegistry.addAll(
-                walkingHumanProgressAsciiArt,
-                progressSquare,
-                progressCircle,
-                analogClock,
-                dayBattery,
-                weekBattery,
-                monthBattery,
-                hourBattery,
-                configButton,
-                workDaysButton,
-                activitiesButton,
-                restartButton,
-                exitButton,
-                focusButton,
-                jokeButton,
-                commandButton
-        );
+        ComponentRegistry<Component> componentRegistry = new ComponentRegistry();
+//        componentRegistry.addAll(
+//                walkingHumanProgressAsciiArt,
+//                progressSquare,
+//                progressCircle,
+//                analogClock,
+//                dayBattery,
+//                weekBattery,
+//                monthBattery,
+//                hourBattery,
+//                configButton,
+//                workDaysButton,
+//                activitiesButton,
+//                restartButton,
+//                exitButton,
+//                helpButton,
+//                focusButton,
+//                jokeButton,
+//                commandButton
+//        );
+        componentRegistry.addAll(this.getContentPane().getComponents());
+        componentRegistry.getSet().stream().forEach(c-> System.out.println("Found component: " + c));
         ComponentRegistry<TimeCalcButton> buttonRegistry = new ComponentRegistry();
         componentRegistry.getSet().stream().filter(c-> c instanceof TimeCalcButton).forEach(c->
                 buttonRegistry.add((TimeCalcButton)c));
@@ -318,6 +335,7 @@ public class MainWindow extends TimeCalcWindow{
                 if(configWindow != null) {configWindow.setVisible(false);configWindow.dispose();}
                 if(workDaysWindow != null) {workDaysWindow.setVisible(false);workDaysWindow.dispose();}
                 if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
+                if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
 
                 setVisible(false);
                 dispose();
@@ -432,6 +450,7 @@ public class MainWindow extends TimeCalcWindow{
         if(configWindow != null) {configWindow.setVisible(false);configWindow.dispose();}
         if(workDaysWindow != null) {workDaysWindow.setVisible(false);workDaysWindow.dispose();}
         if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
+        if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
 
         setVisible(false);
         dispose();

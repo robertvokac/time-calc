@@ -56,10 +56,14 @@ public class TimeCalcButton extends JButton implements GetProperty {
     public void setBoundsFromLeft(JComponent jComponent) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN, jComponent.getY());
     }
+
     public void setBoundsFromTop(JComponent jComponent) {
+        setBoundsFromTop(jComponent, 1);
+    }
+    public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
                                      + jComponent.getHeight()
-                                     + SwingUtils.MARGIN);
+                                     + marginCount * SwingUtils.MARGIN);
     }
 
     @Override

@@ -56,6 +56,6 @@ echo ... 4. Moving new jar file to dist directory
 mv ./modules/time-calc-app/target/time-calc-app-$ORIG_VERSION-jar-with-all-dependencies.jar ./dist/time-calc-$VERSION.jar
 rm ./modules/time-calc-app/target/time-calc-app-$ORIG_VERSION.jar
 
-cp ./dist/time-calc-$VERSION.jar C:/Users/Robert Vokac/Desktop/rv
+cp ./dist/time-calc-$VERSION.jar C:/Users/user/Desktop/rv
 
 
