@@ -289,27 +289,8 @@ public class MainWindow extends TimeCalcWindow{
         add(monthBattery);
 
         ComponentRegistry<Component> componentRegistry = new ComponentRegistry();
-//        componentRegistry.addAll(
-//                walkingHumanProgressAsciiArt,
-//                progressSquare,
-//                progressCircle,
-//                analogClock,
-//                dayBattery,
-//                weekBattery,
-//                monthBattery,
-//                hourBattery,
-//                configButton,
-//                workDaysButton,
-//                activitiesButton,
-//                restartButton,
-//                exitButton,
-//                helpButton,
-//                focusButton,
-//                jokeButton,
-//                commandButton
-//        );
         componentRegistry.addAll(this.getContentPane().getComponents());
-        componentRegistry.getSet().stream().forEach(c-> System.out.println("Found component: " + c));
+
         ComponentRegistry<TimeCalcButton> buttonRegistry = new ComponentRegistry();
         componentRegistry.getSet().stream().filter(c-> c instanceof TimeCalcButton).forEach(c->
                 buttonRegistry.add((TimeCalcButton)c));

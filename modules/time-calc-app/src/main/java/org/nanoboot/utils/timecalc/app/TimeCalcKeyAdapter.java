@@ -31,15 +31,12 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     }
 
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key was pressed: " + e);
         boolean onlyGreyOrNone =
                 timeCalcConfiguration.visibilitySupportedColoredProperty
                         .isEnabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());
-        System.out.println("visibility=" + visibility);
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            System.out.println("Key UP was pressed: " + e);
             timeCalcApp.visibilityProperty
                     .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
                             Visibility.STRONGLY_COLORED.name());
@@ -84,7 +81,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_V) {
-            System.out.println("Key V was pressed: " + e);
             if (visibility.isNone()) {
                 timeCalcApp.visibilityProperty
                         .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
