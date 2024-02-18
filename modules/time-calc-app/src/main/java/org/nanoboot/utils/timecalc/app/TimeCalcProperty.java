@@ -18,16 +18,16 @@ public enum TimeCalcProperty {
     VISIBILITY_DEFAULT("visibility.default", "Default Visibility"),
     VISIBILITY_SUPPORTED_COLORED("visibility.supported.colored", "Visibility : Supported : Colored"),
     //
-    CLOCK_HANDS_LONG_VISIBLE("clock.hands.long.visible", "Visibility : Clock : Hands are long"),
-    CLOCK_HANDS_MINUTE_VISIBLE("clock.hands.minute.visible", "Visibility : Clock : Minute hand"),
-    CLOCK_HANDS_SECOND_VISIBLE("clock.hands.second.visible", "Visibility : Clock : Second hand"),
-    CLOCK_HANDS_MILLISECOND_VISIBLE("clock.hands.millisecond.visible", "Visibility : Clock : Millisecond hand"),
+    CLOCK_HANDS_LONG_VISIBLE("clock.hands.long.visible", "Clock : Hands are long"),
+    CLOCK_HANDS_MINUTE_VISIBLE("clock.hands.minute.visible", "Clock : Minute hand"),
+    CLOCK_HANDS_SECOND_VISIBLE("clock.hands.second.visible", "Clock : Second hand"),
+    CLOCK_HANDS_MILLISECOND_VISIBLE("clock.hands.millisecond.visible", "Clock : Millisecond hand"),
     //
-    BATTERY_WAVES_VISIBLE("battery.waves.visible", "Visibility : Battery : Waves"),
-    JOKES_VISIBLE("jokes.visible", "Visibility : Jokes"),
-    COMMANDS_VISIBLE("commands.visible", "Visibility : Commands"),
-    NOTIFICATIONS_VISIBLE("notifications.visible", "Visibility : Toasts"),
-    SMILEYS_COLORED("smileys.colored", "Visibility : Smileys");
+    BATTERY_WAVES_VISIBLE("battery.waves.visible", "Battery : Waves"),
+    JOKES_VISIBLE("jokes.visible", "Jokes"),
+    COMMANDS_VISIBLE("commands.visible", "Commands"),
+    NOTIFICATIONS_VISIBLE("notifications.visible", "Notifications"),
+    SMILEYS_COLORED("smileys.colored", "Smileys : Colored");
 
     @Getter
     private final String key;

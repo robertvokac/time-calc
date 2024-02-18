@@ -311,7 +311,7 @@ public class MainWindow extends TimeCalcWindow{
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
             Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
-            if(timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled() && currentVisibility.isColored() ){
+            if(!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled() && currentVisibility.isColored() ){
                 timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
             }
             if (stopBeforeEnd) {
