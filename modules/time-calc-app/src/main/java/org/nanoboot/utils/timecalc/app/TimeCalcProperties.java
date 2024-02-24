@@ -32,7 +32,6 @@ public class TimeCalcProperties {
         try {
             String defaultConfiguration = Utils.readTextFromTextResourceInJar(
                     "timecalc-default.conf");
-            System.out.println("defaultConfiguration=" + defaultConfiguration);
             Arrays.stream(defaultConfiguration.split("\n"))
                     .filter(l -> !l.trim().isEmpty())
                     .filter(l -> !l.trim().startsWith("#"))

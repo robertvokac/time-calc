@@ -20,6 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 /**
  * @author Robert Vokac
@@ -32,6 +33,7 @@ public class Widget extends JPanel implements
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
+    public static final int CLOSE_BUTTON_SIDE = 15;
 
     public StringProperty visibilityProperty =
             new StringProperty("widget.visibilityProperty",
@@ -46,17 +48,31 @@ public class Widget extends JPanel implements
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
+    protected boolean mouseOverCloseButton = false;
     protected JLabel smileyIcon;
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);
         new Timer(getTimerDelay(), e -> repaint()).start();
+        this.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+                int x=e.getX();
+                int y=e.getY();
+                mouseOverCloseButton = x >= getWidth() - CLOSE_BUTTON_SIDE && y <= CLOSE_BUTTON_SIDE;
+            }
+        });
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int x=e.getX();
-                int y=e.getY();
-                if(x >= getWidth() - 15 && y <= 15) {
+
+                if(mouseOverCloseButton) {
                     visibleProperty.setValue(false);
                     return;
                 }
@@ -125,14 +141,15 @@ public class Widget extends JPanel implements
                 Visibility.valueOf(visibilityProperty.getValue());
         this.setVisible(visibility != Visibility.NONE);
         paintWidget(brush);
-        if (mouseOver) {
+
+        if (mouseOver && mouseOverCloseButton) {
             brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
-            brush.fillOval(getWidth() - 15 - 1 ,0 + 1,15,15);
+            brush.fillOval(getWidth() - CLOSE_BUTTON_SIDE - 1 , 0 + 1,CLOSE_BUTTON_SIDE,CLOSE_BUTTON_SIDE);
             brush.setColor(Color.LIGHT_GRAY);
             Graphics2D brush2d = (Graphics2D) brush;
             brush2d.setStroke(new BasicStroke(2f));
-            brush.drawLine(getWidth() - 15 - 1 + 2 ,0 + 1 + 2, getWidth() - 0 * 15 - 1 - 2 ,0 + 15 + 1 - 2);
-            brush.drawLine(getWidth() - 15 - 1 + 2, 0 + 15 + 1 - 2, getWidth() - 0 * 15 - 1 - 2 ,0 + 1 + 2);
+            brush.drawLine(getWidth() - CLOSE_BUTTON_SIDE - 1 + 2 ,0 + 1 + 2, getWidth() - 0 * CLOSE_BUTTON_SIDE - 1 - 2 ,0 + CLOSE_BUTTON_SIDE + 1 - 2);
+            brush.drawLine(getWidth() - CLOSE_BUTTON_SIDE - 1 + 2, 0 + CLOSE_BUTTON_SIDE + 1 - 2, getWidth() - 0 * CLOSE_BUTTON_SIDE - 1 - 2 ,0 + 1 + 2);
         }
 
     }
