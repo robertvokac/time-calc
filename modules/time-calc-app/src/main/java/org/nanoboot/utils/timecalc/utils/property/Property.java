@@ -109,5 +109,8 @@ public class Property<T> {
     public void removeListener(ChangeListener<T> listener) {
         this.changeListeners.remove(listener);
     }
+    public String toString() {
+        return String.valueOf(getValue());
+    }
 
 }

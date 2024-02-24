@@ -81,14 +81,16 @@ public class Widget extends JPanel implements
                     //nothing to do
                     return;
                 }
-                Visibility visibility =
-                        Visibility.valueOf(visibilityProperty.getValue());
-                if (visibility.isStronglyColored()) {
-                    visibilityProperty
-                            .setValue(Visibility.WEAKLY_COLORED.name());
-                } else {
-                    visibilityProperty
-                            .setValue(Visibility.STRONGLY_COLORED.name());
+                if(visibleProperty.isEnabled()) {
+                    Visibility visibility =
+                            Visibility.valueOf(visibilityProperty.getValue());
+                    if (visibility.isStronglyColored()) {
+                        visibilityProperty
+                                .setValue(Visibility.WEAKLY_COLORED.name());
+                    } else {
+                        visibilityProperty
+                                .setValue(Visibility.STRONGLY_COLORED.name());
+                    }
                 }
             }
 
@@ -118,6 +120,17 @@ public class Widget extends JPanel implements
         return 100;
     }
 
+    @Override
+    public void setVisible(boolean aFlag) {
+        if(visibleProperty.isEnabled() && !aFlag) {
+            super.setVisible(false);
+        }
+        if(visibleProperty.isDisabled() && aFlag) {
+            super.setVisible(false);
+        }
+
+    }
+
     public final void setDonePercent(double donePercent) {
         if (donePercent > 1) {
             donePercent = 1;
@@ -135,11 +148,12 @@ public class Widget extends JPanel implements
     @Override
     public final void paintComponent(Graphics brush) {
         super.paintComponent(brush);
-        setVisible(visibleProperty.isEnabled());
+
+        System.out.println("widget.visibleProperty=" + visibleProperty.isEnabled());
 
         Visibility visibility =
                 Visibility.valueOf(visibilityProperty.getValue());
-        this.setVisible(visibility != Visibility.NONE);
+        super.setVisible(visibility != Visibility.NONE && visibleProperty.isEnabled());
         paintWidget(brush);
 
         if (mouseOver && mouseOverCloseButton) {
