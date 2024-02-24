@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
  * @author Robert Vokac
  * @since 21.02.2024
  */
-public class AboutButton extends TimeCalcButton {
+public class AboutButton extends TButton {
     public AboutButton() {
         super("About");
         addActionListener(e -> {

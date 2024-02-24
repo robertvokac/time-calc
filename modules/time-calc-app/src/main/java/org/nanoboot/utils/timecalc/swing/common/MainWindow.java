@@ -12,12 +12,14 @@ import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
 import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
+import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgressAsciiArt;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
+import org.nanoboot.utils.timecalc.swing.progress.YearBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
@@ -43,14 +45,25 @@ import java.util.logging.Logger;
  * @author Robert Vokac
  * @since 08.02.2024
  */
-public class MainWindow extends TimeCalcWindow{
+public class MainWindow extends TWindow {
 
     public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
+    private final TButton workDaysButton;
+    private final TButton activitiesButton;
+    private final TButton exitButton;
+    private final TButton configButton;
+    private final TButton restartButton;
+    private final TButton focusButton;
+    private final TButton helpButton;
+    private final TButton weatherButton;
+    private final TButton commandButton;
+    private final TButton jokeButton;
+    private final AboutButton aboutButton;
     private HelpWindow helpWindow = null;
-    private WorkDaysWindow workDaysWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
+    private WorkDaysWindow workDaysWindow = null;
 
     private boolean stopBeforeEnd = false;
     private final TimeCalcConfiguration timeCalcConfiguration =
@@ -86,18 +99,18 @@ public class MainWindow extends TimeCalcWindow{
         int totalSeconds = totalMinutes * TimeHM.SECONDS_PER_MINUTE;
         int totalMilliseconds = totalSeconds * TimeHM.MILLISECONDS_PER_SECOND;
 
-        TimeCalcButton configButton = new TimeCalcButton("Config");
-        TimeCalcButton workDaysButton = new TimeCalcButton("Work Days");
-        TimeCalcButton activitiesButton = new TimeCalcButton("Activities"
-                                                       + "");
-        TimeCalcButton restartButton = new TimeCalcButton("Restart");
-        TimeCalcButton exitButton = new TimeCalcButton("Exit");
-        TimeCalcButton focusButton = new TimeCalcButton("Focus");
-        TimeCalcButton helpButton = new TimeCalcButton("Help");
-        TimeCalcButton weatherButton = new TimeCalcButton("Weather");
-        TimeCalcButton commandButton = new TimeCalcButton("Command");
-        TimeCalcButton jokeButton = new TimeCalcButton("Joke");
-        AboutButton aboutButton = new AboutButton();
+        this.configButton = new TButton("Config");
+        this.workDaysButton = new TButton("Work Days");
+        this.activitiesButton = new TButton("Activities"
+                                               + "");
+        this.restartButton = new TButton("Restart");
+        this.exitButton = new TButton("Exit");
+        this.focusButton = new TButton("Focus");
+        this.helpButton = new TButton("Help");
+        this.weatherButton = new TButton("Weather");
+        this.commandButton = new TButton("Command");
+        this.jokeButton = new TButton("Joke");
+        this.aboutButton = new AboutButton();
 
         //window.add(weatherButton);
         addAll(configButton, workDaysButton, activitiesButton, restartButton,
@@ -108,7 +121,7 @@ public class MainWindow extends TimeCalcWindow{
         if(!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
-        TimeCalcKeyAdapter timeCalcKeyAdapter = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp, commandButton, this);
+        TimeCalcKeyAdapter timeCalcKeyAdapter = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp, this);
         addKeyListener(timeCalcKeyAdapter);
 
         AnalogClock analogClock = new AnalogClock(startTime, endTime);
@@ -240,8 +253,11 @@ public class MainWindow extends TimeCalcWindow{
         analogClock.handsLongProperty
                 .bindTo(timeCalcConfiguration.clockHandsLongVisibleProperty);
 
-        Battery hourBattery = new HourBattery(progressCircle.getBounds().x,
-                progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(),
+        MinuteBattery minuteBattery = new MinuteBattery(progressCircle.getBounds().x,
+                progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(),140);
+        add(minuteBattery);
+        Battery hourBattery = new HourBattery(minuteBattery.getBounds().x + minuteBattery.getWidth() + SwingUtils.MARGIN,
+                minuteBattery.getY(),
                 140);
         add(hourBattery);
 
@@ -251,7 +267,7 @@ public class MainWindow extends TimeCalcWindow{
         add(dayBattery);
 
         Battery weekBattery = new WeekBattery(
-                hourBattery.getBounds().x,
+                minuteBattery.getBounds().x,
                 dayBattery.getY() + dayBattery.getHeight() + SwingUtils.MARGIN, 140);
         add(weekBattery);
 
@@ -283,16 +299,20 @@ public class MainWindow extends TimeCalcWindow{
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
         Battery monthBattery = new MonthBattery(
-                dayBattery.getBounds().x,
+                weekBattery.getBounds().x + weekBattery.getWidth() + SwingUtils.MARGIN,
                 weekBattery.getY(), 140);
         add(monthBattery);
+        Battery yearBattery = new YearBattery(
+                monthBattery.getBounds().x + monthBattery.getWidth() + SwingUtils.MARGIN,
+                monthBattery.getY(), 140);
+        add(yearBattery);
 
         ComponentRegistry<Component> componentRegistry = new ComponentRegistry();
         componentRegistry.addAll(this.getContentPane().getComponents());
 
-        ComponentRegistry<TimeCalcButton> buttonRegistry = new ComponentRegistry();
-        componentRegistry.getSet().stream().filter(c-> c instanceof TimeCalcButton).forEach(c->
-                buttonRegistry.add((TimeCalcButton)c));
+        ComponentRegistry<TButton> buttonRegistry = new ComponentRegistry();
+        componentRegistry.getSet().stream().filter(c-> c instanceof TButton).forEach(c->
+                buttonRegistry.add((TButton)c));
         componentRegistry.getSet().stream().filter(c ->
             GetProperty.class.isAssignableFrom(c.getClass())).forEach(c->
         {
@@ -320,7 +340,7 @@ public class MainWindow extends TimeCalcWindow{
                 if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
                 if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
 
-                timeCalcConfiguration.saveToTimeCalcProperties();
+                //timeCalcConfiguration.saveToTimeCalcProperties();
                 setVisible(false);
                 dispose();
 
@@ -382,12 +402,16 @@ public class MainWindow extends TimeCalcWindow{
             hourBattery.setDonePercent(
                     HourBattery.getHourProgress(timeRemains, secondsRemains,
                             millisecondsRemains));
+
             if (!nowIsWeekend) {
                 hourBattery.setLabel(
                         hourDone + "/" + (
                                 totalMinutes / 60));
             }
-
+            minuteBattery.setDonePercent(MinuteBattery.getMinuteProgress(secondNow, millisecondNow));
+            yearBattery.setDonePercent(YearBattery.getYearProgress(analogClock));
+            yearBattery.setLabel("");
+            //yearBattery.setDonePercent(YearBattery.getYearProgress(2024,0,1,0,0,0,0));
             int totalSecondsRemains =
                     (timeRemains.getHour() * 60 * 60
                      + timeRemains.getMinute() * 60
@@ -452,4 +476,26 @@ public class MainWindow extends TimeCalcWindow{
         }
     }
 
+    public void openWorkDaysWindow() {
+        workDaysButton.doClick();
+    }
+
+    public void openActivitiesWindow() {
+        activitiesButton.doClick();
+    }
+    public void doExit() {
+        exitButton.doClick();
+    }
+
+    public void openConfigWindow() {
+        configButton.doClick();
+    }
+
+    public void doRestart() {
+        restartButton.doClick();
+    }
+
+    public void doCommand() {
+        commandButton.doClick();
+    }
 }

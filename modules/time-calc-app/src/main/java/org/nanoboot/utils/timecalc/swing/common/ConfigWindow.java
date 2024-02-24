@@ -18,14 +18,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
  * @author Robert Vokac
  * @since 16.02.2024
  */
-public class ConfigWindow extends TimeCalcWindow {
+public class ConfigWindow extends TWindow {
     public static final int WIDTH1 = 600;
     public static final int HEIGHT1 = 30;
     public static final String CLIENT_PROPERTY_KEY = TimeCalcProperty.class.getName();

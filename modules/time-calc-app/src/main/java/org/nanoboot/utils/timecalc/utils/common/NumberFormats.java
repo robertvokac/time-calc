@@ -16,6 +16,10 @@ public class NumberFormats {
             new DecimalFormat("#0.00000");
     public static final NumberFormat FORMATTER_THREE_DECIMAL_PLACES =
             new DecimalFormat("#0.000");
+    public static final NumberFormat FORMATTER_SIX_DECIMAL_PLACES =
+            new DecimalFormat("#0.000000");
+    public static final NumberFormat FORMATTER_EIGHT_DECIMAL_PLACES =
+            new DecimalFormat("#0.00000000");
     private NumberFormats() {
         //Not meant to be instantiated.
     }

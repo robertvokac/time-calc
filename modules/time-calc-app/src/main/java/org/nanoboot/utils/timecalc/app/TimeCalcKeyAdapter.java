@@ -1,8 +1,7 @@
 package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
-import org.nanoboot.utils.timecalc.swing.common.TimeCalcButton;
-import org.nanoboot.utils.timecalc.swing.common.TimeCalcWindow;
+import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.awt.event.KeyAdapter;
@@ -15,18 +14,15 @@ import java.awt.event.KeyEvent;
 public class TimeCalcKeyAdapter extends KeyAdapter {
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
-    private final TimeCalcButton commandButton;
-    private final TimeCalcWindow window;
+    private final MainWindow window;
 
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
             TimeCalcApp timeCalcApp,
-            TimeCalcButton commandButton,
-            TimeCalcWindow window
+            MainWindow window
     ) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         this.timeCalcApp = timeCalcApp;
-        this.commandButton = commandButton;
         this.window = window;
     }
 
@@ -110,11 +106,27 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                                 Visibility.STRONGLY_COLORED.name());
             }
         }
+        if (e.getKeyCode() == KeyEvent.VK_F2) {
+            window.doCommand();
+        }
         if (e.getKeyCode() == KeyEvent.VK_R) {
-            commandButton.doClick();
+            window.doRestart();
         }
         if (e.getKeyCode() == KeyEvent.VK_T) {
             Utils.toastsAreEnabled.flip();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_W) {
+            window.openWorkDaysWindow();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            window.openActivitiesWindow();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_X) {
+            window.doExit();
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_S) {
+            window.openConfigWindow();
         }
 
         window.repaint();

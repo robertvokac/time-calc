@@ -229,7 +229,6 @@ public class Battery extends Widget {
                 brush.setColor(currentColor);
             }
         }
-
         brush.drawString(
                 NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
                         .format(donePercent * 100) + "%",
