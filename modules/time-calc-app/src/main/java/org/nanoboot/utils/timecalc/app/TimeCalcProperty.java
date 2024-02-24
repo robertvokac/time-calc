@@ -27,7 +27,9 @@ public enum TimeCalcProperty {
     JOKES_VISIBLE("jokes.visible", "Jokes"),
     COMMANDS_VISIBLE("commands.visible", "Commands"),
     NOTIFICATIONS_VISIBLE("notifications.visible", "Notifications"),
-    SMILEYS_COLORED("smileys.colored", "Smileys : Colored");
+    SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
+    SQUARE_VISIBLE("square.visible", "Square");
+
 
     @Getter
     private final String key;

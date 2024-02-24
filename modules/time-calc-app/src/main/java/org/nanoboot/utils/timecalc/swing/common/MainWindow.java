@@ -133,6 +133,7 @@ public class MainWindow extends TWindow {
                 .setBounds(analogClock.getX() + analogClock.getWidth() + SwingUtils.MARGIN, analogClock.getY(),
                         200);
         add(progressSquare);
+        progressSquare.visibleProperty.bindTo(timeCalcConfiguration.squareVisibleProperty);
 
         ProgressCircle progressCircle = new ProgressCircle();
         progressCircle
@@ -340,7 +341,7 @@ public class MainWindow extends TWindow {
                 if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
                 if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
 
-                //timeCalcConfiguration.saveToTimeCalcProperties();
+                timeCalcConfiguration.saveToTimeCalcProperties();
                 setVisible(false);
                 dispose();
 

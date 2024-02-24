@@ -12,10 +12,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -30,6 +32,7 @@ public class Widget extends JPanel implements
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
+
     public StringProperty visibilityProperty =
             new StringProperty("widget.visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
@@ -37,6 +40,8 @@ public class Widget extends JPanel implements
             new BooleanProperty("smileysColoredProperty", true);
     public final BooleanProperty visibilitySupportedColoredProperty =
             new BooleanProperty("visibilitySupportedColoredProperty", true);
+    public final BooleanProperty visibleProperty =
+            new BooleanProperty("visibleProperty", true);
 
     protected int side = 0;
     protected double donePercent = 0;
@@ -49,6 +54,13 @@ public class Widget extends JPanel implements
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                int x=e.getX();
+                int y=e.getY();
+                if(x >= getWidth() - 15 && y <= 15) {
+                    visibleProperty.setValue(false);
+                    return;
+                }
+
                 if(visibilitySupportedColoredProperty.isDisabled()) {
                     //nothing to do
                     return;
@@ -105,13 +117,23 @@ public class Widget extends JPanel implements
     }
 
     @Override
-    public final void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public final void paintComponent(Graphics brush) {
+        super.paintComponent(brush);
+        setVisible(visibleProperty.isEnabled());
 
         Visibility visibility =
                 Visibility.valueOf(visibilityProperty.getValue());
         this.setVisible(visibility != Visibility.NONE);
-        paintWidget(g);
+        paintWidget(brush);
+        if (mouseOver) {
+            brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
+            brush.fillOval(getWidth() - 15 - 1 ,0 + 1,15,15);
+            brush.setColor(Color.LIGHT_GRAY);
+            Graphics2D brush2d = (Graphics2D) brush;
+            brush2d.setStroke(new BasicStroke(2f));
+            brush.drawLine(getWidth() - 15 - 1 + 2 ,0 + 1 + 2, getWidth() - 0 * 15 - 1 - 2 ,0 + 15 + 1 - 2);
+            brush.drawLine(getWidth() - 15 - 1 + 2, 0 + 15 + 1 - 2, getWidth() - 0 * 15 - 1 - 2 ,0 + 1 + 2);
+        }
 
     }
 

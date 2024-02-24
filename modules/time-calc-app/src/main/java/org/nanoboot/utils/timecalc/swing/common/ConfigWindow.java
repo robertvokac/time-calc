@@ -56,6 +56,8 @@ public class ConfigWindow extends TWindow {
             new JCheckBox("notifications.visible");
     private JCheckBox smileysColoredProperty =
             new JCheckBox("smileys.colored");
+    private JCheckBox squareVisibleProperty =
+            new JCheckBox("square.visible");
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
@@ -73,7 +75,8 @@ public class ConfigWindow extends TWindow {
                 jokesVisibleProperty,
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
-                smileysColoredProperty));
+                smileysColoredProperty,
+                squareVisibleProperty));
         //
         propertiesList.stream().forEach(p -> {
             if(p == visibilityDefaultProperty) {

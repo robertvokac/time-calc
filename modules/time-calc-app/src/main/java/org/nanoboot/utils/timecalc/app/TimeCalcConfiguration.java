@@ -49,6 +49,8 @@ public class TimeCalcConfiguration {
                     .getKey());
     public final BooleanProperty smileysColoredProperty =
             new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    public final BooleanProperty squareVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
 
     private final Map<TimeCalcProperty, Property> mapOfProperties = new HashMap<>();
     private List<Property> allProperties = new ArrayList<>();
@@ -67,6 +69,7 @@ public class TimeCalcConfiguration {
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
                 smileysColoredProperty,
+                squareVisibleProperty,
         }) {
             allProperties.add(p);
         }
@@ -81,6 +84,7 @@ public class TimeCalcConfiguration {
     }
 
     public void saveToTimeCalcProperties() {
+        System.out.println("Going to save properties.");
         if(timeCalcProperties == null) {
             throw new TimeCalcException("Cannot save properties, because timeCalcProperties is null.");
         }

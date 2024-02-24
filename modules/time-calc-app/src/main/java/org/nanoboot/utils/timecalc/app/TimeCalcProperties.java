@@ -24,10 +24,6 @@ public class TimeCalcProperties {
     private final Map<String, String> defaultProperties = new HashMap<>();
 
     private TimeCalcProperties() {
-        if (!FILE.exists()) {
-            //nothing to do;
-            return;
-        }
         try {
             this.properties.load(new FileInputStream("timecalc.conf"));
         } catch (IOException e) {
@@ -36,6 +32,7 @@ public class TimeCalcProperties {
         try {
             String defaultConfiguration = Utils.readTextFromTextResourceInJar(
                     "timecalc-default.conf");
+            System.out.println("defaultConfiguration=" + defaultConfiguration);
             Arrays.stream(defaultConfiguration.split("\n"))
                     .filter(l -> !l.trim().isEmpty())
                     .filter(l -> !l.trim().startsWith("#"))
@@ -64,8 +61,8 @@ public class TimeCalcProperties {
                 getDefaultStringValue(timeCalcProperty)));
     }
     private String getDefaultStringValue(TimeCalcProperty timeCalcProperty) {
-        if(!defaultProperties.containsKey(timeCalcProperty.getKey())) {
-            throw new TimeCalcException("timecalc-default.conf is missing key: " + timeCalcProperty.getKey());
+        if(!defaultProperties.containsKey((String)timeCalcProperty.getKey())) {
+            throw new TimeCalcException("timecalc-default.conf is missing key: \"" + timeCalcProperty.getKey() + "\"");
         }
         return defaultProperties.get(timeCalcProperty.getKey());
     }
@@ -113,7 +110,17 @@ public class TimeCalcProperties {
     }
 
     public void save(Properties properties) {
-        properties.entrySet().stream().forEach(e-> this.properties.replace(e.getKey(), e.getValue().toString()));
+        properties.entrySet().stream().forEach(e ->
+                {
+                    if (this.properties.containsKey(e.getKey())) {
+                        this.properties
+                                .replace(e.getKey(), e.getValue().toString());
+                    } else {
+                        this.properties
+                                .put(e.getKey(), e.getValue().toString());
+                    }
+                }
+        );
         try {
             this.properties.store(new FileOutputStream(FILE), null);
             System.out.println("Saving to " + FILE + " was successful");
