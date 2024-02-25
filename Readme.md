@@ -116,3 +116,17 @@ Progress in square, circle or batteries is represented also by smileys (only, if
  * Sonarqube
  * Add SQLite support and store times of arrivals and departures and time of activities
 
+## For Developers
+
+### How to add new property
+
+**Change these places:**
+
+* timecalc-default.conf
+* timecalc-template.conf
+* TimeCalcProperty
+* TimeCalcConfiguration
+* ConfigWindow
+* Widget class
+* MainWindow - bind
+

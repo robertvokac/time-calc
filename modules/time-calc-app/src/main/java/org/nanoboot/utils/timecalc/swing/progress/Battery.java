@@ -115,8 +115,7 @@ public class Battery extends Widget {
                 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight =
                 (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
-        if (waterSurfaceHeight <= 2 || !TimeCalcProperties.getInstance()
-                .getBooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE) || wavesProperty.isDisabled()) {
+        if (waterSurfaceHeight <= 2 || wavesProperty.isDisabled()) {
             waterSurfaceHeight = 0;
         }
 

@@ -254,6 +254,14 @@ public class MainWindow extends TWindow {
         analogClock.handsLongProperty
                 .bindTo(timeCalcConfiguration.clockHandsLongVisibleProperty);
         analogClock.borderVisibleProperty.bindTo(timeCalcConfiguration.clockBorderVisibleProperty);
+        analogClock.borderOnlyHoursProperty.bindTo(timeCalcConfiguration.clockBorderOnlyHoursProperty);
+        analogClock.numbersVisibleProperty.bindTo(timeCalcConfiguration.clockNumbersVisibleProperty);
+        analogClock.circleVisibleProperty.bindTo(timeCalcConfiguration.clockCircleVisibleProperty);
+        analogClock.circleStrongBorderProperty.bindTo(timeCalcConfiguration.clockCircleStrongBorderProperty);
+        analogClock.centreCircleVisibleProperty.bindTo(timeCalcConfiguration.clockCentreCircleVisibleProperty);
+        analogClock.centreCircleBorderColorProperty.bindTo(timeCalcConfiguration.clockCircleBorderColorProperty);
+        analogClock.handsBlackProperty.bindTo(timeCalcConfiguration.clockHandsBlackProperty);
+        analogClock.centreCircleBlackProperty.bindTo(timeCalcConfiguration.clockCentreCircleBlackProperty);
 
         MinuteBattery minuteBattery = new MinuteBattery(progressCircle.getBounds().x,
                 progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(),140);

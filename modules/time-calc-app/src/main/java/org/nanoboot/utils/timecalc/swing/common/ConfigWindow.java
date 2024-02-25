@@ -7,10 +7,14 @@ import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -36,30 +40,49 @@ public class ConfigWindow extends TWindow {
                     Collectors.toList()).toArray());
 
     private JCheckBox visibilitySupportedColoredProperty =
-            new JCheckBox("visibility.supported.colored");
+            new JCheckBox(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED.getKey());
     private JCheckBox clockHandsLongVisibleProperty =
-            new JCheckBox("clock.hands.long.visible");
+            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE.getKey());
+    private JCheckBox clockHandsBlackProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_BLACK.getKey());
     private JCheckBox clockHandsMinuteVisibleProperty =
-            new JCheckBox("clock.hands.minute.visible");
+            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE.getKey());
     private JCheckBox clockHandsSecondVisibleProperty =
-            new JCheckBox("clock.hands.second.visible");
+            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_SECOND_VISIBLE.getKey());
     private JCheckBox clockHandsMillisecondVisibleProperty =
-            new JCheckBox("clock.hands.millisecond.visible");
+            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE.getKey());
     private JCheckBox clockBorderVisibleProperty =
-            new JCheckBox("clock.border.visible");
+            new JCheckBox(TimeCalcProperty.CLOCK_BORDER_VISIBLE.getKey());
+    private JCheckBox clockBorderOnlyHoursProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_BORDER_ONLY_HOURS.getKey());
+
+    private JCheckBox clockNumbersVisibleProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_NUMBERS_VISIBLE.getKey());
+    private JCheckBox clockCircleVisibleProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE.getKey());
+    private JCheckBox clockCircleStrongBorderProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER.getKey());
+    private JColorChooser clockCircleBorderColorProperty =
+            new JColorChooser(Color.BLACK);
+    private JCheckBox clockCentreCircleVisibleProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE.getKey());
+    private JCheckBox clockCentreCircleBlackProperty =
+            new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK.getKey());
+
+    //
     private JCheckBox batteryWavesVisibleProperty =
-            new JCheckBox("battery.waves.visible");
+            new JCheckBox(TimeCalcProperty.BATTERY_WAVES_VISIBLE.getKey());
 
     private JCheckBox jokesVisibleProperty =
-            new JCheckBox("jokes.visible");
+            new JCheckBox(TimeCalcProperty.JOKES_VISIBLE.getKey());
     private JCheckBox commandsVisibleProperty =
-            new JCheckBox("commands.visible");
+            new JCheckBox(TimeCalcProperty.COMMANDS_VISIBLE.getKey());
     private JCheckBox notificationsVisibleProperty =
-            new JCheckBox("notifications.visible");
+            new JCheckBox(TimeCalcProperty.NOTIFICATIONS_VISIBLE.getKey());
     private JCheckBox smileysColoredProperty =
-            new JCheckBox("smileys.colored");
+            new JCheckBox(TimeCalcProperty.SMILEYS_COLORED.getKey());
     private JCheckBox squareVisibleProperty =
-            new JCheckBox("square.visible");
+            new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
@@ -73,7 +96,15 @@ public class ConfigWindow extends TWindow {
                 clockHandsSecondVisibleProperty,
                 clockHandsMillisecondVisibleProperty,
                 clockHandsLongVisibleProperty,
+                clockHandsBlackProperty,
                 clockBorderVisibleProperty,
+                clockBorderOnlyHoursProperty,
+                clockNumbersVisibleProperty,
+                clockCircleVisibleProperty,
+                clockCircleStrongBorderProperty,
+                clockCircleBorderColorProperty,
+                clockCentreCircleVisibleProperty,
+                clockCentreCircleBlackProperty,
                 batteryWavesVisibleProperty,
                 jokesVisibleProperty,
                 commandsVisibleProperty,
@@ -86,6 +117,10 @@ public class ConfigWindow extends TWindow {
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.VISIBILITY_DEFAULT.getKey());
                 addToNextRow(new JLabel(TimeCalcProperty.VISIBILITY_DEFAULT.getDescription()));
             }
+            if(p == clockCircleBorderColorProperty) {
+                p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getKey());
+                addToNextRow(new JLabel(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getDescription()));
+            }
             if(p instanceof JComboBox) {
                 JComboBox jComboBox = ((JComboBox)p);
                 jComboBox.setMaximumSize(new Dimension(150, 25));
@@ -94,6 +129,7 @@ public class ConfigWindow extends TWindow {
                         CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty =
                         TimeCalcProperty.forKey(timeCalcPropertyKey);
+                jComboBox.setSelectedItem(timeCalcConfiguration.getProperty(timeCalcProperty));
                 jComboBox.addActionListener(e -> {
                     ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty))
                             .setValue(
@@ -118,6 +154,61 @@ public class ConfigWindow extends TWindow {
                     property
                             .setValue(checkBox.isSelected());
                 });
+            }
+            if(p instanceof JColorChooser) {
+                JColorChooser jColorChooser = ((JColorChooser)p);
+                //jColorChooser.setMaximumSize(new Dimension(150, 25));
+
+                String timeCalcPropertyKey = (String) jColorChooser.getClientProperty(
+                        CLIENT_PROPERTY_KEY);
+                TimeCalcProperty timeCalcProperty =
+                        TimeCalcProperty.forKey(timeCalcPropertyKey);
+
+                String currentColor = ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty)).getValue();
+                String[] currentColorAsStringArray = currentColor.split(",");
+                int red =  Integer.valueOf(currentColorAsStringArray[0]);
+                int green =  Integer.valueOf(currentColorAsStringArray[1]);
+                int blue =  Integer.valueOf(currentColorAsStringArray[2]);
+                Color color = new Color (red, green, blue);
+                jColorChooser.setColor(color);
+                jColorChooser.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Color selectedColor = jColorChooser.getSelectionModel()
+                                .getSelectedColor();
+                        selectedColor = JColorChooser.showDialog(null, "Choose a color", color);
+                        if(selectedColor != null) {
+                            jColorChooser.setColor(selectedColor);
+                            ((StringProperty) timeCalcConfiguration
+                                    .getProperty(timeCalcProperty))
+                                    .setValue(
+                                            selectedColor.getRed() + ","
+                                            + selectedColor.getGreen() + ","
+                                            + selectedColor.getBlue());
+                        }
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+
+                    }
+                });
+
             }
             propertiesMap.put(TimeCalcProperty.forKey(
                     (String) p.getClientProperty(CLIENT_PROPERTY_KEY)),p);
@@ -182,6 +273,6 @@ public class ConfigWindow extends TWindow {
     }
 
     private void nextRow() {
-        currentY = currentY + 3 * SwingUtils.MARGIN;
+        currentY = (int) (currentY + 2.5d * SwingUtils.MARGIN);
     }
 }

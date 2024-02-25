@@ -24,6 +24,9 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockHandsLongVisibleProperty =
             new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
                     .getKey());
+    public final BooleanProperty clockHandsBlackProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_BLACK
+                    .getKey());
     public final BooleanProperty clockHandsMinuteVisibleProperty =
             new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE
                     .getKey());
@@ -35,6 +38,28 @@ public class TimeCalcConfiguration {
                     .getKey());
     public final BooleanProperty clockBorderVisibleProperty =
             new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
+                    .getKey());
+    public final BooleanProperty clockBorderOnlyHoursProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_ONLY_HOURS
+                    .getKey());
+
+    public final BooleanProperty clockNumbersVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_NUMBERS_VISIBLE
+                    .getKey());
+    public final BooleanProperty clockCircleVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE
+                    .getKey());
+    public final BooleanProperty clockCircleStrongBorderProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER
+                    .getKey());
+    public final StringProperty clockCircleBorderColorProperty =
+            new StringProperty(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR
+                    .getKey());
+    public final BooleanProperty clockCentreCircleVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE
+                    .getKey());
+    public final BooleanProperty clockCentreCircleBlackProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
                     .getKey());
     //
     public final BooleanProperty batteryWavesVisibleProperty =
@@ -64,10 +89,18 @@ public class TimeCalcConfiguration {
                 visibilityDefaultProperty,
                 visibilitySupportedColoredProperty,
                 clockHandsLongVisibleProperty,
+                clockHandsBlackProperty,
                 clockHandsMinuteVisibleProperty,
                 clockHandsSecondVisibleProperty,
                 clockHandsMillisecondVisibleProperty,
                 clockBorderVisibleProperty,
+                clockBorderOnlyHoursProperty,
+                clockNumbersVisibleProperty,
+                clockCircleVisibleProperty,
+                clockCircleStrongBorderProperty,
+                clockCircleBorderColorProperty,
+                clockCentreCircleVisibleProperty,
+                clockCentreCircleBlackProperty,
                 batteryWavesVisibleProperty,
                 jokesVisibleProperty,
                 commandsVisibleProperty,

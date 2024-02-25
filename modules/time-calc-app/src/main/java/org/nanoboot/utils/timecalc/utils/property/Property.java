@@ -50,6 +50,7 @@ public class Property<T> {
     }
 
     public void bindTo(Property<T> anotherProperty) {
+        fireValueChangedEvent(value);
         this.boundToProperty = anotherProperty;
         this.boundChangeListener =
                 (Property<T> p, T oldValue, T newValue) -> {
@@ -59,6 +60,7 @@ public class Property<T> {
                 };
         this.boundToProperty
                 .addListener(boundChangeListener);
+
     }
 
     public T getValue() {
