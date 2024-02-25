@@ -83,8 +83,6 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 
 ### Smileys
 
-### Smileys
-
 Progress in square, circle or batteries is represented also by smileys (only, if the widget is hovered by mouse cursor):
 
 Smileys can be colored or white-black (can be set in configuration)
@@ -120,7 +118,6 @@ Smileys can be colored or white-black (can be set in configuration)
 <pre>&#x1f60d;</pre> ... smiling face with heart-shaped eyes ... less than 93.75%
 
 <pre>&#x1f608;</pre> ... smiling face with horns ... more or equal to 93.75%
-
 
 ## Key shortcuts
 
