@@ -60,4 +60,14 @@ public enum ProgressSmiley {
         }
         return SMILEY_16;
     }
+
+    public static void main(String[] args) {
+        Arrays.stream(values()).forEach(s-> {
+            s.getCharacter().codePoints().mapToObj(Integer::toHexString).forEach(System.out::println);
+
+        });
+    }
+    private static String toUnicode(char ch) {
+        return String.format("\\u%04x", (int) ch);
+    }
 }

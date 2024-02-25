@@ -6,7 +6,8 @@ Time Calc is a desktop application used to track the remaining time until the en
 
 _Time Calc is written in Java programming language and uses the Swing framework._
 
-![Tux, the Linux mascot](images/screenshot.png)
+![Screenshot of application "Time Calc"](images/screenshot.png)
+
 ## Usage
 
 ### Start of application
@@ -82,27 +83,63 @@ If file test.txt exists, then user is not asked for start time and overtime. Ins
 
 ### Smileys
 
-Progress in square, circle or batteries is represented also by smileys (only, if the widget is hovered by mouse cursor):
- * smileys can be colored or white-black (can be set in configuration)
+### Smileys
 
-* ? ... face screaming in fear ... less than 6.25%
-* ? ... pouting face ... less than 12.5%
-* ? ... angry face ... less than 18.75%
-* ? ... loudly crying face ... less than 25%
-* ? ... crying face ... less than 31.25%
-* ? ... disappointed face ... less than 37.5%
-* ? ... tired face ... less than 43.75%
-* ? ... fearful face ... less than 50%
-* ? ... astonished face ... less than 56.25%
-* ? ... frowning face with open mouth ... less than 62.5%
-* ? ... smiling face with smiling eyes ... less than 68.75%
-* ? ... smiling face with open mouth ... less than 75%
-* ? ... grinning face with smiling eyes ... less than 81.25%
-* ? ... smiling face with sunglasses ... less than 87.5%
-* ? ... smiling face with heart-shaped eyes ... less than 93.75%
-* ? ... smiling face with horns ... more or equal to 93.75%
+Progress in square, circle or batteries is represented also by smileys (only, if the widget is hovered by mouse cursor):
+
+Smileys can be colored or white-black (can be set in configuration)
+
+<pre>&#x1f631;</pre> ... face screaming in fear ... less than 6.25%
+
+<pre>&#x1f621;</pre> ... pouting face ... less than 12.5%
+
+<pre>&#x1f620;</pre> ... angry face ... less than 18.75%
+
+<pre>&#x1f62d;</pre> ... loudly crying face ... less than 25%
+
+<pre>&#x1f622;</pre> ... crying face ... less than 31.25%
+
+<pre>&#x1f61e;</pre> ... disappointed face ... less than 37.5%
+
+<pre>&#x1f62b;</pre> ... tired face ... less than 43.75%
+
+<pre>&#x1f628;</pre> ... fearful face ... less than 50%
+
+<pre>&#x1f632;</pre> ... astonished face ... less than 56.25%
+
+<pre>&#x1f626;</pre> ... frowning face with open mouth ... less than 62.5%
+
+<pre>&#x1f60a;</pre> ... smiling face with smiling eyes ... less than 68.75%
+
+<pre>&#x1f603;</pre> ... smiling face with open mouth ... less than 75%
+
+<pre>&#x1f601;</pre> ... grinning face with smiling eyes ... less than 81.25%
+
+<pre>&#x1f60e;</pre> ... smiling face with sunglasses ... less than 87.5%
+
+<pre>&#x1f60d;</pre> ... smiling face with heart-shaped eyes ... less than 93.75%
+
+<pre>&#x1f608;</pre> ... smiling face with horns ... more or equal to 93.75%
+
 
 ## Key shortcuts
+
+* UP - Show widgets again, if they were hidden
+* DOWN - Hide all widgets and buttons
+* H - Show all hide everything
+* G - switch between coloured and no-coloured visibility mode
+* C - switch between strongly coloured and weakly coloured visibility mode
+* V - switch visibility mode NONE and STRONGLY_COLOURED
+* SPACE - switch visibility mode: NONE, GREY, WEAKLY_COLOURED, STRONGLY_COLOURED
+* F2 - run commands
+* R - restart app
+* T - enable or disable notifications
+* W - open work days window
+* A - open activity window
+* S - open config window
+* P or F1 - open help window
+* X - exit application
+* J - show random Joke
 
 ## Command button
 

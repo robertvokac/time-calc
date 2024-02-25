@@ -262,7 +262,6 @@ public class ConfigWindow extends TWindow {
 
             }
         });
-
     }
 
     private void addToNextRow(JComponent jComponent) {

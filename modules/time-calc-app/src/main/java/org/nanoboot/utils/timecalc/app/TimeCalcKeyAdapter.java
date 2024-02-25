@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
+import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.awt.event.KeyAdapter;
@@ -129,8 +130,15 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             window.openConfigWindow();
         }
 
+        if (e.getKeyCode() == KeyEvent.VK_J) {
+            if(timeCalcConfiguration.jokesVisibleProperty.isEnabled()) {
+                Jokes.showRandom();
+            }
 
-        if (e.getKeyCode() == KeyEvent.VK_P) {
+        }
+
+
+        if (e.getKeyCode() == KeyEvent.VK_P || e.getKeyCode() == KeyEvent.VK_F1) {
             window.openHelpWindow();
         }
 

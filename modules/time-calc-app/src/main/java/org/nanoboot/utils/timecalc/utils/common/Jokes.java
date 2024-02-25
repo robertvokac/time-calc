@@ -72,7 +72,7 @@ public class Jokes {
         Toaster t = new Toaster();
         t.setToasterWidth(800);
         t.setToasterHeight(800);
-        t.setDisplayTime(60000 * 5);
+        t.setDisplayTime(60000 * 1);
         t.setToasterColor(Color.GRAY);
         Font font = new Font("sans", Font.PLAIN, 16);
         t.setToasterMessageFont(font);

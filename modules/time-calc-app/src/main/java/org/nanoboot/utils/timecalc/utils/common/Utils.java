@@ -47,7 +47,7 @@ public class Utils {
         FileOutputStream outputStream;
         try {
             outputStream = new FileOutputStream(file.getAbsolutePath());
-            byte[] strToBytes = text.getBytes();
+            byte[] strToBytes = text.getBytes(StandardCharsets.UTF_8);
             outputStream.write(strToBytes);
 
             outputStream.close();
