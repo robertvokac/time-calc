@@ -25,8 +25,8 @@ import java.util.jar.Manifest;
  */
 public class Utils {
 
-    public static final BooleanProperty toastsAreEnabled =
-            new BooleanProperty("toastsAreEnabled", true);
+    public static final BooleanProperty toastsAreEnabled
+            = new BooleanProperty("toastsAreEnabled", true);
     public static final Color ULTRA_LIGHT_GRAY = new Color(216, 216, 216);
     /**
      * Count of bytes per one kilobyte.
@@ -109,8 +109,8 @@ public class Utils {
         if (!classPath.startsWith("jar")) {
             return null;
         }
-        String manifestPath =
-                classPath.substring(0, classPath.lastIndexOf("!") + 1)
+        String manifestPath
+                = classPath.substring(0, classPath.lastIndexOf("!") + 1)
                 + "/META-INF/MANIFEST.MF";
         Manifest manifest;
         try {
@@ -128,16 +128,16 @@ public class Utils {
         return base64Decoder
                 .decode(s.getBytes());
     }
+
     public static String readTextFromTextResourceInJar(String pathToFile) throws IOException {
         InputStream inputStream = ClassLoader.getSystemClassLoader().
                 getSystemResourceAsStream(pathToFile);
-        InputStreamReader
-                streamReader = new InputStreamReader(inputStream,
+        InputStreamReader streamReader = new InputStreamReader(inputStream,
                 StandardCharsets.UTF_8);
         BufferedReader in = new BufferedReader(streamReader);
 
         StringBuilder sb = new StringBuilder();
-        for (String line; (line = in.readLine()) != null; ) {
+        for (String line; (line = in.readLine()) != null;) {
             sb.append(line).append("\n");
         }
         return sb.toString();

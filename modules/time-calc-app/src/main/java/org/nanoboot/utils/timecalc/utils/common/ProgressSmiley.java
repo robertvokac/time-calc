@@ -6,7 +6,7 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import java.util.Arrays;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 26.02.2024
  */
 public enum ProgressSmiley {
@@ -37,6 +37,7 @@ public enum ProgressSmiley {
         this.character = ch;
         this.description = d;
     }
+
     public int getNumber() {
         return Integer.valueOf(this.name().replace("SMILEY_", ""));
     }
@@ -62,11 +63,12 @@ public enum ProgressSmiley {
     }
 
     public static void main(String[] args) {
-        Arrays.stream(values()).forEach(s-> {
+        Arrays.stream(values()).forEach(s -> {
             s.getCharacter().codePoints().mapToObj(Integer::toHexString).forEach(System.out::println);
 
         });
     }
+
     private static String toUnicode(char ch) {
         return String.format("\\u%04x", (int) ch);
     }

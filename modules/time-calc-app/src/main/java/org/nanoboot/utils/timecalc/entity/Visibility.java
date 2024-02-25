@@ -24,6 +24,7 @@ public enum Visibility {
     public boolean isColored() {
         return isStronglyColored() || isWeaklyColored();
     }
+
     public boolean isGray() {
         return this == GRAY;
     }

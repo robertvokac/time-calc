@@ -11,6 +11,7 @@ import java.util.Set;
  * @since 21.02.2024
  */
 public class ComponentRegistry<T extends Component> {
+
     @Getter
     private final Set<T> set = new HashSet<>();
 

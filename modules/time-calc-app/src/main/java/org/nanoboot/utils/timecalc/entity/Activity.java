@@ -12,6 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Activity {
+
     public static final String SUBJECT_FIELD_SEPARATOR = " : ";
     private int year;
     private int month;
@@ -23,9 +24,11 @@ public class Activity {
     private int spentMinutes;
     private boolean jira;
     private boolean bugzilla;
+
     public String createSubject() {
         return ticket + SUBJECT_FIELD_SEPARATOR + name;
     }
+
     public String createBugzillaComment() {
         return ticket + SUBJECT_FIELD_SEPARATOR + year + "-" + month + "-" + day + SUBJECT_FIELD_SEPARATOR + ((spentHours + spentMinutes / 60d) + "h") + SUBJECT_FIELD_SEPARATOR + comment;
     }

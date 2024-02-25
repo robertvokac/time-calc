@@ -11,15 +11,15 @@ import java.util.List;
  * @since 23.02.2024
  */
 public class Property<T> {
+
     @Getter
     private final String name;
     private boolean valid = true;
     private T value;
     private Property<T> boundToProperty = null;
-    private final List<InvalidationListener> invalidationListeners =
-            new ArrayList<>();
-    private final List<ChangeListener<T>>
-            changeListeners = new ArrayList<ChangeListener<T>>();
+    private final List<InvalidationListener> invalidationListeners
+            = new ArrayList<>();
+    private final List<ChangeListener<T>> changeListeners = new ArrayList<ChangeListener<T>>();
     private ChangeListener<T> boundChangeListener = null;
 
     public Property(String name, T valueIn) {
@@ -52,8 +52,8 @@ public class Property<T> {
     public void bindTo(Property<T> anotherProperty) {
         fireValueChangedEvent(value);
         this.boundToProperty = anotherProperty;
-        this.boundChangeListener =
-                (Property<T> p, T oldValue, T newValue) -> {
+        this.boundChangeListener
+                = (Property<T> p, T oldValue, T newValue) -> {
                     this.markInvalid();
                     this.fireValueChangedEvent(oldValue);
                     //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
@@ -111,6 +111,7 @@ public class Property<T> {
     public void removeListener(ChangeListener<T> listener) {
         this.changeListeners.remove(listener);
     }
+
     public String toString() {
         return String.valueOf(getValue());
     }

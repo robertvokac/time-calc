@@ -9,10 +9,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 26.02.2024
  */
 public class TimeCalcKeyAdapter extends KeyAdapter {
+
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow window;
@@ -28,15 +29,15 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     }
 
     public void keyPressed(KeyEvent e) {
-        boolean onlyGreyOrNone =
-                timeCalcConfiguration.visibilitySupportedColoredProperty
+        boolean onlyGreyOrNone
+                = timeCalcConfiguration.visibilitySupportedColoredProperty
                         .isDisabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             timeCalcApp.visibilityProperty
-                    .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
-                            Visibility.STRONGLY_COLORED.name());
+                    .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                            : Visibility.STRONGLY_COLORED.name());
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             timeCalcApp.visibilityProperty
@@ -46,8 +47,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         if (e.getKeyCode() == KeyEvent.VK_H) {
             if (visibility.isNone()) {
                 timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
-                                Visibility.STRONGLY_COLORED.name());
+                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                : Visibility.STRONGLY_COLORED.name());
             } else {
                 timeCalcApp.visibilityProperty
                         .setValue(Visibility.NONE.name());
@@ -80,8 +81,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         if (e.getKeyCode() == KeyEvent.VK_V) {
             if (visibility.isNone()) {
                 timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
-                                Visibility.STRONGLY_COLORED.name());
+                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                : Visibility.STRONGLY_COLORED.name());
             } else {
                 timeCalcApp.visibilityProperty
                         .setValue(Visibility.NONE.name());
@@ -90,8 +91,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if (visibility.isStronglyColored()) {
                 timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
-                                Visibility.WEAKLY_COLORED.name());
+                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                : Visibility.WEAKLY_COLORED.name());
             }
             if (visibility.isWeaklyColored()) {
                 timeCalcApp.visibilityProperty
@@ -103,8 +104,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
             if (visibility.isNone()) {
                 timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name() :
-                                Visibility.STRONGLY_COLORED.name());
+                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                : Visibility.STRONGLY_COLORED.name());
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_F2) {
@@ -131,12 +132,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_J) {
-            if(timeCalcConfiguration.jokesVisibleProperty.isEnabled()) {
+            if (timeCalcConfiguration.jokesVisibleProperty.isEnabled()) {
                 Jokes.showRandom();
             }
 
         }
-
 
         if (e.getKeyCode() == KeyEvent.VK_P || e.getKeyCode() == KeyEvent.VK_F1) {
             window.openHelpWindow();

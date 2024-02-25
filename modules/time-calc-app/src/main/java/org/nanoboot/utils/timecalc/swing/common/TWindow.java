@@ -9,6 +9,7 @@ import java.awt.HeadlessException;
  * @since 21.02.2024
  */
 public class TWindow extends JFrame {
+
     public TWindow() throws HeadlessException {
 
     }

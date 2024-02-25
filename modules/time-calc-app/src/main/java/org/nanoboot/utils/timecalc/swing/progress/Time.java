@@ -8,38 +8,38 @@ import java.util.Date;
 
 public class Time extends Thread {
 
-    private final IntegerProperty yearReadWriteProperty =
-            new IntegerProperty("yearProperty");
-    public ReadOnlyProperty<Integer> yearProperty =
-            yearReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty monthReadWriteProperty =
-            new IntegerProperty("monthProperty");
-    public ReadOnlyProperty<Integer> monthProperty =
-            monthReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty dayReadWriteProperty =
-            new IntegerProperty("dayProperty");
-    public ReadOnlyProperty<Integer> dayProperty =
-            dayReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty hourReadWriteProperty =
-            new IntegerProperty("hourProperty");
-    public ReadOnlyProperty<Integer> hourProperty =
-            hourReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty minuteReadWriteProperty =
-            new IntegerProperty("minuteProperty");
-    public ReadOnlyProperty<Integer> minuteProperty =
-            minuteReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty secondReadWriteProperty =
-            new IntegerProperty("secondProperty");
-    public ReadOnlyProperty<Integer> secondProperty =
-            secondReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty millisecondReadWriteProperty =
-            new IntegerProperty("millisecondProperty");
-    public ReadOnlyProperty<Integer> millisecondProperty =
-            millisecondReadWriteProperty.asReadOnlyProperty();
-    private final IntegerProperty dayOfWeekReadWriteProperty =
-            new IntegerProperty("dayOfWeek");
-    public ReadOnlyProperty<Integer> dayOfWeek =
-            dayOfWeekReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty yearReadWriteProperty
+            = new IntegerProperty("yearProperty");
+    public ReadOnlyProperty<Integer> yearProperty
+            = yearReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty monthReadWriteProperty
+            = new IntegerProperty("monthProperty");
+    public ReadOnlyProperty<Integer> monthProperty
+            = monthReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty dayReadWriteProperty
+            = new IntegerProperty("dayProperty");
+    public ReadOnlyProperty<Integer> dayProperty
+            = dayReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty hourReadWriteProperty
+            = new IntegerProperty("hourProperty");
+    public ReadOnlyProperty<Integer> hourProperty
+            = hourReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty minuteReadWriteProperty
+            = new IntegerProperty("minuteProperty");
+    public ReadOnlyProperty<Integer> minuteProperty
+            = minuteReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty secondReadWriteProperty
+            = new IntegerProperty("secondProperty");
+    public ReadOnlyProperty<Integer> secondProperty
+            = secondReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty millisecondReadWriteProperty
+            = new IntegerProperty("millisecondProperty");
+    public ReadOnlyProperty<Integer> millisecondProperty
+            = millisecondReadWriteProperty.asReadOnlyProperty();
+    private final IntegerProperty dayOfWeekReadWriteProperty
+            = new IntegerProperty("dayOfWeek");
+    public ReadOnlyProperty<Integer> dayOfWeek
+            = dayOfWeekReadWriteProperty.asReadOnlyProperty();
     //private long lastUpdateNanoTime = 0l;
 
     public Time() {
@@ -73,15 +73,14 @@ public class Time extends Thread {
 
     public void writeString() {
         System.out.println(
-                yearProperty.getValue() + " " +
-                monthProperty.getValue() + " " +
-                dayProperty.getValue() + " " +
-                hourProperty.getValue() + " " +
-                minuteProperty.getValue() + " " +
-                secondProperty.getValue() + " " +
-                millisecondProperty.getValue() + " " +
-                dayOfWeek.getValue() + " "
-
+                yearProperty.getValue() + " "
+                + monthProperty.getValue() + " "
+                + dayProperty.getValue() + " "
+                + hourProperty.getValue() + " "
+                + minuteProperty.getValue() + " "
+                + secondProperty.getValue() + " "
+                + millisecondProperty.getValue() + " "
+                + dayOfWeek.getValue() + " "
         );
     }
 }

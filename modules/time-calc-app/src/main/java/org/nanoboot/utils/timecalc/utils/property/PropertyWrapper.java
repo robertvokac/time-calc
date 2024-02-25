@@ -7,6 +7,7 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
  * @since 23.02.2024
  */
 public class PropertyWrapper<T> {
+
     private Property<T> innerProperty;
 
     public final void unBound() {

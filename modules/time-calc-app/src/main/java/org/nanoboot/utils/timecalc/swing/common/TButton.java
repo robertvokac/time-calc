@@ -16,27 +16,28 @@ import java.awt.Color;
  * @since 21.02.2024
  */
 public class TButton extends JButton implements GetProperty {
+
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 30;
-    public StringProperty visibilityProperty =
-            new StringProperty("visibilityProperty",
+    public StringProperty visibilityProperty
+            = new StringProperty("visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
 
-    public final BooleanProperty visibilitySupportedColoredProperty =
-            new BooleanProperty("visibilitySupportedColoredProperty", true);
+    public final BooleanProperty visibilitySupportedColoredProperty
+            = new BooleanProperty("visibilitySupportedColoredProperty", true);
     private Color originalBackground;
     private Color originalForeground;
 
     public TButton(String label) {
         super(label);
         new Timer(100, e -> {
-            Visibility visibility =
-                    Visibility.valueOf(visibilityProperty.getValue());
+            Visibility visibility
+                    = Visibility.valueOf(visibilityProperty.getValue());
             setVisible(visibility.isNotNone());
             if (!visibility.isStronglyColored() || visibility.isGray()) {
-            setBackground(MainWindow.BACKGROUND_COLOR);
-            setForeground(MainWindow.FOREGROUND_COLOR);
-        } else {
+                setBackground(MainWindow.BACKGROUND_COLOR);
+                setForeground(MainWindow.FOREGROUND_COLOR);
+            } else {
                 setOriginalBackground();
                 setOriginalForeground();
             }
@@ -64,10 +65,11 @@ public class TButton extends JButton implements GetProperty {
     public void setBoundsFromTop(JComponent jComponent) {
         setBoundsFromTop(jComponent, 1);
     }
+
     public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
-                                     + jComponent.getHeight()
-                                     + marginCount * SwingUtils.MARGIN);
+                + jComponent.getHeight()
+                + marginCount * SwingUtils.MARGIN);
     }
 
     @Override

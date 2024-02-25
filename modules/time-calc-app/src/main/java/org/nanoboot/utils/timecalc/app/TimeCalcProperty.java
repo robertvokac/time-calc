@@ -49,13 +49,12 @@ public enum TimeCalcProperty {
     private final Class clazz;
 
     public static TimeCalcProperty forKey(String key) {
-        Optional<TimeCalcProperty>
-                timeCalcPropertyOptional = Arrays.stream(values()).filter(t -> t.getKey().equals(key)).findFirst();
-        if(timeCalcPropertyOptional.isPresent()) {
+        Optional<TimeCalcProperty> timeCalcPropertyOptional = Arrays.stream(values()).filter(t -> t.getKey().equals(key)).findFirst();
+        if (timeCalcPropertyOptional.isPresent()) {
             return timeCalcPropertyOptional.get();
         } else {
-            TimeCalcException e =
-                    new TimeCalcException("There is no key: " + key);
+            TimeCalcException e
+                    = new TimeCalcException("There is no key: " + key);
             e.printStackTrace();
             throw e;
         }
@@ -66,6 +65,7 @@ public enum TimeCalcProperty {
         this.description = description;
         this.clazz = clazz;
     }
+
     TimeCalcProperty(String key, String description) {
         this(key, description, Boolean.class);
     }

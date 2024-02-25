@@ -25,6 +25,7 @@ import java.net.URL;
  * @since 16.02.2024
  */
 public class WeatherWindow extends JFrame {
+
     public WeatherWindow() {
         this.setSize(400, 300);
 
@@ -47,7 +48,6 @@ public class WeatherWindow extends JFrame {
         //            jep.setText(e.getMessage());
         //            return;
         //        }
-
         try {
             String pocasiHtml = null;
             File pocasiHtmlFile = new File("pocasi.html");
@@ -57,9 +57,9 @@ public class WeatherWindow extends JFrame {
                 Utils.writeTextToFile(pocasiHtmlFile, pocasiHtml);
             } catch (Exception e) {
                 e.printStackTrace();
-                pocasiHtml = pocasiHtmlFile.exists() ?
-                        Utils.readTextFromFile(pocasiHtmlFile) :
-                        "Sorry, pocasi.html was not found.";
+                pocasiHtml = pocasiHtmlFile.exists()
+                        ? Utils.readTextFromFile(pocasiHtmlFile)
+                        : "Sorry, pocasi.html was not found.";
             }
 
             {
@@ -86,7 +86,7 @@ public class WeatherWindow extends JFrame {
 
             jep.setContentType("text/html");
             jep.setText("<html><head><meta charset=\"UTF-8\"></head><body>"
-                        + pocasiHtml + "</body></html>");
+                    + pocasiHtml + "</body></html>");
             Utils.writeTextToFile(new File("aaa"),
                     "<html><head><meta charset=\"UTF-8\"></head><body>"
                     + pocasiHtml + "</body></html>");
@@ -103,8 +103,8 @@ public class WeatherWindow extends JFrame {
             Source xmlInput = new StreamSource(new StringReader(input));
             StringWriter stringWriter = new StringWriter();
             StreamResult xmlOutput = new StreamResult(stringWriter);
-            TransformerFactory transformerFactory =
-                    TransformerFactory.newInstance();
+            TransformerFactory transformerFactory
+                    = TransformerFactory.newInstance();
 
             transformerFactory.setAttribute("indent-number", indent);
 
@@ -117,8 +117,8 @@ public class WeatherWindow extends JFrame {
                 Source xmlInput = new StreamSource(new StringReader(input));
                 StringWriter stringWriter = new StringWriter();
                 StreamResult xmlOutput = new StreamResult(stringWriter);
-                TransformerFactory transformerFactory =
-                        TransformerFactory.newInstance();
+                TransformerFactory transformerFactory
+                        = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
                 transformer.setOutputProperty(

@@ -15,106 +15,106 @@ import java.util.Properties;
  * @since 20.02.2024
  */
 public class TimeCalcConfiguration {
+
     public final StringProperty visibilityDefaultProperty = new StringProperty(TimeCalcProperty.VISIBILITY_DEFAULT
             .getKey());
-    public final BooleanProperty visibilitySupportedColoredProperty =
-            new BooleanProperty(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED
+    public final BooleanProperty visibilitySupportedColoredProperty
+            = new BooleanProperty(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED
                     .getKey());
     //
-    public final BooleanProperty clockHandsLongVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
+    public final BooleanProperty clockHandsLongVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
                     .getKey());
-    public final BooleanProperty clockHandsBlackProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_BLACK
+    public final BooleanProperty clockHandsBlackProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_BLACK
                     .getKey());
-    public final BooleanProperty clockHandsMinuteVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE
+    public final BooleanProperty clockHandsMinuteVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE
                     .getKey());
-    public final BooleanProperty clockHandsSecondVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_SECOND_VISIBLE
+    public final BooleanProperty clockHandsSecondVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_SECOND_VISIBLE
                     .getKey());
-    public final BooleanProperty clockHandsMillisecondVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE
+    public final BooleanProperty clockHandsMillisecondVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE
                     .getKey());
-    public final BooleanProperty clockBorderVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
+    public final BooleanProperty clockBorderVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
                     .getKey());
-    public final BooleanProperty clockBorderOnlyHoursProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_ONLY_HOURS
+    public final BooleanProperty clockBorderOnlyHoursProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_ONLY_HOURS
                     .getKey());
 
-    public final BooleanProperty clockNumbersVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_NUMBERS_VISIBLE
+    public final BooleanProperty clockNumbersVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_NUMBERS_VISIBLE
                     .getKey());
-    public final BooleanProperty clockCircleVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE
+    public final BooleanProperty clockCircleVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE
                     .getKey());
-    public final BooleanProperty clockCircleStrongBorderProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER
+    public final BooleanProperty clockCircleStrongBorderProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER
                     .getKey());
-    public final StringProperty clockCircleBorderColorProperty =
-            new StringProperty(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR
+    public final StringProperty clockCircleBorderColorProperty
+            = new StringProperty(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR
                     .getKey());
-    public final BooleanProperty clockCentreCircleVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE
+    public final BooleanProperty clockCentreCircleVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE
                     .getKey());
-    public final BooleanProperty clockCentreCircleBlackProperty =
-            new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
+    public final BooleanProperty clockCentreCircleBlackProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
                     .getKey());
     //
-    public final BooleanProperty batteryWavesVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
+    public final BooleanProperty batteryWavesVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
                     .getKey());
 
-    public final BooleanProperty jokesVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.JOKES_VISIBLE
+    public final BooleanProperty jokesVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.JOKES_VISIBLE
                     .getKey());
-    public final BooleanProperty commandsVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.COMMANDS_VISIBLE
+    public final BooleanProperty commandsVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.COMMANDS_VISIBLE
                     .getKey());
-    public final BooleanProperty notificationsVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.NOTIFICATIONS_VISIBLE
+    public final BooleanProperty notificationsVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.NOTIFICATIONS_VISIBLE
                     .getKey());
-    public final BooleanProperty smileysColoredProperty =
-            new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
-    public final BooleanProperty squareVisibleProperty =
-            new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
+    public final BooleanProperty smileysColoredProperty
+            = new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    public final BooleanProperty squareVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
 
     private final Map<TimeCalcProperty, Property> mapOfProperties = new HashMap<>();
     private List<Property> allProperties = new ArrayList<>();
     private TimeCalcProperties timeCalcProperties;
 
     public TimeCalcConfiguration() {
-        for(Property p:new Property[] {
-                visibilityDefaultProperty,
-                visibilitySupportedColoredProperty,
-                clockHandsLongVisibleProperty,
-                clockHandsBlackProperty,
-                clockHandsMinuteVisibleProperty,
-                clockHandsSecondVisibleProperty,
-                clockHandsMillisecondVisibleProperty,
-                clockBorderVisibleProperty,
-                clockBorderOnlyHoursProperty,
-                clockNumbersVisibleProperty,
-                clockCircleVisibleProperty,
-                clockCircleStrongBorderProperty,
-                clockCircleBorderColorProperty,
-                clockCentreCircleVisibleProperty,
-                clockCentreCircleBlackProperty,
-                batteryWavesVisibleProperty,
-                jokesVisibleProperty,
-                commandsVisibleProperty,
-                notificationsVisibleProperty,
-                smileysColoredProperty,
-                squareVisibleProperty,
-        }) {
+        for (Property p : new Property[]{
+            visibilityDefaultProperty,
+            visibilitySupportedColoredProperty,
+            clockHandsLongVisibleProperty,
+            clockHandsBlackProperty,
+            clockHandsMinuteVisibleProperty,
+            clockHandsSecondVisibleProperty,
+            clockHandsMillisecondVisibleProperty,
+            clockBorderVisibleProperty,
+            clockBorderOnlyHoursProperty,
+            clockNumbersVisibleProperty,
+            clockCircleVisibleProperty,
+            clockCircleStrongBorderProperty,
+            clockCircleBorderColorProperty,
+            clockCentreCircleVisibleProperty,
+            clockCentreCircleBlackProperty,
+            batteryWavesVisibleProperty,
+            jokesVisibleProperty,
+            commandsVisibleProperty,
+            notificationsVisibleProperty,
+            smileysColoredProperty,
+            squareVisibleProperty,}) {
             allProperties.add(p);
         }
         allProperties.stream().forEach(p -> mapOfProperties.put(TimeCalcProperty.forKey(p.getName()), p));
     }
 
     public Property getProperty(TimeCalcProperty timeCalcProperty) {
-        if(!mapOfProperties.containsKey(timeCalcProperty)) {
+        if (!mapOfProperties.containsKey(timeCalcProperty)) {
             throw new TimeCalcException("There is no property for : " + timeCalcProperty);
         }
         return mapOfProperties.get(timeCalcProperty);
@@ -122,7 +122,7 @@ public class TimeCalcConfiguration {
 
     public void saveToTimeCalcProperties() {
         System.out.println("Going to save properties.");
-        if(timeCalcProperties == null) {
+        if (timeCalcProperties == null) {
             throw new TimeCalcException("Cannot save properties, because timeCalcProperties is null.");
         }
         Properties properties = new Properties();
@@ -130,21 +130,22 @@ public class TimeCalcConfiguration {
         this.timeCalcProperties.save(properties);
 
     }
+
     public void loadFromTimeCalcProperties(
             TimeCalcProperties timeCalcProperties) {
         this.timeCalcProperties = timeCalcProperties;
-        for(Property p:allProperties) {
-            if(p instanceof BooleanProperty) {
-                ((BooleanProperty)p).setValue(timeCalcProperties.getBooleanProperty(TimeCalcProperty.forKey(p.getName())));
+        for (Property p : allProperties) {
+            if (p instanceof BooleanProperty) {
+                ((BooleanProperty) p).setValue(timeCalcProperties.getBooleanProperty(TimeCalcProperty.forKey(p.getName())));
                 continue;
             }
 
-            if(p.getName().equals(TimeCalcProperty.VISIBILITY_DEFAULT.name())) {
+            if (p.getName().equals(TimeCalcProperty.VISIBILITY_DEFAULT.name())) {
                 visibilityDefaultProperty.setValue(timeCalcProperties.getStringProperty(TimeCalcProperty.VISIBILITY_DEFAULT));
                 continue;
             }
-            if(p instanceof StringProperty) {
-                ((StringProperty)p).setValue(timeCalcProperties.getStringProperty(TimeCalcProperty.forKey(p.getName())));
+            if (p instanceof StringProperty) {
+                ((StringProperty) p).setValue(timeCalcProperties.getStringProperty(TimeCalcProperty.forKey(p.getName())));
                 continue;
             }
             throw new TimeCalcException("Unsupported Property class: " + p.getClass().getName());

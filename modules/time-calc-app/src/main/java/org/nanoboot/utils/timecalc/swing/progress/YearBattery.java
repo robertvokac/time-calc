@@ -7,6 +7,7 @@ import java.util.Calendar;
  * @since 21.02.2024
  */
 public class YearBattery extends Battery {
+
     public YearBattery(int x, int i, int i1) {
         super("Year", x, i, i1);
     }
@@ -39,7 +40,7 @@ public class YearBattery extends Battery {
     private static double getTotalCountOfDaysInAYear(Integer year) {
         boolean leapYear = isLeapYear(year);
         double daysInYear = 365d;
-        if(leapYear) {
+        if (leapYear) {
             daysInYear++;
         }
         return daysInYear;
@@ -58,6 +59,6 @@ public class YearBattery extends Battery {
                 analogClock.minuteProperty.getValue(),
                 analogClock.secondProperty.getValue(),
                 analogClock.millisecondProperty.getValue()
-                );
+        );
     }
 }

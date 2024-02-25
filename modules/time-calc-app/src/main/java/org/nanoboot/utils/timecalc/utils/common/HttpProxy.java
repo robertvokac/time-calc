@@ -8,6 +8,7 @@ import java.io.IOException;
  * @since 16.02.2024
  */
 public class HttpProxy {
+
     private final String url, port, user, password;
 
     public HttpProxy(String url, String port, String user,

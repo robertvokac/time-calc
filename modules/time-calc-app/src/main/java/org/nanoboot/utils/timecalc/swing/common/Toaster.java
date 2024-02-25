@@ -2,35 +2,28 @@
  * This Java class named Toaster is licence under this licence: Apache License V2.0
  */
 package org.nanoboot.utils.timecalc.swing.common;
+
 /**
- * Java Toaster is a java utility class for your swing applications
- * that show an animate box coming from the bottom of your screen
- * with a notification message and/or an associated image
- * (like msn online/offline notifications).
+ * Java Toaster is a java utility class for your swing applications that show an
+ * animate box coming from the bottom of your screen with a notification message
+ * and/or an associated image (like msn online/offline notifications).
  * <p>
- * Toaster panel in windows system follow the taskbar; So if
- * the taskbar is into the bottom the panel coming from the bottom
- * and if the taskbar is on the top then the panel coming from the top.
+ * Toaster panel in windows system follow the taskbar; So if the taskbar is into
+ * the bottom the panel coming from the bottom and if the taskbar is on the top
+ * then the panel coming from the top.
  * <p>
  * This is a simple example of utilization:
  * <p>
- * import com.nitido.utils.toaster.*;
- * import javax.swing.*;
+ * import com.nitido.utils.toaster.*; import javax.swing.*;
  * <p>
- * public class ToasterTest
- * {
+ * public class ToasterTest {
  * <p>
- * public static void main(String[] args)
- * {
- * // Initialize toaster manager...
+ * public static void main(String[] args) { // Initialize toaster manager...
  * Toaster toasterManager = new Toaster();
  * <p>
- * // Show a simple toaster
- * toasterManager.showToaster( new ImageIcon( "mylogo.gif" ), "A simple toaster with an image" );
- * }
- * }
+ * // Show a simple toaster toasterManager.showToaster( new ImageIcon(
+ * "mylogo.gif" ), "A simple toaster with an image" ); } }
  */
-
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.BorderFactory;
@@ -56,6 +49,7 @@ import java.awt.Rectangle;
  * @author daniele piras
  */
 public class Toaster {
+
     private static final long serialVersionUID = 1L;
     // Set the margin
     int margin;
@@ -293,6 +287,7 @@ public class Toaster {
      * @author daniele piras
      */
     class SingleToaster extends JWindow {
+
         private static final long serialVersionUID = 1L;
 
         // Label to store Icon
@@ -301,14 +296,16 @@ public class Toaster {
         // Text area for the message
         private final JTextArea message = new JTextArea();
 
-        /***
+        /**
+         * *
          * Simple costructor that initialized components...
          */
         public SingleToaster() {
             initComponents();
         }
 
-        /***
+        /**
+         * *
          * Function to initialized components
          */
         private void initComponents() {
@@ -317,16 +314,16 @@ public class Toaster {
             message.setFont(getToasterMessageFont());
             JPanel externalPanel = new JPanel(new BorderLayout(1, 1));
             externalPanel.setBackground(getBorderColor());
-            JPanel innerPanel =
-                    new JPanel(new BorderLayout(getMargin(), getMargin())) {
-                        @Override
-                        public void paint(Graphics g) {
-                            if (getBackgroundImage() != null) {
-                                g.drawImage(getBackgroundImage(), 0, 0, null);
-                            }
-                            super.paint(g);
-                        }
-                    };
+            JPanel innerPanel
+                    = new JPanel(new BorderLayout(getMargin(), getMargin())) {
+                @Override
+                public void paint(Graphics g) {
+                    if (getBackgroundImage() != null) {
+                        g.drawImage(getBackgroundImage(), 0, 0, null);
+                    }
+                    super.paint(g);
+                }
+            };
             if (getBackgroundImage() != null) {
                 innerPanel.setOpaque(false);
                 message.setOpaque(false);
@@ -354,7 +351,8 @@ public class Toaster {
             });
         }
 
-        /***
+        /**
+         * *
          * Start toaster animation...
          */
         public void animate() {
@@ -363,10 +361,12 @@ public class Toaster {
 
     }
 
-    /***
+    /**
+     * *
      * Class that manage the animation
      */
     class Animation extends Thread {
+
         SingleToaster toaster;
 
         public Animation(SingleToaster toaster) {
@@ -374,8 +374,8 @@ public class Toaster {
         }
 
         /**
-         * Animate vertically the toaster. The toaster could be moved from bottom
-         * to upper or to upper to bottom
+         * Animate vertically the toaster. The toaster could be moved from
+         * bottom to upper or to upper to bottom
          *
          * @param posx
          * @param fromY
@@ -430,9 +430,9 @@ public class Toaster {
                     startYPosition = screenHeight;
                     stopYPosition = startYPosition - toasterHeight - 1;
                     if (currentNumberOfToaster > 0) {
-                        stopYPosition =
-                                stopYPosition - (maxToaster % maxToasterInSceen
-                                                 * toasterHeight);
+                        stopYPosition
+                                = stopYPosition - (maxToaster % maxToasterInSceen
+                                * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -441,9 +441,9 @@ public class Toaster {
                     stopYPosition = screenRect.y;
 
                     if (currentNumberOfToaster > 0) {
-                        stopYPosition =
-                                stopYPosition + (maxToaster % maxToasterInSceen
-                                                 * toasterHeight);
+                        stopYPosition
+                                = stopYPosition + (maxToaster % maxToasterInSceen
+                                * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }

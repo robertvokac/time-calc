@@ -18,12 +18,11 @@ import java.util.Set;
  * @since 09.02.2024
  */
 public class Jokes {
+
     /**
-     * https://bestvtip.cz/
-     * https://www.vtipbaze.cz/
+     * https://bestvtip.cz/ https://www.vtipbaze.cz/
      * https://www.ivtipy.cz/vtipy-kamenaky-3/
-     * https://www.bomba-vtipy.cz/vtipy-kamenaky/
-     * https://www.vtipy.net/kamenaky
+     * https://www.bomba-vtipy.cz/vtipy-kamenaky/ https://www.vtipy.net/kamenaky
      * https://www.humor.cz/nejlepsi-vtipy/kamenaky/
      * https://www.panvtip.cz/kamenaky
      * https://pompo.cz/osmismerky-8-vtipy-kamenaky_z123513/

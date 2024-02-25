@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
  * @since 21.02.2024
  */
 public class AboutButton extends TButton {
+
     public AboutButton() {
         super("About");
         addActionListener(e -> {

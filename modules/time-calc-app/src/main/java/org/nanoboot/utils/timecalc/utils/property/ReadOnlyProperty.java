@@ -7,6 +7,7 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
  * @since 23.02.2024
  */
 public class ReadOnlyProperty<T> extends Property<T> {
+
     private final Property<T> innerProperty;
 
     public ReadOnlyProperty(String name, T valueIn) {

@@ -16,8 +16,8 @@ import java.io.IOException;
  */
 public class TimeCalcApp {
 
-    public StringProperty visibilityProperty =
-            new StringProperty("timeCalcApp.visibilityProperty",
+    public StringProperty visibilityProperty
+            = new StringProperty("timeCalcApp.visibilityProperty",
                     Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
 
@@ -32,40 +32,40 @@ public class TimeCalcApp {
                     FileConstants.STARTTIME_TXT);
             String oldOvertime = Utils.readTextFromFile(
                     FileConstants.OVERTIME_TXT);
-            String newStartTime =
-                    test ? (oldStartTime != null ? oldStartTime :
-                            Constants.DEFAULT_START_TIME) :
-                            (String) JOptionPane.showInputDialog(
+            String newStartTime
+                    = test ? (oldStartTime != null ? oldStartTime
+                                    : Constants.DEFAULT_START_TIME)
+                            : (String) JOptionPane.showInputDialog(
                                     null,
                                     "Start Time:",
                                     "Start Time",
                                     JOptionPane.PLAIN_MESSAGE,
                                     null,
                                     null,
-                                    oldStartTime == null ?
-                                            Constants.DEFAULT_START_TIME :
-                                            oldStartTime
+                                    oldStartTime == null
+                                            ? Constants.DEFAULT_START_TIME
+                                            : oldStartTime
                             );
-            String newOvertime =
-                    test ? (oldOvertime != null ? oldOvertime :
-                            Constants.DEFAULT_OVERTIME) :
-                            (String) JOptionPane.showInputDialog(
+            String newOvertime
+                    = test ? (oldOvertime != null ? oldOvertime
+                                    : Constants.DEFAULT_OVERTIME)
+                            : (String) JOptionPane.showInputDialog(
                                     null,
                                     "Overtime:",
                                     "Overtime",
                                     JOptionPane.PLAIN_MESSAGE,
                                     null,
                                     null,
-                                    oldOvertime == null ?
-                                            Constants.DEFAULT_OVERTIME :
-                                            oldOvertime
+                                    oldOvertime == null
+                                            ? Constants.DEFAULT_OVERTIME
+                                            : oldOvertime
                             );
 
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
             try {
-                MainWindow timeCalc =
-                        new MainWindow(newStartTime, newOvertime, this);
+                MainWindow timeCalc
+                        = new MainWindow(newStartTime, newOvertime, this);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -90,5 +90,3 @@ public class TimeCalcApp {
     }
 
 }
-
-

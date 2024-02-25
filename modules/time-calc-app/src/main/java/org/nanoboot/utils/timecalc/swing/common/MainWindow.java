@@ -66,8 +66,8 @@ public class MainWindow extends TWindow {
     private WorkDaysWindow workDaysWindow = null;
 
     private boolean stopBeforeEnd = false;
-    private final TimeCalcConfiguration timeCalcConfiguration =
-            new TimeCalcConfiguration();
+    private final TimeCalcConfiguration timeCalcConfiguration
+            = new TimeCalcConfiguration();
 
     public MainWindow(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
@@ -83,15 +83,15 @@ public class MainWindow extends TWindow {
         timeCalcConfiguration
                 .loadFromTimeCalcProperties(TimeCalcProperties.getInstance());
 
-        overTimeIn = (overTimeIn == null || overTimeIn.isEmpty()) ?
-                Constants.DEFAULT_OVERTIME : overTimeIn;
+        overTimeIn = (overTimeIn == null || overTimeIn.isEmpty())
+                ? Constants.DEFAULT_OVERTIME : overTimeIn;
 
         TimeHM startTime = new TimeHM(startTimeIn);
         TimeHM overtime = new TimeHM(overTimeIn);
 
         TimeHM endTime = new TimeHM(
                 startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime
-                        .getHour(),
+                .getHour(),
                 startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH
                 + overtime.getMinute());
 
@@ -102,7 +102,7 @@ public class MainWindow extends TWindow {
         this.configButton = new TButton("Config");
         this.workDaysButton = new TButton("Work Days");
         this.activitiesButton = new TButton("Activities"
-                                               + "");
+                + "");
         this.restartButton = new TButton("Restart");
         this.exitButton = new TButton("Exit");
         this.focusButton = new TButton("Focus");
@@ -116,9 +116,8 @@ public class MainWindow extends TWindow {
         addAll(configButton, workDaysButton, activitiesButton, restartButton,
                 exitButton, focusButton, helpButton, commandButton, jokeButton);
 
-
         timeCalcApp.visibilityProperty.bindTo(timeCalcConfiguration.visibilityDefaultProperty);
-        if(!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
+        if (!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
         TimeCalcKeyAdapter timeCalcKeyAdapter = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp, this);
@@ -141,13 +140,13 @@ public class MainWindow extends TWindow {
                         progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, progressSquare.getY(), 80);
         add(progressCircle);
 
-        WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt =
-                new WalkingHumanProgressAsciiArt(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
+        WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt
+                = new WalkingHumanProgressAsciiArt(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
         add(walkingHumanProgressAsciiArt);
         weatherButton
                 .setBounds(SwingUtils.MARGIN, walkingHumanProgressAsciiArt.getY()
-                                              + walkingHumanProgressAsciiArt.getHeight()
-                                              + SwingUtils.MARGIN);
+                        + walkingHumanProgressAsciiArt.getHeight()
+                        + SwingUtils.MARGIN);
 
         configButton.setBoundsFromTop(walkingHumanProgressAsciiArt);
         workDaysButton.setBoundsFromLeft(configButton);
@@ -156,7 +155,6 @@ public class MainWindow extends TWindow {
         exitButton.setBoundsFromLeft(restartButton);
 
         //
-
         helpButton.setBoundsFromTop(exitButton, 2);
         focusButton.setBoundsFromLeft(helpButton);
         commandButton.setBoundsFromLeft(focusButton);
@@ -187,27 +185,27 @@ public class MainWindow extends TWindow {
             stopBeforeEnd = true;
         });
         workDaysButton.addActionListener(e -> {
-            if(workDaysWindow == null) {
+            if (workDaysWindow == null) {
                 this.workDaysWindow = new WorkDaysWindow();
             }
             workDaysWindow.setVisible(true);
         });
         activitiesButton.addActionListener(e -> {
-            if(activitiesWindow == null) {
+            if (activitiesWindow == null) {
                 this.activitiesWindow = new ActivitiesWindow();
             }
             activitiesWindow.setVisible(true);
         });
 
         configButton.addActionListener(e -> {
-            if(configWindow == null) {
+            if (configWindow == null) {
                 this.configWindow = new ConfigWindow(timeCalcConfiguration);
             }
             configWindow.setVisible(true);
         });
 
         helpButton.addActionListener(e -> {
-            if(helpWindow == null) {
+            if (helpWindow == null) {
                 this.helpWindow = new HelpWindow();
             }
             helpWindow.setVisible(true);
@@ -238,7 +236,7 @@ public class MainWindow extends TWindow {
 
         if (testProperties.containsKey("test.current.year") || testProperties
                 .containsKey("test.current.month") || testProperties
-                    .containsKey("test.current.day")) {
+                .containsKey("test.current.day")) {
             analogClock.dayOfWeekProperty
                     .setValue(calNow.get(Calendar.DAY_OF_WEEK));
         } else {
@@ -264,7 +262,7 @@ public class MainWindow extends TWindow {
         analogClock.centreCircleBlackProperty.bindTo(timeCalcConfiguration.clockCentreCircleBlackProperty);
 
         MinuteBattery minuteBattery = new MinuteBattery(progressCircle.getBounds().x,
-                progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(),140);
+                progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(), 140);
         add(minuteBattery);
         Battery hourBattery = new HourBattery(minuteBattery.getBounds().x + minuteBattery.getWidth() + SwingUtils.MARGIN,
                 minuteBattery.getY(),
@@ -287,13 +285,13 @@ public class MainWindow extends TWindow {
         int workDaysTodo = 0;
         int workDaysTotal;
         for (int dayOfMonth = 1;
-             dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH);
-             dayOfMonth++) {
+                dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                dayOfMonth++) {
             DayOfWeek dayOfWeek = LocalDate.of(analogClock.yearProperty.getValue(),
                     analogClock.monthProperty.getValue(), dayOfMonth).getDayOfWeek();
-            boolean weekend =
-                    dayOfWeek.toString().equals("SATURDAY") || dayOfWeek
-                            .toString().equals("SUNDAY");
+            boolean weekend
+                    = dayOfWeek.toString().equals("SATURDAY") || dayOfWeek
+                    .toString().equals("SUNDAY");
             if (dayOfMonth < currentDayOfMonth && !weekend) {
                 ++workDaysDone;
             }
@@ -305,7 +303,7 @@ public class MainWindow extends TWindow {
                 .of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1,
                         currentDayOfMonth).getDayOfWeek().toString();
         boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY")
-                               || currentDayOfWeekAsString.equals("SUNDAY");
+                || currentDayOfWeekAsString.equals("SUNDAY");
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
         Battery monthBattery = new MonthBattery(
@@ -321,34 +319,46 @@ public class MainWindow extends TWindow {
         componentRegistry.addAll(this.getContentPane().getComponents());
 
         ComponentRegistry<TButton> buttonRegistry = new ComponentRegistry();
-        componentRegistry.getSet().stream().filter(c-> c instanceof TButton).forEach(c->
-                buttonRegistry.add((TButton)c));
-        componentRegistry.getSet().stream().filter(c ->
-            GetProperty.class.isAssignableFrom(c.getClass())).forEach(c->
-        {
+        componentRegistry.getSet().stream().filter(c -> c instanceof TButton).forEach(c
+                -> buttonRegistry.add((TButton) c));
+        componentRegistry.getSet().stream().filter(c
+                -> GetProperty.class.isAssignableFrom(c.getClass())).forEach(c
+                -> {
             ((GetProperty) c).getVisibilityProperty().bindTo(timeCalcApp.visibilityProperty);
             ((GetProperty) c).getVisibilitySupportedColoredProperty().bindTo(timeCalcConfiguration.visibilitySupportedColoredProperty);
         });
 
-        componentRegistry.getSet().stream().filter(c-> c instanceof Battery).forEach(c ->
-            ((Battery)c).wavesProperty.bindTo(timeCalcConfiguration.batteryWavesVisibleProperty));
+        componentRegistry.getSet().stream().filter(c -> c instanceof Battery).forEach(c
+                -> ((Battery) c).wavesProperty.bindTo(timeCalcConfiguration.batteryWavesVisibleProperty));
 
-        componentRegistry.getSet().stream().filter(c-> c instanceof Widget).forEach(c ->
-                ((Widget)c).smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty));
+        componentRegistry.getSet().stream().filter(c -> c instanceof Widget).forEach(c
+                -> ((Widget) c).smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty));
         setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
         while (true) {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
             Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
-            if(!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled() && currentVisibility.isColored() ){
+            if (!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled() && currentVisibility.isColored()) {
                 timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
             }
             if (stopBeforeEnd) {
-                if(configWindow != null) {configWindow.setVisible(false);configWindow.dispose();}
-                if(workDaysWindow != null) {workDaysWindow.setVisible(false);workDaysWindow.dispose();}
-                if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
-                if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
+                if (configWindow != null) {
+                    configWindow.setVisible(false);
+                    configWindow.dispose();
+                }
+                if (workDaysWindow != null) {
+                    workDaysWindow.setVisible(false);
+                    workDaysWindow.dispose();
+                }
+                if (activitiesWindow != null) {
+                    activitiesWindow.setVisible(false);
+                    activitiesWindow.dispose();
+                }
+                if (helpWindow != null) {
+                    helpWindow.setVisible(false);
+                    helpWindow.dispose();
+                }
 
                 timeCalcConfiguration.saveToTimeCalcProperties();
                 setVisible(false);
@@ -378,20 +388,20 @@ public class MainWindow extends TWindow {
             int millisecondsRemains = 1000 - millisecondNow;
 
             int hourDone = Constants.WORKING_HOURS_LENGTH + overtime.getHour()
-                           - timeRemains.getHour();
-            int minutesDone =
-                    Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
+                    - timeRemains.getHour();
+            int minutesDone
+                    = Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
                     - timeRemains.getMinute();
             int secondsDone = secondNow;
             int millisecondsDone = millisecondNow;
 
             int totalMinutesDone = hourDone * 60 + minutesDone;
             int totalSecondsDone = totalMinutesDone * 60 + secondsDone;
-            int totalMillisecondsDone =
-                    totalSecondsDone * 1000 + millisecondsDone;
+            int totalMillisecondsDone
+                    = totalSecondsDone * 1000 + millisecondsDone;
 
             double done = ((double) totalMillisecondsDone)
-                          / ((double) totalMilliseconds);
+                    / ((double) totalMilliseconds);
             progressSquare.setDonePercent(done);
             progressCircle.setDonePercent(done);
             dayBattery.setDonePercent(done);
@@ -415,21 +425,20 @@ public class MainWindow extends TWindow {
 
             if (!nowIsWeekend) {
                 hourBattery.setLabel(
-                        hourDone + "/" + (
-                                totalMinutes / 60));
+                        hourDone + "/" + (totalMinutes / 60));
             }
             minuteBattery.setDonePercent(MinuteBattery.getMinuteProgress(secondNow, millisecondNow));
             yearBattery.setDonePercent(YearBattery.getYearProgress(analogClock));
             yearBattery.setLabel("");
             //yearBattery.setDonePercent(YearBattery.getYearProgress(2024,0,1,0,0,0,0));
-            int totalSecondsRemains =
-                    (timeRemains.getHour() * 60 * 60
-                     + timeRemains.getMinute() * 60
-                     + secondsRemains);
-            int totalMillisecondsRemains =
-                    totalSecondsRemains * 1000 + millisecondsRemains;
-            double totalSecondsRemainsDouble =
-                    ((double) totalMillisecondsRemains) / 1000;
+            int totalSecondsRemains
+                    = (timeRemains.getHour() * 60 * 60
+                    + timeRemains.getMinute() * 60
+                    + secondsRemains);
+            int totalMillisecondsRemains
+                    = totalSecondsRemains * 1000 + millisecondsRemains;
+            double totalSecondsRemainsDouble
+                    = ((double) totalMillisecondsRemains) / 1000;
 
             if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
                 Toaster toasterManager = new Toaster();
@@ -465,10 +474,22 @@ public class MainWindow extends TWindow {
 
             }
         }
-        if(configWindow != null) {configWindow.setVisible(false);configWindow.dispose();}
-        if(workDaysWindow != null) {workDaysWindow.setVisible(false);workDaysWindow.dispose();}
-        if(activitiesWindow != null) {activitiesWindow.setVisible(false);activitiesWindow.dispose();}
-        if(helpWindow != null) {helpWindow.setVisible(false);helpWindow.dispose();}
+        if (configWindow != null) {
+            configWindow.setVisible(false);
+            configWindow.dispose();
+        }
+        if (workDaysWindow != null) {
+            workDaysWindow.setVisible(false);
+            workDaysWindow.dispose();
+        }
+        if (activitiesWindow != null) {
+            activitiesWindow.setVisible(false);
+            activitiesWindow.dispose();
+        }
+        if (helpWindow != null) {
+            helpWindow.setVisible(false);
+            helpWindow.dispose();
+        }
 
         timeCalcConfiguration.saveToTimeCalcProperties();
         setVisible(false);
@@ -493,6 +514,7 @@ public class MainWindow extends TWindow {
     public void openActivitiesWindow() {
         activitiesButton.doClick();
     }
+
     public void doExit() {
         timeCalcConfiguration.saveToTimeCalcProperties();
         exitButton.doClick();

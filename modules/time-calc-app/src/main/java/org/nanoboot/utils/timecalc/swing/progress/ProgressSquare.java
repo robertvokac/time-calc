@@ -77,11 +77,11 @@ public class ProgressSquare extends Widget {
             }
             brush.setColor(FOREGROUND_COLOR);
         }
-        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
-                BACKGROUND_COLOR);
+        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK
+                : BACKGROUND_COLOR);
 
         brush.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                               .format(donePercent * 100) + "%",
+                .format(donePercent * 100) + "%",
                 (int) (side / 8d * 3d),
                 (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)));
         paintSmiley(visibility, brush, (int) (side / 8d * 3d) + 65,

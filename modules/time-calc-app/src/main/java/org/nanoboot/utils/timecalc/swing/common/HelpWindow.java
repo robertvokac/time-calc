@@ -20,8 +20,8 @@ public class HelpWindow extends TWindow {
         setTitle("Help");
         String helpHtml = "";
         try {
-            String helpMd =
-                    Utils.readTextFromTextResourceInJar("help/Readme.md");
+            String helpMd
+                    = Utils.readTextFromTextResourceInJar("help/Readme.md");
 
             helpHtml = com.github.rjeschke.txtmark.Processor.process(
                     helpMd);
@@ -35,7 +35,7 @@ public class HelpWindow extends TWindow {
         System.out.println(helpHtml);
         this.setLayout(null);
         JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBounds(1,1,
+        scrollPane.setBounds(1, 1,
                 getWidth() - SwingUtils.MARGIN,
                 getHeight() - SwingUtils.MARGIN);
         add(scrollPane);

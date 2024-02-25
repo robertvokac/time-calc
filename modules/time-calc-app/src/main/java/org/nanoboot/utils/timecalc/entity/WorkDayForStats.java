@@ -16,6 +16,7 @@ public class WorkDayForStats extends WorkDay {
     private double arrivalTimeMovingAverage14Days;
     private double arrivalTimeMovingAverage28Days;
     private double arrivalTimeMovingAverage56Days;
+
     public WorkDayForStats() {
     }
 }
