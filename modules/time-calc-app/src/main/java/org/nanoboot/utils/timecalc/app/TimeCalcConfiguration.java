@@ -25,8 +25,8 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockHandsLongVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
                     .getKey());
-    public final BooleanProperty clockHandsBlackProperty
-            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_BLACK
+    public final BooleanProperty clockHandsColoredProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_COLORED
                     .getKey());
     public final BooleanProperty clockHandsMinuteVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE
@@ -62,9 +62,30 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockCentreCircleBlackProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
                     .getKey());
+    public final BooleanProperty clockProgressVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                    .getKey());
+    public final BooleanProperty clockDateVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                    .getKey());
     //
     public final BooleanProperty batteryWavesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryCircleProgressProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryPercentProgressProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryChargingCharacterVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryNameVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_NAME_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryLabelVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
                     .getKey());
 
     public final BooleanProperty jokesVisibleProperty
@@ -78,6 +99,9 @@ public class TimeCalcConfiguration {
                     .getKey());
     public final BooleanProperty smileysColoredProperty
             = new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    
     public final BooleanProperty squareVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
 
@@ -90,7 +114,7 @@ public class TimeCalcConfiguration {
             visibilityDefaultProperty,
             visibilitySupportedColoredProperty,
             clockHandsLongVisibleProperty,
-            clockHandsBlackProperty,
+            clockHandsColoredProperty,
             clockHandsMinuteVisibleProperty,
             clockHandsSecondVisibleProperty,
             clockHandsMillisecondVisibleProperty,
@@ -102,11 +126,19 @@ public class TimeCalcConfiguration {
             clockCircleBorderColorProperty,
             clockCentreCircleVisibleProperty,
             clockCentreCircleBlackProperty,
+            clockProgressVisibleOnlyIfMouseMovingOverProperty,
+            clockDateVisibleOnlyIfMouseMovingOverProperty,
             batteryWavesVisibleProperty,
+            batteryCircleProgressProperty,
+            batteryPercentProgressProperty,
+            batteryChargingCharacterVisibleProperty,
+            batteryNameVisibleProperty,
+            batteryLabelVisibleProperty,
             jokesVisibleProperty,
             commandsVisibleProperty,
             notificationsVisibleProperty,
             smileysColoredProperty,
+            smileysVisibleOnlyIfMouseMovingOverProperty,
             squareVisibleProperty,}) {
             allProperties.add(p);
         }

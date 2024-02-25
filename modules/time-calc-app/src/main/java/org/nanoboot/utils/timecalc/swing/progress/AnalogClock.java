@@ -8,8 +8,6 @@ import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
-import org.nanoboot.utils.timecalc.utils.property.InvalidationListener;
-import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JFrame;
@@ -57,8 +55,8 @@ public class AnalogClock extends Widget {
             = new BooleanProperty("millisecondEnabledProperty", false);
     public BooleanProperty handsLongProperty
             = new BooleanProperty("handsLongProperty", true);
-    public BooleanProperty handsBlackProperty
-            = new BooleanProperty("handsBlackProperty", false);
+    public BooleanProperty handsColoredProperty
+            = new BooleanProperty("handsColoredProperty", true);
     public final BooleanProperty borderVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
                     .getKey());
@@ -84,6 +82,10 @@ public class AnalogClock extends Widget {
     public final BooleanProperty centreCircleBlackProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
                     .getKey());
+    public final BooleanProperty progressVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    public final BooleanProperty dateVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
     private TimeHM startTime;
     private final TimeHM endTime;
     private int startAngle;
@@ -161,7 +163,7 @@ public class AnalogClock extends Widget {
         if (customCircleColor == null) {
             customCircleColor = SwingUtils.getColorFromString(centreCircleBorderColorProperty.getValue());
         }
-        if (mouseOver && visibility.isStronglyColored()) {
+        if ((mouseOver || progressVisibleOnlyIfMouseMovingOverProperty.isDisabled()) && visibility.isStronglyColored()) {
             this.startTime = new TimeHM(hour, minute);
             this.startAngle
                     = (int) ((startTime.getHour() + startTime.getMinute() / 60d)
@@ -273,7 +275,7 @@ public class AnalogClock extends Widget {
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        brush.setColor((visibility.isStronglyColored() || mouseOver) ? (handsBlackProperty.isEnabled() ? Color.BLACK : color)
+        brush.setColor((visibility.isStronglyColored() || mouseOver) ? (handsColoredProperty.isEnabled() ? color : Color.BLACK)
                 : FOREGROUND_COLOR);
         brush.setStroke(new BasicStroke(stroke));
         brush.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
@@ -300,7 +302,7 @@ public class AnalogClock extends Widget {
             brush.setColor(currentColor);
         }
 
-        if (this.mouseOver) {
+        if (this.mouseOver || dateVisibleOnlyIfMouseMovingOverProperty.isDisabled()) {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, yearProperty.getValue());
             cal.set(Calendar.MONTH, monthProperty.getValue() - 1);

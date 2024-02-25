@@ -17,10 +17,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 
 /**
  * @author Robert Vokac
@@ -45,7 +45,8 @@ public class Widget extends JPanel implements
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
             = new BooleanProperty("visibleProperty", true);
-
+    public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
@@ -180,9 +181,10 @@ public class Widget extends JPanel implements
     }
 
     protected void paintSmiley(Visibility visibility, Graphics2D brush, int x, int y) {
-        if (!mouseOver) {
+        if (!mouseOver && smileysVisibleOnlyIfMouseMovingOverProperty.isEnabled()) {
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
+                this.smileyIcon = null;
             }
 
             //nothing more to do
@@ -194,6 +196,10 @@ public class Widget extends JPanel implements
         }
 
         if (!colored) {
+            if (this.smileyIcon != null) {
+                this.remove(smileyIcon);
+                this.smileyIcon = null;
+            }
             if (!visibility.isStronglyColored()) {
                 brush.setColor(Color.GRAY);
             }
@@ -221,6 +227,7 @@ public class Widget extends JPanel implements
             ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
+                this.smileyIcon = null;
             }
             this.smileyIcon = new JLabel(imageIcon);
             smileyIcon.setBounds(x, y, 15, 15);

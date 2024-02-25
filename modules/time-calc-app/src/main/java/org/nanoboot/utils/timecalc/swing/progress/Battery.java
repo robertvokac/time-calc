@@ -39,7 +39,17 @@ public class Battery extends Widget {
     private final String name;
     private final double[] randomDoubles
             = new double[]{1d, 1d, 1d, 1d, 1d, 1d, 1};
-    public BooleanProperty wavesProperty = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
+    public BooleanProperty wavesVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
+            .getKey(), true);
+    public BooleanProperty circleProgressVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
+            .getKey(), true);
+    public BooleanProperty percentProgressVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE
+            .getKey(), true);
+    public BooleanProperty chargingCharacterVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE
+            .getKey(), true);
+    public BooleanProperty nameVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_NAME_VISIBLE
+            .getKey(), true);
+    public BooleanProperty labelVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
             .getKey(), true);
     private final BooleanProperty blinking = new BooleanProperty("blinking");
     private long tmpNanoTime = 0l;
@@ -116,7 +126,7 @@ public class Battery extends Widget {
                 = 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight
                 = (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
-        if (waterSurfaceHeight <= 2 || wavesProperty.isDisabled()) {
+        if (waterSurfaceHeight <= 2 || wavesVisibleProperty.isDisabled()) {
             waterSurfaceHeight = 0;
         }
 
@@ -196,19 +206,20 @@ public class Battery extends Widget {
             {
                 Font currentFont = brush.getFont();
                 brush.setFont(BIG_FONT);
-                brush.drawString(
-                        CHARCHING, ((int) (totalWidth * 0.45)),
-                        (donePercent < 0.5 ? totalHeight / 4 * 3
-                                : totalHeight / 4 * 1) + 10
-                );
-
+                if (chargingCharacterVisibleProperty.isEnabled()) {
+                    brush.drawString(
+                            CHARCHING, ((int) (totalWidth * 0.45)),
+                            (donePercent < 0.5 ? totalHeight / 4 * 3
+                                    : totalHeight / 4 * 1) + 10
+                    );
+                }
                 paintSmiley(visibility, brush, ((int) (totalWidth * 0.45)) + 15,
                         (donePercent < 0.5 ? totalHeight / 4 * 3
                                 : totalHeight / 4 * 1) + 8 - 16);
                 brush.setFont(currentFont);
 
             }
-            {
+            if(circleProgressVisibleProperty.isEnabled()) {
                 Color currentColor = brush.getColor();
                 brush.setColor(
                         visibility.isStronglyColored() ? HIGH_HIGHLIGHTED : (visibility.isWeaklyColored() ? HIGH : Color.lightGray));
@@ -228,20 +239,22 @@ public class Battery extends Widget {
                 brush.setColor(currentColor);
             }
         }
+        if(percentProgressVisibleProperty.isEnabled()) {
         brush.drawString(
                 NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
                         .format(donePercent * 100) + "%",
                 ((int) (totalWidth * 0.15)),
                 donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1);
+        }
 
-        if (label != null && !label.isEmpty()) {
+        if (labelVisibleProperty.isEnabled() && label != null && !label.isEmpty()) {
             brush.drawString(
                     label,
                     ((int) (totalWidth * 0.15)),
                     (donePercent > 0.5 ? totalHeight / 4 * 3
                             : totalHeight / 4 * 1) + 20);
         }
-        if (name != null && !name.isEmpty()) {
+        if (nameVisibleProperty.isEnabled() && name != null && !name.isEmpty()) {
             brush.drawString(
                     name,
                     ((int) (totalWidth * 0.10)),

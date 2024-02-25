@@ -258,8 +258,10 @@ public class MainWindow extends TWindow {
         analogClock.circleStrongBorderProperty.bindTo(timeCalcConfiguration.clockCircleStrongBorderProperty);
         analogClock.centreCircleVisibleProperty.bindTo(timeCalcConfiguration.clockCentreCircleVisibleProperty);
         analogClock.centreCircleBorderColorProperty.bindTo(timeCalcConfiguration.clockCircleBorderColorProperty);
-        analogClock.handsBlackProperty.bindTo(timeCalcConfiguration.clockHandsBlackProperty);
+        analogClock.handsColoredProperty.bindTo(timeCalcConfiguration.clockHandsColoredProperty);
         analogClock.centreCircleBlackProperty.bindTo(timeCalcConfiguration.clockCentreCircleBlackProperty);
+        analogClock.progressVisibleOnlyIfMouseMovingOverProperty.bindTo(timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty);
+        analogClock.dateVisibleOnlyIfMouseMovingOverProperty.bindTo(timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty);
 
         MinuteBattery minuteBattery = new MinuteBattery(progressCircle.getBounds().x,
                 progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(), 140);
@@ -329,10 +331,24 @@ public class MainWindow extends TWindow {
         });
 
         componentRegistry.getSet().stream().filter(c -> c instanceof Battery).forEach(c
-                -> ((Battery) c).wavesProperty.bindTo(timeCalcConfiguration.batteryWavesVisibleProperty));
+                -> {
+            Battery battery = ((Battery) c);
+            battery.wavesVisibleProperty.bindTo(timeCalcConfiguration.batteryWavesVisibleProperty);
+            battery.circleProgressVisibleProperty.bindTo(timeCalcConfiguration.batteryCircleProgressProperty);
+            battery.percentProgressVisibleProperty.bindTo(timeCalcConfiguration.batteryPercentProgressProperty);
+            battery.chargingCharacterVisibleProperty.bindTo(timeCalcConfiguration.batteryChargingCharacterVisibleProperty);
+            battery.nameVisibleProperty.bindTo(timeCalcConfiguration.batteryNameVisibleProperty);
+            battery.labelVisibleProperty.bindTo(timeCalcConfiguration.batteryLabelVisibleProperty);
+        });
+        
 
         componentRegistry.getSet().stream().filter(c -> c instanceof Widget).forEach(c
-                -> ((Widget) c).smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty));
+                -> {
+            Widget widget = (Widget) c;
+            widget.smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty);
+            widget.smileysVisibleOnlyIfMouseMovingOverProperty.bindTo(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty);
+        }
+        );
         setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
         while (true) {

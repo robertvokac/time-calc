@@ -81,4 +81,8 @@ public class TButton extends JButton implements GetProperty {
     public Property getVisibilitySupportedColoredProperty() {
         return visibilitySupportedColoredProperty;
     }
+
+    void addActionListener() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

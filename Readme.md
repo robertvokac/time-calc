@@ -157,7 +157,6 @@ Smileys can be colored or white-black (can be set in configuration)
 **Change these places:**
 
 * timecalc-default.conf
-* timecalc-template.conf
 * TimeCalcProperty
 * TimeCalcConfiguration
 * ConfigWindow

@@ -37,6 +37,8 @@ public class ConfigWindow extends TWindow {
     private int currentY = SwingUtils.MARGIN;
     private List<JComponent> propertiesList = new ArrayList<>();
     private Map<TimeCalcProperty, JComponent> propertiesMap = new HashMap<>();
+    private TButton enableAsMuchAsPossible = new TButton("Enable as much as possible");
+    private TButton disableAsMuchAsPossible = new TButton("Disable as much as possible");
     public final JComboBox visibilityDefaultProperty = new JComboBox(Arrays.stream(Visibility.values()).map(v -> v.name()).collect(
             Collectors.toList()).toArray());
 
@@ -44,8 +46,8 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED.getKey());
     private JCheckBox clockHandsLongVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE.getKey());
-    private JCheckBox clockHandsBlackProperty
-            = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_BLACK.getKey());
+    private JCheckBox clockHandsColoredProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_COLORED.getKey());
     private JCheckBox clockHandsMinuteVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE.getKey());
     private JCheckBox clockHandsSecondVisibleProperty
@@ -69,11 +71,26 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE.getKey());
     private JCheckBox clockCentreCircleBlackProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK.getKey());
+    private JCheckBox clockProgressVisibleOnlyIfMouseMovingOverProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    private JCheckBox clockDateVisibleOnlyIfMouseMovingOverProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
 
     //
     private JCheckBox batteryWavesVisibleProperty
             = new JCheckBox(TimeCalcProperty.BATTERY_WAVES_VISIBLE.getKey());
+    private JCheckBox batteryCircleProgressVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE.getKey());
+    private JCheckBox batteryPercentProgressProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE.getKey());
 
+    private JCheckBox batteryChargingCharacterVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE.getKey());
+    private JCheckBox batteryNameVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_NAME_VISIBLE.getKey());
+    private JCheckBox batteryLabelVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_LABEL_VISIBLE.getKey());
+    
     private JCheckBox jokesVisibleProperty
             = new JCheckBox(TimeCalcProperty.JOKES_VISIBLE.getKey());
     private JCheckBox commandsVisibleProperty
@@ -82,22 +99,70 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.NOTIFICATIONS_VISIBLE.getKey());
     private JCheckBox smileysColoredProperty
             = new JCheckBox(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    private JCheckBox smileysVisibleOnlyIfMouseMovingOverProperty
+            = new JCheckBox(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    
     private JCheckBox squareVisibleProperty
             = new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         setTitle("Configuration");
-        this.setSize(800, WIDTH1);
+        this.setSize(800, 1000);
         setLayout(null);
 
+        add(enableAsMuchAsPossible);
+        enableAsMuchAsPossible.setBounds(SwingUtils.MARGIN, currentY, 200,
+                HEIGHT1);
+        add(disableAsMuchAsPossible);
+        disableAsMuchAsPossible.setBounds(enableAsMuchAsPossible.getX() + enableAsMuchAsPossible.getWidth() + SwingUtils.MARGIN, currentY, 200,
+                HEIGHT1);
+        nextRow();
+        for(boolean enable:new boolean[]{true, false}) {
+            TButton button = enable ? enableAsMuchAsPossible : disableAsMuchAsPossible;
+            
+            button.addActionListener(e -> {
+            visibilityDefaultProperty.setSelectedItem(Visibility.STRONGLY_COLORED.name());
+                clockHandsMinuteVisibleProperty.setSelected(true);
+                clockHandsSecondVisibleProperty.setSelected(enable);
+                clockHandsMillisecondVisibleProperty.setSelected(enable);
+                clockHandsLongVisibleProperty.setSelected(enable);
+                clockHandsColoredProperty.setSelected(enable);
+                clockBorderVisibleProperty.setSelected(enable);
+                clockBorderOnlyHoursProperty.setSelected(!enable);
+                clockNumbersVisibleProperty.setSelected(enable);
+                clockCircleVisibleProperty.setSelected(enable);
+                clockCircleStrongBorderProperty.setSelected(!enable);
+                
+                clockCircleBorderColorProperty.setColor(enable ? Color.BLUE : Color.BLACK);
+                timeCalcConfiguration.clockCircleBorderColorProperty.setValue(enable ? "0,0,255" : "0,0,0");
+                
+                clockCentreCircleVisibleProperty.setSelected(enable);
+                clockCentreCircleBlackProperty.setSelected(!enable);
+                clockProgressVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
+                clockDateVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
+                batteryWavesVisibleProperty.setSelected(enable);
+                batteryCircleProgressVisibleProperty.setSelected(enable);
+                batteryPercentProgressProperty.setSelected(enable);
+                batteryChargingCharacterVisibleProperty.setSelected(enable);
+                batteryNameVisibleProperty.setSelected(enable);
+                batteryLabelVisibleProperty.setSelected(enable);
+                jokesVisibleProperty.setSelected(true);
+                commandsVisibleProperty.setSelected(enable);
+                notificationsVisibleProperty.setSelected(enable);
+                smileysVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
+                smileysColoredProperty.setSelected(enable);
+                squareVisibleProperty.setSelected(true);
+        });
+        }
+        
         propertiesList.addAll(Arrays.asList(visibilityDefaultProperty,
                 visibilitySupportedColoredProperty,
                 clockHandsMinuteVisibleProperty,
                 clockHandsSecondVisibleProperty,
                 clockHandsMillisecondVisibleProperty,
                 clockHandsLongVisibleProperty,
-                clockHandsBlackProperty,
+                clockHandsColoredProperty,
                 clockBorderVisibleProperty,
                 clockBorderOnlyHoursProperty,
                 clockNumbersVisibleProperty,
@@ -106,10 +171,18 @@ public class ConfigWindow extends TWindow {
                 clockCircleBorderColorProperty,
                 clockCentreCircleVisibleProperty,
                 clockCentreCircleBlackProperty,
+                clockProgressVisibleOnlyIfMouseMovingOverProperty,
+                clockDateVisibleOnlyIfMouseMovingOverProperty,
                 batteryWavesVisibleProperty,
+                batteryCircleProgressVisibleProperty,
+                batteryPercentProgressProperty,
+                batteryChargingCharacterVisibleProperty,
+                batteryNameVisibleProperty,
+                batteryLabelVisibleProperty,
                 jokesVisibleProperty,
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
+                smileysVisibleOnlyIfMouseMovingOverProperty,
                 smileysColoredProperty,
                 squareVisibleProperty));
         //
@@ -131,7 +204,7 @@ public class ConfigWindow extends TWindow {
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
                 jComboBox.setSelectedItem(timeCalcConfiguration.getProperty(timeCalcProperty));
-                jComboBox.addActionListener(e -> {
+                jComboBox.addPropertyChangeListener(e -> {
                     ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty))
                             .setValue(
                                     (String) jComboBox.getSelectedItem());
@@ -151,7 +224,7 @@ public class ConfigWindow extends TWindow {
                         = (BooleanProperty) timeCalcConfiguration
                                 .getProperty(timeCalcProperty);
                 checkBox.setSelected(property.isEnabled());
-                checkBox.addActionListener(e -> {
+                checkBox.addItemListener(e -> {
                     property
                             .setValue(checkBox.isSelected());
                 });
