@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
@@ -53,6 +54,9 @@ public class AnalogClock extends Widget {
             new BooleanProperty("millisecondEnabledProperty", false);
     public BooleanProperty handsLongProperty =
             new BooleanProperty("handsLongProperty", true);
+    public final BooleanProperty borderVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
+                    .getKey());
     private TimeHM startTime;
     private final TimeHM endTime;
     private int startAngle;
@@ -189,43 +193,64 @@ public class AnalogClock extends Widget {
                             hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
                     Color.BLACK, visibility);
         }
+        if(borderVisibleProperty.isEnabled()) {
+            for (int minuteI = 0; minuteI < 60; minuteI++) {
+                drawBorder(g2d, minuteI, minuteI % 5 == 0 ? 2f : 1f,
+                        Color.BLACK, visibility);
+            }
+        }
         drawCentre(g2d, centerX, centerY);
 
     }
 
-    private void drawCentre(Graphics2D g2d, int centerX, int centerY) {
-        Color currentColor = g2d.getColor();
+    private void drawCentre(Graphics2D brush, int centerX, int centerY) {
+        Color currentColor = brush.getColor();
         Visibility visibility =
                 Visibility.valueOf(visibilityProperty.getValue());
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.RED :
+        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.RED :
                 FOREGROUND_COLOR);
-        g2d.fillOval(centerX - 3, centerY - 3, 8, 8);
-        g2d.setColor(currentColor);
+        brush.fillOval(centerX - 3, centerY - 3, 8, 8);
+        brush.setColor(currentColor);
     }
 
-    private void drawHand(Graphics2D g2d, int length, double value,
+    private void drawBorder(Graphics2D brush, int forMinute,
+            float stroke, Color color, Visibility visibility) {
+        double value = ((double)forMinute) / 60d;
+        int length = side / 18;
+        double angle = Math.PI * 2 * (value - 0.25);
+        int startX = (int) (getWidth() / 2 + (side/2 - length) * Math.cos(angle));
+        int startY = (int) (getHeight() / 2 + (side/2 - length) * Math.sin(angle));
+        int endX = (int) (getWidth() / 2 + (side/2 - length * 0.50d) * Math.cos(angle));
+        int endY = (int) (getHeight() / 2 + (side/2 - length * 0.50d) * Math.sin(angle));
+
+        brush.setColor((visibility.isStronglyColored() || mouseOver) ? color :
+                FOREGROUND_COLOR);
+        brush.setStroke(new BasicStroke(stroke));
+        brush.drawLine(startX, startY, endX, endY);
+    }
+    private void drawHand(Graphics2D brush, int length, double value,
             float stroke, Color color, Visibility visibility) {
         length = length - 4;
         double angle = Math.PI * 2 * (value - 0.25);
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        g2d.setColor((visibility.isStronglyColored() || mouseOver) ? color :
+        brush.setColor((visibility.isStronglyColored() || mouseOver) ? color :
                 FOREGROUND_COLOR);
-        g2d.setStroke(new BasicStroke(stroke));
-        g2d.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
+        brush.setStroke(new BasicStroke(stroke));
+        brush.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);
     }
 
-    private void drawClockFace(Graphics2D g2d, int centerX, int centerY,
+    private void drawClockFace(Graphics2D brush, int centerX, int centerY,
             int radius, Visibility visibility) {
-        g2d.setStroke(new BasicStroke(2.0f));
-        g2d.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
+        brush.setStroke(new BasicStroke(2.0f));
+        brush.setColor(visibility.isStronglyColored() || mouseOver ? Color.BLACK :
                 FOREGROUND_COLOR);
         //        System.out.println("centerX=" + centerX);
         //        System.out.println("centerY=" + centerY);
         //        System.out.println("radius=" + radius);
-        g2d.drawOval(1, 1, centerX * 2 - 4, centerY * 2 - 4);
-        g2d.drawOval(2, 2, centerX * 2 - 4, centerY * 2 - 4);
+        brush.drawOval(1, 1, centerX * 2 - 3, centerY * 2 - 3);
+        brush.drawOval(2, 2, centerX * 2 - 3, centerY * 2 - 3);
 
         //        g2d.drawOval(3, 3, centerX * 2 - 6, centerY * 2 - 6);
         //        g2d.drawOval(4, 4, centerX * 2 - 8, centerY * 2 - 8);
@@ -236,10 +261,10 @@ public class AnalogClock extends Widget {
             cal.set(Calendar.MONTH, monthProperty.getValue() - 1);
             cal.set(Calendar.DAY_OF_MONTH, dayProperty.getValue());
             Date date = cal.getTime();
-            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(date),
+            brush.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(date),
                     ((int) (side * 0.25)),
                     ((int) (side * 0.35)));
-            g2d.drawString(DateFormats.DATE_TIME_FORMATTER_TIME.format(date),
+            brush.drawString(DateFormats.DATE_TIME_FORMATTER_TIME.format(date),
                     ((int) (side * 0.25) + 30),
                     ((int) (side * 0.35)) + 60);
         }
@@ -248,8 +273,8 @@ public class AnalogClock extends Widget {
             int dx = centerX + (int) ((radius + 20) * Math.cos(angle)) - 4;
             int dy = centerY + (int) ((radius + 20) * Math.sin(angle)) + 4;
 
-            g2d.setFont(new Font("sans", Font.BOLD, 16));
-            g2d.drawString(Integer.toString(i), dx, dy);
+            brush.setFont(new Font("sans", Font.BOLD, 16));
+            brush.drawString(Integer.toString(i), dx + (i == 12 ? -3 : 0), dy + (i == 12 ? +3 : 0));
         }
 
     }

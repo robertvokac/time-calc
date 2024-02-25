@@ -45,6 +45,8 @@ public class ConfigWindow extends TWindow {
             new JCheckBox("clock.hands.second.visible");
     private JCheckBox clockHandsMillisecondVisibleProperty =
             new JCheckBox("clock.hands.millisecond.visible");
+    private JCheckBox clockBorderVisibleProperty =
+            new JCheckBox("clock.border.visible");
     private JCheckBox batteryWavesVisibleProperty =
             new JCheckBox("battery.waves.visible");
 
@@ -67,10 +69,11 @@ public class ConfigWindow extends TWindow {
 
         propertiesList.addAll(Arrays.asList(visibilityDefaultProperty,
                 visibilitySupportedColoredProperty,
-                clockHandsLongVisibleProperty,
                 clockHandsMinuteVisibleProperty,
                 clockHandsSecondVisibleProperty,
                 clockHandsMillisecondVisibleProperty,
+                clockHandsLongVisibleProperty,
+                clockBorderVisibleProperty,
                 batteryWavesVisibleProperty,
                 jokesVisibleProperty,
                 commandsVisibleProperty,

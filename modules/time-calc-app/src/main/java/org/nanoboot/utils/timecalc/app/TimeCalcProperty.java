@@ -22,6 +22,7 @@ public enum TimeCalcProperty {
     CLOCK_HANDS_MINUTE_VISIBLE("clock.hands.minute.visible", "Clock : Minute hand"),
     CLOCK_HANDS_SECOND_VISIBLE("clock.hands.second.visible", "Clock : Second hand"),
     CLOCK_HANDS_MILLISECOND_VISIBLE("clock.hands.millisecond.visible", "Clock : Millisecond hand"),
+    CLOCK_BORDER_VISIBLE("clock.border.visible", "Clock : Border"),
     //
     BATTERY_WAVES_VISIBLE("battery.waves.visible", "Battery : Waves"),
     JOKES_VISIBLE("jokes.visible", "Jokes"),
@@ -29,6 +30,8 @@ public enum TimeCalcProperty {
     NOTIFICATIONS_VISIBLE("notifications.visible", "Notifications"),
     SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
     SQUARE_VISIBLE("square.visible", "Square");
+
+
 
 
     @Getter

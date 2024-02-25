@@ -33,6 +33,9 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockHandsMillisecondVisibleProperty =
             new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE
                     .getKey());
+    public final BooleanProperty clockBorderVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
+                    .getKey());
     //
     public final BooleanProperty batteryWavesVisibleProperty =
             new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
@@ -64,6 +67,7 @@ public class TimeCalcConfiguration {
                 clockHandsMinuteVisibleProperty,
                 clockHandsSecondVisibleProperty,
                 clockHandsMillisecondVisibleProperty,
+                clockBorderVisibleProperty,
                 batteryWavesVisibleProperty,
                 jokesVisibleProperty,
                 commandsVisibleProperty,

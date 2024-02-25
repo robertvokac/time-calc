@@ -253,6 +253,7 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.clockHandsMinuteVisibleProperty);
         analogClock.handsLongProperty
                 .bindTo(timeCalcConfiguration.clockHandsLongVisibleProperty);
+        analogClock.borderVisibleProperty.bindTo(timeCalcConfiguration.clockBorderVisibleProperty);
 
         MinuteBattery minuteBattery = new MinuteBattery(progressCircle.getBounds().x,
                 progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(),140);
@@ -485,6 +486,7 @@ public class MainWindow extends TWindow {
         activitiesButton.doClick();
     }
     public void doExit() {
+        timeCalcConfiguration.saveToTimeCalcProperties();
         exitButton.doClick();
     }
 
@@ -493,10 +495,15 @@ public class MainWindow extends TWindow {
     }
 
     public void doRestart() {
+        timeCalcConfiguration.saveToTimeCalcProperties();
         restartButton.doClick();
     }
 
     public void doCommand() {
         commandButton.doClick();
+    }
+
+    public void openHelpWindow() {
+        helpButton.doClick();
     }
 }

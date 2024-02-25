@@ -129,6 +129,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             window.openConfigWindow();
         }
 
+
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            window.openHelpWindow();
+        }
+
         window.repaint();
     }
 
