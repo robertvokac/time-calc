@@ -47,8 +47,10 @@ public enum TimeCalcProperty {
     SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER("smileys.visible-only-if-mouse-moving-over", "Smileys : Visible only, if mouse moving over"),
     SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
     
-    
-    SQUARE_VISIBLE("square.visible", "Square");
+   
+    SQUARE_VISIBLE("square.visible", "Square"),
+    CIRCLE_VISIBLE("circle.visible", "Circle"),
+    WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human");
 
     @Getter
     private final String key;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.awt.Component;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author Robert Vokac
@@ -28,9 +29,17 @@ public class ComponentRegistry<T extends Component> {
             add(c);
         }
     }
-
     public void setVisible(boolean b) {
+        setVisible(null, b);
+    }
+
+    public void setVisible(Predicate<Component> predicate, boolean b) {
         for (T c : set) {
+            if(predicate != null) {
+                if(!predicate.test(c)) {
+                    continue;
+                }
+            }
             c.setVisible(b);
         }
     }

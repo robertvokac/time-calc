@@ -105,9 +105,12 @@ public class ConfigWindow extends TWindow {
     private JCheckBox smileysColoredProperty
             = new JCheckBox(TimeCalcProperty.SMILEYS_COLORED.getKey());
     
-    
     private JCheckBox squareVisibleProperty
             = new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
+    private JCheckBox circleVisibleProperty
+            = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
+    private JCheckBox walkingHumanVisibleProperty
+            = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
@@ -157,7 +160,9 @@ public class ConfigWindow extends TWindow {
                 smileysVisibleProperty.setSelected(enable);
                 smileysColoredProperty.setSelected(enable);
                 smileysVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
-                squareVisibleProperty.setSelected(true);
+                squareVisibleProperty.setSelected(enable);
+                circleVisibleProperty.setSelected(enable);
+                walkingHumanVisibleProperty.setSelected(enable);
         });
         }
         
@@ -190,7 +195,9 @@ public class ConfigWindow extends TWindow {
                 smileysVisibleProperty,
                 smileysVisibleOnlyIfMouseMovingOverProperty,
                 smileysColoredProperty,
-                squareVisibleProperty));
+                squareVisibleProperty,
+                circleVisibleProperty,
+                walkingHumanVisibleProperty));
         //
         propertiesList.stream().forEach(p -> {
             if (p == visibilityDefaultProperty) {

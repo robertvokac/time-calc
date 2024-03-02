@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -139,10 +140,13 @@ public class MainWindow extends TWindow {
                 .setBounds(
                         progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, progressSquare.getY(), 80);
         add(progressCircle);
-
+        progressCircle.visibleProperty.bindTo(timeCalcConfiguration.squareVisibleProperty);
+        
         WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt
                 = new WalkingHumanProgressAsciiArt(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
         add(walkingHumanProgressAsciiArt);
+        walkingHumanProgressAsciiArt.visibleProperty.bindTo(timeCalcConfiguration.squareVisibleProperty);
+        
         weatherButton
                 .setBounds(SwingUtils.MARGIN, walkingHumanProgressAsciiArt.getY()
                         + walkingHumanProgressAsciiArt.getHeight()
@@ -384,7 +388,7 @@ public class MainWindow extends TWindow {
                 break;
             }
 
-            componentRegistry.setVisible(currentVisibility.isNotNone());
+            componentRegistry.setVisible(c -> c instanceof Widget ? ((Widget)c).visibleProperty.isEnabled() : true, currentVisibility.isNotNone());
 
             jokeButton.setVisible(
                     TimeCalcProperties.getInstance().getBooleanProperty(

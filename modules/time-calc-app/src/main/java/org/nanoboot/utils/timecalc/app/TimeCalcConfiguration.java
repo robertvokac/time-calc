@@ -106,6 +106,10 @@ public class TimeCalcConfiguration {
     
     public final BooleanProperty squareVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
+    public final BooleanProperty circleVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
+    public final BooleanProperty walkingHumanVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
 
     private final Map<TimeCalcProperty, Property> mapOfProperties = new HashMap<>();
     private List<Property> allProperties = new ArrayList<>();
@@ -142,7 +146,9 @@ public class TimeCalcConfiguration {
             smileysVisibleProperty,
             smileysVisibleOnlyIfMouseMovingOverProperty,
             smileysColoredProperty,
-            squareVisibleProperty,}) {
+            squareVisibleProperty,
+            circleVisibleProperty,
+            walkingHumanVisibleProperty,}) {
             allProperties.add(p);
         }
         allProperties.stream().forEach(p -> mapOfProperties.put(TimeCalcProperty.forKey(p.getName()), p));

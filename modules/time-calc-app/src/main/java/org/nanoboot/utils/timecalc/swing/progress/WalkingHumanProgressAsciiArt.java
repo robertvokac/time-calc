@@ -39,6 +39,8 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
                     Visibility.STRONGLY_COLORED.name());
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
+    public final BooleanProperty visibleProperty
+            = new BooleanProperty("visibleProperty", true);
 
     public WalkingHumanProgressAsciiArt(int x, int y, int width, int height) {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
@@ -111,7 +113,10 @@ public class WalkingHumanProgressAsciiArt extends JTextPane implements
     public void printPercentToAscii(double percent, int hourRemains,
             int minuteRemains, double done,
             double totalSecondsRemainsDouble, TimeHM endTime) {
-
+        if (visibleProperty.isDisabled()) {
+            setText("");
+            return;
+        }
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
         this.setVisible(visibility != Visibility.NONE);
