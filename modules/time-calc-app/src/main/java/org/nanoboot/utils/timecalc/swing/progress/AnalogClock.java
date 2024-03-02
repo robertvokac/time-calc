@@ -47,6 +47,8 @@ public class AnalogClock extends Widget {
             = new IntegerProperty("millisecondProperty");
     public IntegerProperty dayOfWeekProperty
             = new IntegerProperty("dayOfWeekProperty");
+    public BooleanProperty hourEnabledProperty
+            = new BooleanProperty("hourEnabledProperty", true);
     public BooleanProperty minuteEnabledProperty
             = new BooleanProperty("minuteEnabledProperty", true);
     public BooleanProperty secondEnabledProperty
@@ -179,7 +181,7 @@ public class AnalogClock extends Widget {
         }
 
         //
-        if (millisecondEnabledProperty.isEnabled() && secondEnabledProperty.isEnabled() && minuteEnabledProperty.isEnabled()) {
+        if (millisecondEnabledProperty.isEnabled() && secondEnabledProperty.isEnabled() && minuteEnabledProperty.isEnabled() && hourEnabledProperty.isEnabled()) {
             drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
 
@@ -192,7 +194,7 @@ public class AnalogClock extends Widget {
             }
         }
 
-        if (secondEnabledProperty.isEnabled() && minuteEnabledProperty.isEnabled()) {
+        if (secondEnabledProperty.isEnabled() && minuteEnabledProperty.isEnabled() && hourEnabledProperty.isEnabled()) {
             drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED,
                     visibility);
 
@@ -202,7 +204,7 @@ public class AnalogClock extends Widget {
                         Color.RED, visibility);
             }
         }
-        if (minuteEnabledProperty.isEnabled()) {
+        if (minuteEnabledProperty.isEnabled() && hourEnabledProperty.isEnabled()) {
             double minutes = minute / 60.0 + second / 60.0 / 60.0;
             drawHand(g2d, side / 2 - 20, minutes, 2.0f,
                     Color.BLUE, visibility);
@@ -214,15 +216,17 @@ public class AnalogClock extends Widget {
                         Color.BLUE, visibility);
             }
         }
-        double hours = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
-        drawHand(g2d, side / 2 - 40,
-                hours, 4.0f,
-                Color.BLACK, visibility);
-        if (handsLongProperty.isEnabled()) {
-            drawHand(g2d, (side / 2 - 40) / 4,
-                    hours + hours > 0.5 ? hours - 0.5
-                            : hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
+        if (hourEnabledProperty.isEnabled()) {
+            double hours = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
+            drawHand(g2d, side / 2 - 40,
+                    hours, 4.0f,
                     Color.BLACK, visibility);
+            if (handsLongProperty.isEnabled()) {
+                drawHand(g2d, (side / 2 - 40) / 4,
+                        hours + hours > 0.5 ? hours - 0.5
+                                : hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
+                        Color.BLACK, visibility);
+            }
         }
         if (borderVisibleProperty.isEnabled()) {
             for (int minuteI = 0; minuteI < 60; minuteI++) {

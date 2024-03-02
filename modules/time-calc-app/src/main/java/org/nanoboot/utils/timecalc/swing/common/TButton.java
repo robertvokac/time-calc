@@ -27,13 +27,16 @@ public class TButton extends JButton implements GetProperty {
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     private Color originalBackground;
     private Color originalForeground;
+    
+    public final BooleanProperty visibleProperty
+            = new BooleanProperty("visibleProperty", true);
 
     public TButton(String label) {
         super(label);
         new Timer(100, e -> {
             Visibility visibility
                     = Visibility.valueOf(visibilityProperty.getValue());
-            setVisible(visibility.isNotNone());
+            setVisible(visibility.isNotNone() && visibleProperty.isEnabled());
             if (!visibility.isStronglyColored() || visibility.isGray()) {
                 setBackground(MainWindow.BACKGROUND_COLOR);
                 setForeground(MainWindow.FOREGROUND_COLOR);

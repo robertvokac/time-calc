@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -23,6 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 /**
  * @author Robert Vokac
@@ -44,10 +51,14 @@ public class ConfigWindow extends TWindow {
 
     private JCheckBox visibilitySupportedColoredProperty
             = new JCheckBox(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED.getKey());
+    private JCheckBox clockVisibleProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_VISIBLE.getKey());
     private JCheckBox clockHandsLongVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE.getKey());
     private JCheckBox clockHandsColoredProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_COLORED.getKey());
+    private JCheckBox clockHandsHourVisibleProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_HOUR_VISIBLE.getKey());
     private JCheckBox clockHandsMinuteVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE.getKey());
     private JCheckBox clockHandsSecondVisibleProperty
@@ -120,26 +131,53 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     private JCheckBox walkingHumanVisibleProperty
             = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
+    private final JPanel panelInsideScrollPane;
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         setTitle("Configuration");
-        this.setSize(800, 1000);
-        setLayout(null);
-
-        add(enableAsMuchAsPossible);
-        enableAsMuchAsPossible.setBounds(SwingUtils.MARGIN, currentY, 250,
+        this.setSize(800, 800);
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, getHeight() - 6 * SwingUtils.MARGIN));
+        this.panelInsideScrollPane = new JPanel();
+        final BoxLayout boxLayout = new BoxLayout(panelInsideScrollPane, BoxLayout.Y_AXIS);
+        panelInsideScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        mainPanel.setAlignmentX(LEFT_ALIGNMENT);
+        
+        panelInsideScrollPane.setLayout(boxLayout);
+        panelInsideScrollPane.setMinimumSize(new Dimension(Integer.MAX_VALUE, 400));
+        
+        JScrollPane scrollPane = new JScrollPane(panelInsideScrollPane);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(getWidth() - 50, getHeight() - 100));
+        scrollPane.setWheelScrollingEnabled(true);
+        scrollPane.setBorder(null);
+//        mainPanel.setBackground(Color.red);
+//        scrollPane.setBackground(Color.green);
+//        panelInsideScrollPane.setBackground(Color.blue);
+        
+        add(mainPanel);
+        //mainPanel.setLayout(null);
+        mainPanel.add(enableAsMuchAsPossible);
+        enableAsMuchAsPossible.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 250,
                 HEIGHT1);
-        add(disableAsMuchAsPossible);
-        disableAsMuchAsPossible.setBounds(enableAsMuchAsPossible.getX() + enableAsMuchAsPossible.getWidth() + SwingUtils.MARGIN, currentY, 250,
+        
+        mainPanel.add(disableAsMuchAsPossible);
+        disableAsMuchAsPossible.setBounds(enableAsMuchAsPossible.getX() + enableAsMuchAsPossible.getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 250,
                 HEIGHT1);
-        nextRow();
+        scrollPane.setBounds(enableAsMuchAsPossible.getX(), enableAsMuchAsPossible.getY() + enableAsMuchAsPossible.getHeight() + SwingUtils.MARGIN, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        
+        mainPanel.add(scrollPane);
+        
         for(boolean enable:new boolean[]{true, false}) {
             TButton button = enable ? enableAsMuchAsPossible : disableAsMuchAsPossible;
             
             button.addActionListener(e -> {
             visibilityDefaultProperty.setSelectedItem(Visibility.STRONGLY_COLORED.name());
-                clockHandsMinuteVisibleProperty.setSelected(true);
+            clockVisibleProperty.setSelected(true);
+            clockHandsHourVisibleProperty.setSelected(enable);
+                clockHandsMinuteVisibleProperty.setSelected(enable);
                 clockHandsSecondVisibleProperty.setSelected(enable);
                 clockHandsMillisecondVisibleProperty.setSelected(enable);
                 clockHandsLongVisibleProperty.setSelected(enable);
@@ -156,15 +194,14 @@ public class ConfigWindow extends TWindow {
                 clockCentreCircleVisibleProperty.setSelected(enable);
                 clockCentreCircleBlackProperty.setSelected(!enable);
                 clockProgressVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
-                clockDateVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
+                clockDateVisibleOnlyIfMouseMovingOverProperty.setSelected(false);
+                batteryVisibleProperty.setSelected(true);
                 batteryWavesVisibleProperty.setSelected(enable);
                 batteryCircleProgressVisibleProperty.setSelected(enable);
                 batteryPercentProgressProperty.setSelected(enable);
                 batteryChargingCharacterVisibleProperty.setSelected(enable);
                 batteryNameVisibleProperty.setSelected(enable);
                 batteryLabelVisibleProperty.setSelected(enable);
-                //
-                batteryVisibleProperty.setSelected(true);
                 batteryMinuteVisibleProperty.setSelected(enable);
                 batteryHourVisibleProperty.setSelected(enable);
                 batteryDayVisibleProperty.setSelected(true);
@@ -187,6 +224,8 @@ public class ConfigWindow extends TWindow {
         
         propertiesList.addAll(Arrays.asList(visibilityDefaultProperty,
                 visibilitySupportedColoredProperty,
+                clockVisibleProperty,
+                clockHandsHourVisibleProperty,
                 clockHandsMinuteVisibleProperty,
                 clockHandsSecondVisibleProperty,
                 clockHandsMillisecondVisibleProperty,
@@ -202,14 +241,13 @@ public class ConfigWindow extends TWindow {
                 clockCentreCircleBlackProperty,
                 clockProgressVisibleOnlyIfMouseMovingOverProperty,
                 clockDateVisibleOnlyIfMouseMovingOverProperty,
+                batteryVisibleProperty,
                 batteryWavesVisibleProperty,
                 batteryCircleProgressVisibleProperty,
                 batteryPercentProgressProperty,
                 batteryChargingCharacterVisibleProperty,
                 batteryNameVisibleProperty,
                 batteryLabelVisibleProperty,
-                //
-                batteryVisibleProperty,
                 batteryMinuteVisibleProperty,
                 batteryHourVisibleProperty,
                 batteryDayVisibleProperty,
@@ -218,24 +256,25 @@ public class ConfigWindow extends TWindow {
                 batteryYearVisibleProperty,
                 batteryBlinkingIfCriticalLowVisibleProperty,
                 //
-                jokesVisibleProperty,
-                commandsVisibleProperty,
-                notificationsVisibleProperty,
                 smileysVisibleProperty,
                 smileysVisibleOnlyIfMouseMovingOverProperty,
                 smileysColoredProperty,
+                jokesVisibleProperty,
+                commandsVisibleProperty,
+                notificationsVisibleProperty,
                 squareVisibleProperty,
                 circleVisibleProperty,
                 walkingHumanVisibleProperty));
         //
         propertiesList.stream().forEach(p -> {
+            p.setAlignmentX(LEFT_ALIGNMENT);
             if (p == visibilityDefaultProperty) {
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.VISIBILITY_DEFAULT.getKey());
                 addToNextRow(new JLabel(TimeCalcProperty.VISIBILITY_DEFAULT.getDescription()));
             }
             if (p == clockCircleBorderColorProperty) {
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getKey());
-                addToNextRow(new JLabel(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getDescription()));
+                addToNextRow(new JLabel(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getDescription().replace("Clock : ", "")));
             }
             if (p instanceof JComboBox) {
                 JComboBox jComboBox = ((JComboBox) p);
@@ -271,12 +310,33 @@ public class ConfigWindow extends TWindow {
                     property
                             .setValue(checkBox.isSelected());
                 });
+                String[] array = checkBox.getText().split(" : ");
+                String groupName = array[0];
+                if(groupName.equals("Clock") ||groupName.equals("Battery") ||groupName.equals("Smileys")) {
+                    
+                    checkBox.setText(array.length > 1 ? (checkBox.getText().substring(groupName.length() + 3)) : "Visible");
+                    if(array.length == 1) {
+                        panelInsideScrollPane.add(new JSeparator(SwingConstants.VERTICAL));
+                        JLabel label = new JLabel(groupName);
+                        label.setFont(BIG_FONT);
+                        panelInsideScrollPane.add(label);
+                    }
+                }
+                if(
+                        timeCalcProperty == TimeCalcProperty.VISIBILITY_DEFAULT
+                        ||
+                        timeCalcProperty == TimeCalcProperty.JOKES_VISIBLE
+                        ) {
+                    JLabel label = new JLabel("Misc");
+                        label.setFont(BIG_FONT);
+                        panelInsideScrollPane.add(label);
+                }
             }
             if (p instanceof JColorChooser) {
-                JColorChooser jColorChooser = ((JColorChooser) p);
+                JColorChooser colorChooser = ((JColorChooser) p);
                 //jColorChooser.setMaximumSize(new Dimension(150, 25));
 
-                String timeCalcPropertyKey = (String) jColorChooser.getClientProperty(
+                String timeCalcPropertyKey = (String) colorChooser.getClientProperty(
                         CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
@@ -287,15 +347,16 @@ public class ConfigWindow extends TWindow {
                 int green = Integer.valueOf(currentColorAsStringArray[1]);
                 int blue = Integer.valueOf(currentColorAsStringArray[2]);
                 Color color = new Color(red, green, blue);
-                jColorChooser.setColor(color);
-                jColorChooser.addMouseListener(new MouseListener() {
+                colorChooser.setColor(color);
+                colorChooser.setMaximumSize(new Dimension(200, HEIGHT1));
+                colorChooser.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        Color selectedColor = jColorChooser.getSelectionModel()
+                        Color selectedColor = colorChooser.getSelectionModel()
                                 .getSelectedColor();
                         selectedColor = JColorChooser.showDialog(null, "Choose a color", color);
                         if (selectedColor != null) {
-                            jColorChooser.setColor(selectedColor);
+                            colorChooser.setColor(selectedColor);
                             ((StringProperty) timeCalcConfiguration
                                     .getProperty(timeCalcProperty))
                                     .setValue(
@@ -380,15 +441,18 @@ public class ConfigWindow extends TWindow {
             }
         });
     }
+    private static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
+    private static final String FIVE_SPACES = "     ";
 
     private void addToNextRow(JComponent jComponent) {
-        add(jComponent);
-        jComponent.setBounds(SwingUtils.MARGIN, currentY, WIDTH1,
+        panelInsideScrollPane.add(jComponent);
+        jComponent.setBounds(SwingUtils.MARGIN, currentY, 200,
                 HEIGHT1);
+        panelInsideScrollPane.add(Box.createRigidArea(new Dimension(5, 10)));
         nextRow();
     }
 
     private void nextRow() {
-        currentY = (int) (currentY + 2.5d * SwingUtils.MARGIN);
+        currentY = (int) (currentY + 3.0d * SwingUtils.MARGIN);
     }
 }

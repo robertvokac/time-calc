@@ -182,10 +182,15 @@ public class MainWindow extends TWindow {
                 Jokes.showRandom();
             }
         });
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e
+                -> {
+            timeCalcConfiguration.saveToTimeCalcProperties();
+            System.exit(0);
+        });
         focusButton.addActionListener(e -> requestFocus(true));
         restartButton.addActionListener(e -> {
             setVisible(false);
+            timeCalcConfiguration.saveToTimeCalcProperties();
             stopBeforeEnd = true;
         });
         workDaysButton.addActionListener(e -> {
@@ -206,6 +211,8 @@ public class MainWindow extends TWindow {
                 this.configWindow = new ConfigWindow(timeCalcConfiguration);
             }
             configWindow.setVisible(true);
+            configWindow.setLocationRelativeTo(this);
+            configWindow.setLocation(100, 100);
         });
 
         helpButton.addActionListener(e -> {
@@ -253,6 +260,8 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.clockHandsSecondVisibleProperty);
         analogClock.minuteEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsMinuteVisibleProperty);
+        analogClock.hourEnabledProperty
+                .bindTo(timeCalcConfiguration.clockHandsHourVisibleProperty);
         analogClock.handsLongProperty
                 .bindTo(timeCalcConfiguration.clockHandsLongVisibleProperty);
         analogClock.borderVisibleProperty.bindTo(timeCalcConfiguration.clockBorderVisibleProperty);
@@ -266,7 +275,8 @@ public class MainWindow extends TWindow {
         analogClock.centreCircleBlackProperty.bindTo(timeCalcConfiguration.clockCentreCircleBlackProperty);
         analogClock.progressVisibleOnlyIfMouseMovingOverProperty.bindTo(timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty);
         analogClock.dateVisibleOnlyIfMouseMovingOverProperty.bindTo(timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty);
-
+        analogClock.visibleProperty.bindTo(timeCalcConfiguration.clockVisibleProperty);
+        
         MinuteBattery minuteBattery = new MinuteBattery(progressCircle.getBounds().x,
                 progressCircle.getY() + SwingUtils.MARGIN + progressCircle.getHeight(), 140);
         add(minuteBattery);
@@ -326,7 +336,12 @@ public class MainWindow extends TWindow {
 
         ComponentRegistry<TButton> buttonRegistry = new ComponentRegistry();
         componentRegistry.getSet().stream().filter(c -> c instanceof TButton).forEach(c
-                -> buttonRegistry.add((TButton) c));
+                -> {
+            buttonRegistry.add((TButton) c);
+            
+        });
+//        commandButton.visibleProperty.bindTo(timeCalcConfiguration.commandsVisibleProperty);
+//        jokeButton.visibleProperty.bindTo(timeCalcConfiguration.jokesVisibleProperty);
         componentRegistry.getSet().stream().filter(c
                 -> GetProperty.class.isAssignableFrom(c.getClass())).forEach(c
                 -> {
@@ -366,6 +381,7 @@ public class MainWindow extends TWindow {
         );
         setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
+        
         while (true) {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
             Visibility currentVisibility = Visibility
@@ -398,7 +414,9 @@ public class MainWindow extends TWindow {
                 break;
             }
 
-            componentRegistry.setVisible(c -> c instanceof Widget ? ((Widget)c).visibleProperty.isEnabled() : true, currentVisibility.isNotNone());
+            componentRegistry.setVisible(c -> (c instanceof Widget ? ((Widget)c).visibleProperty.isEnabled()
+                    : true) /*|| (c instanceof TButton ? ((Widget)c).visibleProperty.isEnabled()
+                    : true)*/, currentVisibility.isNotNone());
 
             jokeButton.setVisible(
                     TimeCalcProperties.getInstance().getBooleanProperty(
@@ -547,7 +565,6 @@ public class MainWindow extends TWindow {
     }
 
     public void doExit() {
-        timeCalcConfiguration.saveToTimeCalcProperties();
         exitButton.doClick();
     }
 
@@ -556,7 +573,6 @@ public class MainWindow extends TWindow {
     }
 
     public void doRestart() {
-        timeCalcConfiguration.saveToTimeCalcProperties();
         restartButton.doClick();
     }
 

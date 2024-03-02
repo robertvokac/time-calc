@@ -14,9 +14,10 @@ public enum TimeCalcProperty {
     VISIBILITY_DEFAULT("visibility.default", "Default Visibility"),
     VISIBILITY_SUPPORTED_COLORED("visibility.supported.colored", "Visibility : Supported : Colored"),
     //
-    CLOCK_VISIBLE("clock.hands.long.visible", "Clock"),
-    CLOCK_HANDS_LONG_VISIBLE("clock.hands.long.visible", "Clock : Hands are long"),
-    CLOCK_HANDS_COLORED("clock.hands.colored", "Clock : Hands are colored"),
+    CLOCK_VISIBLE("clock.visible", "Clock"),
+    CLOCK_HANDS_LONG_VISIBLE("clock.hands.long.visible", "Clock : Long Hands"),
+    CLOCK_HANDS_COLORED("clock.hands.colored", "Clock : Colored Hands"),
+    CLOCK_HANDS_HOUR_VISIBLE("clock.hands.hour.visible", "Clock : Hour hand"),
     CLOCK_HANDS_MINUTE_VISIBLE("clock.hands.minute.visible", "Clock : Minute hand"),
     CLOCK_HANDS_SECOND_VISIBLE("clock.hands.second.visible", "Clock : Second hand"),
     CLOCK_HANDS_MILLISECOND_VISIBLE("clock.hands.millisecond.visible", "Clock : Millisecond hand"),

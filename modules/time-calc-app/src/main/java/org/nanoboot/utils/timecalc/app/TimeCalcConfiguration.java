@@ -31,6 +31,8 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockHandsColoredProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_COLORED
                     .getKey());
+    public final BooleanProperty clockHandsHourVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_HOUR_VISIBLE.getKey());
     public final BooleanProperty clockHandsMinuteVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE
                     .getKey());
@@ -149,6 +151,7 @@ public class TimeCalcConfiguration {
             clockVisibleProperty,
             clockHandsLongVisibleProperty,
             clockHandsColoredProperty,
+            clockHandsHourVisibleProperty,
             clockHandsMinuteVisibleProperty,
             clockHandsSecondVisibleProperty,
             clockHandsMillisecondVisibleProperty,
