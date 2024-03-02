@@ -311,6 +311,10 @@ public class AnalogClock extends Widget {
             cal.set(Calendar.YEAR, yearProperty.getValue());
             cal.set(Calendar.MONTH, monthProperty.getValue() - 1);
             cal.set(Calendar.DAY_OF_MONTH, dayProperty.getValue());
+            cal.set(Calendar.HOUR_OF_DAY, hourProperty.getValue());
+            cal.set(Calendar.MINUTE, minuteProperty.getValue());
+            cal.set(Calendar.SECOND, secondProperty.getValue());
+            cal.set(Calendar.MILLISECOND, millisecondProperty.getValue());
             Date date = cal.getTime();
             brush.drawString(DateFormats.DATE_TIME_FORMATTER_LONG.format(date),
                     ((int) (side * 0.25)),
