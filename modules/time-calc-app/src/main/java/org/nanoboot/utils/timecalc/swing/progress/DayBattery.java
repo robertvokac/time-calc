@@ -7,6 +7,7 @@ package org.nanoboot.utils.timecalc.swing.progress;
 public class DayBattery extends Battery {
 
     public DayBattery(int x, int i, int i1) {
-        super("Day", x, i, i1);
+        super(DAY, x, i, i1);
     }
+    public static final String DAY = "Day";
 }

@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
 import java.awt.Color;
+import java.awt.Font;
 
 /**
  * @author Robert Vokac
@@ -13,7 +14,8 @@ public class SwingUtils {
     }
     public static final int MARGIN = 10;
     public static final Color CLOSE_BUTTON_BACKGROUND_COLOR = new Color(127, 127, 127);
-
+    
+    public static final Font SMALL_FONT = new Font("sans", Font.BOLD, 10);
     public static final Color getColorFromString(String s) {
         if (s.isEmpty()) {
             System.out.println("error: empty string for color");

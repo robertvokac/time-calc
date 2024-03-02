@@ -7,8 +7,9 @@ package org.nanoboot.utils.timecalc.swing.progress;
 public class MonthBattery extends Battery {
 
     public MonthBattery(int x, int i, int i1) {
-        super("Month", x, i, i1);
+        super(MONTH, x, i, i1);
     }
+    public static final String MONTH = "Month";
 
     public static double getMonthProgress(int weekDayWhenMondayIsOne,
             int workDaysDone, int workDaysTotal, double done) {

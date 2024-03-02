@@ -88,8 +88,17 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE.getKey());
     private JCheckBox batteryNameVisibleProperty
             = new JCheckBox(TimeCalcProperty.BATTERY_NAME_VISIBLE.getKey());
-    private JCheckBox batteryLabelVisibleProperty
-            = new JCheckBox(TimeCalcProperty.BATTERY_LABEL_VISIBLE.getKey());
+    private JCheckBox batteryLabelVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_LABEL_VISIBLE.getKey());
+    
+    
+    private JCheckBox batteryVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_VISIBLE.getKey());
+    private JCheckBox batteryMinuteVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_MINUTE_VISIBLE.getKey());
+    private JCheckBox batteryHourVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_HOUR_VISIBLE.getKey());
+    private JCheckBox batteryDayVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_DAY_VISIBLE.getKey());
+    private JCheckBox batteryWeekVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_WEEK_VISIBLE.getKey());
+    private JCheckBox batteryMonthVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_MONTH_VISIBLE.getKey());
+    private JCheckBox batteryYearVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_YEAR_VISIBLE.getKey());
+    private JCheckBox batteryBlinkingIfCriticalLowVisibleProperty = new JCheckBox(TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW.getKey());
     
     private JCheckBox jokesVisibleProperty
             = new JCheckBox(TimeCalcProperty.JOKES_VISIBLE.getKey());
@@ -154,6 +163,16 @@ public class ConfigWindow extends TWindow {
                 batteryChargingCharacterVisibleProperty.setSelected(enable);
                 batteryNameVisibleProperty.setSelected(enable);
                 batteryLabelVisibleProperty.setSelected(enable);
+                //
+                batteryVisibleProperty.setSelected(true);
+                batteryMinuteVisibleProperty.setSelected(enable);
+                batteryHourVisibleProperty.setSelected(enable);
+                batteryDayVisibleProperty.setSelected(true);
+                batteryWeekVisibleProperty.setSelected(true);
+                batteryMonthVisibleProperty.setSelected(enable);
+                batteryYearVisibleProperty.setSelected(enable);
+                batteryBlinkingIfCriticalLowVisibleProperty.setSelected(enable);
+//                
                 jokesVisibleProperty.setSelected(true);
                 commandsVisibleProperty.setSelected(enable);
                 notificationsVisibleProperty.setSelected(enable);
@@ -189,6 +208,16 @@ public class ConfigWindow extends TWindow {
                 batteryChargingCharacterVisibleProperty,
                 batteryNameVisibleProperty,
                 batteryLabelVisibleProperty,
+                //
+                batteryVisibleProperty,
+                batteryMinuteVisibleProperty,
+                batteryHourVisibleProperty,
+                batteryDayVisibleProperty,
+                batteryWeekVisibleProperty,
+                batteryMonthVisibleProperty,
+                batteryYearVisibleProperty,
+                batteryBlinkingIfCriticalLowVisibleProperty,
+                //
                 jokesVisibleProperty,
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
@@ -236,6 +265,7 @@ public class ConfigWindow extends TWindow {
                 BooleanProperty property
                         = (BooleanProperty) timeCalcConfiguration
                                 .getProperty(timeCalcProperty);
+                property.addListener(e -> checkBox.setSelected(property.isEnabled()));
                 checkBox.setSelected(property.isEnabled());
                 checkBox.addItemListener(e -> {
                     property

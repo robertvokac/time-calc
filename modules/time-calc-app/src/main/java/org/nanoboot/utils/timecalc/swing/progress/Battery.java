@@ -1,7 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import lombok.Getter;
-import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
@@ -51,6 +50,9 @@ public class Battery extends Widget {
             .getKey(), true);
     public BooleanProperty labelVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
             .getKey(), true);
+    public BooleanProperty blinkingIfCriticalLowVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
+                    .getKey(), true);
     private final BooleanProperty blinking = new BooleanProperty("blinking");
     private long tmpNanoTime = 0l;
     private int totalHeight = 0;
@@ -73,16 +75,22 @@ public class Battery extends Widget {
             this.totalHeight = (int) (this.getHeight() / 10d * 7d);
             this.totalWidth = this.getWidth();
         }
-        if (donePercent > 0 && donePercent <= CRITICAL_LOW_ENERGY
-                && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
-            blinking.flip();
-            tmpNanoTime = System.nanoTime();
-        }
-        if (donePercent > CRITICAL_LOW_ENERGY && blinking.isEnabled()) {
-            blinking.disable();
-        }
-        if (donePercent <= 0 && blinking.getValue()) {
-            blinking.setValue(false);
+        if (blinkingIfCriticalLowVisibleProperty.isEnabled()) {
+            if (donePercent > 0 && donePercent <= CRITICAL_LOW_ENERGY
+                    && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
+                blinking.flip();
+                tmpNanoTime = System.nanoTime();
+            }
+            if (donePercent > CRITICAL_LOW_ENERGY && blinking.isEnabled()) {
+                blinking.disable();
+            }
+            if (donePercent <= 0 && blinking.getValue()) {
+                blinking.setValue(false);
+            }
+        } else {
+            if (blinking.isEnabled()) {
+                blinking.disable();
+            }
         }
 
         Graphics2D brush = (Graphics2D) g;

@@ -14,6 +14,7 @@ public enum TimeCalcProperty {
     VISIBILITY_DEFAULT("visibility.default", "Default Visibility"),
     VISIBILITY_SUPPORTED_COLORED("visibility.supported.colored", "Visibility : Supported : Colored"),
     //
+    CLOCK_VISIBLE("clock.hands.long.visible", "Clock"),
     CLOCK_HANDS_LONG_VISIBLE("clock.hands.long.visible", "Clock : Hands are long"),
     CLOCK_HANDS_COLORED("clock.hands.colored", "Clock : Hands are colored"),
     CLOCK_HANDS_MINUTE_VISIBLE("clock.hands.minute.visible", "Clock : Minute hand"),
@@ -40,6 +41,15 @@ public enum TimeCalcProperty {
     BATTERY_NAME_VISIBLE("battery.name.visible", "Battery : Name"),
     BATTERY_LABEL_VISIBLE("battery.label.visible", "Battery : Label"),
     
+    BATTERY_VISIBLE("battery.visible", "Battery"),
+    BATTERY_MINUTE_VISIBLE("battery.minute.visible", "Battery : Minute"),
+    BATTERY_HOUR_VISIBLE("battery.hour.visible", "Battery : Hour"),
+    BATTERY_DAY_VISIBLE("battery.day.visible", "Battery : Day"),
+    BATTERY_WEEK_VISIBLE("battery.week.visible", "Battery : Week"),
+    BATTERY_MONTH_VISIBLE("battery.month.visible", "Battery : Month"),
+    BATTERY_YEAR_VISIBLE("battery.year.visible", "Battery : Year"),
+    BATTERY_BLINKING_IF_CRITICAL_LOW("battery.blinking-if-critical-low", "Battery : Blinking, if critical low"),
+   
     JOKES_VISIBLE("jokes.visible", "Jokes"),
     COMMANDS_VISIBLE("commands.visible", "Commands"),
     NOTIFICATIONS_VISIBLE("notifications.visible", "Notifications"),

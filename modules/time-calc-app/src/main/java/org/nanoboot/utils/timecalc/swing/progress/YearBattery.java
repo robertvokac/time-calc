@@ -9,8 +9,9 @@ import java.util.Calendar;
 public class YearBattery extends Battery {
 
     public YearBattery(int x, int i, int i1) {
-        super("Year", x, i, i1);
+        super(YEAR, x, i, i1);
     }
+    public static final String YEAR = "Year";
 
     public static double getYearProgress(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second, Integer millisecond) {
         Calendar cal = Calendar.getInstance();

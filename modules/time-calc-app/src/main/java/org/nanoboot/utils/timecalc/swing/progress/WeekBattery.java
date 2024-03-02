@@ -7,8 +7,9 @@ package org.nanoboot.utils.timecalc.swing.progress;
 public class WeekBattery extends Battery {
 
     public WeekBattery(int x, int i, int i1) {
-        super("Week", x, i, i1);
+        super(WEEK, x, i, i1);
     }
+    public static final String WEEK = "Week";
 
     public static double getWeekProgress(int weekDayWhenMondayIsOne,
             double done) {

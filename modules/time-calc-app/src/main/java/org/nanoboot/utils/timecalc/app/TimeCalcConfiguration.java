@@ -22,6 +22,9 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED
                     .getKey());
     //
+        public final BooleanProperty clockVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_VISIBLE
+                    .getKey());
     public final BooleanProperty clockHandsLongVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
                     .getKey());
@@ -87,7 +90,31 @@ public class TimeCalcConfiguration {
     public final BooleanProperty batteryLabelVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
                     .getKey());
-
+    public final BooleanProperty batteryVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryMinuteVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_MINUTE_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryHourVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_HOUR_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryDayVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_DAY_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryWeekVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_WEEK_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryMonthVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_MONTH_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryYearVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_YEAR_VISIBLE
+                    .getKey());
+    public final BooleanProperty batteryBlinkingIfCriticalLowVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
+                    .getKey());
+        
     public final BooleanProperty jokesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.JOKES_VISIBLE
                     .getKey());
@@ -119,6 +146,7 @@ public class TimeCalcConfiguration {
         for (Property p : new Property[]{
             visibilityDefaultProperty,
             visibilitySupportedColoredProperty,
+            clockVisibleProperty,
             clockHandsLongVisibleProperty,
             clockHandsColoredProperty,
             clockHandsMinuteVisibleProperty,
@@ -140,6 +168,14 @@ public class TimeCalcConfiguration {
             batteryChargingCharacterVisibleProperty,
             batteryNameVisibleProperty,
             batteryLabelVisibleProperty,
+            batteryVisibleProperty,
+            batteryMinuteVisibleProperty,
+            batteryHourVisibleProperty,
+            batteryDayVisibleProperty,
+            batteryWeekVisibleProperty,
+            batteryMonthVisibleProperty,
+            batteryYearVisibleProperty,
+            batteryBlinkingIfCriticalLowVisibleProperty,
             jokesVisibleProperty,
             commandsVisibleProperty,
             notificationsVisibleProperty,
@@ -152,6 +188,15 @@ public class TimeCalcConfiguration {
             allProperties.add(p);
         }
         allProperties.stream().forEach(p -> mapOfProperties.put(TimeCalcProperty.forKey(p.getName()), p));
+        batteryVisibleProperty.addListener(e -> {
+        
+        batteryMinuteVisibleProperty.setValue(batteryVisibleProperty.getValue());
+        batteryHourVisibleProperty.setValue(batteryVisibleProperty.getValue());
+        batteryDayVisibleProperty.setValue(batteryVisibleProperty.getValue());
+        batteryWeekVisibleProperty.setValue(batteryVisibleProperty.getValue());
+        batteryMonthVisibleProperty.setValue(batteryVisibleProperty.getValue());
+        batteryYearVisibleProperty.setValue(batteryVisibleProperty.getValue());
+        });
     }
 
     public Property getProperty(TimeCalcProperty timeCalcProperty) {

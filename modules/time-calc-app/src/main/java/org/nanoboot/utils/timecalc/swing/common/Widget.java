@@ -152,6 +152,12 @@ public class Widget extends JPanel implements
     public final void paintComponent(Graphics brush) {
         super.paintComponent(brush);
 
+        setVisible(visibleProperty.isEnabled());
+        
+        if(visibleProperty.isDisabled()) {
+            //nothing to do
+            return;
+        }
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
         super.setVisible(visibility != Visibility.NONE && visibleProperty.isEnabled());

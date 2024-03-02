@@ -140,12 +140,12 @@ public class MainWindow extends TWindow {
                 .setBounds(
                         progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, progressSquare.getY(), 80);
         add(progressCircle);
-        progressCircle.visibleProperty.bindTo(timeCalcConfiguration.squareVisibleProperty);
+        progressCircle.visibleProperty.bindTo(timeCalcConfiguration.circleVisibleProperty);
         
         WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt
                 = new WalkingHumanProgressAsciiArt(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
         add(walkingHumanProgressAsciiArt);
-        walkingHumanProgressAsciiArt.visibleProperty.bindTo(timeCalcConfiguration.squareVisibleProperty);
+        walkingHumanProgressAsciiArt.visibleProperty.bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
         
         weatherButton
                 .setBounds(SwingUtils.MARGIN, walkingHumanProgressAsciiArt.getY()
@@ -343,6 +343,16 @@ public class MainWindow extends TWindow {
             battery.chargingCharacterVisibleProperty.bindTo(timeCalcConfiguration.batteryChargingCharacterVisibleProperty);
             battery.nameVisibleProperty.bindTo(timeCalcConfiguration.batteryNameVisibleProperty);
             battery.labelVisibleProperty.bindTo(timeCalcConfiguration.batteryLabelVisibleProperty);
+            battery.blinkingIfCriticalLowVisibleProperty.bindTo(timeCalcConfiguration.batteryBlinkingIfCriticalLowVisibleProperty);
+            switch(battery.getName()) {
+                case MinuteBattery.MINUTE : battery.visibleProperty.bindTo(timeCalcConfiguration.batteryMinuteVisibleProperty);break;
+                case HourBattery.HOUR : battery.visibleProperty.bindTo(timeCalcConfiguration.batteryHourVisibleProperty);break;
+                case DayBattery.DAY : battery.visibleProperty.bindTo(timeCalcConfiguration.batteryDayVisibleProperty);break;
+                case WeekBattery.WEEK : battery.visibleProperty.bindTo(timeCalcConfiguration.batteryWeekVisibleProperty);break;
+                case MonthBattery.MONTH : battery.visibleProperty.bindTo(timeCalcConfiguration.batteryMonthVisibleProperty);break;
+                case YearBattery.YEAR : battery.visibleProperty.bindTo(timeCalcConfiguration.batteryYearVisibleProperty);break;
+                default: {}
+            };
         });
         
 

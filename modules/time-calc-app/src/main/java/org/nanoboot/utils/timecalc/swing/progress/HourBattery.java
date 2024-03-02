@@ -9,8 +9,9 @@ import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 public class HourBattery extends Battery {
 
     public HourBattery(int x, int i, int i1) {
-        super("Hour", x, i, i1);
+        super(HOUR, x, i, i1);
     }
+    public static final String HOUR = "Hour";
 
     public static double getHourProgress(TimeHM timeRemains, int secondsRemains,
             int millisecondsRemains) {
