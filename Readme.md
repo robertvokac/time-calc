@@ -137,6 +137,8 @@ Smileys can be colored or white-black (can be set in configuration)
 * P or F1 - open help window
 * X - exit application
 * J - show random Joke
+* U - enable everything
+* I - disable almost everything
 
 ## Command button
 

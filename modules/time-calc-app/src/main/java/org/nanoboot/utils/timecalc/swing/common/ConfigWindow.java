@@ -219,6 +219,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
+                MainWindow.hideShowCheckBox.setSelected(enable);
         });
         }
         
@@ -455,4 +456,12 @@ public class ConfigWindow extends TWindow {
     private void nextRow() {
         currentY = (int) (currentY + 3.0d * SwingUtils.MARGIN);
     }
+        
+    public void doEnableEverything() {
+        this.enableAsMuchAsPossible.doClick();
+    }
+    public void doDisableAlmostEverything() {
+        this.disableAsMuchAsPossible.doClick();
+    }
+
 }

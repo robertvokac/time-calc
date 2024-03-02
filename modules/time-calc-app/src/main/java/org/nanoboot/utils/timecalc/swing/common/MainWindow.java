@@ -590,4 +590,17 @@ public class MainWindow extends TWindow {
     public void openHelpWindow() {
         helpButton.doClick();
     }
+    
+    public void doEnableEverything() {
+        if(this.configWindow == null) {
+            openConfigWindow();
+            this.configWindow.setVisible(false);
+        }
+        
+        
+        this.configWindow.doEnableEverything();
+    }
+    public void doDisableAlmostEverything() {
+        this.configWindow.doDisableAlmostEverything();
+    }
 }

@@ -61,6 +61,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             } else {
                 timeCalcApp.visibilityProperty
                         .setValue(Visibility.GRAY.name());
+                MainWindow.hideShowCheckBox.setSelected(false);
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_C) {
@@ -140,6 +141,14 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
 
         if (e.getKeyCode() == KeyEvent.VK_P || e.getKeyCode() == KeyEvent.VK_F1) {
             window.openHelpWindow();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_U) {
+            window.doEnableEverything();
+            
+        }
+        if (e.getKeyCode() == KeyEvent.VK_I) {
+            window.doDisableAlmostEverything();
+            
         }
 
         window.repaint();
