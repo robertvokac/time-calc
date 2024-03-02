@@ -41,6 +41,7 @@ import java.util.Properties;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 
 /**
  * @author Robert Vokac
@@ -61,6 +62,7 @@ public class MainWindow extends TWindow {
     private final TButton commandButton;
     private final TButton jokeButton;
     private final AboutButton aboutButton;
+    public static final JCheckBox hideShowCheckBox = new JCheckBox();
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -115,7 +117,7 @@ public class MainWindow extends TWindow {
 
         //window.add(weatherButton);
         addAll(configButton, workDaysButton, activitiesButton, restartButton,
-                exitButton, focusButton, helpButton, commandButton, jokeButton);
+                exitButton, focusButton, helpButton, commandButton, jokeButton, hideShowCheckBox);
 
         timeCalcApp.visibilityProperty.bindTo(timeCalcConfiguration.visibilityDefaultProperty);
         if (!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled()) {
@@ -163,6 +165,8 @@ public class MainWindow extends TWindow {
         focusButton.setBoundsFromLeft(helpButton);
         commandButton.setBoundsFromLeft(focusButton);
         jokeButton.setBoundsFromLeft(commandButton);
+        hideShowCheckBox.setSelected(true);
+        hideShowCheckBox.setBounds(jokeButton.getX() + jokeButton.getWidth() + SwingUtils.MARGIN, jokeButton.getY(), 20, 20);
         //
         aboutButton.setBounds(exitButton.getX(),
                 exitButton.getY() + exitButton.getHeight() + SwingUtils.MARGIN);
@@ -181,6 +185,9 @@ public class MainWindow extends TWindow {
             for (int i = 1; i <= 1; i++) {
                 Jokes.showRandom();
             }
+        });
+        hideShowCheckBox.addItemListener(e -> 
+        {
         });
         exitButton.addActionListener(e
                 -> {
@@ -421,7 +428,7 @@ public class MainWindow extends TWindow {
             jokeButton.setVisible(
                     TimeCalcProperties.getInstance().getBooleanProperty(
                             TimeCalcProperty.JOKES_VISIBLE)
-                    && !currentVisibility.isNone());
+                    && !currentVisibility.isNone() && MainWindow.hideShowCheckBox.isSelected());
 
             setTitle(currentVisibility.isNone() ? "" : windowTitle);
 

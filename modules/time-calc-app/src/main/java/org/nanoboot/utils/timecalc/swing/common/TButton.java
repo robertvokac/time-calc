@@ -34,6 +34,12 @@ public class TButton extends JButton implements GetProperty {
     public TButton(String label) {
         super(label);
         new Timer(100, e -> {
+            if(!MainWindow.hideShowCheckBox.isSelected()) {
+                setVisible(false);
+                return;
+            } else {
+                setVisible(true);
+            }
             Visibility visibility
                     = Visibility.valueOf(visibilityProperty.getValue());
             setVisible(visibility.isNotNone() && visibleProperty.isEnabled());

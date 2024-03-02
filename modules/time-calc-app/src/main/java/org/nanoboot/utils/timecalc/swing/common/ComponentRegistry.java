@@ -35,6 +35,11 @@ public class ComponentRegistry<T extends Component> {
 
     public void setVisible(Predicate<Component> predicate, boolean b) {
         for (T c : set) {
+            if(c instanceof TButton) {
+                if(!MainWindow.hideShowCheckBox.isSelected() && b) {
+                    continue;
+                }
+            }
             if(predicate != null) {
                 if(!predicate.test(c)) {
                     continue;
