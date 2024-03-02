@@ -597,10 +597,15 @@ public class MainWindow extends TWindow {
             this.configWindow.setVisible(false);
         }
         
-        
         this.configWindow.doEnableEverything();
     }
     public void doDisableAlmostEverything() {
+        
+        if(this.configWindow == null) {
+            openConfigWindow();
+            this.configWindow.setVisible(false);
+        }
+        
         this.configWindow.doDisableAlmostEverything();
     }
 }
