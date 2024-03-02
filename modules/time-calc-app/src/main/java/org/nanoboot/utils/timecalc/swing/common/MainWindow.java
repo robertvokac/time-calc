@@ -345,8 +345,9 @@ public class MainWindow extends TWindow {
         componentRegistry.getSet().stream().filter(c -> c instanceof Widget).forEach(c
                 -> {
             Widget widget = (Widget) c;
-            widget.smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty);
+            widget.smileysVisibleProperty.bindTo(timeCalcConfiguration.smileysVisibleProperty);
             widget.smileysVisibleOnlyIfMouseMovingOverProperty.bindTo(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty);
+            widget.smileysColoredProperty.bindTo(timeCalcConfiguration.smileysColoredProperty);
         }
         );
         setSize(dayBattery.getX() + dayBattery.getWidth() + 3 * SwingUtils.MARGIN,

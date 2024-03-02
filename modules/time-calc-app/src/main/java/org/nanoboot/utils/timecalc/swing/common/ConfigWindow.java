@@ -97,10 +97,14 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.COMMANDS_VISIBLE.getKey());
     private JCheckBox notificationsVisibleProperty
             = new JCheckBox(TimeCalcProperty.NOTIFICATIONS_VISIBLE.getKey());
-    private JCheckBox smileysColoredProperty
-            = new JCheckBox(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    
     private JCheckBox smileysVisibleOnlyIfMouseMovingOverProperty
             = new JCheckBox(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    private JCheckBox smileysVisibleProperty
+            = new JCheckBox(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
+    private JCheckBox smileysColoredProperty
+            = new JCheckBox(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    
     
     private JCheckBox squareVisibleProperty
             = new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
@@ -112,10 +116,10 @@ public class ConfigWindow extends TWindow {
         setLayout(null);
 
         add(enableAsMuchAsPossible);
-        enableAsMuchAsPossible.setBounds(SwingUtils.MARGIN, currentY, 200,
+        enableAsMuchAsPossible.setBounds(SwingUtils.MARGIN, currentY, 250,
                 HEIGHT1);
         add(disableAsMuchAsPossible);
-        disableAsMuchAsPossible.setBounds(enableAsMuchAsPossible.getX() + enableAsMuchAsPossible.getWidth() + SwingUtils.MARGIN, currentY, 200,
+        disableAsMuchAsPossible.setBounds(enableAsMuchAsPossible.getX() + enableAsMuchAsPossible.getWidth() + SwingUtils.MARGIN, currentY, 250,
                 HEIGHT1);
         nextRow();
         for(boolean enable:new boolean[]{true, false}) {
@@ -150,8 +154,9 @@ public class ConfigWindow extends TWindow {
                 jokesVisibleProperty.setSelected(true);
                 commandsVisibleProperty.setSelected(enable);
                 notificationsVisibleProperty.setSelected(enable);
-                smileysVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
+                smileysVisibleProperty.setSelected(enable);
                 smileysColoredProperty.setSelected(enable);
+                smileysVisibleOnlyIfMouseMovingOverProperty.setSelected(!enable);
                 squareVisibleProperty.setSelected(true);
         });
         }
@@ -182,6 +187,7 @@ public class ConfigWindow extends TWindow {
                 jokesVisibleProperty,
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
+                smileysVisibleProperty,
                 smileysVisibleOnlyIfMouseMovingOverProperty,
                 smileysColoredProperty,
                 squareVisibleProperty));

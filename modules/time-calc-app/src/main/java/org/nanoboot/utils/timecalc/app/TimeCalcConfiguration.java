@@ -97,10 +97,12 @@ public class TimeCalcConfiguration {
     public final BooleanProperty notificationsVisibleProperty
             = new BooleanProperty(TimeCalcProperty.NOTIFICATIONS_VISIBLE
                     .getKey());
-    public final BooleanProperty smileysColoredProperty
-            = new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
+    public final BooleanProperty smileysVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
     public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    public final BooleanProperty smileysColoredProperty
+            = new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
     
     public final BooleanProperty squareVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
@@ -137,8 +139,9 @@ public class TimeCalcConfiguration {
             jokesVisibleProperty,
             commandsVisibleProperty,
             notificationsVisibleProperty,
-            smileysColoredProperty,
+            smileysVisibleProperty,
             smileysVisibleOnlyIfMouseMovingOverProperty,
+            smileysColoredProperty,
             squareVisibleProperty,}) {
             allProperties.add(p);
         }

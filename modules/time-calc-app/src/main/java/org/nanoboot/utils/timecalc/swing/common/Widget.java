@@ -39,14 +39,16 @@ public class Widget extends JPanel implements
     public StringProperty visibilityProperty
             = new StringProperty("widget.visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
-    public final BooleanProperty smileysColoredProperty
-            = new BooleanProperty("smileysColoredProperty", true);
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
             = new BooleanProperty("visibleProperty", true);
+    public final BooleanProperty smileysVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
     public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+    public final BooleanProperty smileysColoredProperty
+            = new BooleanProperty("smileysColoredProperty", true);
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
@@ -181,7 +183,7 @@ public class Widget extends JPanel implements
     }
 
     protected void paintSmiley(Visibility visibility, Graphics2D brush, int x, int y) {
-        if (!mouseOver && smileysVisibleOnlyIfMouseMovingOverProperty.isEnabled()) {
+        if (smileysVisibleProperty.isDisabled() || (!mouseOver && smileysVisibleOnlyIfMouseMovingOverProperty.isEnabled())) {
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
