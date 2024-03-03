@@ -30,6 +30,7 @@ public class SwingUtils {
     public static final Color CLOSE_BUTTON_BACKGROUND_COLOR = new Color(127, 127, 127);
     
     public static final Font SMALL_FONT = new Font("sans", Font.BOLD, 10);
+    public static final Font MEDIUM_MONOSPACE_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
     public static final Color getColorFromString(String s) {
         if (s.isEmpty()) {
             System.out.println("error: empty string for color");

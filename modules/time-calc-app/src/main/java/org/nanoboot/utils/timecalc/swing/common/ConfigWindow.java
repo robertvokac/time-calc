@@ -226,7 +226,6 @@ public class ConfigWindow extends TWindow {
                 circleVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
                 MainWindow.hideShowCheckBox.setSelected(enable);
-                mainWindowCustomTitleProperty.setText(enable ? THREE_DASHES : "");
         });
         }
         

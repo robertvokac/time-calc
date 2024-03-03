@@ -17,7 +17,7 @@ import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
-import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgressAsciiArt;
+import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.swing.progress.YearBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
@@ -146,17 +146,18 @@ public class MainWindow extends TWindow {
         add(progressCircle);
         progressCircle.visibleProperty.bindTo(timeCalcConfiguration.circleVisibleProperty);
         
-        WalkingHumanProgressAsciiArt walkingHumanProgressAsciiArt
-                = new WalkingHumanProgressAsciiArt(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
-        add(walkingHumanProgressAsciiArt);
-        walkingHumanProgressAsciiArt.visibleProperty.bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
+        WalkingHumanProgress walkingHumanProgress
+                = new WalkingHumanProgress();
+        walkingHumanProgress.setBounds(analogClock.getX(), analogClock.getY() + analogClock.getHeight() + SwingUtils.MARGIN, 420, 180);
+        add(walkingHumanProgress);
+        walkingHumanProgress.visibleProperty.bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
         
         weatherButton
-                .setBounds(SwingUtils.MARGIN, walkingHumanProgressAsciiArt.getY()
-                        + walkingHumanProgressAsciiArt.getHeight()
-                        + SwingUtils.MARGIN);
+                .setBounds(SwingUtils.MARGIN, walkingHumanProgress.getY()
+                                              + walkingHumanProgress.getHeight()
+                                              + SwingUtils.MARGIN);
 
-        configButton.setBoundsFromTop(walkingHumanProgressAsciiArt);
+        configButton.setBoundsFromTop(walkingHumanProgress);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
         restartButton.setBoundsFromLeft(activitiesButton);
@@ -503,7 +504,7 @@ public class MainWindow extends TWindow {
                 toasterManager.setDisplayTime(30000);
                 toasterManager.showToaster(
                         "Congratulation :-) It is the time to go home.");
-                walkingHumanProgressAsciiArt
+                walkingHumanProgress
                         .printPercentToAscii(done, timeRemains.getHour(),
                                 timeRemains.getMinute(), done,
                                 totalSecondsRemainsDouble, endTime);
@@ -520,7 +521,7 @@ public class MainWindow extends TWindow {
                     }
                 }
             } else {
-                walkingHumanProgressAsciiArt
+                walkingHumanProgress
                         .printPercentToAscii(done, timeRemains.getHour(),
                                 timeRemains.getMinute(), done,
                                 totalSecondsRemainsDouble, endTime);
