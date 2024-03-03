@@ -2,11 +2,17 @@ package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
+import javax.swing.JOptionPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author Robert Vokac
@@ -17,7 +23,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow window;
-
+    private final File timeCalcProfilesTxtFile = new File("time-calc-profiles.txt");
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
             TimeCalcApp timeCalcApp,
@@ -157,6 +163,77 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             MainWindow.hideShowCheckBox.setSelected(!MainWindow.hideShowCheckBox.isSelected());
         }
 
+        boolean numberKeyWasPressed = e.getKeyCode() == KeyEvent.VK_0 ||
+                    e.getKeyCode() == KeyEvent.VK_1 ||
+                    e.getKeyCode() == KeyEvent.VK_2 ||
+                    e.getKeyCode() == KeyEvent.VK_3 ||
+                    e.getKeyCode() == KeyEvent.VK_4 ||
+                    e.getKeyCode() == KeyEvent.VK_5 ||
+                    e.getKeyCode() == KeyEvent.VK_6 ||
+                    e.getKeyCode() == KeyEvent.VK_7 ||
+                    e.getKeyCode() == KeyEvent.VK_8 ||
+                    e.getKeyCode() == KeyEvent.VK_9;
+
+        if(numberKeyWasPressed &&!timeCalcProfilesTxtFile.exists()) {
+            JOptionPane.showMessageDialog(null, "Warning: There is no profile assigned to Key with number, you pressed.", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        if (numberKeyWasPressed  && timeCalcProfilesTxtFile.exists()) {
+
+            Properties properties = new Properties();
+            try {
+                properties.load(new FileInputStream(timeCalcProfilesTxtFile));
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            int profileNumber = 0;
+            Toaster toaster = new Toaster();
+            toaster.setDisplayTime(5000);
+            switch(e.getKeyCode()) {
+                case KeyEvent.VK_0: profileNumber = 0;break;
+                case KeyEvent.VK_1: profileNumber = 1;break;
+                case KeyEvent.VK_2: profileNumber = 2;break;
+                case KeyEvent.VK_3: profileNumber = 3;break;
+                case KeyEvent.VK_4: profileNumber = 4;break;
+                case KeyEvent.VK_5: profileNumber = 5;break;
+                case KeyEvent.VK_6: profileNumber = 6;break;
+                case KeyEvent.VK_7: profileNumber = 7;break;
+                case KeyEvent.VK_8: profileNumber = 8;break;
+                case KeyEvent.VK_9: profileNumber = 9;break;
+            }
+            String key = String.valueOf(profileNumber);
+            if(properties.containsKey(key)) {
+                String profileName = (String) properties.get(key);
+                if(profileName.equals( timeCalcConfiguration.profileNameProperty)) {
+                    toaster.showToaster("Profile \"" + profileName + "\" is already active. Nothing to do");
+                } else {
+                    toaster.showToaster("Info: Changing profile to: " + ((
+                            profileName.isEmpty() ? "{Default profile}" :
+                                    profileName)));
+                    TimeCalcProperties.getInstance().loadProfile(profileName);
+                    timeCalcConfiguration.loadFromTimeCalcProperties(
+                            TimeCalcProperties.getInstance());
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Warning: There is no profile assigned to Key " + profileNumber, "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        if (e.getKeyCode() == KeyEvent.VK_F) {
+            Toaster toaster = new Toaster();
+            if(timeCalcProfilesTxtFile.exists()) {
+                toaster.setDisplayTime(15000);
+                try {
+                    toaster.showToaster(Utils.readTextFromFile(timeCalcProfilesTxtFile));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    toaster.showToaster("Error: " + ioException.getMessage());
+                }
+            } else {
+                toaster.setDisplayTime(15000);
+                toaster.showToaster("Warning: There are no numbers assigned to profiles. Update file: " + timeCalcProfilesTxtFile.getAbsolutePath() + ".");
+            }
+
+        }
         window.repaint();
     }
 

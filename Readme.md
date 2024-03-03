@@ -141,13 +141,13 @@ Smileys can be colored or white-black (can be set in configuration)
 * I - disable almost everything
 * E - enable or disable battery waves
 * B - hide or show buttons
+* 0,1,2,3,4,5,6,7,8 or 9 - activates a profile
+* F - show numbers for profiles
 
 ## Command button
 
 ## Todos
 
- * Custom main window title
- * Profiles
  * Split to Maven modules
  * Junit, Mockito, etc.
  * Checkstyle

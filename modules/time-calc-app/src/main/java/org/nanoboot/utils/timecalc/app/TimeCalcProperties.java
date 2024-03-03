@@ -18,17 +18,33 @@ import java.util.Properties;
  */
 public class TimeCalcProperties {
 
-    public static final File FILE = new File("timecalc.conf");
+    public static final File FILE_WITHOUT_ANY_PROFILE = new File("timecalc.conf");
     private static TimeCalcProperties INSTANCE;
+    private static final File timeCalcCurrentProfileTxtFile = new File("time-calc-current-profile.txt");
     private final Properties properties = new Properties();
     private final Map<String, String> defaultProperties = new HashMap<>();
 
     private TimeCalcProperties() {
+        System.out.println("Loading configuration - start");
+        String profileName = "";
         try {
-            this.properties.load(new FileInputStream("timecalc.conf"));
+            profileName = timeCalcCurrentProfileTxtFile.exists() ? Utils.readTextFromFile(
+                    timeCalcCurrentProfileTxtFile) : "";
         } catch (IOException e) {
-            System.err.println(e);
+            e.printStackTrace();
+            throw new TimeCalcException(e);
         }
+        File file = getFile(profileName);
+        if(file.exists()) {
+            try {
+                this.properties.load(new FileInputStream(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println(e);
+            }
+        }
+        System.out.println("Loading configuration - end");
+        System.out.println("Loading default configuration - start");
         try {
             String defaultConfiguration = Utils.readTextFromTextResourceInJar(
                     "timecalc-default.conf");
@@ -38,14 +54,17 @@ public class TimeCalcProperties {
                     .filter(l -> l.contains("="))
                     .forEach(l -> {
                         String[] array = l.split("=");
-                        defaultProperties.put(array[0], array[1]);
+                        defaultProperties.put(array[0], array.length > 1 ? array[1] : "");
                     });
 
         } catch (IOException e) {
             e.printStackTrace();
             throw new TimeCalcException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-
+        System.out.println("Loading default configuration - end");
     }
 
     public static TimeCalcProperties getInstance() {
@@ -111,7 +130,7 @@ public class TimeCalcProperties {
         properties.replace(key, value.name());
     }
 
-    public void save(Properties properties) {
+    public void save(Properties properties, String profileName) {
         properties.entrySet().stream().forEach(e
                 -> {
             if (this.properties.containsKey(e.getKey())) {
@@ -123,12 +142,31 @@ public class TimeCalcProperties {
             }
         }
         );
+        File file = getFile(profileName);
         try {
-            this.properties.store(new FileOutputStream(FILE), null);
-            System.out.println("Saving to " + FILE + " was successful");
+            this.properties.store(new FileOutputStream(file), null);
+            System.out.println("Saving to " + file + " was successful");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Saving to " + FILE + " failed: " + e.getMessage());
+            System.out.println(
+                    "Saving to " + file + " failed: " + e.getMessage());
+        }
+
+        Utils.writeTextToFile(timeCalcCurrentProfileTxtFile, profileName);
+    }
+
+    private File getFile(String profileName) {
+        return profileName == null || profileName.isEmpty() ?
+                FILE_WITHOUT_ANY_PROFILE :
+                new File("timecalc." + profileName + ".conf");
+    }
+
+    public void loadProfile(String profileName) {
+        try {
+            this.properties.load( new FileInputStream(getFile(profileName)));
+        } catch (IOException e) {
+            System.err.println(e);
         }
     }
+
 }

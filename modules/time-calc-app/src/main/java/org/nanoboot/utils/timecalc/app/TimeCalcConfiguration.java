@@ -141,6 +141,8 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
+    public final StringProperty profileNameProperty
+            = new StringProperty(TimeCalcProperty.PROFILE_NAME.getKey());
 
     private final Map<TimeCalcProperty, Property> mapOfProperties = new HashMap<>();
     private List<Property> allProperties = new ArrayList<>();
@@ -190,7 +192,9 @@ public class TimeCalcConfiguration {
             squareVisibleProperty,
             circleVisibleProperty,
             walkingHumanVisibleProperty,
-            mainWindowCustomTitleProperty,}) {
+            mainWindowCustomTitleProperty,
+            profileNameProperty,
+        }) {
             allProperties.add(p);
         }
         allProperties.stream().forEach(p -> mapOfProperties.put(TimeCalcProperty.forKey(p.getName()), p));
@@ -219,7 +223,7 @@ public class TimeCalcConfiguration {
         }
         Properties properties = new Properties();
         this.allProperties.stream().forEach(p -> properties.put(p.getName(), p.getValue()));
-        this.timeCalcProperties.save(properties);
+        this.timeCalcProperties.save(properties, this.profileNameProperty.getValue());
 
     }
 

@@ -13,6 +13,8 @@ proxy.txt
 out.txt
 pocasi.txt
 test.txt
-timecalc.conf
+timecalc*.conf
 focus.txt
 dist/*
+time-calc-current-profile.txt
+time-calc-profiles.txt

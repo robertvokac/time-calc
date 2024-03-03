@@ -137,6 +137,8 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
     private JTextField mainWindowCustomTitleProperty
             = new JTextField();
+    private JTextField profileNameProperty
+            = new JTextField();
     private final JPanel panelInsideScrollPane;
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
@@ -272,7 +274,8 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty,
                 circleVisibleProperty,
                 walkingHumanVisibleProperty,
-                mainWindowCustomTitleProperty));
+                mainWindowCustomTitleProperty,
+                profileNameProperty));
         //
         propertiesList.stream().forEach(p -> {
             p.setAlignmentX(LEFT_ALIGNMENT);
@@ -287,6 +290,10 @@ public class ConfigWindow extends TWindow {
             if (p == mainWindowCustomTitleProperty) {
                 addToNextRow(new JLabel(TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getDescription()));
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
+            }
+            if (p == profileNameProperty) {
+                addToNextRow(new JLabel(TimeCalcProperty.PROFILE_NAME.getDescription()));
+                p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.PROFILE_NAME.getKey());
             }
             if (p instanceof JComboBox) {
                 JComboBox jComboBox = ((JComboBox) p);
