@@ -73,7 +73,6 @@ Optional assignments of profiles to numbers is stored here.
 
 ### Widgets
 
- * 
 #### Analog Clock
 
  * hour hand
