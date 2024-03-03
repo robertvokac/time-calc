@@ -31,18 +31,36 @@ You can stop the app, if you press the **"Exit"** button or click on the exit wi
 
 If these files are present, something special happens.
 
-### starttime.txt
+### .tc/starttime.txt
 
 This file contains the default start time - used during the previous run of the app.
 If file starttime.txt does not exist, then the default start time is 7:00.
 
-### overtime.txt
+### .tc/overtime.txt
 
 This file contains the default overtime - used during the previous run of the app.
 If file overtime.txt does not exist, then the default overtime is 0:00.
 
-### test.txt
+### .tc/test.txt
 If file test.txt exists, then user is not asked for start time and overtime. Instead, the values in files starttime.txt and overtime.txt are used.
+
+This file can be also used to define custom current time - for testing purposes.
+
+### ./tc/timecalc.conf
+
+Configuration is stored here.
+
+### ./tc/timecalc.{profile name}.conf
+
+Configuration for a profile is stored here.
+
+### ./tc/time-calc-current-profile.txt
+
+Current profile is stored here.
+
+### time-calc-profiles.txt
+
+Optional assignments of profiles to numbers is stored here.
 
 ## Features
 

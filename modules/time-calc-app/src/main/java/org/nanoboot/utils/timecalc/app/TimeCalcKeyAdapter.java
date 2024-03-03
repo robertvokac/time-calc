@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.app;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
+import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
@@ -23,7 +24,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow window;
-    private final File timeCalcProfilesTxtFile = new File("time-calc-profiles.txt");
+
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
             TimeCalcApp timeCalcApp,
@@ -174,14 +175,14 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     e.getKeyCode() == KeyEvent.VK_8 ||
                     e.getKeyCode() == KeyEvent.VK_9;
 
-        if(numberKeyWasPressed &&!timeCalcProfilesTxtFile.exists()) {
+        if(numberKeyWasPressed && !FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
             JOptionPane.showMessageDialog(null, "Warning: There is no profile assigned to Key with number, you pressed.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-        if (numberKeyWasPressed  && timeCalcProfilesTxtFile.exists()) {
+        if (numberKeyWasPressed  && FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
 
             Properties properties = new Properties();
             try {
-                properties.load(new FileInputStream(timeCalcProfilesTxtFile));
+                properties.load(new FileInputStream(FileConstants.TIME_CALC_PROFILES_TXT_FILE));
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -220,15 +221,15 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
         if (e.getKeyCode() == KeyEvent.VK_F) {
 
-            if(timeCalcProfilesTxtFile.exists()) {
+            if(FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
                 try {
-                    Utils.showNotification(Utils.readTextFromFile(timeCalcProfilesTxtFile), 200);
+                    Utils.showNotification(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE), 200);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                     Utils.showNotification("Error: " + ioException.getMessage());
                 }
             } else {
-                Utils.showNotification("Warning: There are no numbers assigned to profiles. Update file: " + timeCalcProfilesTxtFile.getAbsolutePath() + ".");
+                Utils.showNotification("Warning: There are no numbers assigned to profiles. Update file: " + FileConstants.TIME_CALC_PROFILES_TXT_FILE.getAbsolutePath() + ".");
             }
 
         }

@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.io.File;
@@ -18,9 +19,9 @@ import java.util.Properties;
  */
 public class TimeCalcProperties {
 
-    public static final File FILE_WITHOUT_ANY_PROFILE = new File("timecalc.conf");
+
     private static TimeCalcProperties INSTANCE;
-    private static final File timeCalcCurrentProfileTxtFile = new File("time-calc-current-profile.txt");
+
     private final Properties properties = new Properties();
     private final Map<String, String> defaultProperties = new HashMap<>();
 
@@ -28,8 +29,8 @@ public class TimeCalcProperties {
         System.out.println("Loading configuration - start");
         String profileName = "";
         try {
-            profileName = timeCalcCurrentProfileTxtFile.exists() ? Utils.readTextFromFile(
-                    timeCalcCurrentProfileTxtFile) : "";
+            profileName = FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE.exists() ? Utils.readTextFromFile(
+                    FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE) : "";
         } catch (IOException e) {
             e.printStackTrace();
             throw new TimeCalcException(e);
@@ -152,13 +153,13 @@ public class TimeCalcProperties {
                     "Saving to " + file + " failed: " + e.getMessage());
         }
 
-        Utils.writeTextToFile(timeCalcCurrentProfileTxtFile, profileName);
+        Utils.writeTextToFile(FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE, profileName);
     }
 
     private File getFile(String profileName) {
         return profileName == null || profileName.isEmpty() ?
-                FILE_WITHOUT_ANY_PROFILE :
-                new File("timecalc." + profileName + ".conf");
+                FileConstants.FILE_WITHOUT_ANY_PROFILE :
+                new File(FileConstants.FILE_WITHOUT_ANY_PROFILE.getParentFile(), "timecalc." + profileName + ".conf");
     }
 
     public void loadProfile(String profileName) {
