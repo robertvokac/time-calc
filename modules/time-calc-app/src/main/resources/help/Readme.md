@@ -139,7 +139,7 @@ Smileys can be colored or white-black (can be set in configuration)
 ## Key shortcuts
 
 * UP - Show widgets again, if they were hidden
-* DOWN - Hide all widgets and buttons
+* DOWN or PERIOD - Hide all widgets and buttons
 * H - Show all hide everything
 * G - switch between coloured and no-coloured visibility mode
 * C - switch between strongly coloured and weakly coloured visibility mode
@@ -160,6 +160,10 @@ Smileys can be colored or white-black (can be set in configuration)
 * B - hide or show buttons
 * 0,1,2,3,4,5,6,7,8 or 9 - activates a profile
 * F - show numbers for profiles
+* Q - hide or show progress square
+* L - hide or show progress circle
+* M - hide or show walking human
+* Y - hide or show smileys
 
 ## Command button
 

@@ -2,15 +2,12 @@ package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
-import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
-import javax.swing.JOptionPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -41,142 +38,201 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                         .isDisabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            timeCalcApp.visibilityProperty
-                    .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
-                            : Visibility.STRONGLY_COLORED.name());
-        }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            timeCalcApp.visibilityProperty
-                    .setValue(Visibility.NONE.name());
+
+        int keyCode = e.getKeyCode();
+
+        boolean numberKeyWasPressed = keyCode == KeyEvent.VK_0 ||
+                                      keyCode == KeyEvent.VK_1 ||
+                                      keyCode == KeyEvent.VK_2 ||
+                                      keyCode == KeyEvent.VK_3 ||
+                                      keyCode == KeyEvent.VK_4 ||
+                                      keyCode == KeyEvent.VK_5 ||
+                                      keyCode == KeyEvent.VK_6 ||
+                                      keyCode == KeyEvent.VK_7 ||
+                                      keyCode == KeyEvent.VK_8 ||
+                                      keyCode == KeyEvent.VK_9;
+
+
+        if(numberKeyWasPressed && !FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
+            Utils.showNotification("Warning: There is no profile assigned to Key with number, you pressed.");
         }
 
-        if (e.getKeyCode() == KeyEvent.VK_H) {
-            if (visibility.isNone()) {
+        switch (keyCode) {
+
+            case KeyEvent.VK_UP: {
                 timeCalcApp.visibilityProperty
                         .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
                                 : Visibility.STRONGLY_COLORED.name());
-            } else {
+                break;
+            }
+
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_PERIOD: {
                 timeCalcApp.visibilityProperty
                         .setValue(Visibility.NONE.name());
+                break;
             }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_G) {
-            if (visibility.isGray() && !onlyGreyOrNone) {
-                timeCalcApp.visibilityProperty
-                        .setValue(Visibility.WEAKLY_COLORED.name());
-            } else {
-                timeCalcApp.visibilityProperty
-                        .setValue(Visibility.GRAY.name());
-                MainWindow.hideShowCheckBox.setSelected(false);
+
+            case KeyEvent.VK_H: {
+                if (visibility.isNone()) {
+                    timeCalcApp.visibilityProperty
+                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                    : Visibility.STRONGLY_COLORED.name());
+                } else {
+                    timeCalcApp.visibilityProperty
+                            .setValue(Visibility.NONE.name());
+                }
+                break;
             }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_C) {
-            if (!onlyGreyOrNone) {
-                if (visibility.isStronglyColored()) {
+            case KeyEvent.VK_G: {
+                if (visibility.isGray() && !onlyGreyOrNone) {
                     timeCalcApp.visibilityProperty
                             .setValue(Visibility.WEAKLY_COLORED.name());
                 } else {
                     timeCalcApp.visibilityProperty
-                            .setValue(
-                                    Visibility.STRONGLY_COLORED.name());
+                            .setValue(Visibility.GRAY.name());
+                    MainWindow.hideShowCheckBox.setSelected(false);
                 }
-            } else {
-                timeCalcApp.visibilityProperty.setValue(Visibility.GRAY
-                        .name());
+                break;
             }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_V) {
-            if (visibility.isNone()) {
-                timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
-                                : Visibility.STRONGLY_COLORED.name());
-            } else {
-                timeCalcApp.visibilityProperty
-                        .setValue(Visibility.NONE.name());
+            case KeyEvent.VK_C: {
+                if (!onlyGreyOrNone) {
+                    if (visibility.isStronglyColored()) {
+                        timeCalcApp.visibilityProperty
+                                .setValue(Visibility.WEAKLY_COLORED.name());
+                    } else {
+                        timeCalcApp.visibilityProperty
+                                .setValue(
+                                        Visibility.STRONGLY_COLORED.name());
+                    }
+                } else {
+                    timeCalcApp.visibilityProperty.setValue(Visibility.GRAY
+                            .name());
+                }
+                break;
             }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (visibility.isStronglyColored()) {
-                timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
-                                : Visibility.WEAKLY_COLORED.name());
+            case KeyEvent.VK_V: {
+                if (visibility.isNone()) {
+                    timeCalcApp.visibilityProperty
+                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                    : Visibility.STRONGLY_COLORED.name());
+                } else {
+                    timeCalcApp.visibilityProperty
+                            .setValue(Visibility.NONE.name());
+                }
+                break;
             }
-            if (visibility.isWeaklyColored()) {
-                timeCalcApp.visibilityProperty
-                        .setValue(Visibility.GRAY.name());
+            case KeyEvent.VK_SPACE: {
+                if (visibility.isStronglyColored()) {
+                    timeCalcApp.visibilityProperty
+                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                    : Visibility.WEAKLY_COLORED.name());
+                }
+                if (visibility.isWeaklyColored()) {
+                    timeCalcApp.visibilityProperty
+                            .setValue(Visibility.GRAY.name());
+                }
+                if (visibility.isGray()) {
+                    timeCalcApp.visibilityProperty
+                            .setValue(Visibility.NONE.name());
+                }
+                if (visibility.isNone()) {
+                    timeCalcApp.visibilityProperty
+                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
+                                    : Visibility.STRONGLY_COLORED.name());
+                }
+                break;
             }
-            if (visibility.isGray()) {
-                timeCalcApp.visibilityProperty
-                        .setValue(Visibility.NONE.name());
+            case KeyEvent.VK_F2: {
+                window.doCommand();
+                break;
             }
-            if (visibility.isNone()) {
-                timeCalcApp.visibilityProperty
-                        .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
-                                : Visibility.STRONGLY_COLORED.name());
+            case KeyEvent.VK_R: {
+                window.doRestart();
+                break;
             }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_F2) {
-            window.doCommand();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_R) {
-            window.doRestart();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_N) {
-            timeCalcConfiguration.notificationsVisibleProperty.flip();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_W) {
-            window.openWorkDaysWindow();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_A) {
-            window.openActivitiesWindow();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_X) {
-            window.doExit();
-        }
+            case KeyEvent.VK_N: {
+                timeCalcConfiguration.notificationsVisibleProperty.flip();
+                break;
+            }
+            case KeyEvent.VK_W: {
+                window.openWorkDaysWindow();
+                break;
+            }
+            case KeyEvent.VK_A: {
+                window.openActivitiesWindow();
+                break;
+            }
+            case KeyEvent.VK_X: {
+                window.doExit();
+                break;
+            }
 
-        if (e.getKeyCode() == KeyEvent.VK_S) {
-            window.openConfigWindow();
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_J) {
-            if (timeCalcConfiguration.jokesVisibleProperty.isEnabled()) {
-                Jokes.showRandom();
+            case KeyEvent.VK_S: {
+                window.openConfigWindow();
+                break;
             }
 
-        }
+            case KeyEvent.VK_J: {
+                if (timeCalcConfiguration.jokesVisibleProperty.isEnabled()) {
+                    Jokes.showRandom();
+                    break;
+                }
 
-        if (e.getKeyCode() == KeyEvent.VK_P || e.getKeyCode() == KeyEvent.VK_F1) {
-            window.openHelpWindow();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_U) {
-            window.doEnableEverything();
-            
-        }
-        if (e.getKeyCode() == KeyEvent.VK_I) {
-            window.doDisableAlmostEverything();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_E) {
-            timeCalcConfiguration.batteryWavesVisibleProperty.flip();
-        }
-        
-        if (e.getKeyCode() == KeyEvent.VK_B) {
-            MainWindow.hideShowCheckBox.setSelected(!MainWindow.hideShowCheckBox.isSelected());
-        }
+            }
 
-        boolean numberKeyWasPressed = e.getKeyCode() == KeyEvent.VK_0 ||
-                    e.getKeyCode() == KeyEvent.VK_1 ||
-                    e.getKeyCode() == KeyEvent.VK_2 ||
-                    e.getKeyCode() == KeyEvent.VK_3 ||
-                    e.getKeyCode() == KeyEvent.VK_4 ||
-                    e.getKeyCode() == KeyEvent.VK_5 ||
-                    e.getKeyCode() == KeyEvent.VK_6 ||
-                    e.getKeyCode() == KeyEvent.VK_7 ||
-                    e.getKeyCode() == KeyEvent.VK_8 ||
-                    e.getKeyCode() == KeyEvent.VK_9;
+            case KeyEvent.VK_P:
+            case KeyEvent.VK_F1: {
+                window.openHelpWindow();
+                break;
+            }
+            case KeyEvent.VK_U: {
+                window.doEnableEverything();
+                break;
 
-        if(numberKeyWasPressed && !FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
-            JOptionPane.showMessageDialog(null, "Warning: There is no profile assigned to Key with number, you pressed.", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+            case KeyEvent.VK_I: {
+                window.doDisableAlmostEverything();
+                break;
+            }
+            case KeyEvent.VK_E: {
+                timeCalcConfiguration.batteryWavesVisibleProperty.flip();
+                break;
+            }
+
+            case KeyEvent.VK_B: {
+                MainWindow.hideShowCheckBox
+                        .setSelected(!MainWindow.hideShowCheckBox.isSelected());
+                break;
+            }
+            case KeyEvent.VK_F: {
+
+                if(FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
+                    try {
+                        Utils.showNotification(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE), 15000, 200);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                        Utils.showNotification("Error: " + ioException.getMessage());
+                    }
+                } else {
+                    Utils.showNotification("Warning: There are no numbers assigned to profiles. Update file: " + FileConstants.TIME_CALC_PROFILES_TXT_FILE.getAbsolutePath() + ".");
+                }
+                break;
+            }
+            case KeyEvent.VK_Q: {
+                timeCalcConfiguration.squareVisibleProperty.flip();break;
+            }
+            case KeyEvent.VK_L: {
+                timeCalcConfiguration.circleVisibleProperty.flip();break;
+            }
+            case KeyEvent.VK_Y: {
+                timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty.flip();break;
+            }
+            case KeyEvent.VK_M: {
+                timeCalcConfiguration.walkingHumanVisibleProperty.flip();break;
+            }
+            default: Utils.showNotification("Unsupported key was pressed. There is no key shortcut for this key.");
+
         }
         if (numberKeyWasPressed  && FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
 
@@ -187,7 +243,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 ioException.printStackTrace();
             }
             int profileNumber = 0;
-            switch(e.getKeyCode()) {
+            switch(keyCode) {
                 case KeyEvent.VK_0: profileNumber = 0;break;
                 case KeyEvent.VK_1: profileNumber = 1;break;
                 case KeyEvent.VK_2: profileNumber = 2;break;
@@ -217,20 +273,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 Utils.showNotification("Warning: There is no profile assigned to Key " + profileNumber, 5000);
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_F) {
 
-            if(FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
-                try {
-                    Utils.showNotification(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE), 15000, 200);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                    Utils.showNotification("Error: " + ioException.getMessage());
-                }
-            } else {
-                Utils.showNotification("Warning: There are no numbers assigned to profiles. Update file: " + FileConstants.TIME_CALC_PROFILES_TXT_FILE.getAbsolutePath() + ".");
-            }
 
-        }
         window.repaint();
     }
 
