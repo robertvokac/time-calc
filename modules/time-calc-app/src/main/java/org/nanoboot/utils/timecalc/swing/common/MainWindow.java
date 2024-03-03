@@ -27,6 +27,7 @@ import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
@@ -38,10 +39,8 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JCheckBox;
 
 /**
  * @author Robert Vokac
@@ -85,6 +84,9 @@ public class MainWindow extends TWindow {
         });
         timeCalcConfiguration
                 .loadFromTimeCalcProperties(TimeCalcProperties.getInstance());
+        timeCalcConfiguration.mainWindowCustomTitleProperty.addListener(e -> {
+            setTitle(getWindowTitle());
+        });
 
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty())
                 ? Constants.DEFAULT_OVERTIME : overTimeIn;
@@ -174,8 +176,7 @@ public class MainWindow extends TWindow {
         setLayout(null);
         setVisible(true);
 
-        String windowTitle = "Time Calc " + Utils.getVersion();
-        setTitle(windowTitle);
+        setTitle(getWindowTitle());
 
         weatherButton
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
@@ -391,6 +392,7 @@ public class MainWindow extends TWindow {
         
         while (true) {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
+
             Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
             if (!timeCalcConfiguration.visibilitySupportedColoredProperty.isEnabled() && currentVisibility.isColored()) {
@@ -430,7 +432,7 @@ public class MainWindow extends TWindow {
                             TimeCalcProperty.JOKES_VISIBLE)
                     && !currentVisibility.isNone() && MainWindow.hideShowCheckBox.isSelected());
 
-            setTitle(currentVisibility.isNone() ? "" : windowTitle);
+            setTitle(currentVisibility.isNone() ? "" : getWindowTitle());
 
             int hourNow = analogClock.hourProperty.getValue();
             int minuteNow = analogClock.minuteProperty.getValue();
@@ -550,6 +552,19 @@ public class MainWindow extends TWindow {
         timeCalcConfiguration.saveToTimeCalcProperties();
         setVisible(false);
         dispose();
+    }
+
+    private String getWindowTitle() {
+        if (timeCalcConfiguration.mainWindowCustomTitleProperty.getValue()
+                .equals(ConfigWindow.THREE_DASHES)) {
+            return "Time Calc " + Utils.getVersion();
+
+        } else {
+            return String.valueOf(
+                    timeCalcConfiguration.mainWindowCustomTitleProperty
+                            .getValue());
+        }
+
     }
 
     private void bindToIfPropertyMissing(Properties properties, String key, Calendar cal, int timeUnit, IntegerProperty firstProperty, Property secondProperty) {

@@ -146,7 +146,8 @@ Smileys can be colored or white-black (can be set in configuration)
 
 ## Todos
 
- * Config window
+ * Custom main window title
+ * Profiles
  * Split to Maven modules
  * Junit, Mockito, etc.
  * Checkstyle

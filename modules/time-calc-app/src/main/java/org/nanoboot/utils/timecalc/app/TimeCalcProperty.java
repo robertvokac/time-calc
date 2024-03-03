@@ -61,7 +61,8 @@ public enum TimeCalcProperty {
    
     SQUARE_VISIBLE("square.visible", "Square"),
     CIRCLE_VISIBLE("circle.visible", "Circle"),
-    WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human");
+    WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
+    MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title", "Main Window : Custom Title");
 
     @Getter
     private final String key;

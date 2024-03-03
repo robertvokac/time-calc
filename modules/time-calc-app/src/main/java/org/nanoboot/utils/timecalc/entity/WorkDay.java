@@ -18,6 +18,7 @@ public class WorkDay {
     private int day;
     private int arrivalHour;
     private int arrivalMinute;
+    private boolean halfDay;
     private int overtimeHour;
     private int overtimeMinute;
     private String note;

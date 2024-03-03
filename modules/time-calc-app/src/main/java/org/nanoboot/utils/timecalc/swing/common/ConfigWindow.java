@@ -29,7 +29,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * @author Robert Vokac
@@ -40,6 +43,7 @@ public class ConfigWindow extends TWindow {
     public static final int WIDTH1 = 600;
     public static final int HEIGHT1 = 30;
     public static final String CLIENT_PROPERTY_KEY = TimeCalcProperty.class.getName();
+    public static final String THREE_DASHES = "---";
     private final TimeCalcConfiguration timeCalcConfiguration;
     private int currentY = SwingUtils.MARGIN;
     private List<JComponent> propertiesList = new ArrayList<>();
@@ -131,6 +135,8 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     private JCheckBox walkingHumanVisibleProperty
             = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
+    private JTextField mainWindowCustomTitleProperty
+            = new JTextField();
     private final JPanel panelInsideScrollPane;
 
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
@@ -220,6 +226,7 @@ public class ConfigWindow extends TWindow {
                 circleVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
                 MainWindow.hideShowCheckBox.setSelected(enable);
+                mainWindowCustomTitleProperty.setText(enable ? THREE_DASHES : "");
         });
         }
         
@@ -265,7 +272,8 @@ public class ConfigWindow extends TWindow {
                 notificationsVisibleProperty,
                 squareVisibleProperty,
                 circleVisibleProperty,
-                walkingHumanVisibleProperty));
+                walkingHumanVisibleProperty,
+                mainWindowCustomTitleProperty));
         //
         propertiesList.stream().forEach(p -> {
             p.setAlignmentX(LEFT_ALIGNMENT);
@@ -277,6 +285,10 @@ public class ConfigWindow extends TWindow {
                 p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getKey());
                 addToNextRow(new JLabel(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR.getDescription().replace("Clock : ", "")));
             }
+            if (p == mainWindowCustomTitleProperty) {
+                addToNextRow(new JLabel(TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getDescription()));
+                p.putClientProperty(CLIENT_PROPERTY_KEY, TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
+            }
             if (p instanceof JComboBox) {
                 JComboBox jComboBox = ((JComboBox) p);
                 jComboBox.setMaximumSize(new Dimension(150, 25));
@@ -285,7 +297,7 @@ public class ConfigWindow extends TWindow {
                         CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
-                jComboBox.setSelectedItem(timeCalcConfiguration.getProperty(timeCalcProperty));
+                jComboBox.setSelectedItem(timeCalcConfiguration.getProperty(timeCalcProperty).getValue());
                 jComboBox.addPropertyChangeListener(e -> {
                     ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty))
                             .setValue(
@@ -389,6 +401,29 @@ public class ConfigWindow extends TWindow {
                 });
 
             }
+            if (p instanceof JTextField) {
+                JTextField jTextField = ((JTextField) p);
+                jTextField.setMaximumSize(new Dimension(150, 25));
+
+                String timeCalcPropertyKey = (String) jTextField.getClientProperty(
+                        CLIENT_PROPERTY_KEY);
+                TimeCalcProperty timeCalcProperty
+                        = TimeCalcProperty.forKey(timeCalcPropertyKey);
+                jTextField.setText((String) timeCalcConfiguration.getProperty(timeCalcProperty).getValue());
+
+                jTextField.getDocument().addDocumentListener(new DocumentListener() {
+                    public void changedUpdate(DocumentEvent e) {
+                    }
+                    public void removeUpdate(DocumentEvent e) {
+                    }
+                    public void insertUpdate(DocumentEvent e) {
+                        ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty))
+                                .setValue(
+                                        (String) jTextField.getText());
+                    }
+                });
+            }
+
             propertiesMap.put(TimeCalcProperty.forKey(
                     (String) p.getClientProperty(CLIENT_PROPERTY_KEY)), p);
             addToNextRow(p);
