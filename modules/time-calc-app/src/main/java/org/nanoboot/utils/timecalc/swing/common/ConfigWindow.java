@@ -297,7 +297,7 @@ public class ConfigWindow extends TWindow {
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
                 jComboBox.setSelectedItem(timeCalcConfiguration.getProperty(timeCalcProperty).getValue());
-                jComboBox.addPropertyChangeListener(e -> {
+                jComboBox.addActionListener(e -> {
                     ((StringProperty) timeCalcConfiguration.getProperty(timeCalcProperty))
                             .setValue(
                                     (String) jComboBox.getSelectedItem());
