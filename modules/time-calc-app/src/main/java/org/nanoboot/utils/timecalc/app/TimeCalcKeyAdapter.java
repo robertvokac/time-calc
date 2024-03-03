@@ -115,8 +115,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         if (e.getKeyCode() == KeyEvent.VK_R) {
             window.doRestart();
         }
-        if (e.getKeyCode() == KeyEvent.VK_T) {
-            Utils.toastsAreEnabled.flip();
+        if (e.getKeyCode() == KeyEvent.VK_N) {
+            timeCalcConfiguration.notificationsVisibleProperty.flip();
         }
         if (e.getKeyCode() == KeyEvent.VK_W) {
             window.openWorkDaysWindow();
@@ -148,7 +148,13 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
         if (e.getKeyCode() == KeyEvent.VK_I) {
             window.doDisableAlmostEverything();
-            
+        }
+        if (e.getKeyCode() == KeyEvent.VK_E) {
+            timeCalcConfiguration.batteryWavesVisibleProperty.flip();
+        }
+        
+        if (e.getKeyCode() == KeyEvent.VK_B) {
+            MainWindow.hideShowCheckBox.setSelected(!MainWindow.hideShowCheckBox.isSelected());
         }
 
         window.repaint();

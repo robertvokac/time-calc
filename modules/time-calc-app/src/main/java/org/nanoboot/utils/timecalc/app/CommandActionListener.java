@@ -75,8 +75,7 @@ public class CommandActionListener
                 t.showToaster(commands.substring(6));
                 break;
             case "toasts":
-                Utils.toastsAreEnabled
-                        .setValue(commandsAsArray[1].equals("1"));
+                timeCalcConfiguration.notificationsVisibleProperty.setValue(commandsAsArray[1].equals("1"));
                 break;
             default:
                 JOptionPane.showMessageDialog(null,

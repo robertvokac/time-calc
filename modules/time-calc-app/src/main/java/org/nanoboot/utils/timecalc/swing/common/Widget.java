@@ -164,13 +164,7 @@ public class Widget extends JPanel implements
         paintWidget(brush);
 
         if (mouseOver && mouseOverCloseButton) {
-            brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
-            brush.fillOval(getWidth() - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE, CLOSE_BUTTON_SIDE);
-            brush.setColor(Color.LIGHT_GRAY);
-            Graphics2D brush2d = (Graphics2D) brush;
-            brush2d.setStroke(new BasicStroke(2f));
-            brush.drawLine(getWidth() - CLOSE_BUTTON_SIDE - 1 + 2, 0 + 1 + 2, getWidth() - 0 * CLOSE_BUTTON_SIDE - 1 - 2, 0 + CLOSE_BUTTON_SIDE + 1 - 2);
-            brush.drawLine(getWidth() - CLOSE_BUTTON_SIDE - 1 + 2, 0 + CLOSE_BUTTON_SIDE + 1 - 2, getWidth() - 0 * CLOSE_BUTTON_SIDE - 1 - 2, 0 + 1 + 2);
+            SwingUtils.paintCloseIcon(brush, getWidth());
         }
 
     }

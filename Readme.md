@@ -130,7 +130,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * SPACE - switch visibility mode: NONE, GREY, WEAKLY_COLOURED, STRONGLY_COLOURED
 * F2 - run commands
 * R - restart app
-* T - enable or disable notifications
+* N - enable or disable notifications
 * W - open work days window
 * A - open activity window
 * S - open config window
@@ -139,6 +139,8 @@ Smileys can be colored or white-black (can be set in configuration)
 * J - show random Joke
 * U - enable everything
 * I - disable almost everything
+* E - enable or disable battery waves
+* B - hide or show buttons
 
 ## Command button
 

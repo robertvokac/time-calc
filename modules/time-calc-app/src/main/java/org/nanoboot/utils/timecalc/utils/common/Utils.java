@@ -25,8 +25,6 @@ import java.util.jar.Manifest;
  */
 public class Utils {
 
-    public static final BooleanProperty toastsAreEnabled
-            = new BooleanProperty("toastsAreEnabled", true);
     public static final Color ULTRA_LIGHT_GRAY = new Color(216, 216, 216);
     /**
      * Count of bytes per one kilobyte.
