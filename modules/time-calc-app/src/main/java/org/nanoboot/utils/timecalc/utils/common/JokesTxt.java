@@ -17,7 +17,7 @@ public class JokesTxt {
         File jokeTxtFile = new File("jokes.txt");
         if (!jokeTxtFile.exists()) {
             //nothing to do
-            return new String[]{"A", "B", "C"};
+            return new String[] {"A", "B", "C"};
         }
         return Utils.readTextFromFile(jokeTxtFile).split("-----SEPARATOR-----");
     }

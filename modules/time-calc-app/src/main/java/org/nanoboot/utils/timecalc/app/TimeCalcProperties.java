@@ -19,7 +19,6 @@ import java.util.Properties;
  */
 public class TimeCalcProperties {
 
-
     private static TimeCalcProperties INSTANCE;
 
     private final Properties properties = new Properties();
@@ -29,14 +28,17 @@ public class TimeCalcProperties {
         System.out.println("Loading configuration - start");
         String profileName = "";
         try {
-            profileName = FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE.exists() ? Utils.readTextFromFile(
-                    FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE) : "";
+            profileName =
+                    FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE.exists() ?
+                            Utils.readTextFromFile(
+                                    FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE) :
+                            "";
         } catch (IOException e) {
             e.printStackTrace();
             throw new TimeCalcException(e);
         }
         File file = getFile(profileName);
-        if(file.exists()) {
+        if (file.exists()) {
             try {
                 this.properties.load(new FileInputStream(file));
             } catch (IOException e) {
@@ -55,7 +57,8 @@ public class TimeCalcProperties {
                     .filter(l -> l.contains("="))
                     .forEach(l -> {
                         String[] array = l.split("=");
-                        defaultProperties.put(array[0], array.length > 1 ? array[1] : "");
+                        defaultProperties.put(array[0],
+                                array.length > 1 ? array[1] : "");
                     });
 
         } catch (IOException e) {
@@ -81,8 +84,11 @@ public class TimeCalcProperties {
     }
 
     private String getDefaultStringValue(TimeCalcProperty timeCalcProperty) {
-        if (!defaultProperties.containsKey((String) timeCalcProperty.getKey())) {
-            throw new TimeCalcException("timecalc-default.conf is missing key: \"" + timeCalcProperty.getKey() + "\"");
+        if (!defaultProperties
+                .containsKey(timeCalcProperty.getKey())) {
+            throw new TimeCalcException(
+                    "timecalc-default.conf is missing key: \""
+                    + timeCalcProperty.getKey() + "\"");
         }
         return defaultProperties.get(timeCalcProperty.getKey());
     }
@@ -97,7 +103,8 @@ public class TimeCalcProperties {
     }
 
     public String getStringProperty(TimeCalcProperty timeCalcProperty) {
-        return getStringProperty(timeCalcProperty, getDefaultStringValue(timeCalcProperty));
+        return getStringProperty(timeCalcProperty,
+                getDefaultStringValue(timeCalcProperty));
     }
 
     private String getStringProperty(TimeCalcProperty timeCalcProperty,
@@ -110,7 +117,8 @@ public class TimeCalcProperties {
     }
 
     private String getVisibilityProperty(TimeCalcProperty timeCalcProperty) {
-        return getStringProperty(timeCalcProperty, Visibility.STRONGLY_COLORED.name());
+        return getStringProperty(timeCalcProperty,
+                Visibility.STRONGLY_COLORED.name());
     }
 
     private void setBooleanProperty(TimeCalcProperty timeCalcProperty,
@@ -133,15 +141,15 @@ public class TimeCalcProperties {
 
     public void save(Properties properties, String profileName) {
         properties.entrySet().stream().forEach(e
-                -> {
-            if (this.properties.containsKey(e.getKey())) {
-                this.properties
-                        .replace(e.getKey(), e.getValue().toString());
-            } else {
-                this.properties
-                        .put(e.getKey(), e.getValue().toString());
-            }
-        }
+                        -> {
+                    if (this.properties.containsKey(e.getKey())) {
+                        this.properties
+                                .replace(e.getKey(), e.getValue().toString());
+                    } else {
+                        this.properties
+                                .put(e.getKey(), e.getValue().toString());
+                    }
+                }
         );
         File file = getFile(profileName);
         try {
@@ -153,23 +161,26 @@ public class TimeCalcProperties {
                     "Saving to " + file + " failed: " + e.getMessage());
         }
 
-        Utils.writeTextToFile(FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE, profileName);
+        Utils.writeTextToFile(FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE,
+                profileName);
     }
 
     private File getFile(String profileName) {
         return profileName == null || profileName.isEmpty() ?
                 FileConstants.FILE_WITHOUT_ANY_PROFILE :
-                new File(FileConstants.FILE_WITHOUT_ANY_PROFILE.getParentFile(), "timecalc." + profileName + ".conf");
+                new File(FileConstants.FILE_WITHOUT_ANY_PROFILE.getParentFile(),
+                        "timecalc." + profileName + ".conf");
     }
 
     public void loadProfile(String profileName) {
         File file = getFile(profileName);
-        if(!file.exists()) {
-            Utils.showNotification("There is no profile with name: " + profileName);
+        if (!file.exists()) {
+            Utils.showNotification(
+                    "There is no profile with name: " + profileName);
             return;
         }
         try {
-            this.properties.load( new FileInputStream(file));
+            this.properties.load(new FileInputStream(file));
         } catch (IOException e) {
             System.err.println(e);
         }

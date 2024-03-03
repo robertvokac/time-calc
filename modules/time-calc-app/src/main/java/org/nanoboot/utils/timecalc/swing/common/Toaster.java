@@ -24,7 +24,6 @@ package org.nanoboot.utils.timecalc.swing.common;
  * // Show a simple toaster toasterManager.showToaster( new ImageIcon(
  * "mylogo.gif" ), "A simple toaster with an image" ); } }
  */
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -110,10 +109,10 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-//        if (!Utils.toastsAreEnabled.getValue()) {
-//            //nothing to do
-//            return;
-//        }
+        //        if (!Utils.toastsAreEnabled.getValue()) {
+        //            //nothing to do
+        //            return;
+        //        }
         SingleToaster singleToaster = new SingleToaster();
         if (icon != null) {
             singleToaster.iconLabel.setIcon(icon);
@@ -431,8 +430,9 @@ public class Toaster {
                     stopYPosition = startYPosition - toasterHeight - 1;
                     if (currentNumberOfToaster > 0) {
                         stopYPosition
-                                = stopYPosition - (maxToaster % maxToasterInSceen
-                                * toasterHeight);
+                                =
+                                stopYPosition - (maxToaster % maxToasterInSceen
+                                                 * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -442,8 +442,9 @@ public class Toaster {
 
                     if (currentNumberOfToaster > 0) {
                         stopYPosition
-                                = stopYPosition + (maxToaster % maxToasterInSceen
-                                * toasterHeight);
+                                =
+                                stopYPosition + (maxToaster % maxToasterInSceen
+                                                 * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }

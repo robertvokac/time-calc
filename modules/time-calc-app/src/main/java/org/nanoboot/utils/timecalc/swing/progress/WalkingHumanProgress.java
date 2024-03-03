@@ -20,7 +20,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.font.LineBreakMeasurer;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
@@ -42,6 +41,7 @@ public class WalkingHumanProgress extends Widget implements
     private double done;
     private double totalSecondsRemainsDouble;
     private TimeHM endTime;
+
     public WalkingHumanProgress() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
         putClientProperty("mouseEntered", "false");
@@ -92,7 +92,7 @@ public class WalkingHumanProgress extends Widget implements
             setForeground(
                     visibility.isStronglyColored()
                     || getClientProperty("mouseEntered").equals("true")
-                    ? Color.BLACK : Color.LIGHT_GRAY);
+                            ? Color.BLACK : Color.LIGHT_GRAY);
         }).start();
 
     }
@@ -117,11 +117,12 @@ public class WalkingHumanProgress extends Widget implements
         } else {
             String[] lines = string.split("\n");
 
-
             Visibility visibility
                     = Visibility.valueOf(visibilityProperty.getValue());
 
-            brush.setColor(visibility.isStronglyColored() ? Color.BLUE : visibility.isWeaklyColored() ? Color.GRAY : Color.LIGHT_GRAY);
+            brush.setColor(visibility.isStronglyColored() ? Color.BLUE :
+                    visibility.isWeaklyColored() ? Color.GRAY :
+                            Color.LIGHT_GRAY);
             brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
             int y = SwingUtils.MARGIN;
             for (String line : lines) {
@@ -228,15 +229,15 @@ public class WalkingHumanProgress extends Widget implements
             double totalSecondsRemainsDouble, TimeHM endTime) {
         String msg
                 = "Done=" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(
-                        done * 100) + "% Remains="
-                + String.format("%02d", hourRemains) + ":" + String
-                .format("%02d", minuteRemains)
-                + /*":" + String.format("%02d", secondsRemains)+ */ " ("
-                + NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
-                        .format(totalSecondsRemainsDouble - 60)
-                + " s" + ")" + " End=" + String
-                        .format("%02d", endTime.getHour()) + ":" + String
-                .format("%02d", endTime.getMinute());
+                done * 100) + "% Remains="
+                  + String.format("%02d", hourRemains) + ":" + String
+                          .format("%02d", minuteRemains)
+                  + /*":" + String.format("%02d", secondsRemains)+ */ " ("
+                  + NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
+                          .format(totalSecondsRemainsDouble - 60)
+                  + " s" + ")" + " End=" + String
+                          .format("%02d", endTime.getHour()) + ":" + String
+                          .format("%02d", endTime.getMinute());
         return msg;
     }
 

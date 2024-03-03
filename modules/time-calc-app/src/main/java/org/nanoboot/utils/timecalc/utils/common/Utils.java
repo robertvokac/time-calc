@@ -2,11 +2,8 @@ package org.nanoboot.utils.timecalc.utils.common;
 
 import org.nanoboot.utils.timecalc.app.Main;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
-import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -110,7 +107,7 @@ public class Utils {
         }
         String manifestPath
                 = classPath.substring(0, classPath.lastIndexOf("!") + 1)
-                + "/META-INF/MANIFEST.MF";
+                  + "/META-INF/MANIFEST.MF";
         Manifest manifest;
         try {
             manifest = new Manifest(new URL(manifestPath).openStream());
@@ -128,7 +125,8 @@ public class Utils {
                 .decode(s.getBytes());
     }
 
-    public static String readTextFromTextResourceInJar(String pathToFile) throws IOException {
+    public static String readTextFromTextResourceInJar(String pathToFile)
+            throws IOException {
         InputStream inputStream = ClassLoader.getSystemClassLoader().
                 getSystemResourceAsStream(pathToFile);
         InputStreamReader streamReader = new InputStreamReader(inputStream,
@@ -136,21 +134,25 @@ public class Utils {
         BufferedReader in = new BufferedReader(streamReader);
 
         StringBuilder sb = new StringBuilder();
-        for (String line; (line = in.readLine()) != null;) {
+        for (String line; (line = in.readLine()) != null; ) {
             sb.append(line).append("\n");
         }
         return sb.toString();
     }
+
     public static void showNotification(String message) {
         showNotification(message, 0);
     }
+
     public static void showNotification(String message, int displayTime) {
         showNotification(message, displayTime, 0);
     }
-    public static void showNotification(String message, int displayTime, int height) {
+
+    public static void showNotification(String message, int displayTime,
+            int height) {
         Toaster toaster = new Toaster();
         toaster.setDisplayTime(displayTime == 0 ? 15000 : displayTime);
-        if(height != 0) {
+        if (height != 0) {
             toaster.setToasterHeight(height);
         }
         toaster.showToaster(message);

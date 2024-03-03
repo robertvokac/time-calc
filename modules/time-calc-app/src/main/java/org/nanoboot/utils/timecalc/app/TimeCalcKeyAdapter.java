@@ -35,7 +35,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         boolean onlyGreyOrNone
                 = timeCalcConfiguration.visibilitySupportedColoredProperty
-                        .isDisabled();
+                .isDisabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());
 
@@ -52,9 +52,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                                       keyCode == KeyEvent.VK_8 ||
                                       keyCode == KeyEvent.VK_9;
 
-
-        if(numberKeyWasPressed && !FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
-            Utils.showNotification("Warning: There is no profile assigned to Key with number, you pressed.");
+        if (numberKeyWasPressed && !FileConstants.TIME_CALC_PROFILES_TXT_FILE
+                .exists()) {
+            Utils.showNotification(
+                    "Warning: There is no profile assigned to Key with number, you pressed.");
         }
 
         switch (keyCode) {
@@ -207,59 +208,97 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
             case KeyEvent.VK_F: {
 
-                if(FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
+                if (FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
                     try {
-                        Utils.showNotification(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE), 15000, 200);
+                        Utils.showNotification(Utils.readTextFromFile(
+                                FileConstants.TIME_CALC_PROFILES_TXT_FILE),
+                                15000, 200);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
-                        Utils.showNotification("Error: " + ioException.getMessage());
+                        Utils.showNotification(
+                                "Error: " + ioException.getMessage());
                     }
                 } else {
-                    Utils.showNotification("Warning: There are no numbers assigned to profiles. Update file: " + FileConstants.TIME_CALC_PROFILES_TXT_FILE.getAbsolutePath() + ".");
+                    Utils.showNotification(
+                            "Warning: There are no numbers assigned to profiles. Update file: "
+                            + FileConstants.TIME_CALC_PROFILES_TXT_FILE
+                                    .getAbsolutePath() + ".");
                 }
                 break;
             }
             case KeyEvent.VK_Q: {
-                timeCalcConfiguration.squareVisibleProperty.flip();break;
+                timeCalcConfiguration.squareVisibleProperty.flip();
+                break;
             }
             case KeyEvent.VK_L: {
-                timeCalcConfiguration.circleVisibleProperty.flip();break;
+                timeCalcConfiguration.circleVisibleProperty.flip();
+                break;
             }
             case KeyEvent.VK_Y: {
-                timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty.flip();break;
+                timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty
+                        .flip();
+                break;
             }
             case KeyEvent.VK_M: {
-                timeCalcConfiguration.walkingHumanVisibleProperty.flip();break;
+                timeCalcConfiguration.walkingHumanVisibleProperty.flip();
+                break;
             }
-            default: Utils.showNotification("Unsupported key was pressed. There is no key shortcut for this key.");
+            default:
+                Utils.showNotification(
+                        "Unsupported key was pressed. There is no key shortcut for this key.");
 
         }
-        if (numberKeyWasPressed  && FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
+        if (numberKeyWasPressed && FileConstants.TIME_CALC_PROFILES_TXT_FILE
+                .exists()) {
 
             Properties properties = new Properties();
             try {
-                properties.load(new FileInputStream(FileConstants.TIME_CALC_PROFILES_TXT_FILE));
+                properties.load(new FileInputStream(
+                        FileConstants.TIME_CALC_PROFILES_TXT_FILE));
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
             int profileNumber = 0;
-            switch(keyCode) {
-                case KeyEvent.VK_0: profileNumber = 0;break;
-                case KeyEvent.VK_1: profileNumber = 1;break;
-                case KeyEvent.VK_2: profileNumber = 2;break;
-                case KeyEvent.VK_3: profileNumber = 3;break;
-                case KeyEvent.VK_4: profileNumber = 4;break;
-                case KeyEvent.VK_5: profileNumber = 5;break;
-                case KeyEvent.VK_6: profileNumber = 6;break;
-                case KeyEvent.VK_7: profileNumber = 7;break;
-                case KeyEvent.VK_8: profileNumber = 8;break;
-                case KeyEvent.VK_9: profileNumber = 9;break;
+            switch (keyCode) {
+                case KeyEvent.VK_0:
+                    profileNumber = 0;
+                    break;
+                case KeyEvent.VK_1:
+                    profileNumber = 1;
+                    break;
+                case KeyEvent.VK_2:
+                    profileNumber = 2;
+                    break;
+                case KeyEvent.VK_3:
+                    profileNumber = 3;
+                    break;
+                case KeyEvent.VK_4:
+                    profileNumber = 4;
+                    break;
+                case KeyEvent.VK_5:
+                    profileNumber = 5;
+                    break;
+                case KeyEvent.VK_6:
+                    profileNumber = 6;
+                    break;
+                case KeyEvent.VK_7:
+                    profileNumber = 7;
+                    break;
+                case KeyEvent.VK_8:
+                    profileNumber = 8;
+                    break;
+                case KeyEvent.VK_9:
+                    profileNumber = 9;
+                    break;
             }
             String key = String.valueOf(profileNumber);
-            if(properties.containsKey(key)) {
+            if (properties.containsKey(key)) {
                 String profileName = (String) properties.get(key);
-                if(profileName.equals( timeCalcConfiguration.profileNameProperty)) {
-                    Utils.showNotification("Profile \"" + profileName + "\" is already active. Nothing to do", 5000);
+                if (profileName
+                        .equals(timeCalcConfiguration.profileNameProperty)) {
+                    Utils.showNotification("Profile \"" + profileName
+                                           + "\" is already active. Nothing to do",
+                            5000);
                 } else {
                     Utils.showNotification("Info: Changing profile to: " + ((
                             profileName.isEmpty() ? "{Default profile}" :
@@ -270,10 +309,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
 
             } else {
-                Utils.showNotification("Warning: There is no profile assigned to Key " + profileNumber, 5000);
+                Utils.showNotification(
+                        "Warning: There is no profile assigned to Key "
+                        + profileNumber, 5000);
             }
         }
-
 
         window.repaint();
     }

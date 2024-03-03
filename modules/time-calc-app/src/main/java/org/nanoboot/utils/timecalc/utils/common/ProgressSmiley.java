@@ -38,10 +38,6 @@ public enum ProgressSmiley {
         this.description = d;
     }
 
-    public int getNumber() {
-        return Integer.valueOf(this.name().replace("SMILEY_", ""));
-    }
-
     public static ProgressSmiley forNumber(int number) {
         for (ProgressSmiley s : ProgressSmiley.values()) {
             if (s.getNumber() == number) {
@@ -64,12 +60,17 @@ public enum ProgressSmiley {
 
     public static void main(String[] args) {
         Arrays.stream(values()).forEach(s -> {
-            s.getCharacter().codePoints().mapToObj(Integer::toHexString).forEach(System.out::println);
+            s.getCharacter().codePoints().mapToObj(Integer::toHexString)
+                    .forEach(System.out::println);
 
         });
     }
 
     private static String toUnicode(char ch) {
         return String.format("\\u%04x", (int) ch);
+    }
+
+    public int getNumber() {
+        return Integer.valueOf(this.name().replace("SMILEY_", ""));
     }
 }

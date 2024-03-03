@@ -14,12 +14,13 @@ public class Property<T> {
 
     @Getter
     private final String name;
+    private final List<InvalidationListener> invalidationListeners
+            = new ArrayList<>();
+    private final List<ChangeListener<T>> changeListeners =
+            new ArrayList<ChangeListener<T>>();
     private boolean valid = true;
     private T value;
     private Property<T> boundToProperty = null;
-    private final List<InvalidationListener> invalidationListeners
-            = new ArrayList<>();
-    private final List<ChangeListener<T>> changeListeners = new ArrayList<ChangeListener<T>>();
     private ChangeListener<T> boundChangeListener = null;
 
     public Property(String name, T valueIn) {
@@ -54,10 +55,10 @@ public class Property<T> {
         this.boundToProperty = anotherProperty;
         this.boundChangeListener
                 = (Property<T> p, T oldValue, T newValue) -> {
-                    this.markInvalid();
-                    this.fireValueChangedEvent(oldValue);
-                    //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
-                };
+            this.markInvalid();
+            this.fireValueChangedEvent(oldValue);
+            //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
+        };
         this.boundToProperty
                 .addListener(boundChangeListener);
 

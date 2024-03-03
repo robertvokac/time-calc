@@ -2,7 +2,6 @@ package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JOptionPane;
 import java.awt.Color;
@@ -20,7 +19,8 @@ public class CommandActionListener
     private final TimeCalcApp timeCalcApp;
     private final TimeCalcConfiguration timeCalcConfiguration;
 
-    public CommandActionListener(TimeCalcApp timeCalcApp, TimeCalcConfiguration timeCalcConfiguration) {
+    public CommandActionListener(TimeCalcApp timeCalcApp,
+            TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcApp = timeCalcApp;
         this.timeCalcConfiguration = timeCalcConfiguration;
     }
@@ -44,14 +44,14 @@ public class CommandActionListener
             case "color":
                 timeCalcApp.visibilityProperty.setValue(
                         commandsAsArray[1].equals("1")
-                        ? Visibility.STRONGLY_COLORED.name()
-                        : Visibility.WEAKLY_COLORED.name());
+                                ? Visibility.STRONGLY_COLORED.name()
+                                : Visibility.WEAKLY_COLORED.name());
                 break;
             case "gray":
                 timeCalcApp.visibilityProperty.setValue(
                         commandsAsArray[1].equals("1")
-                        ? Visibility.GRAY.name()
-                        : Visibility.WEAKLY_COLORED.name());
+                                ? Visibility.GRAY.name()
+                                : Visibility.WEAKLY_COLORED.name());
                 break;
             case "waves":
                 timeCalcConfiguration.batteryWavesVisibleProperty
@@ -75,7 +75,8 @@ public class CommandActionListener
                 t.showToaster(commands.substring(6));
                 break;
             case "toasts":
-                timeCalcConfiguration.notificationsVisibleProperty.setValue(commandsAsArray[1].equals("1"));
+                timeCalcConfiguration.notificationsVisibleProperty
+                        .setValue(commandsAsArray[1].equals("1"));
                 break;
             default:
                 JOptionPane.showMessageDialog(null,

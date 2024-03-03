@@ -8,15 +8,16 @@ import org.nanoboot.utils.timecalc.utils.common.TimeHM;
  */
 public class HourBattery extends Battery {
 
+    public static final String HOUR = "Hour";
+
     public HourBattery(int x, int i, int i1) {
         super(HOUR, x, i, i1);
     }
-    public static final String HOUR = "Hour";
 
     public static double getHourProgress(TimeHM timeRemains, int secondsRemains,
             int millisecondsRemains) {
         if (secondsRemains < 0 || millisecondsRemains < 0
-                || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {
+            || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {
             return 1;
         }
         double minutesRemainsD = timeRemains.getMinute();

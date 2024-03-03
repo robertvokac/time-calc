@@ -2,11 +2,8 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -29,7 +26,7 @@ public class ProgressCircle extends Widget {
         Graphics2D brush = (Graphics2D) g;
         brush.setColor(
                 visibility.isStronglyColored() || mouseOver ? Color.darkGray
-                : FOREGROUND_COLOR);
+                        : FOREGROUND_COLOR);
         brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 

@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
 import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
@@ -12,7 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -20,7 +20,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 
 /**
  * @author Robert Vokac
@@ -29,16 +28,12 @@ import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 public class Widget extends JPanel implements
         GetProperty {
 
+    public static final int CLOSE_BUTTON_SIDE = 15;
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
-    public static final int CLOSE_BUTTON_SIDE = 15;
-
-    public StringProperty visibilityProperty
-            = new StringProperty("widget.visibilityProperty",
-                    Visibility.STRONGLY_COLORED.name());
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -46,9 +41,14 @@ public class Widget extends JPanel implements
     public final BooleanProperty smileysVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
     public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
-            = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER.getKey());
+            = new BooleanProperty(
+            TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                    .getKey());
     public final BooleanProperty smileysColoredProperty
             = new BooleanProperty("smileysColoredProperty", true);
+    public StringProperty visibilityProperty
+            = new StringProperty("widget.visibilityProperty",
+            Visibility.STRONGLY_COLORED.name());
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
@@ -69,7 +69,8 @@ public class Widget extends JPanel implements
 
                 int x = e.getX();
                 int y = e.getY();
-                mouseOverCloseButton = x >= getWidth() - CLOSE_BUTTON_SIDE && y <= CLOSE_BUTTON_SIDE;
+                mouseOverCloseButton = x >= getWidth() - CLOSE_BUTTON_SIDE
+                                       && y <= CLOSE_BUTTON_SIDE;
             }
         });
         addMouseListener(new MouseListener() {
@@ -124,16 +125,16 @@ public class Widget extends JPanel implements
         return 100;
     }
 
-//    @Override
-//    public void setVisible(boolean aFlag) {
-//        if(visibleProperty.isEnabled() && !aFlag) {
-//            super.setVisible(false);
-//        }
-//        if(visibleProperty.isDisabled() && aFlag) {
-//            super.setVisible(false);
-//        }
-//
-//    }
+    //    @Override
+    //    public void setVisible(boolean aFlag) {
+    //        if(visibleProperty.isEnabled() && !aFlag) {
+    //            super.setVisible(false);
+    //        }
+    //        if(visibleProperty.isDisabled() && aFlag) {
+    //            super.setVisible(false);
+    //        }
+    //
+    //    }
     public final void setDonePercent(double donePercent) {
         if (donePercent > 1) {
             donePercent = 1;
@@ -153,14 +154,15 @@ public class Widget extends JPanel implements
         super.paintComponent(brush);
 
         setVisible(visibleProperty.isEnabled());
-        
-        if(visibleProperty.isDisabled()) {
+
+        if (visibleProperty.isDisabled()) {
             //nothing to do
             return;
         }
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
-        super.setVisible(visibility != Visibility.NONE && visibleProperty.isEnabled());
+        super.setVisible(
+                visibility != Visibility.NONE && visibleProperty.isEnabled());
         paintWidget(brush);
 
         if (mouseOver && mouseOverCloseButton) {
@@ -182,8 +184,11 @@ public class Widget extends JPanel implements
         return visibilitySupportedColoredProperty;
     }
 
-    protected void paintSmiley(Visibility visibility, Graphics2D brush, int x, int y) {
-        if (smileysVisibleProperty.isDisabled() || (!mouseOver && smileysVisibleOnlyIfMouseMovingOverProperty.isEnabled())) {
+    protected void paintSmiley(Visibility visibility, Graphics2D brush, int x,
+            int y) {
+        if (smileysVisibleProperty.isDisabled() || (!mouseOver
+                                                    && smileysVisibleOnlyIfMouseMovingOverProperty
+                                                            .isEnabled())) {
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
@@ -212,7 +217,8 @@ public class Widget extends JPanel implements
                 brush.setColor(Color.BLACK);
             }
             Color currentColor = brush.getColor();
-            brush.setColor(visibility.isStronglyColored() ? Color.WHITE : BACKGROUND_COLOR);
+            brush.setColor(visibility.isStronglyColored() ? Color.WHITE :
+                    BACKGROUND_COLOR);
             brush.fillRect(
                     x, y,
                     20,
@@ -226,7 +232,9 @@ public class Widget extends JPanel implements
             );
         }
         if (colored) {
-            ImageIcon imageIcon = ProgressSmileyIcon.forSmiley(ProgressSmiley.forProgress(donePercent)).getIcon();
+            ImageIcon imageIcon = ProgressSmileyIcon
+                    .forSmiley(ProgressSmiley.forProgress(donePercent))
+                    .getIcon();
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;

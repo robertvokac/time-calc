@@ -19,22 +19,20 @@ public class TButton extends JButton implements GetProperty {
 
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 30;
-    public StringProperty visibilityProperty
-            = new StringProperty("visibilityProperty",
-                    Visibility.STRONGLY_COLORED.name());
-
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
-    private Color originalBackground;
-    private Color originalForeground;
-    
     public final BooleanProperty visibleProperty
             = new BooleanProperty("visibleProperty", true);
+    public StringProperty visibilityProperty
+            = new StringProperty("visibilityProperty",
+            Visibility.STRONGLY_COLORED.name());
+    private Color originalBackground;
+    private Color originalForeground;
 
     public TButton(String label) {
         super(label);
         new Timer(100, e -> {
-            if(!MainWindow.hideShowCheckBox.isSelected()) {
+            if (!MainWindow.hideShowCheckBox.isSelected()) {
                 setVisible(false);
                 return;
             } else {
@@ -68,7 +66,8 @@ public class TButton extends JButton implements GetProperty {
     }
 
     public void setBoundsFromLeft(JComponent jComponent) {
-        setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN, jComponent.getY());
+        setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
+                jComponent.getY());
     }
 
     public void setBoundsFromTop(JComponent jComponent) {
@@ -77,8 +76,8 @@ public class TButton extends JButton implements GetProperty {
 
     public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
-                + jComponent.getHeight()
-                + marginCount * SwingUtils.MARGIN);
+                                     + jComponent.getHeight()
+                                     + marginCount * SwingUtils.MARGIN);
     }
 
     @Override
@@ -92,6 +91,7 @@ public class TButton extends JButton implements GetProperty {
     }
 
     void addActionListener() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

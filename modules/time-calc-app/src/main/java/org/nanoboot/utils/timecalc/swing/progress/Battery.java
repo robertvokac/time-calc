@@ -37,23 +37,31 @@ public class Battery extends Widget {
     @Getter
     private final String name;
     private final double[] randomDoubles
-            = new double[]{1d, 1d, 1d, 1d, 1d, 1d, 1};
-    public BooleanProperty wavesVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
-            .getKey(), true);
-    public BooleanProperty circleProgressVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
-            .getKey(), true);
-    public BooleanProperty percentProgressVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE
-            .getKey(), true);
-    public BooleanProperty chargingCharacterVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE
-            .getKey(), true);
-    public BooleanProperty nameVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_NAME_VISIBLE
-            .getKey(), true);
-    public BooleanProperty labelVisibleProperty = new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
-            .getKey(), true);
-    public BooleanProperty blinkingIfCriticalLowVisibleProperty
-            = new BooleanProperty(TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
-                    .getKey(), true);
+            = new double[] {1d, 1d, 1d, 1d, 1d, 1d, 1};
     private final BooleanProperty blinking = new BooleanProperty("blinking");
+    public BooleanProperty wavesVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
+                    .getKey(), true);
+    public BooleanProperty circleProgressVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
+                    .getKey(), true);
+    public BooleanProperty percentProgressVisibleProperty = new BooleanProperty(
+            TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE
+                    .getKey(), true);
+    public BooleanProperty chargingCharacterVisibleProperty =
+            new BooleanProperty(
+                    TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE
+                            .getKey(), true);
+    public BooleanProperty nameVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.BATTERY_NAME_VISIBLE
+                    .getKey(), true);
+    public BooleanProperty labelVisibleProperty =
+            new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
+                    .getKey(), true);
+    public BooleanProperty blinkingIfCriticalLowVisibleProperty
+            = new BooleanProperty(
+            TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
+                    .getKey(), true);
     private long tmpNanoTime = 0l;
     private int totalHeight = 0;
     private int totalWidth;
@@ -77,7 +85,7 @@ public class Battery extends Widget {
         }
         if (blinkingIfCriticalLowVisibleProperty.isEnabled()) {
             if (donePercent > 0 && donePercent <= CRITICAL_LOW_ENERGY
-                    && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
+                && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
                 blinking.flip();
                 tmpNanoTime = System.nanoTime();
             }
@@ -99,7 +107,7 @@ public class Battery extends Widget {
                 = Visibility.valueOf(visibilityProperty.getValue());
         brush.setColor(
                 visibility.isStronglyColored() || mouseOver ? Color.YELLOW
-                : FOREGROUND_COLOR);
+                        : FOREGROUND_COLOR);
         brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -111,15 +119,15 @@ public class Battery extends Widget {
             brush.setColor(
                     donePercent < LOW_ENERGY ? LOW_HIGHLIGHTED
                             : (donePercent < HIGH_ENERGY
-                                    ? MEDIUM_HIGHLIGHTED
-                                    : (donePercent < VERY_HIGH_ENERGY
-                                            ? HIGH_HIGHLIGHTED
-                                            : HIGHEST_HIGHLIGHTED)));
+                            ? MEDIUM_HIGHLIGHTED
+                            : (donePercent < VERY_HIGH_ENERGY
+                            ? HIGH_HIGHLIGHTED
+                            : HIGHEST_HIGHLIGHTED)));
         } else {
             brush.setColor(donePercent < LOW_ENERGY ? LOW
                     : (donePercent < HIGH_ENERGY
-                            ? MEDIUM
-                            : (donePercent < VERY_HIGH_ENERGY ? HIGH : HIGHEST)));
+                    ? MEDIUM
+                    : (donePercent < VERY_HIGH_ENERGY ? HIGH : HIGHEST)));
         }
         if (visibility.isGray()) {
             brush.setColor(Utils.ULTRA_LIGHT_GRAY);
@@ -131,7 +139,8 @@ public class Battery extends Widget {
         int intX = 1;
         int todoHeight = totalHeight - doneHeight;
         double surfacePower
-                = 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
+                =
+                1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight
                 = (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
         if (waterSurfaceHeight <= 2 || wavesVisibleProperty.isDisabled()) {
@@ -146,32 +155,32 @@ public class Battery extends Widget {
                         ? doneHeight : doneHeight - waterSurfaceHeight + 1);
         int pointCount = 8;
         if (doneHeight >= waterSurfaceHeight
-                && donePercent < 1) {// && todoHeight > waterSurfaceHeight) {
+            && donePercent < 1) {// && todoHeight > waterSurfaceHeight) {
             //g2d.fillArc(intX, intY, width_, intHeight - waterSurfaceHeight, 30, 60);
 
             brush.fillPolygon(
-                    new int[]{intX,
-                        (int) (intX + totalWidth / pointCount * 0.5),
-                        intX + totalWidth / pointCount * 3,
-                        intX + totalWidth / pointCount * 4,
-                        intX + totalWidth / pointCount * 5,
-                        intX + totalWidth / pointCount * 6,
-                        intX + totalWidth / pointCount * 7,
-                        intX + totalWidth / pointCount * 8},
-                    new int[]{todoHeight + (waterSurfaceHeight * 1),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                0)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                1)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                2)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                3)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                4)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                5)),
-                        todoHeight + (waterSurfaceHeight * 1)},
+                    new int[] {intX,
+                            (int) (intX + totalWidth / pointCount * 0.5),
+                            intX + totalWidth / pointCount * 3,
+                            intX + totalWidth / pointCount * 4,
+                            intX + totalWidth / pointCount * 5,
+                            intX + totalWidth / pointCount * 6,
+                            intX + totalWidth / pointCount * 7,
+                            intX + totalWidth / pointCount * 8},
+                    new int[] {todoHeight + (waterSurfaceHeight * 1),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    0)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    1)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    2)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    3)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    4)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    5)),
+                            todoHeight + (waterSurfaceHeight * 1)},
                     pointCount);
 
             brush.setColor(
@@ -181,28 +190,28 @@ public class Battery extends Widget {
             brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
             brush.drawPolyline(
-                    new int[]{intX,
-                        (int) (intX + totalWidth / pointCount * 0.5),
-                        intX + totalWidth / pointCount * 3,
-                        intX + totalWidth / pointCount * 4,
-                        intX + totalWidth / pointCount * 5,
-                        intX + totalWidth / pointCount * 6,
-                        intX + totalWidth / pointCount * 7,
-                        intX + totalWidth / pointCount * 8},
-                    new int[]{todoHeight + (waterSurfaceHeight * 1),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                0, true)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                1, true)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                2, true)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                3, true)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                4, true)),
-                        todoHeight + (int) (waterSurfaceHeight * getRandom(
-                                5, true)),
-                        todoHeight + (waterSurfaceHeight * 1)},
+                    new int[] {intX,
+                            (int) (intX + totalWidth / pointCount * 0.5),
+                            intX + totalWidth / pointCount * 3,
+                            intX + totalWidth / pointCount * 4,
+                            intX + totalWidth / pointCount * 5,
+                            intX + totalWidth / pointCount * 6,
+                            intX + totalWidth / pointCount * 7,
+                            intX + totalWidth / pointCount * 8},
+                    new int[] {todoHeight + (waterSurfaceHeight * 1),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    0, true)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    1, true)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    2, true)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    3, true)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    4, true)),
+                            todoHeight + (int) (waterSurfaceHeight * getRandom(
+                                    5, true)),
+                            todoHeight + (waterSurfaceHeight * 1)},
                     pointCount);
             brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
@@ -227,10 +236,12 @@ public class Battery extends Widget {
                 brush.setFont(currentFont);
 
             }
-            if(circleProgressVisibleProperty.isEnabled()) {
+            if (circleProgressVisibleProperty.isEnabled()) {
                 Color currentColor = brush.getColor();
                 brush.setColor(
-                        visibility.isStronglyColored() ? HIGH_HIGHLIGHTED : (visibility.isWeaklyColored() ? HIGH : Color.lightGray));
+                        visibility.isStronglyColored() ? HIGH_HIGHLIGHTED :
+                                (visibility.isWeaklyColored() ? HIGH :
+                                        Color.lightGray));
 
                 double angleDouble = donePercent * 360;
 
@@ -239,7 +250,9 @@ public class Battery extends Widget {
                         15, 15, 90, -(int) angleDouble);
                 brush.setColor(
                         visibility.isStronglyColored() ? LIGHT_RED
-                        : visibility.isWeaklyColored() ? ULTRA_LIGHT_RED : BACKGROUND_COLOR);
+                                :
+                                visibility.isWeaklyColored() ? ULTRA_LIGHT_RED :
+                                        BACKGROUND_COLOR);
                 brush.fillArc(((int) (totalWidth * 0.45)) + 15,
                         totalHeight / 4 * 3 + 28,
                         15, 15, 90, +(int) (360 - angleDouble));
@@ -247,22 +260,25 @@ public class Battery extends Widget {
                 brush.setColor(currentColor);
             }
         }
-        if(percentProgressVisibleProperty.isEnabled()) {
-        brush.drawString(
-                NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
-                        .format(donePercent * 100) + "%",
-                ((int) (totalWidth * 0.15)),
-                donePercent > 0.5 ? totalHeight / 4 * 3 : totalHeight / 4 * 1);
+        if (percentProgressVisibleProperty.isEnabled()) {
+            brush.drawString(
+                    NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
+                            .format(donePercent * 100) + "%",
+                    ((int) (totalWidth * 0.15)),
+                    donePercent > 0.5 ? totalHeight / 4 * 3 :
+                            totalHeight / 4 * 1);
         }
 
-        if (labelVisibleProperty.isEnabled() && label != null && !label.isEmpty()) {
+        if (labelVisibleProperty.isEnabled() && label != null && !label
+                .isEmpty()) {
             brush.drawString(
                     label,
                     ((int) (totalWidth * 0.15)),
                     (donePercent > 0.5 ? totalHeight / 4 * 3
                             : totalHeight / 4 * 1) + 20);
         }
-        if (nameVisibleProperty.isEnabled() && name != null && !name.isEmpty()) {
+        if (nameVisibleProperty.isEnabled() && name != null && !name
+                .isEmpty()) {
             brush.drawString(
                     name,
                     ((int) (totalWidth * 0.10)),

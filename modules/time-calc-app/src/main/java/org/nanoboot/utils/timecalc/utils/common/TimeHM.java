@@ -46,7 +46,7 @@ public class TimeHM {
     public static int countDiffInMinutes(TimeHM startTime, TimeHM endTime) {
         return (endTime.getHour() * TimeHM.MINUTES_PER_HOUR + endTime
                 .getMinute()) - (startTime.getHour() * TimeHM.MINUTES_PER_HOUR
-                + startTime.getMinute());
+                                 + startTime.getMinute());
     }
 
     public TimeHM cloneInstance() {

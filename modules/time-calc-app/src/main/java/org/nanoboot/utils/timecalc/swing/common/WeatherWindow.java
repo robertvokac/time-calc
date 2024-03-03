@@ -86,7 +86,7 @@ public class WeatherWindow extends JFrame {
 
             jep.setContentType("text/html");
             jep.setText("<html><head><meta charset=\"UTF-8\"></head><body>"
-                    + pocasiHtml + "</body></html>");
+                        + pocasiHtml + "</body></html>");
             Utils.writeTextToFile(new File("aaa"),
                     "<html><head><meta charset=\"UTF-8\"></head><body>"
                     + pocasiHtml + "</body></html>");

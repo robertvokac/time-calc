@@ -29,19 +29,20 @@ public class ComponentRegistry<T extends Component> {
             add(c);
         }
     }
+
     public void setVisible(boolean b) {
         setVisible(null, b);
     }
 
     public void setVisible(Predicate<Component> predicate, boolean b) {
         for (T c : set) {
-            if(c instanceof TButton) {
-                if(!MainWindow.hideShowCheckBox.isSelected() && b) {
+            if (c instanceof TButton) {
+                if (!MainWindow.hideShowCheckBox.isSelected() && b) {
                     continue;
                 }
             }
-            if(predicate != null) {
-                if(!predicate.test(c)) {
+            if (predicate != null) {
+                if (!predicate.test(c)) {
                     continue;
                 }
             }

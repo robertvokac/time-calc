@@ -8,12 +8,15 @@ import java.util.Calendar;
  */
 public class YearBattery extends Battery {
 
+    public static final String YEAR = "Year";
+
     public YearBattery(int x, int i, int i1) {
         super(YEAR, x, i, i1);
     }
-    public static final String YEAR = "Year";
 
-    public static double getYearProgress(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second, Integer millisecond) {
+    public static double getYearProgress(Integer year, Integer month,
+            Integer day, Integer hour, Integer minute, Integer second,
+            Integer millisecond) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);
@@ -27,12 +30,12 @@ public class YearBattery extends Battery {
         double minutes = minute + seconds / 60d;
         double hours = hour + minutes / 60d;
         double days = cal.get(Calendar.DAY_OF_YEAR) + hours / 24d;
-//        System.out.println("millisecond=" + millisecond);
-//        System.out.println("seconds=" + seconds);
-//        System.out.println("minutes=" + minutes);
-//        System.out.println("hours=" + hours);
-//        System.out.println("days=" + days);
-//        System.out.println("cal.get(Calendar.DAY_OF_YEAR)=" + cal.get(Calendar.DAY_OF_YEAR));
+        //        System.out.println("millisecond=" + millisecond);
+        //        System.out.println("seconds=" + seconds);
+        //        System.out.println("minutes=" + minutes);
+        //        System.out.println("hours=" + hours);
+        //        System.out.println("days=" + days);
+        //        System.out.println("cal.get(Calendar.DAY_OF_YEAR)=" + cal.get(Calendar.DAY_OF_YEAR));
 
         double totalCountOfDaysInAYear = getTotalCountOfDaysInAYear(year);
         return days / totalCountOfDaysInAYear;
