@@ -187,8 +187,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 ioException.printStackTrace();
             }
             int profileNumber = 0;
-            Toaster toaster = new Toaster();
-            toaster.setDisplayTime(5000);
             switch(e.getKeyCode()) {
                 case KeyEvent.VK_0: profileNumber = 0;break;
                 case KeyEvent.VK_1: profileNumber = 1;break;
@@ -205,25 +203,25 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             if(properties.containsKey(key)) {
                 String profileName = (String) properties.get(key);
                 if(profileName.equals( timeCalcConfiguration.profileNameProperty)) {
-                    toaster.showToaster("Profile \"" + profileName + "\" is already active. Nothing to do");
+                    Utils.showNotification("Profile \"" + profileName + "\" is already active. Nothing to do", 5000);
                 } else {
-                    toaster.showToaster("Info: Changing profile to: " + ((
+                    Utils.showNotification("Info: Changing profile to: " + ((
                             profileName.isEmpty() ? "{Default profile}" :
-                                    profileName)));
+                                    profileName)), 5000);
                     TimeCalcProperties.getInstance().loadProfile(profileName);
                     timeCalcConfiguration.loadFromTimeCalcProperties(
                             TimeCalcProperties.getInstance());
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Warning: There is no profile assigned to Key " + profileNumber, "Warning", JOptionPane.WARNING_MESSAGE);
+                Utils.showNotification("Warning: There is no profile assigned to Key " + profileNumber, 5000);
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_F) {
 
             if(FileConstants.TIME_CALC_PROFILES_TXT_FILE.exists()) {
                 try {
-                    Utils.showNotification(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE), 200);
+                    Utils.showNotification(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE), 15000, 200);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                     Utils.showNotification("Error: " + ioException.getMessage());

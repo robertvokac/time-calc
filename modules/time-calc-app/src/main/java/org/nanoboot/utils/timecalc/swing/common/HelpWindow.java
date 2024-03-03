@@ -34,8 +34,8 @@ public class HelpWindow extends TWindow {
         this.setLayout(null);
         JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBounds(1, 1,
-                getWidth() - SwingUtils.MARGIN,
-                getHeight() - SwingUtils.MARGIN);
+                getWidth() - 2 * SwingUtils.MARGIN,
+                getHeight() - 4 * SwingUtils.MARGIN);
         add(scrollPane);
 
         JEditorPane editor = new JEditorPane();

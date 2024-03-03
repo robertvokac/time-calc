@@ -144,9 +144,12 @@ public class Utils {
     public static void showNotification(String message) {
         showNotification(message, 0);
     }
-    public static void showNotification(String message, int height) {
+    public static void showNotification(String message, int displayTime) {
+        showNotification(message, displayTime, 0);
+    }
+    public static void showNotification(String message, int displayTime, int height) {
         Toaster toaster = new Toaster();
-        toaster.setDisplayTime(15000);
+        toaster.setDisplayTime(displayTime == 0 ? 15000 : displayTime);
         if(height != 0) {
             toaster.setToasterHeight(height);
         }
