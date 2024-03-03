@@ -162,8 +162,13 @@ public class TimeCalcProperties {
     }
 
     public void loadProfile(String profileName) {
+        File file = getFile(profileName);
+        if(!file.exists()) {
+            Utils.showNotification("There is no profile with name: " + profileName);
+            return;
+        }
         try {
-            this.properties.load( new FileInputStream(getFile(profileName)));
+            this.properties.load( new FileInputStream(file));
         } catch (IOException e) {
             System.err.println(e);
         }

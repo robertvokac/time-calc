@@ -219,18 +219,16 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_F) {
-            Toaster toaster = new Toaster();
+
             if(timeCalcProfilesTxtFile.exists()) {
-                toaster.setDisplayTime(15000);
                 try {
-                    toaster.showToaster(Utils.readTextFromFile(timeCalcProfilesTxtFile));
+                    Utils.showNotification(Utils.readTextFromFile(timeCalcProfilesTxtFile), 200);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
-                    toaster.showToaster("Error: " + ioException.getMessage());
+                    Utils.showNotification("Error: " + ioException.getMessage());
                 }
             } else {
-                toaster.setDisplayTime(15000);
-                toaster.showToaster("Warning: There are no numbers assigned to profiles. Update file: " + timeCalcProfilesTxtFile.getAbsolutePath() + ".");
+                Utils.showNotification("Warning: There are no numbers assigned to profiles. Update file: " + timeCalcProfilesTxtFile.getAbsolutePath() + ".");
             }
 
         }

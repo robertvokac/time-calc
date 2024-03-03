@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.utils.common;
 
 import org.nanoboot.utils.timecalc.app.Main;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
 import java.awt.Color;
@@ -139,5 +140,16 @@ public class Utils {
             sb.append(line).append("\n");
         }
         return sb.toString();
+    }
+    public static void showNotification(String message) {
+        showNotification(message, 0);
+    }
+    public static void showNotification(String message, int height) {
+        Toaster toaster = new Toaster();
+        toaster.setDisplayTime(15000);
+        if(height != 0) {
+            toaster.setToasterHeight(height);
+        }
+        toaster.showToaster(message);
     }
 }
