@@ -32,7 +32,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
-import java.io.File;
 
 /**
  * @author Robert Vokac
@@ -150,7 +149,7 @@ public class MainWindow extends TWindow {
         {
             arrivalTextField.valueProperty.addListener(e -> {
                 if (!arrivalTextField.valueProperty.getValue().isEmpty()) {
-                    TTime startTime_ = arrivalTextField.asTimeHM();
+                    TTime startTime_ = arrivalTextField.asTTime();
                     analogClock.startHourProperty
                             .setValue(startTime_.getHour());
                     analogClock.startMinuteProperty
@@ -160,7 +159,7 @@ public class MainWindow extends TWindow {
             });
             departureTextField.valueProperty.addListener(e -> {
                 if (!departureTextField.valueProperty.getValue().isEmpty()) {
-                    TTime endTime = arrivalTextField.asTimeHM();
+                    TTime endTime = arrivalTextField.asTTime();
                     analogClock.endHourProperty
                             .setValue(endTime.getHour());
                     analogClock.endMinuteProperty
@@ -270,8 +269,8 @@ public class MainWindow extends TWindow {
         add(remainingTextField);
         add(saveButton);
         saveButton.addActionListener(e -> {
-            TTime overtime_ =overtimeTextField.asTimeHM();
-            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTimeHM().toString().substring(0,5));
+            TTime overtime_ =overtimeTextField.asTTime();
+            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0,5));
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0,overtime_.isNegative() ? 6 : 5));
         });
         //
@@ -534,14 +533,20 @@ public class MainWindow extends TWindow {
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 
 
-
         while (true) {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
-
+            if(!departureTextField.valueProperty.getValue().isEmpty()){
+                TTime startTime = arrivalTextField.asTTime();
+                TTime endTime = departureTextField.asTTime();
+                analogClock.startHourProperty.setValue(startTime.getHour());
+                analogClock.startMinuteProperty.setValue(startTime.getMinute());
+                analogClock.endHourProperty.setValue(endTime.getHour());
+                analogClock.endMinuteProperty.setValue(endTime.getMinute());
+            }
             {
 
-                TTime startTime = arrivalTextField.asTimeHM();
-                TTime overtime = overtimeTextField.asTimeHM();
+                TTime startTime = arrivalTextField.asTTime();
+                TTime overtime = overtimeTextField.asTTime();
                 TTime newDeparture = startTime.add(new TTime(8,30));
                 if(overtime.isNegative()) {
                     TTime tmpTTime = overtime.cloneInstance();
@@ -602,8 +607,8 @@ public class MainWindow extends TWindow {
             int secondNow = analogClock.secondProperty.getValue();
             int millisecondNow = analogClock.millisecondProperty.getValue();
 
-            TTime startTime = arrivalTextField.asTimeHM();
-            TTime endTime = departureTextField.asTimeHM();
+            TTime startTime = arrivalTextField.asTTime();
+            TTime endTime = departureTextField.asTTime();
             TTime nowTime = TTime.of(time.asCalendar());
             TTime timeElapsed = TTime
                     .computeTimeDiff(startTime, nowTime);
@@ -628,7 +633,7 @@ public class MainWindow extends TWindow {
 //            }
 
 
-            TTime overtime = overtimeTextField.asTimeHM();
+            TTime overtime = overtimeTextField.asTTime();
             int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
                                               - timeRemains.getHour());
             int minutesDone
@@ -643,8 +648,8 @@ public class MainWindow extends TWindow {
                     = totalSecondsDone * 1000 + millisecondsDone;
 
 
-            int totalMinutes = TTime.countDiffInMinutes(arrivalTextField.asTimeHM(),
-                    departureTextField.asTimeHM());
+            int totalMinutes = TTime.countDiffInMinutes(arrivalTextField.asTTime(),
+                    departureTextField.asTTime());
 
             int totalSeconds = totalMinutes * TTime.SECONDS_PER_MINUTE;
             int totalMilliseconds = totalSeconds * TTime.MILLISECONDS_PER_SECOND;

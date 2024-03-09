@@ -124,7 +124,7 @@ public class TTextField extends JTextField implements GetProperty {
     public Property getVisibilitySupportedColoredProperty() {
         return visibilitySupportedColoredProperty;
     }
-    public TTime asTimeHM() {
+    public TTime asTTime() {
         return new TTime(valueProperty.getValue());
     }
 
