@@ -78,9 +78,9 @@ public class WalkingHumanProgress extends Widget implements
             brush.setColor(visibility.isStronglyColored() ? Color.BLUE :
                     visibility.isWeaklyColored() ? Color.GRAY :
                             Color.LIGHT_GRAY);
-            if(mouseOver) {
-                brush.drawRect(1,1,getWidth() - 2, getHeight() - 2);
-            }
+//            if(mouseOver) {
+//                brush.drawRect(1,1,getWidth() - 2, getHeight() - 2);
+//            }
             brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
             int y = SwingUtils.MARGIN;
             for (String line : lines) {

@@ -29,7 +29,7 @@ import java.awt.event.MouseMotionListener;
 public class Widget extends JPanel implements
         GetProperty {
 
-    public static final int CLOSE_BUTTON_SIDE = 20;
+    private static final int CLOSE_BUTTON_SIDE = 25;
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
@@ -209,7 +209,7 @@ public class Widget extends JPanel implements
         brush.setColor(CLOSE_BUTTON_FOREGROUND_COLOR);
         Graphics2D brush2d = (Graphics2D) brush;
         brush2d.setStroke(new BasicStroke(2f));
-        int offset = 4;
+        int offset = 6;
         brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + offset, 0 + 1 + offset,
                 width - 0 * CLOSE_BUTTON_SIDE - 1 - offset,
                 0 + CLOSE_BUTTON_SIDE + 1 - offset);
