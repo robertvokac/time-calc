@@ -38,7 +38,7 @@ public class Time extends Thread {
             = secondReadWriteProperty.asReadOnlyProperty();
     public ReadOnlyProperty<Integer> millisecondProperty
             = millisecondReadWriteProperty.asReadOnlyProperty();
-    public ReadOnlyProperty<Integer> dayOfWeek
+    public ReadOnlyProperty<Integer> dayOfWeekProperty
             = dayOfWeekReadWriteProperty.asReadOnlyProperty();
     public final IntegerProperty yearCustomProperty
             = new IntegerProperty("yearCustomProperty", Integer.MAX_VALUE);
@@ -111,7 +111,7 @@ public class Time extends Thread {
                 + minuteProperty.getValue() + " "
                 + secondProperty.getValue() + " "
                 + millisecondProperty.getValue() + " "
-                + dayOfWeek.getValue() + " "
+                + dayOfWeekProperty.getValue() + " "
         );
     }
     private int returnCustomValueIfNeeded(Calendar cal, int timeUnit,

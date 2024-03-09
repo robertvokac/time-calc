@@ -195,7 +195,9 @@ public class MainWindow extends TWindow {
             }
         });
         hideShowCheckBox.addItemListener(e ->
+
         {
+            this.requestFocus();
         });
         exitButton.addActionListener(e
                 -> {
@@ -253,7 +255,7 @@ public class MainWindow extends TWindow {
         analogClock.secondProperty.bindTo( time.secondProperty);
         analogClock.millisecondProperty.bindTo(time.millisecondProperty);
 
-        analogClock.dayOfWeekProperty.bindTo(time.dayOfWeek);
+        analogClock.dayOfWeekProperty.bindTo(time.dayOfWeekProperty);
 
         analogClock.millisecondEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsMillisecondVisibleProperty);

@@ -44,8 +44,6 @@ If file overtime.txt does not exist, then the default overtime is 0:00.
 ### .tc/test.txt
 If file test.txt exists, then user is not asked for start time and overtime. Instead, the values in files starttime.txt and overtime.txt are used.
 
-This file can be also used to define custom current time - for testing purposes.
-
 ### ./tc/timecalc.conf
 
 Configuration is stored here.

@@ -127,6 +127,17 @@ public class AnalogClock extends Widget {
                 = new AnalogClock(new TimeHM("6:30"), new TimeHM("19:00"));
         window.add(clock);
         window.pack();
+        Time time = new Time();
+        time.allowCustomValuesProperty.setValue(true);
+        clock.dayProperty.bindTo(time.dayProperty);
+        clock.monthProperty.bindTo(time.monthProperty);
+        clock.yearProperty.bindTo(time.yearProperty);
+        clock.hourProperty.bindTo(time.hourProperty);
+        clock.minuteProperty.bindTo(time.minuteProperty);
+        clock.secondProperty.bindTo( time.secondProperty);
+        clock.millisecondProperty.bindTo(time.millisecondProperty);
+        clock.dayOfWeekProperty.bindTo(time.dayOfWeekProperty);
+        clock.visibilityProperty.setValue(Visibility.GRAY.name());
         window.setVisible(true);
         //        window.addKeyListener(new KeyAdapter() {
         //            // Key Pressed method
