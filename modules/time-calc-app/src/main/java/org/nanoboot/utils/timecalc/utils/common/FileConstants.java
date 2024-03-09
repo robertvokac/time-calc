@@ -19,7 +19,7 @@ public class FileConstants {
             new File(TC_DIRECTORY, "time-calc-current-profile.txt");
     public static final File FILE_WITHOUT_ANY_PROFILE =
             new File(TC_DIRECTORY, "timecalc.conf");
-    public static final File JOKES_TXT = new File(TC_DIRECTORY, "jokes.txt");
+    public static final File JOKES_TXT = new File(TC_DIRECTORY, "time-calc-jokes.txt");
 
     private FileConstants() {
         //Not meant to be instantiated.
