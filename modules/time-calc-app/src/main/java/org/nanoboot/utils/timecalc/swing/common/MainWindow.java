@@ -601,9 +601,6 @@ public class MainWindow extends TWindow {
 
             setTitle(currentVisibility.isNone() ? "" : getWindowTitle());
 
-            int hourNow = analogClock.hourProperty.getValue();
-            int minuteNow = analogClock.minuteProperty.getValue();
-
             int secondNow = analogClock.secondProperty.getValue();
             int millisecondNow = analogClock.millisecondProperty.getValue();
 
@@ -691,25 +688,14 @@ public class MainWindow extends TWindow {
             yearBattery
                     .setDonePercent(YearBattery.getYearProgress(analogClock));
             yearBattery.setLabel("");
-            //yearBattery.setDonePercent(YearBattery.getYearProgress(2024,0,1,0,0,0,0));
-            int totalSecondsRemains
-                    = (int) (timeRemains.getHour() * 60 * 60
-                                                 + timeRemains.getMinute() * 60
-                                                 + secondsRemains);
-            int totalMillisecondsRemains
-                    = totalSecondsRemains * 1000 + millisecondsRemains;
-            double totalSecondsRemainsDouble
-                    = ((double) totalMillisecondsRemains) / 1000;
-
+            
             if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
                 Toaster toasterManager = new Toaster();
                 toasterManager.setDisplayTime(30000);
                 toasterManager.showToaster(
                         "Congratulation :-) It is the time to go home.");
                 walkingHumanProgress
-                        .printPercentToAscii(done, timeRemains.getHour(),
-                                timeRemains.getMinute(), done,
-                                totalSecondsRemainsDouble, endTime);
+                        .setDonePercent(done);
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
@@ -724,9 +710,7 @@ public class MainWindow extends TWindow {
                 }
             } else {
                 walkingHumanProgress
-                        .printPercentToAscii(done, timeRemains.getHour(),
-                                timeRemains.getMinute(), done,
-                                totalSecondsRemainsDouble, endTime);
+                        .setDonePercent(done);
             }
 
             try {

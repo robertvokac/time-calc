@@ -8,7 +8,6 @@ import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 
@@ -34,13 +33,6 @@ public class WalkingHumanProgress extends Widget implements
 
     private static final String WALL = "||";
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
-
-    private double percent;
-    private int hourRemains;
-    private int minuteRemains;
-    private double done;
-    private double totalSecondsRemainsDouble;
-    private TTime endTime;
 
     public WalkingHumanProgress() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
@@ -111,7 +103,7 @@ public class WalkingHumanProgress extends Widget implements
 
     @Override
     public void paintWidget(Graphics brush) {
-        String string = printPercentToAscii();
+        String string = createAsciiString();
         if (string.isEmpty()) {
             //nothing to do
         } else {
@@ -133,7 +125,7 @@ public class WalkingHumanProgress extends Widget implements
         }
     }
 
-    private String printPercentToAscii() {
+    private String createAsciiString() {
         if (visibleProperty.isDisabled()) {
             //nothing to do
             return "";
@@ -143,11 +135,10 @@ public class WalkingHumanProgress extends Widget implements
         this.setVisible(visibility != Visibility.NONE);
 
         StringBuilder sb = new StringBuilder();
-        String msg = createMessage(hourRemains, minuteRemains, done,
-                totalSecondsRemainsDouble, endTime);
-        int percentInt = (int) (percent * 100);
-        if (!alreadyShownPercents.contains((int) (percent * 100))) {
-            alreadyShownPercents.add((int) (percent * 100));
+
+        int percentInt = (int) (donePercent * 100);
+        if (!alreadyShownPercents.contains((int) (donePercent * 100))) {
+            alreadyShownPercents.add((int) (donePercent * 100));
             Toaster toasterManager = new Toaster();
             Font font = new Font("sans", Font.PLAIN, 16);
             toasterManager.setToasterMessageFont(font);
@@ -177,11 +168,8 @@ public class WalkingHumanProgress extends Widget implements
             }
 
         }
-
-        sb.append(msg + "\n\n");
-
         int spacesTotal = 40;
-        int spacesDone = (int) (percent * spacesTotal);
+        int spacesDone = (int) (donePercent * spacesTotal);
         if (spacesDone > spacesTotal) {
             spacesDone = spacesTotal;
         }
@@ -208,38 +196,10 @@ public class WalkingHumanProgress extends Widget implements
                 + createRepeatedString(spacesTotal + 16, '=')
                 + Constants.NEW_LINE + "Steps: "
                 + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(percent * ((double) spacesTotal)) + "/"
+                        .format(donePercent * ((double) spacesTotal)) + "/"
                 + spacesTotal
         );
         return sb.toString();
-    }
-
-    public void printPercentToAscii(double percent, long hourRemains,
-            long minuteRemains, double done,
-            double totalSecondsRemainsDouble, TTime endTime) {
-        this.percent = percent;
-        this.hourRemains = (int) hourRemains;
-        this.minuteRemains = (int) minuteRemains;
-        this.done = done;
-        this.totalSecondsRemainsDouble = totalSecondsRemainsDouble;
-        this.endTime = endTime;
-    }
-
-    private String createMessage(int hourRemains, int minuteRemains,
-            double done,
-            double totalSecondsRemainsDouble, TTime endTime) {
-        String msg
-                = "Done=" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(
-                done * 100) + "% Remains="
-                  + String.format("%02d", hourRemains) + ":" + String
-                          .format("%02d", minuteRemains)
-                  + /*":" + String.format("%02d", secondsRemains)+ */ " ("
-                  + NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
-                          .format(totalSecondsRemainsDouble - 60)
-                  + " s" + ")" + " End=" + String
-                          .format("%02d", endTime.getHour()) + ":" + String
-                          .format("%02d", endTime.getMinute());
-        return msg;
     }
 
     @Override
