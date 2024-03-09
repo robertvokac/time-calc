@@ -172,6 +172,7 @@ public class WalkingHumanProgress extends Widget implements
                 toasterManager.showToaster(new ImageIcon(image),
                         "Progress: " + (percentInt) + "%");
             } else {
+                toasterManager.setToasterHeight(200);
                 toasterManager.showToaster("Progress: " + (percentInt) + "%");
             }
 

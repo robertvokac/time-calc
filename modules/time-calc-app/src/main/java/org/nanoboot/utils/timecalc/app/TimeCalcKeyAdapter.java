@@ -247,6 +247,31 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 switchProfile(false, true);
                 break;
             }
+
+            case KeyEvent.VK_K: {
+                if(timeCalcConfiguration.clockVisibleProperty.isEnabled()) {
+                    timeCalcConfiguration.clockVisibleProperty.disable();
+                } else {
+                    timeCalcConfiguration.clockVisibleProperty.enable();
+                    timeCalcConfiguration.                    clockHandsLongVisibleProperty.enable();
+                            timeCalcConfiguration.clockHandsColoredProperty.enable();
+                            timeCalcConfiguration.clockHandsHourVisibleProperty.enable();
+                            timeCalcConfiguration.clockHandsMinuteVisibleProperty.enable();
+                            timeCalcConfiguration.clockHandsSecondVisibleProperty.enable();
+                            timeCalcConfiguration.clockHandsMillisecondVisibleProperty.enable();
+                            timeCalcConfiguration.clockBorderVisibleProperty.enable();
+                            timeCalcConfiguration.clockBorderOnlyHoursProperty.disable();
+                            timeCalcConfiguration.clockNumbersVisibleProperty.enable();
+                            timeCalcConfiguration.clockCircleVisibleProperty.enable();
+                            timeCalcConfiguration.clockCircleStrongBorderProperty.disable();
+                            timeCalcConfiguration.clockCircleBorderColorProperty.setValue("0,0,255");
+                            timeCalcConfiguration.clockCentreCircleVisibleProperty.enable();
+                            timeCalcConfiguration.clockCentreCircleBlackProperty.disable();
+                            timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty.disable();
+                            timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty.disable();
+                }
+                break;
+            }
             default:
                 if(!numberKeyWasPressed) {
                     Utils.showNotification(
@@ -310,6 +335,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     Utils.showNotification("Info: Changing profile to: #" + profileNumber + " " + ((
                             profileName.isEmpty() ? "{Default profile}" :
                                     profileName)), 5000);
+                    timeCalcConfiguration.saveToTimeCalcProperties();
                     TimeCalcProperties.getInstance().loadProfile(profileName);
                     timeCalcConfiguration.loadFromTimeCalcProperties(
                             TimeCalcProperties.getInstance());
