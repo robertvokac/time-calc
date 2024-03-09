@@ -25,8 +25,28 @@ public class SwingUtils {
         //Not meant to be instantiated.
     }
 
-    public static void paintCloseIcon(Graphics brush, int width) {
-        brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
+    public static void paintCloseIcon(Graphics brush, int width,
+            boolean mouseOver, boolean mouseOverCloseButton) {
+        
+        if(!mouseOver) {
+            //nothing to do
+            return;
+        }
+        if(!mouseOverCloseButton) {
+            //nothing to do
+            return;
+        }
+
+         brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
+
+//        if(!mouseOverCloseButton) {
+//            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
+//                    CLOSE_BUTTON_SIDE);
+//            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1+1, 0 + 1 +1, CLOSE_BUTTON_SIDE - 2,
+//                    CLOSE_BUTTON_SIDE - 2);
+//            return;
+//        }
+        
         brush.fillOval(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
                 CLOSE_BUTTON_SIDE);
         brush.setColor(Color.LIGHT_GRAY);

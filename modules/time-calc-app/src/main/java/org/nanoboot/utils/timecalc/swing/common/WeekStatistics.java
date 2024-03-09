@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 /**
- * @author Robert
+ * @author Robert Vokac
  * @since 06.03.2024
  */
 @Getter

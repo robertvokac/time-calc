@@ -33,7 +33,8 @@ public class Jokes {
     static {
         try {
             array = JokesTxt.getAsArray();
-            Set<String> set = new HashSet<>();
+            if(array.length > 0) {
+                Set<String> set = new HashSet<>();
             for (String vtip : array) {
                 if (vtip.trim().isEmpty()) {
                     //nothing to do
@@ -43,6 +44,8 @@ public class Jokes {
             }
             array = new String[set.size()];
             array = set.toArray(array);
+            }
+            
         } catch (IOException e) {
             System.err.println(e);
         }
@@ -63,7 +66,7 @@ public class Jokes {
     }
 
     public static void showRandom() {
-        if (!TimeCalcProperties.getInstance().getBooleanProperty(
+        if (array.length == 0 || !TimeCalcProperties.getInstance().getBooleanProperty(
                 TimeCalcProperty.JOKES_VISIBLE)) {
             //nothing to do
             return;

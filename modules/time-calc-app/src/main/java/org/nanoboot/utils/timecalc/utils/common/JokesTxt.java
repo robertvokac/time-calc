@@ -14,10 +14,10 @@ public class JokesTxt {
     }
 
     public static String[] getAsArray() throws IOException {
-        File jokeTxtFile = new File("jokes.txt");
+        File jokeTxtFile = FileConstants.JOKES_TXT;
         if (!jokeTxtFile.exists()) {
             //nothing to do
-            return new String[] {"A", "B", "C"};
+            return new String[] {};
         }
         return Utils.readTextFromFile(jokeTxtFile).split("-----SEPARATOR-----");
     }

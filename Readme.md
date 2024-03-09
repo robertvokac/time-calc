@@ -56,7 +56,7 @@ Configuration for a profile is stored here.
 
 Current profile is stored here.
 
-### time-calc-profiles.txt
+### ./tc/time-calc-profiles.txt
 
 Optional assignments of profiles to numbers is stored here.
 
