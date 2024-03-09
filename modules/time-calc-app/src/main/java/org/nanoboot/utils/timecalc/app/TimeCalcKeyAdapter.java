@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Properties;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 
 /**
  * @author Robert Vokac
@@ -21,11 +22,15 @@ import java.util.Properties;
  */
 public class TimeCalcKeyAdapter extends KeyAdapter {
 
+    private static final TTime T_TIME_ONE_MINUTE = new TTime(0, 1);
+    private static final TTime T_TIME_ONE_HOUR = new TTime(1,0);
+    
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow window;
     private final Time time;
-
+    private boolean changeByOneHour = false;
+    
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
             TimeCalcApp timeCalcApp,
@@ -69,6 +74,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         boolean increase = shiftDown;
         boolean decrease = ctrlDown;
         boolean reset = altDown;
+        TTime changeTTime = changeByOneHour ? T_TIME_ONE_HOUR : T_TIME_ONE_MINUTE;
         switch (keyCode) {
             case KeyEvent.VK_Y: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " year.");
@@ -115,21 +121,44 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             case KeyEvent.VK_A: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
                 if (increase) {
-                    window.increaseArrivalByOneMinute();
+                    window.increaseArrival(changeTTime);
                 }
                 if (decrease) {
-                    window.decreaseArrivalByOneMinute();
+                    window.decreaseArrival(changeTTime);
                 }
                 break;
             }
             case KeyEvent.VK_O: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
                 if (increase) {
-                    window.increaseOvertimeByOneMinute();
+                    window.increaseOvertime(changeTTime);
                 }
                 if (decrease) {
-                    window.decreaseOvertimeByOneMinute();
+                    window.decreaseOvertime(changeTTime);
                 }
+                break;
+            }
+            case KeyEvent.VK_W: {
+                if (increase) {
+                    window.increaseWork(changeTTime);
+                }
+                if (decrease) {
+                    window.decreaseWork(changeTTime);
+                }
+                break;
+            }
+            case KeyEvent.VK_P: {
+                if (increase) {
+                    window.increasePause(changeTTime);
+                }
+                if (decrease) {
+                    window.decreasePause(changeTTime);
+                }
+                break;
+            }
+            case KeyEvent.VK_C: {
+                this.changeByOneHour = increase;
+                Utils.showNotification("Time will be changed by 1 " + (increase ? "hour" : "minute") + ".");
                 break;
             }
             default:

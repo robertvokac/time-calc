@@ -58,8 +58,8 @@ public class MainWindow extends TWindow {
             = new TimeCalcConfiguration();
     private final TTextField arrivalTextField;
     private final TTextField overtimeTextField;
-    private final TTextField workingTimeInMinutesTextField;
-    private final TTextField pauseTimeInMinutesTextField;
+    private final TTextField workingTimeTextField;
+    private final TTextField pauseTimeTextField;
     private final TTextField noteTextField;
     private final TTextField departureTextField;
     private final TTextField elapsedTextField;
@@ -73,8 +73,8 @@ public class MainWindow extends TWindow {
     {
         this.arrivalTextField = new TTextField();
         this.overtimeTextField = new TTextField();
-        this.workingTimeInMinutesTextField = new TTextField("480");
-        this.pauseTimeInMinutesTextField = new TTextField("30");
+        this.workingTimeTextField = new TTextField("8:00");
+        this.pauseTimeTextField = new TTextField("0:30");
         this.noteTextField = new TTextField("", 160);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
@@ -261,30 +261,32 @@ public class MainWindow extends TWindow {
         TLabel workingTimeInMinutesTextFieldLabel = new TLabel("Work:", 40);
         workingTimeInMinutesTextFieldLabel.setBoundsFromLeft(overtimeTextField);
 
-        workingTimeInMinutesTextField.setBoundsFromLeft(workingTimeInMinutesTextFieldLabel);
+        workingTimeTextField.setBoundsFromLeft(workingTimeInMinutesTextFieldLabel);
         //
         TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:", 40);
-        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeInMinutesTextField);
+        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeTextField);
 
-        pauseTimeInMinutesTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
+        pauseTimeTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
         //
         TLabel noteTextFieldLabel = new TLabel("Note:");
-        noteTextFieldLabel.setBoundsFromLeft(pauseTimeInMinutesTextField);
+        noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField);
 
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
         //half day, pause time in minutes, note
         arrivalTextField.setEditable(false);
         overtimeTextField.setEditable(false);
+        workingTimeTextField.setEditable(false);
+        pauseTimeTextField.setEditable(false);
 
         add(arrivalTextFieldLabel);
         add(arrivalTextField);
         add(overtimeTextFieldLabel);
         add(overtimeTextField);
         add(workingTimeInMinutesTextFieldLabel);
-        add(workingTimeInMinutesTextField);
+        add(workingTimeTextField);
 
         add(pauseTimeInMinutesFieldLabel);
-        add(pauseTimeInMinutesTextField);
+        add(pauseTimeTextField);
         add(noteTextFieldLabel);
         add(noteTextField);
         //
@@ -620,16 +622,19 @@ public class MainWindow extends TWindow {
 
             TTime startTime = null;
             TTime overtime = null;
+            TTime workDuration = new TTime(workingTimeTextField.valueProperty.getValue());
+            TTime pauseDuration = new TTime(pauseTimeTextField.valueProperty.getValue());
             try {
                 startTime = arrivalTextField.asTTime();
                 overtime = overtimeTextField.asTTime();
             } catch (Exception e) {
 
             }
-            if (startTime == null || overtime == null) {
+            if (startTime == null || overtime == null || workDuration == null || pauseDuration == null) {
                 return false;
             }
-            TTime newDeparture = startTime.add(new TTime(8, 30));
+ 
+            TTime newDeparture = startTime.add(workDuration).add(pauseDuration);
             if (overtime.isNegative()) {
                 TTime tmpTTime = overtime.cloneInstance();
                 tmpTTime.setNegative(false);
@@ -712,16 +717,12 @@ public class MainWindow extends TWindow {
         //                elapsedTextField.valueProperty.setValue(s + ":" + (secondNow < 10 ? "0" : "") + secondNow + ":" + (millisecondNow < 10 ? "00" : (millisecondNow < 100 ? "0" : millisecondNow)) + millisecondNow);
         //            }
 
-        TTime overtime = overtimeTextField.asTTime();
-        int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
-                - timeRemains.getHour());
-
         int totalMillisecondsDone
                 = timeElapsed.toTotalMilliseconds();
-
-        int totalMinutes = timeTotal.getMinute();
+        int totalHoursDone = totalMillisecondsDone / 1000 / 60 /60;
 
         int totalMilliseconds = timeTotal.toTotalMilliseconds();
+        int totalMinutes = totalMilliseconds / 1000 / 60 ;
 
         double done = ((double) totalMillisecondsDone)
                 / ((double) totalMilliseconds);
@@ -759,7 +760,7 @@ public class MainWindow extends TWindow {
 
         if (!nowIsWeekend) {
             hourBattery.setLabel(
-                    hourDone + "/" + (totalMinutes / 60));
+                    totalHoursDone + "/" + (totalMinutes / 60));
         }
         minuteBattery.setDonePercent(
                 MinuteBattery.getMinuteProgress(secondNow, millisecondNow));
@@ -859,21 +860,37 @@ public class MainWindow extends TWindow {
         this.configWindow.doDisableAlmostEverything();
     }
 
-    public void increaseArrivalByOneMinute() {
-        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).add(new TTime(0, 1)).toString().substring(0, 5));
+    public void increaseArrival(TTime tTime) {
+        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).add(tTime).toString().substring(0, 5));
     }
 
-    public void decreaseArrivalByOneMinute() {
-        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).remove(new TTime(0, 1)).toString().substring(0, 5));
+    public void decreaseArrival(TTime tTime) {
+        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).remove(tTime).toString().substring(0, 5));
     }
 
-    public void increaseOvertimeByOneMinute() {
-        TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).add(new TTime(0, 1));
+    public void increaseOvertime(TTime tTime) {
+        TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).add(tTime);
         overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 : 5));
     }
 
-    public void decreaseOvertimeByOneMinute() {
-        TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).remove(new TTime(0, 1));
+    public void decreaseOvertime(TTime tTime) {
+        TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).remove(tTime);
         overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 : 5));
+    }
+
+    public void increaseWork(TTime tTime) {
+        workingTimeTextField.valueProperty.setValue(new TTime(this.workingTimeTextField.valueProperty.getValue()).add(tTime).toString().substring(0, 5));
+    }
+
+    public void decreaseWork(TTime tTime) {
+        workingTimeTextField.valueProperty.setValue(new TTime(this.workingTimeTextField.valueProperty.getValue()).remove(tTime).toString().substring(0, 5));
+    }
+
+    public void increasePause(TTime tTime) {
+        pauseTimeTextField.valueProperty.setValue(new TTime(this.pauseTimeTextField.valueProperty.getValue()).add(tTime).toString().substring(0, 5));
+    }
+
+    public void decreasePause(TTime tTime) {
+        pauseTimeTextField.valueProperty.setValue(new TTime(this.pauseTimeTextField.valueProperty.getValue()).remove(tTime).toString().substring(0, 5));
     }
 }

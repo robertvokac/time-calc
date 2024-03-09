@@ -169,10 +169,16 @@ Smileys can be colored or white-black (can be set in configuration)
 * CTRL + {Y,N,D,H,M,S or I} - Decrease test time value
 * ALT + {Y,N,D,H,M,S or I} - Rest test time value
 * D - Reset custom time values to the real time
-* SHIFT + A - Increase arrival time by 1 minute
-* CTRL + A - Decrease arrival time by 1 minute
-* SHIFT + O - Increase overtime by 1 minute
-* CTRL + O - Decrease overtime by 1 minute
+* SHIFT + A - Increase arrival time
+* CTRL + A - Decrease arrival time
+* SHIFT + O - Increase overtime
+* CTRL + O - Decrease overtime
+* SHIFT + W - Increase working time
+* CTRL + W - Decrease worknig time
+* SHIFT + P - Increase pause
+* CTRL + P - Decrease pause
+* SHIFT + C - Increase or decrease of time is change by 1 hour
+* CTRL + C - Increase or decrease of time is change by 1 minute
 
 ## Command button
 
