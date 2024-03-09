@@ -103,10 +103,10 @@ public class TTime implements Comparable<TTime> {
         this(false, hourIn, minuteIn, secondIn, millisecondIn);
     }
     public TTime(boolean negative, int hourIn, int minuteIn, int secondIn, int millisecondIn) {
-        this.hour = hourIn;
-        this.minute = minuteIn;
-        this.second = secondIn;
-        this.millisecond = millisecondIn;
+        this.hour = Math.abs(hourIn);
+        this.minute = Math.abs(minuteIn);
+        this.second = Math.abs(secondIn);
+        this.millisecond = Math.abs(millisecondIn);
         this.negative = negative;
         while (minute >= MINUTES_PER_HOUR) {
             minute = minute - MINUTES_PER_HOUR;
@@ -125,7 +125,7 @@ public class TTime implements Comparable<TTime> {
         return result;
     }
 
-    private static TTime ofMilliseconds(int s) {
+    public static TTime ofMilliseconds(int s) {
         int hours = s / 60 / 60 / 1000;
         int milliseconds = s - hours * 60 * 60 * 1000;
         int minutes = milliseconds / 60 / 1000;
@@ -138,12 +138,12 @@ public class TTime implements Comparable<TTime> {
 
     public TTime add(TTime tTimeToBeAdded) {
         TTime result = this.cloneInstance();
-//        if(result.isNegative()) {
-//            result.setNegative(false);
-//            result.remove(tTimeToBeAdded);
-//            result.setNegative(true);
-//            return result;
-//        }
+        if(result.isNegative()) {
+            result.setNegative(false);
+            result = result.remove(tTimeToBeAdded);
+            result.setNegative(result.toTotalMilliseconds() != 0);
+            return result;
+        }
         Calendar cal = asCalendar();
         cal.add(Calendar.HOUR_OF_DAY, tTimeToBeAdded.hour);
         cal.add(Calendar.MINUTE, tTimeToBeAdded.minute);

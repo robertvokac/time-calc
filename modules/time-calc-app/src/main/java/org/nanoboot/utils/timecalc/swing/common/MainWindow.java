@@ -529,13 +529,18 @@ public class MainWindow extends TWindow {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
 
             {
+
                 TTime startTime = arrivalTextField.asTimeHM();
                 TTime overtime = overtimeTextField.asTimeHM();
-                departureTextField.valueProperty.setValue(new TTime(
-                        startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime
-                                .getHour(),
-                        startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH
-                        + overtime.getMinute()).toString().substring(0, 5));
+                TTime newDeparture = startTime.add(new TTime(8,30));
+                if(overtime.isNegative()) {
+                    TTime tmpTTime = overtime.cloneInstance();
+                    tmpTTime.setNegative(false);
+                    newDeparture = newDeparture.remove(tmpTTime);
+                } else {
+                    newDeparture = newDeparture.add(overtime);
+                }
+                departureTextField.valueProperty.setValue(newDeparture.toString().substring(0, 5));
             }
             Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
