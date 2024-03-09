@@ -248,17 +248,6 @@ public class MainWindow extends TWindow {
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(new Date());
 
-        Properties testProperties = new Properties();
-        File testPropertiesFile = new File("test.txt");
-        try {
-            if (testPropertiesFile.exists()) {
-                testProperties.load(new FileInputStream(testPropertiesFile));
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(MainWindow.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        }
-
         time.yearCustomProperty.bindTo(timeCalcConfiguration.testYearCustomProperty);
         time.monthCustomProperty.bindTo(timeCalcConfiguration.testMonthCustomProperty);
         time.dayCustomProperty.bindTo(timeCalcConfiguration.testDayCustomProperty);
@@ -267,33 +256,15 @@ public class MainWindow extends TWindow {
         time.secondCustomProperty.bindTo(timeCalcConfiguration.testSecondCustomProperty);
         time.millisecondCustomProperty.bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
         time.allowCustomValuesProperty.setValue(true);
-        bindToIfPropertyMissing(testProperties, "test.current.day", calNow,
-                Calendar.DAY_OF_MONTH, analogClock.dayProperty,
-                time.dayProperty);
-        bindToIfPropertyMissing(testProperties, "test.current.month", calNow,
-                Calendar.MONTH, analogClock.monthProperty, time.monthProperty);
-        bindToIfPropertyMissing(testProperties, "test.current.year", calNow,
-                Calendar.YEAR, analogClock.yearProperty, time.yearProperty);
-        bindToIfPropertyMissing(testProperties, "test.current.hour", calNow,
-                Calendar.HOUR, analogClock.hourProperty, time.hourProperty);
-        bindToIfPropertyMissing(testProperties, "test.current.minute", calNow,
-                Calendar.MINUTE, analogClock.minuteProperty,
-                time.minuteProperty);
-        bindToIfPropertyMissing(testProperties, "test.current.second", calNow,
-                Calendar.SECOND, analogClock.secondProperty,
-                time.secondProperty);
-        bindToIfPropertyMissing(testProperties, "test.current.millisecond",
-                calNow, Calendar.MILLISECOND, analogClock.millisecondProperty,
-                time.millisecondProperty);
+        analogClock.dayProperty.bindTo(time.dayProperty);
+        analogClock.monthProperty.bindTo(time.monthProperty);
+        analogClock.yearProperty.bindTo(time.yearProperty);
+        analogClock.hourProperty.bindTo(time.hourProperty);
+        analogClock.minuteProperty.bindTo(time.minuteProperty);
+        analogClock.secondProperty.bindTo( time.secondProperty);
+        analogClock.millisecondProperty.bindTo(time.millisecondProperty);
 
-        if (testProperties.containsKey("test.current.year") || testProperties
-                .containsKey("test.current.month") || testProperties
-                    .containsKey("test.current.day")) {
-            analogClock.dayOfWeekProperty
-                    .setValue(calNow.get(Calendar.DAY_OF_WEEK));
-        } else {
-            analogClock.dayOfWeekProperty.bindTo(time.dayOfWeek);
-        }
+        analogClock.dayOfWeekProperty.bindTo(time.dayOfWeek);
 
         analogClock.millisecondEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsMillisecondVisibleProperty);
@@ -662,20 +633,6 @@ public class MainWindow extends TWindow {
                             .getValue());
         }
 
-    }
-
-    private void bindToIfPropertyMissing(Properties properties, String key,
-            Calendar cal, int timeUnit, IntegerProperty firstProperty,
-            Property secondProperty) {
-        if (properties.containsKey(key)) {
-            cal.set(timeUnit, Integer.parseInt(
-                    (String) properties.get(key)) + (
-                                      timeUnit == Calendar.MONTH ? -1 : 0));
-            firstProperty.setValue(Integer.valueOf(
-                    (String) properties.get(key)));
-        } else {
-            firstProperty.bindTo(secondProperty);
-        }
     }
 
     public void openWorkDaysWindow() {
