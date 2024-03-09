@@ -11,16 +11,19 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class WorkDay {
+public class WorkingDay {
 
+    private String id;
     private int year;
     private int month;
     private int day;
     private int arrivalHour;
     private int arrivalMinute;
-    private boolean halfDay;
     private int overtimeHour;
     private int overtimeMinute;
+
+    private boolean halfDay;
+    private int pauseTimeInMinutes;
     private String note;
 
 }

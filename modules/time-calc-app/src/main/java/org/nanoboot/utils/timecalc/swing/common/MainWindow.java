@@ -58,7 +58,7 @@ public class MainWindow extends TWindow {
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
-    private WorkDaysWindow workDaysWindow = null;
+    private WorkingDaysWindow workingDaysWindow = null;
     private boolean stopBeforeEnd = false;
 
     public MainWindow(String startTimeIn, String overTimeIn,
@@ -211,10 +211,10 @@ public class MainWindow extends TWindow {
             stopBeforeEnd = true;
         });
         workDaysButton.addActionListener(e -> {
-            if (workDaysWindow == null) {
-                this.workDaysWindow = new WorkDaysWindow();
+            if (workingDaysWindow == null) {
+                this.workingDaysWindow = new WorkingDaysWindow();
             }
-            workDaysWindow.setVisible(true);
+            workingDaysWindow.setVisible(true);
         });
         activitiesButton.addActionListener(e -> {
             if (activitiesWindow == null) {
@@ -436,9 +436,9 @@ public class MainWindow extends TWindow {
                     configWindow.setVisible(false);
                     configWindow.dispose();
                 }
-                if (workDaysWindow != null) {
-                    workDaysWindow.setVisible(false);
-                    workDaysWindow.dispose();
+                if (workingDaysWindow != null) {
+                    workingDaysWindow.setVisible(false);
+                    workingDaysWindow.dispose();
                 }
                 if (activitiesWindow != null) {
                     activitiesWindow.setVisible(false);
@@ -578,9 +578,9 @@ public class MainWindow extends TWindow {
             configWindow.setVisible(false);
             configWindow.dispose();
         }
-        if (workDaysWindow != null) {
-            workDaysWindow.setVisible(false);
-            workDaysWindow.dispose();
+        if (workingDaysWindow != null) {
+            workingDaysWindow.setVisible(false);
+            workingDaysWindow.dispose();
         }
         if (activitiesWindow != null) {
             activitiesWindow.setVisible(false);

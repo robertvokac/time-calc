@@ -3,9 +3,11 @@ package org.nanoboot.utils.timecalc.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class WorkDayForStats extends WorkDay {
+public class WorkingDayForStats extends WorkingDay {
 
     private int departureHour;
     private int departureMinute;
@@ -17,6 +19,10 @@ public class WorkDayForStats extends WorkDay {
     private double arrivalTimeMovingAverage28Days;
     private double arrivalTimeMovingAverage56Days;
 
-    public WorkDayForStats() {
+    public WorkingDayForStats() {
+    }
+
+    public List<WorkingDayForStats> createList(List<WorkingDay> list) {
+        return null;//todo
     }
 }

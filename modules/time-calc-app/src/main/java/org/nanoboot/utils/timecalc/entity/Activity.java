@@ -13,7 +13,9 @@ import lombok.ToString;
 @ToString
 public class Activity {
 
-    public static final String SUBJECT_FIELD_SEPARATOR = " : ";
+    private static final String SUBJECT_FIELD_SEPARATOR = " : ";
+
+    private String id;
     private int year;
     private int month;
     private int day;
