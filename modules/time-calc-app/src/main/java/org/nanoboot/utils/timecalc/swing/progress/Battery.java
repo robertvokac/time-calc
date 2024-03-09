@@ -229,9 +229,10 @@ public class Battery extends Widget {
                 brush.setFont(currentFont);
 
             }
-            if (circleProgressVisibleProperty.isEnabled()) {
-                paintCircleProgress(brush, visibility);
-            }
+
+        }
+        if (circleProgressVisibleProperty.isEnabled()) {
+            paintCircleProgress(brush, visibility);
         }
 
         if (donePercent > 0) {
@@ -246,8 +247,8 @@ public class Battery extends Widget {
                 
         if (percentProgressVisibleProperty.isEnabled()) {
             brush.drawString(
-                    NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
-                            .format(donePercent * 100) + "%",
+                    (donePercent == 1 ? 100 : (NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
+                            .format(donePercent * 100))) + "%",
                     ((int) (totalWidth * 0.15)),
                     donePercent > 0.5 ? totalHeight / 4 * 3 :
                             totalHeight / 4 * 1);
