@@ -118,25 +118,24 @@ public class TTime implements Comparable<TTime> {
         }
     }
     public TTime remove(TTime tTimeToBeRemoved) {
-        TTime firstTime = this;
-        TTime secondTime = tTimeToBeRemoved;
-        boolean negative = false;
-        if (firstTime.compareTo(secondTime) < 0) {
-            secondTime = firstTime;
-            firstTime = tTimeToBeRemoved;
-            negative = true;
-        }
-
-        Calendar cal = firstTime.asCalendar();
-        cal.add(Calendar.HOUR_OF_DAY, -secondTime.hour);
-        cal.add(Calendar.MINUTE, -secondTime.minute);
-        cal.add(Calendar.SECOND, -secondTime.second);
-        cal.add(Calendar.MILLISECOND, -secondTime.millisecond);
-        TTime result = TTime.of(cal);
-        result.setNegative(negative);
-
+        int s1 = this.toTotalMilliseconds();
+        int s2 = tTimeToBeRemoved.toTotalMilliseconds();
+        int s = s1 - s2;
+        TTime result = TTime.ofMilliseconds(s);
         return result;
     }
+
+    private static TTime ofMilliseconds(int s) {
+        int hours = s / 60 / 60 / 1000;
+        int milliseconds = s - hours * 60 * 60 * 1000;
+        int minutes = milliseconds / 60 / 1000;
+        milliseconds = milliseconds - minutes * 60 * 1000;
+        int seconds = milliseconds / 1000;
+        milliseconds = milliseconds - seconds * 1000;
+        return new TTime(s < 0, Math.abs(hours), Math.abs(minutes), Math.abs(seconds), Math.abs(milliseconds));
+
+    }
+
     public TTime add(TTime tTimeToBeAdded) {
         TTime result = this.cloneInstance();
 //        if(result.isNegative()) {
