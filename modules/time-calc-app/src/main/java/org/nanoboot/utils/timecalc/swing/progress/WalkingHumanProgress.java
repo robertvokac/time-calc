@@ -100,8 +100,6 @@ public class WalkingHumanProgress extends Widget implements
 
         StringBuilder sb = new StringBuilder();
         final int donePercentInt = (int) (Math.floor(donePercent * 100));
-        System.out.println("donePercent=" + donePercent);
-        System.out.println("donePercentInt=" + donePercentInt);
 
         int percentInt = donePercentInt;
         if (donePercentInt % 5 == 0 && !alreadyShownPercents.contains(donePercentInt)) {

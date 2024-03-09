@@ -130,7 +130,12 @@ public class TTime implements Comparable<TTime> {
         TTime result = TTime.ofMilliseconds(s);
         return result;
     }
-
+    public static TTime ofMinutes(int s) {
+        return ofMilliseconds(s * 1000 * 60);
+    }
+    public static TTime ofSeconds(int s) {
+        return ofMilliseconds(s * 1000);
+    }
     public static TTime ofMilliseconds(int s) {
         int hours = s / 60 / 60 / 1000;
         int milliseconds = s - hours * 60 * 60 * 1000;

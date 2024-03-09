@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.nanoboot.utils.timecalc.persistence.api.VersionRepositoryApi;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.SqliteConnectionFactory;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.VersionRepositorySQLiteImpl;
@@ -29,6 +30,9 @@ public class TimeCalcApp {
             = new StringProperty("timeCalcApp.visibilityProperty",
                     Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
+    
+    @Getter
+    private SqliteConnectionFactory sqliteConnectionFactory;
 
     public void start(String[] args) throws IOException {
         if (startNanoTime != 0l) {
@@ -114,7 +118,7 @@ public class TimeCalcApp {
     }
 
     private void initDB() {
-        SqliteConnectionFactory sqliteConnectionFactory = new SqliteConnectionFactory();
+        this.sqliteConnectionFactory = new SqliteConnectionFactory();
         try {
             Connection conn = sqliteConnectionFactory.createConnection();
         } catch (ClassNotFoundException ex) {

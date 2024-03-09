@@ -42,6 +42,7 @@ public class HelpWindow extends TWindow {
         add(scrollPane);
 
         JEditorPane editor = new JEditorPane();
+        editor.setEditable(false);
         scrollPane.setViewportView(editor);
 
         editor.setContentType("text/html");

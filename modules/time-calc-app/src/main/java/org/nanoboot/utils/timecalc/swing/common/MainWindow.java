@@ -32,6 +32,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
+import java.util.Calendar;
+import org.nanoboot.utils.timecalc.entity.WorkingDay;
+import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
 
 /**
  * @author Robert Vokac
@@ -69,6 +72,7 @@ public class MainWindow extends TWindow {
     private ActivitiesWindow activitiesWindow = null;
     private WorkingDaysWindow workingDaysWindow = null;
     private boolean stopBeforeEnd = false;
+    private final WorkingDayRepositorySQLiteImpl workingDayRepository;
 
     {
         this.arrivalTextField = new TTextField();
@@ -319,12 +323,8 @@ public class MainWindow extends TWindow {
         add(remainingTextFieldLabel);
         add(remainingTextField);
         add(saveButton);
-        saveButton.addActionListener(e -> {
-            TTime overtime_ = overtimeTextField.asTTime();
-            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0, 5));
-            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0, overtime_.isNegative() ? 6 : 5));
-            timeCalcConfiguration.saveToTimeCalcProperties();
-        });
+        this.workingDayRepository = new WorkingDayRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
+
         //
         configButton.setBoundsFromTop(departureTextFieldLabel);
         workDaysButton.setBoundsFromLeft(configButton);
@@ -377,7 +377,7 @@ public class MainWindow extends TWindow {
         });
         workDaysButton.addActionListener(e -> {
             if (workingDaysWindow == null) {
-                this.workingDaysWindow = new WorkingDaysWindow();
+                this.workingDaysWindow = new WorkingDaysWindow(workingDayRepository, time);
             }
             workingDaysWindow.setVisible(true);
         });
@@ -571,6 +571,68 @@ public class MainWindow extends TWindow {
 //                arrivalTextFieldLabel.setBoundsFromTop(clock);
 //            }
 //        });
+        
+        saveButton.addActionListener(e -> {
+            
+            TTime arrival_ = new TTime(arrivalTextField.getText());
+            TTime overtime_ = new TTime(overtimeTextField.getText());
+            TTime work_ = new TTime(workingTimeTextField.getText());
+            TTime pause_ = new TTime(pauseTimeTextField.getText()); 
+           
+            Calendar cal = time.asCalendar();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0, 5));
+            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0, overtime_.isNegative() ? 6 : 5));
+            timeCalcConfiguration.saveToTimeCalcProperties();
+            WorkingDay workingDay = workingDayRepository.read(time.asCalendar());
+            if (workingDay == null) {
+                workingDay = new WorkingDay();
+                workingDay.setId(WorkingDay.createId(year, month, day));
+                workingDay.setYear(year);
+                workingDay.setMonth(month);
+                workingDay.setDay(day);
+            }
+            workingDay.setArrivalHour(arrival_.getHour());
+            workingDay.setArrivalMinute(arrival_.getMinute());
+            workingDay.setOvertimeHour(overtime_.getHour());
+            workingDay.setOvertimeMinute(overtime_.getMinute());
+            workingDay.setWorkingTimeInMinutes(work_.toTotalMilliseconds() / 1000 / 60);
+            workingDay.setPauseTimeInMinutes(pause_.toTotalMilliseconds() / 1000 / 60);
+            workingDay.setNote(noteTextField.getText());
+            workingDayRepository.update(workingDay);
+
+        });
+        
+        WorkingDay workingDay = workingDayRepository.read(time.asCalendar());
+
+        if (workingDay != null) {
+            workingTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(workingDay.getWorkingTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
+            pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(workingDay.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
+            noteTextField.valueProperty.setValue(workingDay.getNote());
+    
+            TTime arrival_ = new TTime(arrivalTextField.getText());
+            TTime overtime_ = new TTime(overtimeTextField.getText());
+//            TTime work_ = new TTime(workingTimeTextField.getText());
+//            TTime pause_ = new TTime(pauseTimeTextField.getText());
+
+//            System.out.println("arrival_=" + arrival_);
+//            System.out.println("overtime_=" + overtime_);
+//            System.out.println("work_=" + work_);
+//            System.out.println("pause_=" + pause_);
+
+            workingDay.setArrivalHour(arrival_.getHour());
+            workingDay.setArrivalMinute(arrival_.getMinute());
+
+            workingDay.setOvertimeHour(overtime_.getHour());
+            workingDay.setOvertimeMinute(overtime_.getMinute());
+            
+            workingDayRepository.update(workingDay);
+        }
+
+        System.out.println(workingDay);
+        
         while (true) {
             if (updateWindow(timeCalcApp, time, clock, minuteBattery, hourBattery,
                     dayBattery,
@@ -696,9 +758,7 @@ public class MainWindow extends TWindow {
         TTime nowTime = TTime.of(time.asCalendar());
         TTime timeElapsed = TTime
                 .computeTimeDiff(startTime, nowTime);
-        System.out.println("timeElapsed=" + timeElapsed.toString());
-        System.out.println("startTime=" + startTime.toString());
-        System.out.println("nowTime=" + nowTime.toString());
+        
         TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
         TTime timeTotal = TTime.computeTimeDiff(startTime, endTime);
         String timeElapsedString = timeElapsed.toString();
@@ -727,12 +787,8 @@ public class MainWindow extends TWindow {
         int totalMilliseconds = timeTotal.toTotalMilliseconds();
         int totalMinutes = totalMilliseconds / 1000 / 60 ;
 
-        System.out.println("totalMillisecondsDone=" + totalMillisecondsDone);
-            System.out.println("totalMilliseconds=" + totalMilliseconds);
         double done = ((double) totalMillisecondsDone)
                 / ((double) totalMilliseconds);
-if(done == 1)
-    System.out.println("a");
         if (done < 0) {
             done = 0;
         }

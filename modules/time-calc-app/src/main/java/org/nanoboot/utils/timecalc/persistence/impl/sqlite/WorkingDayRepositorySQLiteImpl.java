@@ -1,9 +1,15 @@
 package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
 
 import java.util.List;
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
 
 /**
  * @author Robert Vokac
@@ -11,317 +17,215 @@ import java.util.List;
  */
 public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
 
+    private final SqliteConnectionFactory sqliteConnectionFactory;
+
+    public WorkingDayRepositorySQLiteImpl(SqliteConnectionFactory sqliteConnectionFactory) {
+        this.sqliteConnectionFactory = sqliteConnectionFactory;
+    }
+
     @Override
     public void create(WorkingDay workingDay) {
+        System.out.println("Going to create: " + workingDay.toString());
+
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("INSERT INTO ")
+                .append(WorkingDayTable.TABLE_NAME)
+                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?)");
+
+        String sql = sb.toString();
+
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+            int i = 0;
+
+            stmt.setString(++i, workingDay.getId());
+            stmt.setInt(++i, workingDay.getYear());
+            stmt.setInt(++i, workingDay.getMonth());
+            stmt.setInt(++i, workingDay.getDay());
+            //
+            stmt.setInt(++i, workingDay.getArrivalHour());
+            stmt.setInt(++i, workingDay.getArrivalMinute());
+            stmt.setInt(++i, workingDay.getOvertimeHour());
+            stmt.setInt(++i, workingDay.getOvertimeMinute());
+            //
+            stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
+            stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
+            stmt.setString(++i, workingDay.getNote());
+
+            //
+            stmt.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            throw new TimeCalcException(ex);
+        }
 
     }
 
     @Override
-    public List<WorkingDay> list(int year, int month) {
-        return null;
+    public List<WorkingDay> list(int year, int month, int day) {
+
+        List<WorkingDay> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT * FROM ")
+                .append(WorkingDayTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(WorkingDayTable.YEAR).append("=? AND ")
+                .append(WorkingDayTable.MONTH).append("=? ");
+        if (day != 0) {
+            sb.append(" AND ").append(WorkingDayTable.DAY).append("=? ");
+        }
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            //System.err.println(stmt.toString());
+            stmt.setInt(++i, year);
+            stmt.setInt(++i, month);
+            if (day != 0) {
+                stmt.setInt(++i, day);
+            }
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(extractWorkingDayFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        return result;
+//
     }
 
     @Override
     public void update(WorkingDay workingDay) {
+        if(list(workingDay.getYear(), workingDay.getMonth(),workingDay.getDay()).isEmpty()) {
+            create(workingDay);
+            return;
+        }
+        System.out.println("Going to update: " + workingDay.toString());
 
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("UPDATE ")
+                .append(WorkingDayTable.TABLE_NAME)
+                .append(" SET ")
+                .append(WorkingDayTable.ARRIVAL_HOUR).append("=?, ")
+                .append(WorkingDayTable.ARRIVAL_MINUTE).append("=?, ")
+                .append(WorkingDayTable.OVERTIME_HOUR).append("=?, ")
+                .append(WorkingDayTable.OVERTIME_MINUTE).append("=?, ")
+                .append(WorkingDayTable.WORKING_TIME_IN_MINUTES).append("=?, ")
+                .append(WorkingDayTable.PAUSE_TIME_IN_MINUTES).append("=?, ")
+                .append(WorkingDayTable.NOTE).append("=? ")
+                .append(" WHERE ").append(
+                WorkingDayTable.ID).append("=?");
+
+        String sql = sb.toString();
+        //System.err.println(sql);
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+            int i = 0;
+            stmt.setInt(++i, workingDay.getArrivalHour());
+            stmt.setInt(++i, workingDay.getArrivalMinute());
+            stmt.setInt(++i, workingDay.getOvertimeHour());
+            stmt.setInt(++i, workingDay.getOvertimeMinute());
+            stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
+            stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
+            stmt.setString(++i, workingDay.getNote());
+
+            stmt.setString(++i, workingDay.getId());
+
+            int numberOfUpdatedRows = stmt.executeUpdate();
+            //System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            throw new TimeCalcException(ex);
+        }
     }
 
     @Override
     public WorkingDay read(int year, int month, int day) {
-        return null;
+        List<WorkingDay> list = list(year, month, day);
+        return list.isEmpty() ? null : list.get(0);
     }
-}
 
-//    private org.nanoboot.bitinspector.persistence.impl.sqlite.SqliteConnectionFactory
-//            sqliteConnectionFactory;
-//
-//    public FileRepositoryImplSqlite(
-//            org.nanoboot.bitinspector.persistence.impl.sqlite.SqliteConnectionFactory sqliteConnectionFactory) {
-//        this.sqliteConnectionFactory = sqliteConnectionFactory;
-//    }
-//
-//    @Override
-//    public void create(List<FsFile> files) {
-//        if (files.isEmpty()) {
-//            return;
-//        }
-//        if (files.size() > 100) {
-//            List<FsFile> tmpList = new ArrayList<>();
-//            for (int i = 0; i < files.size(); i++) {
-//                FsFile e = files.get(i);
-//                tmpList.add(e);
-//                if (tmpList.size() >= 100) {
-//                    create(tmpList);
-//                    tmpList.clear();
-//                }
-//            }
-//            if (!tmpList.isEmpty()) {
-//                create(tmpList);
-//                tmpList.clear();
-//            }
-//            return;
-//        }
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("INSERT INTO ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.TABLE_NAME)
-//                .append("(")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ID).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.NAME).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ABSOLUTE_PATH).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_MODIFICATION_DATE).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_DATE).append(",")
-//                //
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.HASH_SUM_VALUE).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.HASH_SUM_ALGORITHM).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.SIZE).append(",")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_RESULT).append("");
-//
-//        sb.append(") VALUES ");
-//
-//        int index = 0;
-//        for (FsFile f : files) {
-//            sb.append(" (?,?,?,?,?, ?,?,?,?)");
-//            boolean lastFile = index == (files.size() - 1);
-//            if (!lastFile) {
-//                sb.append(",");
-//            }
-//            index = index + 1;
-//        }
-//
-//        String sql = sb.toString();
-//        //System.err.println(sql);
-//        try (
-//                Connection connection = createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//            int i = 0;
-//
-//            for (FsFile f : files) {
-//                stmt.setString(++i, f.getId());
-//                stmt.setString(++i, f.getName());
-//                stmt.setString(++i, f.getAbsolutePath());
-//                stmt.setString(++i, f.getLastModificationDate());
-//                //
-//                stmt.setString(++i, f.getLastCheckDate());
-//                //
-//                stmt.setString(++i, f.getHashSumValue());
-//                stmt.setString(++i, f.getHashSumAlgorithm());
-//                stmt.setLong(++i, f.getSize());
-//                stmt.setString(++i, f.getLastCheckResult());
-//
-//            }
-//            //
-//            stmt.execute();
-//            //System.out.println(stmt.toString());
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(FileRepositoryImplSqlite.class.getName()).log(
-//                    Level.SEVERE, null, ex);
-//        }
-//
-//    }
-//
-//    @Override
-//    public List<FsFile> list() {
-//
-//        List<FsFile> result = new ArrayList<>();
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("SELECT * FROM ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.TABLE_NAME);
-//
-//        String sql = sb.toString();
-//        //        System.err.println(sql);
-//        int i = 0;
-//        ResultSet rs = null;
-//        try (
-//                Connection connection = createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//
-//            System.err.println(stmt.toString());
-//            rs = stmt.executeQuery();
-//
-//            while (rs.next()) {
-//                result.add(extractFileFromResultSet(rs));
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(FileRepositoryImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            try {
-//                if (rs != null) {
-//                    rs.close();
-//                }
-//            } catch (SQLException ex) {
-//                Logger.getLogger(FileRepositoryImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        return result;
-//    }
-//
-//    @Override
-//    public void remove(FsFile file) {
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("DELETE FROM ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.TABLE_NAME);
-//        sb.append(" WHERE ");
-//
-//        sb.append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ID);
-//        sb.append("=?");
-//        String sql = sb.toString();
-//        //System.err.println("SQL::" + sql);
-//        int i = 0;
-//
-//        try (
-//                Connection connection = createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//
-//            stmt.setString(++i, file.getId());
-//
-//            //System.err.println(stmt.toString());
-//            stmt.execute();
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(FileRepositoryImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-//
-//    private Connection createConnection() throws ClassNotFoundException {
-//        return sqliteConnectionFactory.createConnection();
-//    }
-//
-//    @Override
-//    public void updateFile(FsFile file) {
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("UPDATE ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.TABLE_NAME)
-//                .append(" SET ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_MODIFICATION_DATE).append("=?, ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_DATE).append("=?, ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.HASH_SUM_VALUE).append("=?, ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.HASH_SUM_ALGORITHM).append("=?, ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.SIZE).append("=?, ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_RESULT).append("=? ")
-//                .append(" WHERE ").append(
-//                org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ID).append("=?");
-//
-//        String sql = sb.toString();
-//        //System.err.println(sql);
-//        try (
-//                Connection connection = createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//            int i = 0;
-//            stmt.setString(++i, file.getLastModificationDate());
-//            stmt.setString(++i, file.getLastCheckDate());
-//            stmt.setString(++i, file.getHashSumValue());
-//            stmt.setString(++i, file.getHashSumAlgorithm());
-//            stmt.setLong(++i, file.getSize());
-//            stmt.setString(++i, file.getLastCheckResult());
-//
-//            stmt.setString(++i, file.getId());
-//
-//            int numberOfUpdatedRows = stmt.executeUpdate();
-//            //System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(FileRepositoryImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-//
-//    private FsFile extractFileFromResultSet(final ResultSet rs) throws SQLException {
-//        return new FsFile(
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ID),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.NAME),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ABSOLUTE_PATH),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_MODIFICATION_DATE),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_DATE),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.HASH_SUM_VALUE),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.HASH_SUM_ALGORITHM),
-//                rs.getLong(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.SIZE),
-//                rs.getString(
-//                        org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_RESULT)
-//        );
-//    }
-//
-//    @Override
-//    public void updateLastCheckDate(String lastCheckDate, List<FsFile> files) {
-//
-//        if (files.isEmpty()) {
-//            return;
-//        }
-//        if (files.size() > 100) {
-//            List<FsFile> tmpList = new ArrayList<>();
-//            for (int i = 0; i < files.size(); i++) {
-//                FsFile e = files.get(i);
-//                tmpList.add(e);
-//                if (tmpList.size() >= 100) {
-//                    updateLastCheckDate(lastCheckDate, tmpList);
-//                    tmpList.clear();
-//                }
-//            }
-//            if (!tmpList.isEmpty()) {
-//                updateLastCheckDate(lastCheckDate, tmpList);
-//                tmpList.clear();
-//            }
-//            return;
-//        }
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("UPDATE ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.TABLE_NAME)
-//                .append(" SET ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_DATE).append("=?, ")
-//                .append(org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.LAST_CHECK_RESULT).append("='OK' ")
-//                .append(" WHERE ").append(
-//                org.nanoboot.bitinspector.persistence.impl.sqlite.FileTable.ID).append(" IN (");
-//        int index = 0;
-//        for (FsFile f : files) {
-//            index = index + 1;
-//            sb.append("?");
-//            if (index < files.size()) {
-//                sb.append(",");
-//            }
-//        }
-//        sb.append(")");
-//
-//        String sql = sb.toString();
-//        //System.err.println(sql);
-//        try (
-//                Connection connection = createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//            int i = 0;
-//
-//            stmt.setString(++i, lastCheckDate);
-//
-//            for (FsFile f : files) {
-//                stmt.setString(++i, f.getId());
-//            }
-//
-//            int numberOfUpdatedRows = stmt.executeUpdate();
-//            //System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(FileRepositoryImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    private WorkingDay extractWorkingDayFromResultSet(final ResultSet rs) throws SQLException {
+        return new WorkingDay(
+                rs.getString(WorkingDayTable.ID),
+                rs.getInt(WorkingDayTable.YEAR),
+                rs.getInt(WorkingDayTable.MONTH),
+                rs.getInt(WorkingDayTable.DAY),
+                rs.getInt(WorkingDayTable.ARRIVAL_HOUR),
+                rs.getInt(WorkingDayTable.ARRIVAL_MINUTE),
+                rs.getInt(WorkingDayTable.OVERTIME_HOUR),
+                rs.getInt(WorkingDayTable.OVERTIME_MINUTE),
+                rs.getInt(WorkingDayTable.WORKING_TIME_IN_MINUTES),
+                rs.getInt(WorkingDayTable.PAUSE_TIME_IN_MINUTES),
+                rs.getString(WorkingDayTable.NOTE)
+        );
+    }
+
+    @Override
+    public List<String> getYears() {
+        
+        List<String> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT distinct ").append(WorkingDayTable.YEAR). append(" FROM ")
+                .append(WorkingDayTable.TABLE_NAME);
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(rs.getString(WorkingDayTable.YEAR));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        return result;
+    }
+
+}
