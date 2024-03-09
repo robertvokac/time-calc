@@ -22,7 +22,7 @@ import java.sql.Connection;
 
 /**
  *
-* @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
+ * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  */
 public interface ConnectionFactory {
 

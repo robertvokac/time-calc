@@ -18,7 +18,7 @@ public class TimeCalcApp {
 
     public StringProperty visibilityProperty
             = new StringProperty("timeCalcApp.visibilityProperty",
-            Visibility.WEAKLY_COLORED.name());
+                    Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
 
     public void start(String[] args) throws IOException {
@@ -26,7 +26,7 @@ public class TimeCalcApp {
             throw new TimeCalcException("TimeCalcApp was already started.");
         }
         startNanoTime = System.nanoTime();
-        if(!FileConstants.TC_DIRECTORY.exists()) {
+        if (!FileConstants.TC_DIRECTORY.exists()) {
             FileConstants.TC_DIRECTORY.mkdir();
         }
         while (true) {
@@ -37,37 +37,37 @@ public class TimeCalcApp {
                     FileConstants.OVERTIME_TXT);
             String newStartTime
                     = test ? (oldStartTime != null ? oldStartTime
-                    : Constants.DEFAULT_START_TIME)
-                    : (String) JOptionPane.showInputDialog(
-                    null,
-                    "Start Time:",
-                    "Start Time",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    oldStartTime == null
-                            ? Constants.DEFAULT_START_TIME
-                            : oldStartTime
-            );
-            if(newStartTime == null) {
+                                    : Constants.DEFAULT_START_TIME)
+                            : (String) JOptionPane.showInputDialog(
+                                    null,
+                                    "Start Time:",
+                                    "Start Time",
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    null,
+                                    oldStartTime == null
+                                            ? Constants.DEFAULT_START_TIME
+                                            : oldStartTime
+                            );
+            if (newStartTime == null) {
                 break;
             }
             String newOvertime
                     = test ? (oldOvertime != null ? oldOvertime
-                    : Constants.DEFAULT_OVERTIME)
-                    : (String) JOptionPane.showInputDialog(
-                    null,
-                    "Overtime:",
-                    "Overtime",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    oldOvertime == null
-                            ? Constants.DEFAULT_OVERTIME
-                            : oldOvertime
-            );
+                                    : Constants.DEFAULT_OVERTIME)
+                            : (String) JOptionPane.showInputDialog(
+                                    null,
+                                    "Overtime:",
+                                    "Overtime",
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    null,
+                                    oldOvertime == null
+                                            ? Constants.DEFAULT_OVERTIME
+                                            : oldOvertime
+                            );
 
-            if(newOvertime == null) {
+            if (newOvertime == null) {
                 break;
             }
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);

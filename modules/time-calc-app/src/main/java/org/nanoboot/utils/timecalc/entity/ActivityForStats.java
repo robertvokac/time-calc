@@ -16,6 +16,7 @@ public class ActivityForStats extends Activity {
 
     public ActivityForStats() {
     }
+
     public List<ActivityForStats> createList(List<Activity> list) {
         return null;//todo
     }

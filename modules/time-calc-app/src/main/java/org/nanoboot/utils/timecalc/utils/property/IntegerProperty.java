@@ -14,6 +14,11 @@ public class IntegerProperty extends Property<Integer> {
         this(name, 0);
     }
 
-    public void increment() {this.setValue(getValue() + 1);}
-    public void decrement() {this.setValue(getValue() - 1);}
+    public void increment() {
+        this.setValue(getValue() + 1);
+    }
+
+    public void decrement() {
+        this.setValue(getValue() - 1);
+    }
 }

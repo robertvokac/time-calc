@@ -28,10 +28,12 @@ public class TLabel extends JLabel implements GetProperty {
             = new BooleanProperty("visibleProperty", true);
     public StringProperty visibilityProperty
             = new StringProperty("visibilityProperty",
-            Visibility.STRONGLY_COLORED.name());
+                    Visibility.STRONGLY_COLORED.name());
+
     public TLabel(String text) {
         this(text, 0);
     }
+
     public TLabel(String text, int customWidth) {
         super(text);
         this.customWidth = customWidth;
@@ -61,7 +63,6 @@ public class TLabel extends JLabel implements GetProperty {
         this.originalForeground = getForeground();
     }
 
-
     public void setBoundsFromLeft(JComponent jComponent) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
                 jComponent.getY());
@@ -73,9 +74,10 @@ public class TLabel extends JLabel implements GetProperty {
 
     public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
-                                     + jComponent.getHeight()
-                                     + marginCount * SwingUtils.MARGIN);
+                + jComponent.getHeight()
+                + marginCount * SwingUtils.MARGIN);
     }
+
     public void setOriginalBackground() {
         this.setBackground(originalBackground);
     }
@@ -83,6 +85,7 @@ public class TLabel extends JLabel implements GetProperty {
     public void setOriginalForeground() {
         this.setForeground(originalForeground);
     }
+
     @Override
     public Property getVisibilityProperty() {
         return visibilityProperty;

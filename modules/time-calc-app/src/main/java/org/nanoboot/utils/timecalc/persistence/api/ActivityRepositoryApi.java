@@ -10,9 +10,13 @@ import java.util.List;
  * @since 23.02.2024
  */
 public interface ActivityRepositoryApi {
+
     void create(Activity activity);
+
     List<Activity> list(int year, int month, int day);
+
     void update(Activity activity);
+
     WorkingDay read(String id);
 
 }

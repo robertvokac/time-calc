@@ -20,9 +20,10 @@ package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
 /**
  *
-* @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
+ * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  */
 class WorkingDayTable {
+
     public static final String TABLE_NAME = "WORKING_DAY";
 
     public static final String ID = "ID";
@@ -43,6 +44,5 @@ class WorkingDayTable {
     private WorkingDayTable() {
         //Not meant to be instantiated.
     }
-    
 
 }

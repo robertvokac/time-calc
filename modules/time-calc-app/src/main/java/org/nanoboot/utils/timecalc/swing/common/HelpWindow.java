@@ -30,11 +30,11 @@ public class HelpWindow extends TWindow {
         }
 
         helpHtml = "<div style=\"font-family:sans;margin-bottom:20px;\">"
-                   + helpHtml + "</div>";
+                + helpHtml + "</div>";
 
         this.setLayout(null);
-        JScrollPane scrollPane =
-                new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane scrollPane
+                = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBounds(1, 1,
                 getWidth() - 2 * SwingUtils.MARGIN,

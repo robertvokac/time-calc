@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Time extends Thread {
+
     private final IntegerProperty yearReadWriteProperty
             = new IntegerProperty("yearProperty");
     private final IntegerProperty monthReadWriteProperty
@@ -66,7 +67,7 @@ public class Time extends Thread {
     public Calendar asCalendar() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, yearProperty.getValue());
-        cal.set(Calendar.MONTH, monthProperty.getValue() -1);
+        cal.set(Calendar.MONTH, monthProperty.getValue() - 1);
         cal.set(Calendar.DAY_OF_MONTH, dayProperty.getValue());
         cal.set(Calendar.HOUR_OF_DAY, hourProperty.getValue());
         cal.set(Calendar.MINUTE, minuteProperty.getValue());
@@ -74,6 +75,7 @@ public class Time extends Thread {
         cal.set(Calendar.MILLISECOND, millisecondProperty.getValue());
         return cal;
     }
+
     public void run() {
 
         while (true) {
@@ -114,13 +116,14 @@ public class Time extends Thread {
                 + dayOfWeekProperty.getValue() + " "
         );
     }
+
     private int returnCustomValueIfNeeded(Calendar cal, int timeUnit,
             IntegerProperty custom,
             ReadOnlyProperty<Integer> real) {
         boolean allow = allowCustomValuesProperty.isEnabled();
         Integer customValue = custom.getValue();
 
-        if(allow && customValue != Integer.MAX_VALUE) {
+        if (allow && customValue != Integer.MAX_VALUE) {
             return custom.getValue();
         } else {
             return timeUnit == Calendar.MONTH ? (cal.get(timeUnit) + 1) : cal.get(timeUnit);

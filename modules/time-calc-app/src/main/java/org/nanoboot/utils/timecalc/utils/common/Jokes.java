@@ -33,19 +33,19 @@ public class Jokes {
     static {
         try {
             array = JokesTxt.getAsArray();
-            if(array.length > 0) {
+            if (array.length > 0) {
                 Set<String> set = new HashSet<>();
-            for (String vtip : array) {
-                if (vtip.trim().isEmpty()) {
-                    //nothing to do
-                    continue;
+                for (String vtip : array) {
+                    if (vtip.trim().isEmpty()) {
+                        //nothing to do
+                        continue;
+                    }
+                    set.add(vtip.trim());
                 }
-                set.add(vtip.trim());
+                array = new String[set.size()];
+                array = set.toArray(array);
             }
-            array = new String[set.size()];
-            array = set.toArray(array);
-            }
-            
+
         } catch (IOException e) {
             System.err.println(e);
         }

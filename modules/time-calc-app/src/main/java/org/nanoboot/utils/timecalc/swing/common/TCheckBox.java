@@ -21,6 +21,7 @@ public class TCheckBox extends JCheckBox implements GetProperty {
     private static final int HEIGHT = 30;
     private Color originalBackground;
     private Color originalForeground;
+
     public TCheckBox(String text) {
         this(text, false);
     }
@@ -30,15 +31,16 @@ public class TCheckBox extends JCheckBox implements GetProperty {
             = new BooleanProperty("visibleProperty", true);
     public StringProperty visibilityProperty
             = new StringProperty("visibilityProperty",
-            Visibility.STRONGLY_COLORED.name());
+                    Visibility.STRONGLY_COLORED.name());
+
     public TCheckBox(String text, boolean b) {
         super(text, b);
 
         valueProperty.setValue(b);
 
-       addActionListener( e -> valueProperty.setValue(isSelected()));
-        valueProperty.addListener(e ->
-        {
+        addActionListener(e -> valueProperty.setValue(isSelected()));
+        valueProperty.addListener(e
+                -> {
             if (valueProperty.getValue().equals(getText())) {
                 setSelected(valueProperty.isEnabled());
             }
@@ -64,6 +66,7 @@ public class TCheckBox extends JCheckBox implements GetProperty {
         }).start();
     }
     public final BooleanProperty valueProperty = new BooleanProperty("");
+
     public void setBounds(int x, int y) {
         setBounds(x, y, WIDTH, HEIGHT);
         this.originalBackground = getBackground();
@@ -81,9 +84,10 @@ public class TCheckBox extends JCheckBox implements GetProperty {
 
     public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
-                                     + jComponent.getHeight()
-                                     + marginCount * SwingUtils.MARGIN);
+                + jComponent.getHeight()
+                + marginCount * SwingUtils.MARGIN);
     }
+
     public void setOriginalBackground() {
         this.setBackground(originalBackground);
     }
@@ -91,6 +95,7 @@ public class TCheckBox extends JCheckBox implements GetProperty {
     public void setOriginalForeground() {
         this.setForeground(originalForeground);
     }
+
     @Override
     public Property getVisibilityProperty() {
         return visibilityProperty;

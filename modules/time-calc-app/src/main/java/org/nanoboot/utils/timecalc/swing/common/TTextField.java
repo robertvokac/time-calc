@@ -31,14 +31,17 @@ public class TTextField extends JTextField implements GetProperty {
             = new BooleanProperty("visibleProperty", true);
     public StringProperty visibilityProperty
             = new StringProperty("visibilityProperty",
-            Visibility.STRONGLY_COLORED.name());
+                    Visibility.STRONGLY_COLORED.name());
     public final StringProperty valueProperty = new StringProperty();
+
     public TTextField() {
         this("", 0);
     }
+
     public TTextField(String s) {
         this(s, 0);
     }
+
     public TTextField(String s, int customWidth) {
         super(s);
         this.customWidth = customWidth;
@@ -56,13 +59,14 @@ public class TTextField extends JTextField implements GetProperty {
                     public void insertUpdate(DocumentEvent e) {
                         update(e);
                     }
+
                     private void update(DocumentEvent e) {
                         valueProperty.setValue(getText());
                     }
 
                 });
-        valueProperty.addListener(e ->
-        {
+        valueProperty.addListener(e
+                -> {
             if (!valueProperty.getValue().equals(getText())) {
                 setText(valueProperty.getValue());
             }
@@ -93,9 +97,11 @@ public class TTextField extends JTextField implements GetProperty {
         this.originalBackground = getBackground();
         this.originalForeground = getForeground();
     }
+
     public void setBoundsFromLeft(JComponent jComponent) {
         setBoundsFromLeft(jComponent, 0);
     }
+
     public void setBoundsFromLeft(JComponent jComponent, int additionalY) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
                 jComponent.getY() + additionalY);
@@ -107,9 +113,10 @@ public class TTextField extends JTextField implements GetProperty {
 
     public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
-                                     + jComponent.getHeight()
-                                     + marginCount * SwingUtils.MARGIN);
+                + jComponent.getHeight()
+                + marginCount * SwingUtils.MARGIN);
     }
+
     public void setOriginalBackground() {
         this.setBackground(originalBackground);
     }
@@ -117,6 +124,7 @@ public class TTextField extends JTextField implements GetProperty {
     public void setOriginalForeground() {
         this.setForeground(originalForeground);
     }
+
     @Override
     public Property getVisibilityProperty() {
         return visibilityProperty;
@@ -126,9 +134,9 @@ public class TTextField extends JTextField implements GetProperty {
     public Property getVisibilitySupportedColoredProperty() {
         return visibilitySupportedColoredProperty;
     }
+
     public TTime asTTime() {
         return new TTime(valueProperty.getValue());
     }
-
 
 }

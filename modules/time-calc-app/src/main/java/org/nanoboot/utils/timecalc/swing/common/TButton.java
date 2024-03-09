@@ -25,7 +25,7 @@ public class TButton extends JButton implements GetProperty {
             = new BooleanProperty("visibleProperty", true);
     public StringProperty visibilityProperty
             = new StringProperty("visibilityProperty",
-            Visibility.STRONGLY_COLORED.name());
+                    Visibility.STRONGLY_COLORED.name());
     private Color originalBackground;
     private Color originalForeground;
     private int customWidth = 0;
@@ -33,6 +33,7 @@ public class TButton extends JButton implements GetProperty {
     public TButton(String label) {
         this(label, 0);
     }
+
     public TButton(String label, int customWidth) {
         super(label);
         this.customWidth = customWidth;
@@ -81,8 +82,8 @@ public class TButton extends JButton implements GetProperty {
 
     public void setBoundsFromTop(JComponent jComponent, int marginCount) {
         setBounds(SwingUtils.MARGIN, jComponent.getY()
-                                     + jComponent.getHeight()
-                                     + marginCount * SwingUtils.MARGIN);
+                + jComponent.getHeight()
+                + marginCount * SwingUtils.MARGIN);
     }
 
     @Override

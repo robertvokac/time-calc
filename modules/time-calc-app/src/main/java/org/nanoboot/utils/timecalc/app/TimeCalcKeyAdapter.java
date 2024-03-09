@@ -44,7 +44,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         boolean ctrlDown = e.isControlDown();
         boolean altDown = e.isAltDown();
         boolean metaDown = e.isMetaDown();
-        if(!shiftDown && !ctrlDown && !altDown) {
+        if (!shiftDown && !ctrlDown && !altDown) {
             processKeyCode(keyCode);
         } else {
             processTestModeKeyCode(keyCode, shiftDown, ctrlDown, altDown);
@@ -114,20 +114,20 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
             case KeyEvent.VK_A: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
-                if(increase) {
+                if (increase) {
                     window.increaseArrivalByOneMinute();
                 }
-                if(decrease) {
+                if (decrease) {
                     window.decreaseArrivalByOneMinute();
                 }
                 break;
             }
             case KeyEvent.VK_O: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
-                if(increase) {
+                if (increase) {
                     window.increaseOvertimeByOneMinute();
                 }
-                if(decrease) {
+                if (decrease) {
                     window.decreaseOvertimeByOneMinute();
                 }
                 break;
@@ -143,16 +143,31 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             boolean increase, boolean decrease, boolean reset, int timeUnit) {
         int currentValue = integerProperty.getValue();
 
-        if((increase || decrease) && currentValue == Integer.MAX_VALUE) {
-            switch(timeUnit) {
-                case Calendar.YEAR: integerProperty.setValue(time.yearProperty.getValue());break;
-                case Calendar.MONTH:integerProperty.setValue(time.monthProperty.getValue());break;
-                case Calendar.DAY_OF_MONTH:integerProperty.setValue(time.dayProperty.getValue());break;
-                case Calendar.HOUR_OF_DAY:integerProperty.setValue(time.hourProperty.getValue());break;
-                case Calendar.MINUTE:integerProperty.setValue(time.minuteProperty.getValue());break;
-                case Calendar.SECOND:integerProperty.setValue(time.secondProperty.getValue());break;
-                case Calendar.MILLISECOND:integerProperty.setValue(time.millisecondProperty.getValue());break;
-                default: throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+        if ((increase || decrease) && currentValue == Integer.MAX_VALUE) {
+            switch (timeUnit) {
+                case Calendar.YEAR:
+                    integerProperty.setValue(time.yearProperty.getValue());
+                    break;
+                case Calendar.MONTH:
+                    integerProperty.setValue(time.monthProperty.getValue());
+                    break;
+                case Calendar.DAY_OF_MONTH:
+                    integerProperty.setValue(time.dayProperty.getValue());
+                    break;
+                case Calendar.HOUR_OF_DAY:
+                    integerProperty.setValue(time.hourProperty.getValue());
+                    break;
+                case Calendar.MINUTE:
+                    integerProperty.setValue(time.minuteProperty.getValue());
+                    break;
+                case Calendar.SECOND:
+                    integerProperty.setValue(time.secondProperty.getValue());
+                    break;
+                case Calendar.MILLISECOND:
+                    integerProperty.setValue(time.millisecondProperty.getValue());
+                    break;
+                default:
+                    throw new TimeCalcException("Unsupported time unit: " + timeUnit);
             }
         }
         Calendar cal = time.asCalendar();
@@ -165,10 +180,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         int oldMillisecond = cal.get(Calendar.MILLISECOND);
         cal.add(timeUnit, increase ? 1 : (-1));
         int newValue = cal.get(timeUnit);
-        if(Calendar.MONTH == timeUnit) {
-            newValue ++;
+        if (Calendar.MONTH == timeUnit) {
+            newValue++;
         }
-        if(reset) {
+        if (reset) {
             newValue = Integer.MAX_VALUE;
         }
         integerProperty.setValue(newValue);
@@ -179,28 +194,80 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         int newMinute = cal.get(Calendar.MINUTE);
         int newSecond = cal.get(Calendar.SECOND);
         int newMillisecond = cal.get(Calendar.MILLISECOND);
-        if(increase){
-        switch(timeUnit) {
-            case Calendar.YEAR: break;
-            case Calendar.MONTH: if(oldYear != newYear) { updateProperty(timeCalcConfiguration.testYearCustomProperty, increase, decrease, reset, Calendar.YEAR);}break;
-            case Calendar.DAY_OF_MONTH:if(oldMonth != newMonth) { updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset, Calendar.MONTH);}break;
-            case Calendar.HOUR_OF_DAY:if(oldDay != newDay) { updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);}break;
-            case Calendar.MINUTE:if(oldHour != newHour) { updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);}break;
-            case Calendar.SECOND:if(oldMinute != newMinute) { updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MINUTE);}break;
-            case Calendar.MILLISECOND:if(oldSecond != newSecond) { updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.SECOND);}break;
-            default: throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+        if (increase) {
+            switch (timeUnit) {
+                case Calendar.YEAR:
+                    break;
+                case Calendar.MONTH:
+                    if (oldYear != newYear) {
+                        updateProperty(timeCalcConfiguration.testYearCustomProperty, increase, decrease, reset, Calendar.YEAR);
+                    }
+                    break;
+                case Calendar.DAY_OF_MONTH:
+                    if (oldMonth != newMonth) {
+                        updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset, Calendar.MONTH);
+                    }
+                    break;
+                case Calendar.HOUR_OF_DAY:
+                    if (oldDay != newDay) {
+                        updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);
+                    }
+                    break;
+                case Calendar.MINUTE:
+                    if (oldHour != newHour) {
+                        updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);
+                    }
+                    break;
+                case Calendar.SECOND:
+                    if (oldMinute != newMinute) {
+                        updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MINUTE);
+                    }
+                    break;
+                case Calendar.MILLISECOND:
+                    if (oldSecond != newSecond) {
+                        updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.SECOND);
+                    }
+                    break;
+                default:
+                    throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+            }
         }
-        }
-        if(decrease){
-            switch(timeUnit) {
-                case Calendar.YEAR: break;
-                case Calendar.MONTH:if(oldYear != newYear) { updateProperty(timeCalcConfiguration.testYearCustomProperty, increase, decrease, reset, Calendar.YEAR);}break;
-                case Calendar.DAY_OF_MONTH:if(oldMonth != newMonth) { updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MONTH);}break;
-                case Calendar.HOUR_OF_DAY:if(oldDay != newDay) { updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);}break;
-                case Calendar.MINUTE:if(oldHour != newHour) { updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);}break;
-                case Calendar.SECOND:if(oldMinute != newMinute) { updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.MINUTE);}break;
-                case Calendar.MILLISECOND: if(oldSecond != newSecond) { updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.SECOND);}break;
-                default: throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+        if (decrease) {
+            switch (timeUnit) {
+                case Calendar.YEAR:
+                    break;
+                case Calendar.MONTH:
+                    if (oldYear != newYear) {
+                        updateProperty(timeCalcConfiguration.testYearCustomProperty, increase, decrease, reset, Calendar.YEAR);
+                    }
+                    break;
+                case Calendar.DAY_OF_MONTH:
+                    if (oldMonth != newMonth) {
+                        updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MONTH);
+                    }
+                    break;
+                case Calendar.HOUR_OF_DAY:
+                    if (oldDay != newDay) {
+                        updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);
+                    }
+                    break;
+                case Calendar.MINUTE:
+                    if (oldHour != newHour) {
+                        updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);
+                    }
+                    break;
+                case Calendar.SECOND:
+                    if (oldMinute != newMinute) {
+                        updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.MINUTE);
+                    }
+                    break;
+                case Calendar.MILLISECOND:
+                    if (oldSecond != newSecond) {
+                        updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.SECOND);
+                    }
+                    break;
+                default:
+                    throw new TimeCalcException("Unsupported time unit: " + timeUnit);
             }
         }
 
@@ -209,19 +276,19 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private void processKeyCode(int keyCode) {
         boolean onlyGreyOrNone
                 = timeCalcConfiguration.visibilitySupportedColoredProperty
-                .isDisabled();
+                        .isDisabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());
-        boolean numberKeyWasPressed = keyCode == KeyEvent.VK_0 ||
-                                      keyCode == KeyEvent.VK_1 ||
-                                      keyCode == KeyEvent.VK_2 ||
-                                      keyCode == KeyEvent.VK_3 ||
-                                      keyCode == KeyEvent.VK_4 ||
-                                      keyCode == KeyEvent.VK_5 ||
-                                      keyCode == KeyEvent.VK_6 ||
-                                      keyCode == KeyEvent.VK_7 ||
-                                      keyCode == KeyEvent.VK_8 ||
-                                      keyCode == KeyEvent.VK_9;
+        boolean numberKeyWasPressed = keyCode == KeyEvent.VK_0
+                || keyCode == KeyEvent.VK_1
+                || keyCode == KeyEvent.VK_2
+                || keyCode == KeyEvent.VK_3
+                || keyCode == KeyEvent.VK_4
+                || keyCode == KeyEvent.VK_5
+                || keyCode == KeyEvent.VK_6
+                || keyCode == KeyEvent.VK_7
+                || keyCode == KeyEvent.VK_8
+                || keyCode == KeyEvent.VK_9;
 
         if (numberKeyWasPressed && !FileConstants.TIME_CALC_PROFILES_TXT_FILE
                 .exists()) {
@@ -398,7 +465,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             case KeyEvent.VK_Y: {
                 timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty
                         .flip();
-                if(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty.isDisabled() && timeCalcConfiguration.smileysVisibleProperty.isDisabled()){
+                if (timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty.isDisabled() && timeCalcConfiguration.smileysVisibleProperty.isDisabled()) {
                     timeCalcConfiguration.smileysVisibleProperty.enable();
                 }
                 break;
@@ -428,31 +495,31 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
 
             case KeyEvent.VK_K: {
-                if(timeCalcConfiguration.clockVisibleProperty.isEnabled()) {
+                if (timeCalcConfiguration.clockVisibleProperty.isEnabled()) {
                     timeCalcConfiguration.clockVisibleProperty.disable();
                 } else {
                     timeCalcConfiguration.clockVisibleProperty.enable();
-                    timeCalcConfiguration.                    clockHandsLongVisibleProperty.enable();
-                            timeCalcConfiguration.clockHandsColoredProperty.enable();
-                            timeCalcConfiguration.clockHandsHourVisibleProperty.enable();
-                            timeCalcConfiguration.clockHandsMinuteVisibleProperty.enable();
-                            timeCalcConfiguration.clockHandsSecondVisibleProperty.enable();
-                            timeCalcConfiguration.clockHandsMillisecondVisibleProperty.enable();
-                            timeCalcConfiguration.clockBorderVisibleProperty.enable();
-                            timeCalcConfiguration.clockBorderOnlyHoursProperty.disable();
-                            timeCalcConfiguration.clockNumbersVisibleProperty.enable();
-                            timeCalcConfiguration.clockCircleVisibleProperty.enable();
-                            timeCalcConfiguration.clockCircleStrongBorderProperty.disable();
-                            timeCalcConfiguration.clockCircleBorderColorProperty.setValue("0,0,255");
-                            timeCalcConfiguration.clockCentreCircleVisibleProperty.enable();
-                            timeCalcConfiguration.clockCentreCircleBlackProperty.disable();
-                            timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty.disable();
-                            timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty.disable();
+                    timeCalcConfiguration.clockHandsLongVisibleProperty.enable();
+                    timeCalcConfiguration.clockHandsColoredProperty.enable();
+                    timeCalcConfiguration.clockHandsHourVisibleProperty.enable();
+                    timeCalcConfiguration.clockHandsMinuteVisibleProperty.enable();
+                    timeCalcConfiguration.clockHandsSecondVisibleProperty.enable();
+                    timeCalcConfiguration.clockHandsMillisecondVisibleProperty.enable();
+                    timeCalcConfiguration.clockBorderVisibleProperty.enable();
+                    timeCalcConfiguration.clockBorderOnlyHoursProperty.disable();
+                    timeCalcConfiguration.clockNumbersVisibleProperty.enable();
+                    timeCalcConfiguration.clockCircleVisibleProperty.enable();
+                    timeCalcConfiguration.clockCircleStrongBorderProperty.disable();
+                    timeCalcConfiguration.clockCircleBorderColorProperty.setValue("0,0,255");
+                    timeCalcConfiguration.clockCentreCircleVisibleProperty.enable();
+                    timeCalcConfiguration.clockCentreCircleBlackProperty.disable();
+                    timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty.disable();
+                    timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty.disable();
                 }
                 break;
             }
             default:
-                if(!numberKeyWasPressed) {
+                if (!numberKeyWasPressed) {
                     Utils.showNotification(
                             "Unsupported key was pressed. There is no key shortcut for this key: "
                             + keyCode);
@@ -508,12 +575,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 if (profileName
                         .equals(timeCalcConfiguration.profileNameProperty)) {
                     Utils.showNotification("Profile \"" + profileName
-                                           + "\" is already active. Nothing to do",
+                            + "\" is already active. Nothing to do",
                             5000);
                 } else {
-                    Utils.showNotification("Info: Changing profile to: #" + profileNumber + " " + ((
-                            profileName.isEmpty() ? "{Default profile}" :
-                                    profileName)), 5000);
+                    Utils.showNotification("Info: Changing profile to: #" + profileNumber + " " + ((profileName.isEmpty() ? "{Default profile}"
+                            : profileName)), 5000);
                     timeCalcConfiguration.saveToTimeCalcProperties();
                     TimeCalcProperties.getInstance().loadProfile(profileName);
                     timeCalcConfiguration.loadFromTimeCalcProperties(
@@ -532,14 +598,14 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     }
 
     private void switchProfile(boolean previous, boolean next) {
-        if((previous && next) || (!previous && !next)) {
+        if ((previous && next) || (!previous && !next)) {
             //nothing to do
             return;
         }
         Properties profiles = new Properties();
         try {
             final String readTextFromFile = Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE);
-            if(readTextFromFile == null || readTextFromFile.isEmpty()) {
+            if (readTextFromFile == null || readTextFromFile.isEmpty()) {
                 return;
             }
 
@@ -549,7 +615,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
-            if(profiles.size() == 1) {
+            if (profiles.size() == 1) {
                 return;
             }
 
@@ -570,17 +636,17 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
 
         int numberOfCurrentProfile = next ? -1 : 9;
-        for(Object number:profiles.keySet()) {
+        for (Object number : profiles.keySet()) {
             String profileName = (String) profiles.get(number);
-            if(profileName.equals(currentProfileName)) {
+            if (profileName.equals(currentProfileName)) {
                 numberOfCurrentProfile = Integer.valueOf(
                         (String) number);
                 break;
             }
         }
-        for(int i = (numberOfCurrentProfile + (next ? 1 : -1)); next ? i <=9 : i >=0; i= next ? (i +1) : (i -1)) {
+        for (int i = (numberOfCurrentProfile + (next ? 1 : -1)); next ? i <= 9 : i >= 0; i = next ? (i + 1) : (i - 1)) {
             String number = String.valueOf(i);
-            if(!profiles.containsKey(number)) {
+            if (!profiles.containsKey(number)) {
                 continue;
             }
 

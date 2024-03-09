@@ -18,7 +18,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
-
 import org.nanoboot.utils.timecalc.persistence.api.ConnectionFactory;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 
@@ -31,14 +30,17 @@ import java.sql.SQLException;
  * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  */
 public class SqliteConnectionFactory implements ConnectionFactory {
+
     private final String jdbcUrl;
 
     private static String createJdbcUrl(String directoryWhereSqliteFileIs) {
         return "jdbc:sqlite:" + directoryWhereSqliteFileIs + "/" + ".time-calc.sqlite3?foreign_keys=on;";
     }
+
     public SqliteConnectionFactory() {
         this(FileConstants.TC_DIRECTORY.getName());
     }
+
     public SqliteConnectionFactory(String directoryWhereSqliteFileIs) {
         this.jdbcUrl = createJdbcUrl(directoryWhereSqliteFileIs);
     }

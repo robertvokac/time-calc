@@ -35,7 +35,7 @@ public class TTime implements Comparable<TTime> {
     private Integer millisecond;
 
     public TTime(long hour, long minute, long second, long millisecond) {
-        this((int)hour, (int)minute, (int)second, (int)millisecond);
+        this((int) hour, (int) minute, (int) second, (int) millisecond);
     }
 
     public TTime(int hour, int minute) {
@@ -74,6 +74,7 @@ public class TTime implements Comparable<TTime> {
         return sb.toString();
 
     }
+
     public static TTime of(Calendar cal) {
         return new TTime(
                 cal.get(Calendar.HOUR_OF_DAY),
@@ -81,6 +82,7 @@ public class TTime implements Comparable<TTime> {
                 cal.get(Calendar.SECOND),
                 cal.get(Calendar.MILLISECOND));
     }
+
     public static TTime of(Duration duration) {
         return new TTime(
                 duration.get(ChronoUnit.HOURS),
@@ -88,6 +90,7 @@ public class TTime implements Comparable<TTime> {
                 duration.get(ChronoUnit.SECONDS),
                 duration.get(ChronoUnit.MILLIS));
     }
+
     public TTime(String string) {
         this.negative = string.startsWith("-");
         if (negative) {
@@ -99,9 +102,11 @@ public class TTime implements Comparable<TTime> {
         this.second = array.length >= 3 ? ((negative ? (1) : 1) * Integer.valueOf(array[2])) : 0;
         this.millisecond = array.length >= 4 ? ((negative ? (1) : 1) * Integer.valueOf(array[3])) : 0;
     }
+
     public TTime(int hourIn, int minuteIn, int secondIn, int millisecondIn) {
         this(false, hourIn, minuteIn, secondIn, millisecondIn);
     }
+
     public TTime(boolean negative, int hourIn, int minuteIn, int secondIn, int millisecondIn) {
         this.hour = Math.abs(hourIn);
         this.minute = Math.abs(minuteIn);
@@ -117,6 +122,7 @@ public class TTime implements Comparable<TTime> {
             hour = hour - 1;
         }
     }
+
     public TTime remove(TTime tTimeToBeRemoved) {
         int s1 = this.toTotalMilliseconds();
         int s2 = tTimeToBeRemoved.toTotalMilliseconds();
@@ -138,7 +144,7 @@ public class TTime implements Comparable<TTime> {
 
     public TTime add(TTime tTimeToBeAdded) {
         TTime result = this.cloneInstance();
-        if(result.isNegative()) {
+        if (result.isNegative()) {
             result.setNegative(false);
             result = result.remove(tTimeToBeAdded);
             result.setNegative(result.toTotalMilliseconds() != 0);
@@ -156,7 +162,7 @@ public class TTime implements Comparable<TTime> {
     public static int countDiffInMinutes(TTime startTime, TTime endTime) {
         return (endTime.getHour() * TTime.MINUTES_PER_HOUR + endTime
                 .getMinute()) - (startTime.getHour() * TTime.MINUTES_PER_HOUR
-                                 + startTime.getMinute());
+                + startTime.getMinute());
     }
 
     public TTime cloneInstance() {
@@ -164,8 +170,9 @@ public class TTime implements Comparable<TTime> {
     }
 
     public String toString() {
-        return (negative ? "-" : "") + (hour < 10 ? "0" : "") + hour + ":" + (minute < 10 ? "0" : "") + minute + ":" + (second < 10 ? "0" : "") + second + ":" + (millisecond < 10 ? "00" : (millisecond < 100 ? "0": "")) + millisecond;
+        return (negative ? "-" : "") + (hour < 10 ? "0" : "") + hour + ":" + (minute < 10 ? "0" : "") + minute + ":" + (second < 10 ? "0" : "") + second + ":" + (millisecond < 10 ? "00" : (millisecond < 100 ? "0" : "")) + millisecond;
     }
+
     public Calendar asCalendar() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, hour);
@@ -174,17 +181,19 @@ public class TTime implements Comparable<TTime> {
         cal.set(Calendar.MILLISECOND, millisecond);
         return cal;
     }
+
     public Date asDate() {
         return asCalendar().getTime();
     }
+
     public int toTotalMilliseconds() {
-        return ((negative ? (-1) : 1)) * (hour * 60 * 60 * 1000 + minute * 60 * 1000 + second * 1000 + millisecond) ;
+        return ((negative ? (-1) : 1)) * (hour * 60 * 60 * 1000 + minute * 60 * 1000 + second * 1000 + millisecond);
     }
 
     @Override
     public int compareTo(TTime o) {
         int result = Integer.valueOf(toTotalMilliseconds()).compareTo(o.toTotalMilliseconds());
-        if(this.isNegative()) {
+        if (this.isNegative()) {
             System.out.println("this.toTotalMilliseconds()=" + this.toTotalMilliseconds());
             System.out.println("o.toTotalMilliseconds()=" + o.toTotalMilliseconds());
             System.out.println("comparing: " + this + " " + o + " = " + result);

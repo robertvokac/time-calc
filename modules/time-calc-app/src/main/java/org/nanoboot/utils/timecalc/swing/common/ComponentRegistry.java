@@ -36,7 +36,7 @@ public class ComponentRegistry<T extends Component> {
 
     public void setVisible(Predicate<Component> predicate, boolean b) {
         for (T c : set) {
-            if (c instanceof TButton || c instanceof TTextField || c instanceof  TLabel || c instanceof TCheckBox) {
+            if (c instanceof TButton || c instanceof TTextField || c instanceof TLabel || c instanceof TCheckBox) {
                 if (!MainWindow.hideShowFormsCheckBox.isSelected() && b) {
                     continue;
                 }

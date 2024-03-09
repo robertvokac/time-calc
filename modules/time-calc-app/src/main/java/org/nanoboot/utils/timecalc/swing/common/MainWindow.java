@@ -80,6 +80,7 @@ public class MainWindow extends TWindow {
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
     }
+
     public MainWindow(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
         setFocusable(true);
@@ -104,21 +105,21 @@ public class MainWindow extends TWindow {
 
         arrivalTextField.addVetoableChangeListener(e -> {
             String newValue = (String) e.getNewValue();
-            if(newValue.isEmpty()) {
+            if (newValue.isEmpty()) {
                 throw new PropertyVetoException("Arrival must not be empty.", new PropertyChangeEvent(e.getSource(), e.getPropertyName(), e.getOldValue(), e.getNewValue()));
             }
         });
 
         overtimeTextField.addVetoableChangeListener(e -> {
             String newValue = (String) e.getNewValue();
-            if(newValue.isEmpty()) {
+            if (newValue.isEmpty()) {
                 throw new PropertyVetoException("Overtime must not be empty.", new PropertyChangeEvent(e.getSource(), e.getPropertyName(), e.getOldValue(), e.getNewValue()));
             }
         });
         this.configButton = new TButton("Config");
         this.workDaysButton = new TButton("Work Days");
         this.activitiesButton = new TButton("Activities"
-                                            + "");
+                + "");
         this.restartButton = new TButton("Restart");
         this.exitButton = new TButton("Exit");
         this.focusButton = new TButton("Focus");
@@ -139,14 +140,14 @@ public class MainWindow extends TWindow {
                 .isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
-        if(Toaster.notificationsVisibleProperty.isBound()) {
+        if (Toaster.notificationsVisibleProperty.isBound()) {
             Toaster.notificationsVisibleProperty.unBound();
         }
         Toaster.notificationsVisibleProperty.bindTo(timeCalcConfiguration.notificationsVisibleProperty);
-        
+
         Time time = new Time();
-        TimeCalcKeyAdapter timeCalcKeyAdapter =
-                new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp,
+        TimeCalcKeyAdapter timeCalcKeyAdapter
+                = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp,
                         this, time);
         addKeyListener(timeCalcKeyAdapter);
 
@@ -182,8 +183,8 @@ public class MainWindow extends TWindow {
         clock.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 200);
         add(clock);
 
-        MinuteBattery minuteBattery =
-                new MinuteBattery(clock.getBounds().x + clock.getWidth() + SwingUtils.MARGIN,
+        MinuteBattery minuteBattery
+                = new MinuteBattery(clock.getBounds().x + clock.getWidth() + SwingUtils.MARGIN,
                         clock.getY(), BATTERY_WIDTH);
         add(minuteBattery);
         Battery hourBattery = new HourBattery(
@@ -226,7 +227,7 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
         weatherButton
                 .setBounds(SwingUtils.MARGIN, walkingHumanProgress.getY()
-                                              + walkingHumanProgress.getHeight());
+                        + walkingHumanProgress.getHeight());
 
         //
         ProgressSquare progressSquare = new ProgressSquare();
@@ -241,7 +242,7 @@ public class MainWindow extends TWindow {
         progressCircle
                 .setBounds(
                         progressSquare.getX(), progressSquare.getY() + progressSquare.getHeight()
-                                               + SwingUtils.MARGIN, 100);
+                        + SwingUtils.MARGIN, 100);
         add(progressCircle);
         progressCircle.visibleProperty
                 .bindTo(timeCalcConfiguration.circleVisibleProperty);
@@ -259,7 +260,7 @@ public class MainWindow extends TWindow {
 
         TLabel workingTimeInMinutesTextFieldLabel = new TLabel("Work:", 40);
         workingTimeInMinutesTextFieldLabel.setBoundsFromLeft(overtimeTextField);
-        
+
         workingTimeInMinutesTextField.setBoundsFromLeft(workingTimeInMinutesTextFieldLabel);
         //
         TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:", 40);
@@ -317,9 +318,9 @@ public class MainWindow extends TWindow {
         add(remainingTextField);
         add(saveButton);
         saveButton.addActionListener(e -> {
-            TTime overtime_ =overtimeTextField.asTTime();
-            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0,5));
-            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0,overtime_.isNegative() ? 6 : 5));
+            TTime overtime_ = overtimeTextField.asTTime();
+            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0, 5));
+            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0, overtime_.isNegative() ? 6 : 5));
             timeCalcConfiguration.saveToTimeCalcProperties();
         });
         //
@@ -327,9 +328,8 @@ public class MainWindow extends TWindow {
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
 
-        exitButton.setBounds(saveButton.getX() + saveButton.getWidth() - activitiesButton.getWidth() , workDaysButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
+        exitButton.setBounds(saveButton.getX() + saveButton.getWidth() - activitiesButton.getWidth(), workDaysButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
         restartButton.setBounds(exitButton.getX() - SwingUtils.MARGIN - activitiesButton.getWidth(), activitiesButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
-
 
         //
         helpButton.setBoundsFromTop(exitButton, 2);
@@ -462,8 +462,8 @@ public class MainWindow extends TWindow {
         clock.visibleProperty
                 .bindTo(timeCalcConfiguration.clockVisibleProperty);
 
-        ComponentRegistry<Component> componentRegistry =
-                new ComponentRegistry();
+        ComponentRegistry<Component> componentRegistry
+                = new ComponentRegistry();
         componentRegistry.addAll(this.getContentPane().getComponents());
 
         ComponentRegistry<TButton> buttonRegistry = new ComponentRegistry();
@@ -534,15 +534,15 @@ public class MainWindow extends TWindow {
 
         componentRegistry.getSet().stream().filter(c -> c instanceof Widget)
                 .forEach(c
-                                -> {
-                            Widget widget = (Widget) c;
-                            widget.smileysVisibleProperty
-                                    .bindTo(timeCalcConfiguration.smileysVisibleProperty);
-                            widget.smileysVisibleOnlyIfMouseMovingOverProperty
-                                    .bindTo(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty);
-                            widget.smileysColoredProperty
-                                    .bindTo(timeCalcConfiguration.smileysColoredProperty);
-                        }
+                        -> {
+                    Widget widget = (Widget) c;
+                    widget.smileysVisibleProperty
+                            .bindTo(timeCalcConfiguration.smileysVisibleProperty);
+                    widget.smileysVisibleOnlyIfMouseMovingOverProperty
+                            .bindTo(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty);
+                    widget.smileysColoredProperty
+                            .bindTo(timeCalcConfiguration.smileysColoredProperty);
+                }
                 );
         setSize(progressSquare.getX() + progressSquare.getWidth()
                 + 3 * SwingUtils.MARGIN,
@@ -608,7 +608,7 @@ public class MainWindow extends TWindow {
             ComponentRegistry<Component> componentRegistry, TLabel arrivalTextFieldLabel) {
         //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
 
-        if(!departureTextField.valueProperty.getValue().isEmpty() && !arrivalTextField.valueProperty.getValue().isEmpty()){
+        if (!departureTextField.valueProperty.getValue().isEmpty() && !arrivalTextField.valueProperty.getValue().isEmpty()) {
             TTime startTime = arrivalTextField.asTTime();
             TTime endTime = departureTextField.asTTime();
             clock.startHourProperty.setValue(startTime.getHour());
@@ -626,11 +626,11 @@ public class MainWindow extends TWindow {
             } catch (Exception e) {
 
             }
-            if(startTime == null || overtime == null) {
+            if (startTime == null || overtime == null) {
                 return false;
             }
-            TTime newDeparture = startTime.add(new TTime(8,30));
-            if(overtime.isNegative()) {
+            TTime newDeparture = startTime.add(new TTime(8, 30));
+            if (overtime.isNegative()) {
                 TTime tmpTTime = overtime.cloneInstance();
                 tmpTTime.setNegative(false);
                 newDeparture = newDeparture.remove(tmpTTime);
@@ -671,8 +671,8 @@ public class MainWindow extends TWindow {
         }
 
         componentRegistry.setVisible(c -> (!(c instanceof Widget)
-                                           || ((Widget) c).visibleProperty
-                                                   .isEnabled()) /*|| (c instanceof TButton ? ((Widget)c).visibleProperty.isEnabled()
+                || ((Widget) c).visibleProperty
+                        .isEnabled()) /*|| (c instanceof TButton ? ((Widget)c).visibleProperty.isEnabled()
                 : true)*/, currentVisibility.isNotNone());
 
         jokeButton.setVisible(
@@ -714,21 +714,21 @@ public class MainWindow extends TWindow {
 
         TTime overtime = overtimeTextField.asTTime();
         int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
-                                          - timeRemains.getHour());
+                - timeRemains.getHour());
 
         int totalMillisecondsDone
                 = timeElapsed.toTotalMilliseconds();
-        
+
         int totalMinutes = timeTotal.getMinute();
 
         int totalMilliseconds = timeTotal.toTotalMilliseconds();
-        
+
         double done = ((double) totalMillisecondsDone)
-                      / ((double) totalMilliseconds);
-        if(done < 0) {
+                / ((double) totalMilliseconds);
+        if (done < 0) {
             done = 0;
         }
-        if(done > 1) {
+        if (done > 1) {
             done = 1;
         }
         progressSquare.setDonePercent(done);
@@ -858,18 +858,22 @@ public class MainWindow extends TWindow {
 
         this.configWindow.doDisableAlmostEverything();
     }
+
     public void increaseArrivalByOneMinute() {
         arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).add(new TTime(0, 1)).toString().substring(0, 5));
     }
+
     public void decreaseArrivalByOneMinute() {
         arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).remove(new TTime(0, 1)).toString().substring(0, 5));
     }
+
     public void increaseOvertimeByOneMinute() {
         TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).add(new TTime(0, 1));
-        overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 :5));
+        overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 : 5));
     }
+
     public void decreaseOvertimeByOneMinute() {
         TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).remove(new TTime(0, 1));
-        overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 :5));
+        overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 : 5));
     }
 }

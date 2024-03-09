@@ -42,8 +42,8 @@ public class ConfigWindow extends TWindow {
 
     public static final int WIDTH1 = 600;
     public static final int HEIGHT1 = 30;
-    public static final String CLIENT_PROPERTY_KEY =
-            TimeCalcProperty.class.getName();
+    public static final String CLIENT_PROPERTY_KEY
+            = TimeCalcProperty.class.getName();
     public static final String THREE_DASHES = "---";
     private static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     private static final String FIVE_SPACES = "     ";
@@ -55,13 +55,13 @@ public class ConfigWindow extends TWindow {
     private int currentY = SwingUtils.MARGIN;
     private final List<JComponent> propertiesList = new ArrayList<>();
     private final Map<TimeCalcProperty, JComponent> propertiesMap = new HashMap<>();
-    private final TButton enableAsMuchAsPossible =
-            new TButton("Enable as much as possible");
-    private final TButton disableAsMuchAsPossible =
-            new TButton("Disable as much as possible");
+    private final TButton enableAsMuchAsPossible
+            = new TButton("Enable as much as possible");
+    private final TButton disableAsMuchAsPossible
+            = new TButton("Disable as much as possible");
     private final JCheckBox visibilitySupportedColoredProperty
             = new JCheckBox(
-            TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED.getKey());
+                    TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED.getKey());
     private final JCheckBox clockVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_VISIBLE.getKey());
     private final JCheckBox clockHandsLongVisibleProperty
@@ -71,14 +71,12 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox clockHandsHourVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_HOUR_VISIBLE.getKey());
     private final JCheckBox clockHandsMinuteVisibleProperty
-            =
-            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE.getKey());
+            = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE.getKey());
     private final JCheckBox clockHandsSecondVisibleProperty
-            =
-            new JCheckBox(TimeCalcProperty.CLOCK_HANDS_SECOND_VISIBLE.getKey());
+            = new JCheckBox(TimeCalcProperty.CLOCK_HANDS_SECOND_VISIBLE.getKey());
     private final JCheckBox clockHandsMillisecondVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE.getKey());
+                    TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE.getKey());
     private final JCheckBox clockBorderVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_BORDER_VISIBLE.getKey());
     private final JCheckBox clockBorderOnlyHoursProperty
@@ -88,56 +86,54 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox clockCircleVisibleProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE.getKey());
     private final JCheckBox clockCircleStrongBorderProperty
-            =
-            new JCheckBox(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER.getKey());
+            = new JCheckBox(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER.getKey());
     private final JColorChooser clockCircleBorderColorProperty
             = new JColorChooser(Color.BLACK);
     private final JCheckBox clockCentreCircleVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE.getKey());
+                    TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE.getKey());
     private final JCheckBox clockCentreCircleBlackProperty
-            =
-            new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK.getKey());
+            = new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK.getKey());
     private final JCheckBox clockProgressVisibleOnlyIfMouseMovingOverProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     private final JCheckBox clockDateVisibleOnlyIfMouseMovingOverProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     //
     private final JCheckBox batteryWavesVisibleProperty
             = new JCheckBox(TimeCalcProperty.BATTERY_WAVES_VISIBLE.getKey());
     private final JCheckBox batteryCircleProgressVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE.getKey());
+                    TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE.getKey());
     private final JCheckBox batteryPercentProgressProperty
             = new JCheckBox(
-            TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE.getKey());
+                    TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE.getKey());
     private final JCheckBox batteryChargingCharacterVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE.getKey());
+                    TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE.getKey());
     private final JCheckBox batteryNameVisibleProperty
             = new JCheckBox(TimeCalcProperty.BATTERY_NAME_VISIBLE.getKey());
-    private final JCheckBox batteryLabelVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_LABEL_VISIBLE.getKey());
-    private final JCheckBox batteryVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_VISIBLE.getKey());
-    private final JCheckBox batteryMinuteVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_MINUTE_VISIBLE.getKey());
-    private final JCheckBox batteryHourVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_HOUR_VISIBLE.getKey());
-    private final JCheckBox batteryDayVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_DAY_VISIBLE.getKey());
-    private final JCheckBox batteryWeekVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_WEEK_VISIBLE.getKey());
-    private final JCheckBox batteryMonthVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_MONTH_VISIBLE.getKey());
-    private final JCheckBox batteryYearVisibleProperty =
-            new JCheckBox(TimeCalcProperty.BATTERY_YEAR_VISIBLE.getKey());
-    private final JCheckBox batteryBlinkingIfCriticalLowVisibleProperty =
-            new JCheckBox(
+    private final JCheckBox batteryLabelVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_LABEL_VISIBLE.getKey());
+    private final JCheckBox batteryVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_VISIBLE.getKey());
+    private final JCheckBox batteryMinuteVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_MINUTE_VISIBLE.getKey());
+    private final JCheckBox batteryHourVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_HOUR_VISIBLE.getKey());
+    private final JCheckBox batteryDayVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_DAY_VISIBLE.getKey());
+    private final JCheckBox batteryWeekVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_WEEK_VISIBLE.getKey());
+    private final JCheckBox batteryMonthVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_MONTH_VISIBLE.getKey());
+    private final JCheckBox batteryYearVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_YEAR_VISIBLE.getKey());
+    private final JCheckBox batteryBlinkingIfCriticalLowVisibleProperty
+            = new JCheckBox(
                     TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW.getKey());
     private final JCheckBox jokesVisibleProperty
             = new JCheckBox(TimeCalcProperty.JOKES_VISIBLE.getKey());
@@ -147,8 +143,8 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.NOTIFICATIONS_VISIBLE.getKey());
     private final JCheckBox smileysVisibleOnlyIfMouseMovingOverProperty
             = new JCheckBox(
-            TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     private final JCheckBox smileysVisibleProperty
             = new JCheckBox(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
     private final JCheckBox smileysColoredProperty
@@ -177,6 +173,7 @@ public class ConfigWindow extends TWindow {
             = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_SECOND.getKey());
     private final JTextField testClockCustomMillisecondProperty
             = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_MILLISECOND.getKey());
+
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         setTitle("Configuration");
@@ -186,8 +183,8 @@ public class ConfigWindow extends TWindow {
         mainPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE,
                 getHeight() - 6 * SwingUtils.MARGIN));
         this.panelInsideScrollPane = new JPanel();
-        final BoxLayout boxLayout =
-                new BoxLayout(panelInsideScrollPane, BoxLayout.Y_AXIS);
+        final BoxLayout boxLayout
+                = new BoxLayout(panelInsideScrollPane, BoxLayout.Y_AXIS);
         panelInsideScrollPane.setAlignmentX(LEFT_ALIGNMENT);
         mainPanel.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -216,18 +213,18 @@ public class ConfigWindow extends TWindow {
         mainPanel.add(disableAsMuchAsPossible);
         disableAsMuchAsPossible.setBounds(
                 enableAsMuchAsPossible.getX() + enableAsMuchAsPossible
-                        .getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 250,
+                .getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 250,
                 HEIGHT1);
         scrollPane.setBounds(enableAsMuchAsPossible.getX(),
                 enableAsMuchAsPossible.getY() + enableAsMuchAsPossible
-                        .getHeight() + SwingUtils.MARGIN, Integer.MAX_VALUE,
+                .getHeight() + SwingUtils.MARGIN, Integer.MAX_VALUE,
                 Integer.MAX_VALUE);
 
         mainPanel.add(scrollPane);
 
-        for (boolean enable : new boolean[] {true, false}) {
-            TButton button =
-                    enable ? enableAsMuchAsPossible : disableAsMuchAsPossible;
+        for (boolean enable : new boolean[]{true, false}) {
+            TButton button
+                    = enable ? enableAsMuchAsPossible : disableAsMuchAsPossible;
 
             button.addActionListener(e -> {
                 visibilityDefaultProperty
@@ -376,8 +373,8 @@ public class ConfigWindow extends TWindow {
                 JComboBox jComboBox = ((JComboBox) p);
                 jComboBox.setMaximumSize(new Dimension(150, 25));
 
-                String timeCalcPropertyKey =
-                        (String) jComboBox.getClientProperty(
+                String timeCalcPropertyKey
+                        = (String) jComboBox.getClientProperty(
                                 CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
@@ -404,7 +401,7 @@ public class ConfigWindow extends TWindow {
 
                 BooleanProperty property
                         = (BooleanProperty) timeCalcConfiguration
-                        .getProperty(timeCalcProperty);
+                                .getProperty(timeCalcProperty);
                 property.addListener(
                         e -> checkBox.setSelected(property.isEnabled()));
                 checkBox.setSelected(property.isEnabled());
@@ -415,8 +412,8 @@ public class ConfigWindow extends TWindow {
                 String[] array = checkBox.getText().split(" : ");
                 String groupName = array[0];
                 if (groupName.equals("Clock") || groupName.equals("Battery")
-                    || groupName.equals("Smileys")
-                    || groupName.equals("Test")) {
+                        || groupName.equals("Smileys")
+                        || groupName.equals("Test")) {
 
                     checkBox.setText(array.length > 1 ? (checkBox.getText()
                             .substring(groupName.length() + 3)) : "Visible");
@@ -428,11 +425,8 @@ public class ConfigWindow extends TWindow {
                         panelInsideScrollPane.add(label);
                     }
                 }
-                if (
-                        timeCalcProperty == TimeCalcProperty.VISIBILITY_DEFAULT
-                        ||
-                        timeCalcProperty == TimeCalcProperty.JOKES_VISIBLE
-                ) {
+                if (timeCalcProperty == TimeCalcProperty.VISIBILITY_DEFAULT
+                        || timeCalcProperty == TimeCalcProperty.JOKES_VISIBLE) {
                     JLabel label = new JLabel("Misc");
                     label.setFont(BIG_FONT);
                     panelInsideScrollPane.add(label);
@@ -442,8 +436,8 @@ public class ConfigWindow extends TWindow {
                 JColorChooser colorChooser = ((JColorChooser) p);
                 //jColorChooser.setMaximumSize(new Dimension(150, 25));
 
-                String timeCalcPropertyKey =
-                        (String) colorChooser.getClientProperty(
+                String timeCalcPropertyKey
+                        = (String) colorChooser.getClientProperty(
                                 CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
@@ -499,7 +493,7 @@ public class ConfigWindow extends TWindow {
             }
             if (p instanceof JTextField) {
                 JTextField textField = ((JTextField) p);
-                if(textField.getText().startsWith("test.clock.custom.")) {
+                if (textField.getText().startsWith("test.clock.custom.")) {
                     String key = textField.getText();
                     textField.setText("");
                     textField.putClientProperty(CLIENT_PROPERTY_KEY, key);
@@ -507,8 +501,8 @@ public class ConfigWindow extends TWindow {
                 }
                 textField.setMaximumSize(new Dimension(150, 25));
 
-                String timeCalcPropertyKey =
-                        (String) textField.getClientProperty(
+                String timeCalcPropertyKey
+                        = (String) textField.getClientProperty(
                                 CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
@@ -517,20 +511,16 @@ public class ConfigWindow extends TWindow {
                         .getProperty(timeCalcProperty).addListener(e -> {
 
                     textField.setText(isInteger
-                            ?
-                            String.valueOf(timeCalcConfiguration
+                            ? String.valueOf(timeCalcConfiguration
                                     .getProperty(timeCalcProperty).getValue())
-                            :
-                            (String) timeCalcConfiguration
+                            : (String) timeCalcConfiguration
                                     .getProperty(timeCalcProperty).getValue());
                 });
                 textField.setText(isInteger
-                        ?
-                        String.valueOf(timeCalcConfiguration
+                        ? String.valueOf(timeCalcConfiguration
                                 .getProperty(timeCalcProperty).getValue())
-                        :
-                        (String) timeCalcConfiguration
-                        .getProperty(timeCalcProperty).getValue());
+                        : (String) timeCalcConfiguration
+                                .getProperty(timeCalcProperty).getValue());
 
                 textField.getDocument()
                         .addDocumentListener(new DocumentListener() {
@@ -543,13 +533,14 @@ public class ConfigWindow extends TWindow {
                             public void insertUpdate(DocumentEvent e) {
                                 update(e);
                             }
+
                             private void update(DocumentEvent e) {
                                 String text = textField.getText();
                                 boolean isInteger = Integer.class == timeCalcProperty.getClazz();
                                 timeCalcConfiguration
                                         .getProperty(timeCalcProperty)
-                                        .setValue(isInteger ? Integer.valueOf(text):
-                                                text);
+                                        .setValue(isInteger ? Integer.valueOf(text)
+                                                : text);
                             }
                         });
             }

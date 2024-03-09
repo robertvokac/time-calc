@@ -44,14 +44,14 @@ public class CommandActionListener
             case "color":
                 timeCalcApp.visibilityProperty.setValue(
                         commandsAsArray[1].equals("1")
-                                ? Visibility.STRONGLY_COLORED.name()
-                                : Visibility.WEAKLY_COLORED.name());
+                        ? Visibility.STRONGLY_COLORED.name()
+                        : Visibility.WEAKLY_COLORED.name());
                 break;
             case "gray":
                 timeCalcApp.visibilityProperty.setValue(
                         commandsAsArray[1].equals("1")
-                                ? Visibility.GRAY.name()
-                                : Visibility.WEAKLY_COLORED.name());
+                        ? Visibility.GRAY.name()
+                        : Visibility.WEAKLY_COLORED.name());
                 break;
             case "waves":
                 timeCalcConfiguration.batteryWavesVisibleProperty

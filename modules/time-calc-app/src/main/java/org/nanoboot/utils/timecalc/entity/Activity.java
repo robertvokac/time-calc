@@ -33,9 +33,9 @@ public class Activity {
 
     public String createBugzillaComment() {
         return ticket + SUBJECT_FIELD_SEPARATOR + year + "-" + month + "-" + day
-               + SUBJECT_FIELD_SEPARATOR + ((spentHours + spentMinutes / 60d)
-                                            + "h") + SUBJECT_FIELD_SEPARATOR
-               + comment;
+                + SUBJECT_FIELD_SEPARATOR + ((spentHours + spentMinutes / 60d)
+                + "h") + SUBJECT_FIELD_SEPARATOR
+                + comment;
     }
 
 }

@@ -45,19 +45,16 @@ public enum TimeCalcProperty {
     CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER(
             "clock.date.visible-only-if-mouse-moving-over",
             "Clock : Date visible only, if mouse moving over"),
-
     //
     BATTERY_WAVES_VISIBLE("battery.waves.visible", "Battery : Waves"),
     BATTERY_CIRCLE_PROGRESS_VISIBLE("battery.circle-progress.visible",
             "Battery : Circle Progress"),
     BATTERY_PERCENT_PROGRESS_VISIBLE("battery.percent-progress.visible",
             "Battery : Percent Progress"),
-
     BATTERY_CHARGING_CHARACTER_VISIBLE("battery.charging-character.visible",
             "Battery : Charging Character"),
     BATTERY_NAME_VISIBLE("battery.name.visible", "Battery : Name"),
     BATTERY_LABEL_VISIBLE("battery.label.visible", "Battery : Label"),
-
     BATTERY_VISIBLE("battery.visible", "Battery"),
     BATTERY_MINUTE_VISIBLE("battery.minute.visible", "Battery : Minute"),
     BATTERY_HOUR_VISIBLE("battery.hour.visible", "Battery : Hour"),
@@ -67,7 +64,6 @@ public enum TimeCalcProperty {
     BATTERY_YEAR_VISIBLE("battery.year.visible", "Battery : Year"),
     BATTERY_BLINKING_IF_CRITICAL_LOW("battery.blinking-if-critical-low",
             "Battery : Blinking, if critical low"),
-
     JOKES_VISIBLE("jokes.visible", "Jokes"),
     COMMANDS_VISIBLE("commands.visible", "Commands"),
     NOTIFICATIONS_VISIBLE("notifications.visible", "Notifications"),
@@ -76,7 +72,6 @@ public enum TimeCalcProperty {
             "smileys.visible-only-if-mouse-moving-over",
             "Smileys : Visible only, if mouse moving over"),
     SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
-
     SQUARE_VISIBLE("square.visible", "Square"),
     CIRCLE_VISIBLE("circle.visible", "Circle"),
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
@@ -109,8 +104,8 @@ public enum TimeCalcProperty {
     }
 
     public static TimeCalcProperty forKey(String key) {
-        Optional<TimeCalcProperty> timeCalcPropertyOptional =
-                Arrays.stream(values()).filter(t -> t.getKey().equals(key))
+        Optional<TimeCalcProperty> timeCalcPropertyOptional
+                = Arrays.stream(values()).filter(t -> t.getKey().equals(key))
                         .findFirst();
         if (timeCalcPropertyOptional.isPresent()) {
             return timeCalcPropertyOptional.get();

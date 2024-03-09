@@ -107,7 +107,7 @@ public class Utils {
         }
         String manifestPath
                 = classPath.substring(0, classPath.lastIndexOf("!") + 1)
-                  + "/META-INF/MANIFEST.MF";
+                + "/META-INF/MANIFEST.MF";
         Manifest manifest;
         try {
             manifest = new Manifest(new URL(manifestPath).openStream());
@@ -134,7 +134,7 @@ public class Utils {
         BufferedReader in = new BufferedReader(streamReader);
 
         StringBuilder sb = new StringBuilder();
-        for (String line; (line = in.readLine()) != null; ) {
+        for (String line; (line = in.readLine()) != null;) {
             sb.append(line).append("\n");
         }
         return sb.toString();

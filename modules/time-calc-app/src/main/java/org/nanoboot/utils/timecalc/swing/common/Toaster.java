@@ -24,7 +24,6 @@ package org.nanoboot.utils.timecalc.swing.common;
  * // Show a simple toaster toasterManager.showToaster( new ImageIcon(
  * "mylogo.gif" ), "A simple toaster with an image" ); } }
  */
-
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -52,11 +51,11 @@ import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 public class Toaster {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static final BooleanProperty notificationsVisibleProperty
             = new BooleanProperty(TimeCalcProperty.NOTIFICATIONS_VISIBLE
                     .getKey());
-    
+
     // Set the margin
     int margin;
     // Flag that indicate if use alwaysOnTop or not.
@@ -437,9 +436,8 @@ public class Toaster {
                     stopYPosition = startYPosition - toasterHeight - 1;
                     if (currentNumberOfToaster > 0) {
                         stopYPosition
-                                =
-                                stopYPosition - (maxToaster % maxToasterInSceen
-                                                 * toasterHeight);
+                                = stopYPosition - (maxToaster % maxToasterInSceen
+                                * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -449,9 +447,8 @@ public class Toaster {
 
                     if (currentNumberOfToaster > 0) {
                         stopYPosition
-                                =
-                                stopYPosition + (maxToaster % maxToasterInSceen
-                                                 * toasterHeight);
+                                = stopYPosition + (maxToaster % maxToasterInSceen
+                                * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }

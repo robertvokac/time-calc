@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class ProgressSmileyIcon extends javax.swing.ImageIcon {
 
-    private static final Map<ProgressSmiley, ProgressSmileyIcon> cache =
-            new HashMap<>();
+    private static final Map<ProgressSmiley, ProgressSmileyIcon> cache
+            = new HashMap<>();
     @Getter
     private final ProgressSmiley progressSmiley;
     @Getter

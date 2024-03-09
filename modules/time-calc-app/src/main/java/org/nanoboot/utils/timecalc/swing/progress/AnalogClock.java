@@ -26,39 +26,39 @@ public class AnalogClock extends Widget {
 
     public static final Color COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED
             = new Color(246,
-            152, 51);
+                    152, 51);
     public final BooleanProperty borderVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty borderOnlyHoursProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_ONLY_HOURS
-            .getKey());
+                    .getKey());
     public final BooleanProperty numbersVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_NUMBERS_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty circleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty circleStrongBorderProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER
-            .getKey());
+                    .getKey());
     public final BooleanProperty centreCircleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE
-            .getKey());
+                    .getKey());
     public final StringProperty centreCircleBorderColorProperty
             = new StringProperty(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR
-            .getKey());
+                    .getKey());
     public final BooleanProperty centreCircleBlackProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
-            .getKey());
+                    .getKey());
     public final BooleanProperty progressVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
-            TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     public final BooleanProperty dateVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
-            TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
 
     public IntegerProperty startHourProperty
             = new IntegerProperty("startHourProperty");
@@ -100,24 +100,29 @@ public class AnalogClock extends Widget {
 
         centreCircleBorderColorProperty.addListener(property
                 -> customCircleColor = SwingUtils.getColorFromString(
-                centreCircleBorderColorProperty.getValue()));
+                        centreCircleBorderColorProperty.getValue()));
     }
+
     private int computeStartAngle() {
         return computeAngle(startHourProperty.getValue(), startMinuteProperty.getValue());
     }
+
     private int computeEndAngle() {
         return computeAngle(endHourProperty.getValue(), endMinuteProperty.getValue());
     }
+
     private int computeAngle(TTime TTime) {
         if (TTime.getHour() > 12) {
             TTime.setHour(TTime.getHour() - 12);
         }
         return computeAngle(TTime.getHour(), TTime.getMinute());
     }
+
     private int computeAngle(int hour, int minute) {
         return (int) ((hour + minute / 60d) / 12d
-                      * 360d);
+                * 360d);
     }
+
     public static void main(String[] args) {
         JFrame window = new JFrame("Analog Clock");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,7 +141,7 @@ public class AnalogClock extends Widget {
         clock.yearProperty.bindTo(time.yearProperty);
         clock.hourProperty.bindTo(time.hourProperty);
         clock.minuteProperty.bindTo(time.minuteProperty);
-        clock.secondProperty.bindTo( time.secondProperty);
+        clock.secondProperty.bindTo(time.secondProperty);
         clock.millisecondProperty.bindTo(time.millisecondProperty);
         clock.dayOfWeekProperty.bindTo(time.dayOfWeekProperty);
         clock.visibilityProperty.setValue(Visibility.GRAY.name());
@@ -187,7 +192,6 @@ public class AnalogClock extends Widget {
         if ((mouseOver || progressVisibleOnlyIfMouseMovingOverProperty
                 .isDisabled()) && visibility.isStronglyColored()) {
 
-
             Color currentColor = g2d.getColor();
             g2d.setColor(Color.YELLOW);
             int startAngle = computeStartAngle();
@@ -201,7 +205,7 @@ public class AnalogClock extends Widget {
         //
         if (millisecondEnabledProperty.isEnabled() && secondEnabledProperty
                 .isEnabled() && minuteEnabledProperty.isEnabled()
-            && hourEnabledProperty.isEnabled()) {
+                && hourEnabledProperty.isEnabled()) {
             drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
 
@@ -239,8 +243,8 @@ public class AnalogClock extends Widget {
             }
         }
         if (hourEnabledProperty.isEnabled()) {
-            double hours =
-                    hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
+            double hours
+                    = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
             drawHand(g2d, side / 2 - 40,
                     hours, 4.0f,
                     Color.BLACK, visibility);
@@ -256,8 +260,8 @@ public class AnalogClock extends Widget {
                 if (borderOnlyHoursProperty.isEnabled() && minuteI % 5 != 0) {
                     continue;
                 }
-                drawBorder(g2d, minuteI, minuteI % 5 == 0 ?
-                                (numbersVisibleProperty.isEnabled() ? 2f : 4f) : 1f,
+                drawBorder(g2d, minuteI, minuteI % 5 == 0
+                        ? (numbersVisibleProperty.isEnabled() ? 2f : 4f) : 1f,
                         Color.BLACK, visibility);
             }
         }
@@ -273,9 +277,9 @@ public class AnalogClock extends Widget {
         Color currentColor = brush.getColor();
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
-        brush.setColor(visibility.isStronglyColored() || mouseOver ?
-                (centreCircleBlackProperty.isEnabled() ? Color.BLACK :
-                        Color.RED)
+        brush.setColor(visibility.isStronglyColored() || mouseOver
+                ? (centreCircleBlackProperty.isEnabled() ? Color.BLACK
+                : Color.RED)
                 : FOREGROUND_COLOR);
         brush.fillOval(centerX - 3, centerY - 3, 8, 8);
         brush.setColor(currentColor);
@@ -285,19 +289,19 @@ public class AnalogClock extends Widget {
             float stroke, Color color, Visibility visibility) {
         double value = ((double) forMinute) / 60d;
         boolean hourAngle = forMinute % 5 == 0;
-        int length = side / (numbersVisibleProperty.isEnabled() ? 18 :
-                (hourAngle ? 12 : 18));
+        int length = side / (numbersVisibleProperty.isEnabled() ? 18
+                : (hourAngle ? 12 : 18));
         double angle = Math.PI * 2 * (value - 0.25);
-        int startX =
-                (int) (getWidth() / 2 + (side / 2 - length) * Math.cos(angle));
-        int startY =
-                (int) (getHeight() / 2 + (side / 2 - length) * Math.sin(angle));
+        int startX
+                = (int) (getWidth() / 2 + (side / 2 - length) * Math.cos(angle));
+        int startY
+                = (int) (getHeight() / 2 + (side / 2 - length) * Math.sin(angle));
         int endX = (int) (getWidth() / 2
-                          + (side / 2 - length * 0.50d * (hourAngle ? 0.25 : 1))
-                            * Math.cos(angle));
+                + (side / 2 - length * 0.50d * (hourAngle ? 0.25 : 1))
+                * Math.cos(angle));
         int endY = (int) (getHeight() / 2
-                          + (side / 2 - length * 0.50d * (hourAngle ? 0.25 : 1))
-                            * Math.sin(angle));
+                + (side / 2 - length * 0.50d * (hourAngle ? 0.25 : 1))
+                * Math.sin(angle));
 
         brush.setColor((visibility.isStronglyColored() || mouseOver) ? color
                 : FOREGROUND_COLOR);
@@ -312,8 +316,8 @@ public class AnalogClock extends Widget {
         int endX = (int) (getWidth() / 2 + length * Math.cos(angle));
         int endY = (int) (getHeight() / 2 + length * Math.sin(angle));
 
-        brush.setColor((visibility.isStronglyColored() || mouseOver) ?
-                (handsColoredProperty.isEnabled() ? color : Color.BLACK)
+        brush.setColor((visibility.isStronglyColored() || mouseOver)
+                ? (handsColoredProperty.isEnabled() ? color : Color.BLACK)
                 : FOREGROUND_COLOR);
         brush.setStroke(new BasicStroke(stroke));
         brush.drawLine(getWidth() / 2, getHeight() / 2, endX, endY);

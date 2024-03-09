@@ -10,6 +10,7 @@ import java.util.List;
  * @since 23.02.2024
  */
 public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
+
     @Override
     public void create(WorkingDay workingDay) {
 
@@ -30,9 +31,6 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
         return null;
     }
 }
-
-
-
 
 //    private org.nanoboot.bitinspector.persistence.impl.sqlite.SqliteConnectionFactory
 //            sqliteConnectionFactory;

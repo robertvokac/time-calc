@@ -35,9 +35,9 @@ public class Widget extends JPanel implements
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
-    
-    public static final Color CLOSE_BUTTON_FOREGROUND_COLOR =
-            new Color(127, 127, 127);
+
+    public static final Color CLOSE_BUTTON_FOREGROUND_COLOR
+            = new Color(127, 127, 127);
     public static final Color CLOSE_BUTTON_BACKGROUND_COLOR = Color.LIGHT_GRAY;
     public static final Color CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON = new Color(255, 153, 153);
     public final BooleanProperty visibilitySupportedColoredProperty
@@ -48,13 +48,13 @@ public class Widget extends JPanel implements
             = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
     public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
-            TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     public final BooleanProperty smileysColoredProperty
             = new BooleanProperty("smileysColoredProperty", true);
     public StringProperty visibilityProperty
             = new StringProperty("widget.visibilityProperty",
-            Visibility.STRONGLY_COLORED.name());
+                    Visibility.STRONGLY_COLORED.name());
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
@@ -77,7 +77,7 @@ public class Widget extends JPanel implements
                 int x = e.getX();
                 int y = e.getY();
                 mouseOverCloseButton = x >= getWidth() - CLOSE_BUTTON_SIDE
-                                       && y <= CLOSE_BUTTON_SIDE;
+                        && y <= CLOSE_BUTTON_SIDE;
             }
         });
         addMouseListener(new MouseListener() {
@@ -181,11 +181,11 @@ public class Widget extends JPanel implements
         paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
 
     }
-     
+
     private static void paintCloseIcon(Graphics brush, int width,
             boolean mouseOver, boolean mouseOverCloseButton) {
-        
-        if(!mouseOver) {
+
+        if (!mouseOver) {
             //nothing to do
             return;
         }
@@ -194,7 +194,7 @@ public class Widget extends JPanel implements
 //            return;
 //        }
 
-         brush.setColor(mouseOverCloseButton ? CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON : CLOSE_BUTTON_BACKGROUND_COLOR);
+        brush.setColor(mouseOverCloseButton ? CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON : CLOSE_BUTTON_BACKGROUND_COLOR);
 
 //        if(!mouseOverCloseButton) {
 //            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
@@ -203,7 +203,6 @@ public class Widget extends JPanel implements
 //                    CLOSE_BUTTON_SIDE - 2);
 //            return;
 //        }
-        
         brush.fillOval(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
                 CLOSE_BUTTON_SIDE);
         brush.setColor(CLOSE_BUTTON_FOREGROUND_COLOR);
@@ -234,8 +233,8 @@ public class Widget extends JPanel implements
     protected void paintSmiley(Visibility visibility, Graphics2D brush, int x,
             int y) {
         if (smileysVisibleProperty.isDisabled() || (!mouseOver
-                                                    && smileysVisibleOnlyIfMouseMovingOverProperty
-                                                            .isEnabled())) {
+                && smileysVisibleOnlyIfMouseMovingOverProperty
+                        .isEnabled())) {
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
@@ -264,8 +263,8 @@ public class Widget extends JPanel implements
                 brush.setColor(Color.BLACK);
             }
             Color currentColor = brush.getColor();
-            brush.setColor(visibility.isStronglyColored() ? Color.WHITE :
-                    BACKGROUND_COLOR);
+            brush.setColor(visibility.isStronglyColored() ? Color.WHITE
+                    : BACKGROUND_COLOR);
             brush.fillRect(
                     x, y,
                     20,
@@ -291,6 +290,7 @@ public class Widget extends JPanel implements
             this.add(smileyIcon);
         }
     }
+
     protected boolean changedInTheLastXMilliseconds(int milliseconds) {
         return (System.nanoTime() - lastUpdate) < milliseconds * 1000000;
     }

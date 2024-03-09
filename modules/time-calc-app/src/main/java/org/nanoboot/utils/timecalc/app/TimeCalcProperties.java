@@ -28,11 +28,11 @@ public class TimeCalcProperties {
         System.out.println("Loading configuration - start");
         String profileName = "";
         try {
-            profileName =
-                    FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE.exists() ?
-                            Utils.readTextFromFile(
-                                    FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE) :
-                            "";
+            profileName
+                    = FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE.exists()
+                    ? Utils.readTextFromFile(
+                            FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE)
+                    : "";
         } catch (IOException e) {
             e.printStackTrace();
             throw new TimeCalcException(e);
@@ -115,6 +115,7 @@ public class TimeCalcProperties {
         }
         return (String) properties.get(key);
     }
+
     public int getIntegerProperty(TimeCalcProperty timeCalcProperty) {
         return getIntegerProperty(timeCalcProperty,
                 Integer.valueOf(getDefaultStringValue(timeCalcProperty)));
@@ -128,6 +129,7 @@ public class TimeCalcProperties {
         }
         return Integer.valueOf((String) properties.get(key));
     }
+
     private String getVisibilityProperty(TimeCalcProperty timeCalcProperty) {
         return getStringProperty(timeCalcProperty,
                 Visibility.STRONGLY_COLORED.name());
@@ -153,15 +155,15 @@ public class TimeCalcProperties {
 
     public void save(Properties properties, String profileName) {
         properties.entrySet().stream().forEach(e
-                        -> {
-                    if (this.properties.containsKey(e.getKey())) {
-                        this.properties
-                                .replace(e.getKey(), e.getValue().toString());
-                    } else {
-                        this.properties
-                                .put(e.getKey(), e.getValue().toString());
-                    }
-                }
+                -> {
+            if (this.properties.containsKey(e.getKey())) {
+                this.properties
+                        .replace(e.getKey(), e.getValue().toString());
+            } else {
+                this.properties
+                        .put(e.getKey(), e.getValue().toString());
+            }
+        }
         );
         File file = getFile(profileName);
         try {
@@ -178,9 +180,9 @@ public class TimeCalcProperties {
     }
 
     private File getFile(String profileName) {
-        return profileName == null || profileName.isEmpty() ?
-                FileConstants.FILE_WITHOUT_ANY_PROFILE :
-                new File(FileConstants.FILE_WITHOUT_ANY_PROFILE.getParentFile(),
+        return profileName == null || profileName.isEmpty()
+                ? FileConstants.FILE_WITHOUT_ANY_PROFILE
+                : new File(FileConstants.FILE_WITHOUT_ANY_PROFILE.getParentFile(),
                         "timecalc." + profileName + ".conf");
     }
 

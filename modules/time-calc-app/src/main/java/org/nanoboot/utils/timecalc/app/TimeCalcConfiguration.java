@@ -17,132 +17,129 @@ import java.util.Properties;
  */
 public class TimeCalcConfiguration {
 
-    public final StringProperty visibilityDefaultProperty =
-            new StringProperty(TimeCalcProperty.VISIBILITY_DEFAULT
+    public final StringProperty visibilityDefaultProperty
+            = new StringProperty(TimeCalcProperty.VISIBILITY_DEFAULT
                     .getKey());
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty(TimeCalcProperty.VISIBILITY_SUPPORTED_COLORED
-            .getKey());
+                    .getKey());
     //
     public final BooleanProperty clockVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockHandsLongVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockHandsColoredProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_COLORED
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockHandsHourVisibleProperty
             = new BooleanProperty(
-            TimeCalcProperty.CLOCK_HANDS_HOUR_VISIBLE.getKey());
+                    TimeCalcProperty.CLOCK_HANDS_HOUR_VISIBLE.getKey());
     public final BooleanProperty clockHandsMinuteVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MINUTE_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockHandsSecondVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_SECOND_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockHandsMillisecondVisibleProperty
-            =
-            new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_MILLISECOND_VISIBLE
                     .getKey());
     public final BooleanProperty clockBorderVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockBorderOnlyHoursProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_ONLY_HOURS
-            .getKey());
+                    .getKey());
 
     public final BooleanProperty clockNumbersVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_NUMBERS_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockCircleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockCircleStrongBorderProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CIRCLE_STRONG_BORDER
-            .getKey());
+                    .getKey());
     public final StringProperty clockCircleBorderColorProperty
             = new StringProperty(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockCentreCircleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty clockCentreCircleBlackProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
-            .getKey());
-    public final BooleanProperty
-            clockProgressVisibleOnlyIfMouseMovingOverProperty
-            = new BooleanProperty(
-            TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
                     .getKey());
+    public final BooleanProperty clockProgressVisibleOnlyIfMouseMovingOverProperty
+            = new BooleanProperty(
+                    TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     public final BooleanProperty clockDateVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
-            TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     //
     public final BooleanProperty batteryWavesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryCircleProgressProperty
-            =
-            new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
+            = new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
                     .getKey());
     public final BooleanProperty batteryPercentProgressProperty
             = new BooleanProperty(
-            TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE
-                    .getKey());
+                    TimeCalcProperty.BATTERY_PERCENT_PROGRESS_VISIBLE
+                            .getKey());
     public final BooleanProperty batteryChargingCharacterVisibleProperty
             = new BooleanProperty(
-            TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE
-                    .getKey());
+                    TimeCalcProperty.BATTERY_CHARGING_CHARACTER_VISIBLE
+                            .getKey());
     public final BooleanProperty batteryNameVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_NAME_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryLabelVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_LABEL_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryMinuteVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_MINUTE_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryHourVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_HOUR_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryDayVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_DAY_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryWeekVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_WEEK_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryMonthVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_MONTH_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryYearVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_YEAR_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty batteryBlinkingIfCriticalLowVisibleProperty
             = new BooleanProperty(
-            TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
-                    .getKey());
+                    TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
+                            .getKey());
 
     public final BooleanProperty jokesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.JOKES_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty commandsVisibleProperty
             = new BooleanProperty(TimeCalcProperty.COMMANDS_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty notificationsVisibleProperty
             = new BooleanProperty(TimeCalcProperty.NOTIFICATIONS_VISIBLE
-            .getKey());
+                    .getKey());
     public final BooleanProperty smileysVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SMILEYS_VISIBLE.getKey());
     public final BooleanProperty smileysVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
-            TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
-                    .getKey());
+                    TimeCalcProperty.SMILEYS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
+                            .getKey());
     public final BooleanProperty smileysColoredProperty
             = new BooleanProperty(TimeCalcProperty.SMILEYS_COLORED.getKey());
 
@@ -152,10 +149,10 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     public final BooleanProperty walkingHumanVisibleProperty
             = new BooleanProperty(
-            TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
+                    TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(
-            TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
+                    TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
     public final BooleanProperty testModeProperty
             = new BooleanProperty("testModeProperty", false);
     public final StringProperty profileNameProperty
@@ -176,66 +173,65 @@ public class TimeCalcConfiguration {
             .getKey(), Integer.MAX_VALUE);
 
     //
-    private final Map<TimeCalcProperty, Property> mapOfProperties =
-            new HashMap<>();
+    private final Map<TimeCalcProperty, Property> mapOfProperties
+            = new HashMap<>();
     private final List<Property> allProperties = new ArrayList<>();
 
     private TimeCalcProperties timeCalcProperties;
 
     public TimeCalcConfiguration() {
-        for (Property p : new Property[] {
-                visibilityDefaultProperty,
-                visibilitySupportedColoredProperty,
-                clockVisibleProperty,
-                clockHandsLongVisibleProperty,
-                clockHandsColoredProperty,
-                clockHandsHourVisibleProperty,
-                clockHandsMinuteVisibleProperty,
-                clockHandsSecondVisibleProperty,
-                clockHandsMillisecondVisibleProperty,
-                clockBorderVisibleProperty,
-                clockBorderOnlyHoursProperty,
-                clockNumbersVisibleProperty,
-                clockCircleVisibleProperty,
-                clockCircleStrongBorderProperty,
-                clockCircleBorderColorProperty,
-                clockCentreCircleVisibleProperty,
-                clockCentreCircleBlackProperty,
-                clockProgressVisibleOnlyIfMouseMovingOverProperty,
-                clockDateVisibleOnlyIfMouseMovingOverProperty,
-                batteryWavesVisibleProperty,
-                batteryCircleProgressProperty,
-                batteryPercentProgressProperty,
-                batteryChargingCharacterVisibleProperty,
-                batteryNameVisibleProperty,
-                batteryLabelVisibleProperty,
-                batteryVisibleProperty,
-                batteryMinuteVisibleProperty,
-                batteryHourVisibleProperty,
-                batteryDayVisibleProperty,
-                batteryWeekVisibleProperty,
-                batteryMonthVisibleProperty,
-                batteryYearVisibleProperty,
-                batteryBlinkingIfCriticalLowVisibleProperty,
-                jokesVisibleProperty,
-                commandsVisibleProperty,
-                notificationsVisibleProperty,
-                smileysVisibleProperty,
-                smileysVisibleOnlyIfMouseMovingOverProperty,
-                smileysColoredProperty,
-                squareVisibleProperty,
-                circleVisibleProperty,
-                walkingHumanVisibleProperty,
-                mainWindowCustomTitleProperty,
-                profileNameProperty,
-                testYearCustomProperty,
-                testMonthCustomProperty,
-                testDayCustomProperty,
-                testHourCustomProperty,
-                testMinuteCustomProperty,
-                testSecondCustomProperty,
-                testMillisecondCustomProperty,
-        }) {
+        for (Property p : new Property[]{
+            visibilityDefaultProperty,
+            visibilitySupportedColoredProperty,
+            clockVisibleProperty,
+            clockHandsLongVisibleProperty,
+            clockHandsColoredProperty,
+            clockHandsHourVisibleProperty,
+            clockHandsMinuteVisibleProperty,
+            clockHandsSecondVisibleProperty,
+            clockHandsMillisecondVisibleProperty,
+            clockBorderVisibleProperty,
+            clockBorderOnlyHoursProperty,
+            clockNumbersVisibleProperty,
+            clockCircleVisibleProperty,
+            clockCircleStrongBorderProperty,
+            clockCircleBorderColorProperty,
+            clockCentreCircleVisibleProperty,
+            clockCentreCircleBlackProperty,
+            clockProgressVisibleOnlyIfMouseMovingOverProperty,
+            clockDateVisibleOnlyIfMouseMovingOverProperty,
+            batteryWavesVisibleProperty,
+            batteryCircleProgressProperty,
+            batteryPercentProgressProperty,
+            batteryChargingCharacterVisibleProperty,
+            batteryNameVisibleProperty,
+            batteryLabelVisibleProperty,
+            batteryVisibleProperty,
+            batteryMinuteVisibleProperty,
+            batteryHourVisibleProperty,
+            batteryDayVisibleProperty,
+            batteryWeekVisibleProperty,
+            batteryMonthVisibleProperty,
+            batteryYearVisibleProperty,
+            batteryBlinkingIfCriticalLowVisibleProperty,
+            jokesVisibleProperty,
+            commandsVisibleProperty,
+            notificationsVisibleProperty,
+            smileysVisibleProperty,
+            smileysVisibleOnlyIfMouseMovingOverProperty,
+            smileysColoredProperty,
+            squareVisibleProperty,
+            circleVisibleProperty,
+            walkingHumanVisibleProperty,
+            mainWindowCustomTitleProperty,
+            profileNameProperty,
+            testYearCustomProperty,
+            testMonthCustomProperty,
+            testDayCustomProperty,
+            testHourCustomProperty,
+            testMinuteCustomProperty,
+            testSecondCustomProperty,
+            testMillisecondCustomProperty,}) {
             allProperties.add(p);
         }
         allProperties.stream().forEach(p -> mapOfProperties
@@ -264,10 +260,11 @@ public class TimeCalcConfiguration {
         }
         return mapOfProperties.get(timeCalcProperty);
     }
+
     public String print() {
         StringBuilder sb = new StringBuilder();
-        for(Property p: allProperties) {
-            if(!p.getName().startsWith("test")) {
+        for (Property p : allProperties) {
+            if (!p.getName().startsWith("test")) {
                 continue;
             }
             sb.append(p.getName()).append("=").append(p.getValue())

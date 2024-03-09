@@ -26,7 +26,7 @@ public class ProgressCircle extends Widget {
         Graphics2D brush = (Graphics2D) g;
         brush.setColor(
                 visibility.isStronglyColored() || mouseOver ? Color.darkGray
-                        : FOREGROUND_COLOR);
+                : FOREGROUND_COLOR);
         brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 

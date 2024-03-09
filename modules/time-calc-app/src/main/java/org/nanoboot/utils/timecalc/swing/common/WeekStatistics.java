@@ -14,6 +14,7 @@ import java.util.Calendar;
  */
 @Getter
 public class WeekStatistics {
+
     private final boolean nowIsWeekend;
     private final int workDaysDone;
     private final int workDaysTotal;
@@ -26,11 +27,11 @@ public class WeekStatistics {
             int currentDayOfMonth = analogClock.dayProperty.getValue();
 
             for (int dayOfMonth = 1;
-                 dayOfMonth <= time.asCalendar()
-                         .getActualMaximum(Calendar.DAY_OF_MONTH);
-                 dayOfMonth++) {
-                DayOfWeek dayOfWeek =
-                        LocalDate.of(analogClock.yearProperty.getValue(),
+                    dayOfMonth <= time.asCalendar()
+                            .getActualMaximum(Calendar.DAY_OF_MONTH);
+                    dayOfMonth++) {
+                DayOfWeek dayOfWeek
+                        = LocalDate.of(analogClock.yearProperty.getValue(),
                                 analogClock.monthProperty.getValue(),
                                 dayOfMonth)
                                 .getDayOfWeek();
@@ -52,9 +53,9 @@ public class WeekStatistics {
                         analogClock.dayProperty.getValue()).getDayOfWeek()
                 .toString();
         this.nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY")
-                            || currentDayOfWeekAsString.equals("SUNDAY");
-        workDaysTotalTmp =
-                workDaysDoneTmp + (nowIsWeekend ? 0 : 1) + workDaysTodoTmp;
+                || currentDayOfWeekAsString.equals("SUNDAY");
+        workDaysTotalTmp
+                = workDaysDoneTmp + (nowIsWeekend ? 0 : 1) + workDaysTodoTmp;
         this.workDaysDone = workDaysDoneTmp;
         this.workDaysTotal = workDaysTotalTmp;
 //        System.out.println("currentDayOfWeekAsString=" + currentDayOfWeekAsString);

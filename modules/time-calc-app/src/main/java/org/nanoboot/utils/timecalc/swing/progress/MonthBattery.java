@@ -19,9 +19,9 @@ public class MonthBattery extends Battery {
             done = 1;
         }
         double result = weekDayWhenMondayIsOne == 6
-                        || weekDayWhenMondayIsOne == 7 
-                ? (double) workDaysDone / workDaysTotal
-                : (workDaysDone + done) / workDaysTotal;
+                || weekDayWhenMondayIsOne == 7
+                        ? (double) workDaysDone / workDaysTotal
+                        : (workDaysDone + done) / workDaysTotal;
 //        System.out.println("result=" + result);
         return result;
     }

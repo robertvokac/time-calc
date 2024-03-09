@@ -16,8 +16,8 @@ public class Property<T> {
     private final String name;
     private final List<InvalidationListener> invalidationListeners
             = new ArrayList<>();
-    private final List<ChangeListener<T>> changeListeners =
-            new ArrayList<ChangeListener<T>>();
+    private final List<ChangeListener<T>> changeListeners
+            = new ArrayList<ChangeListener<T>>();
     private boolean valid = true;
     private T value;
     private Property<T> boundToProperty = null;
@@ -51,7 +51,7 @@ public class Property<T> {
     }
 
     public void bindTo(Property<T> anotherProperty) {
-        if(this == anotherProperty) {
+        if (this == anotherProperty) {
             new RuntimeException().printStackTrace();
             throw new TimeCalcException("Cannot bind to self: " + getName());
         }
@@ -59,10 +59,10 @@ public class Property<T> {
         this.boundToProperty = anotherProperty;
         this.boundChangeListener
                 = (Property<T> p, T oldValue, T newValue) -> {
-            this.markInvalid();
-            this.fireValueChangedEvent(oldValue);
-            //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
-        };
+                    this.markInvalid();
+                    this.fireValueChangedEvent(oldValue);
+                    //System.out.println("bindTo markInvalid " + p.getName() + " " + p.getValue());
+                };
         this.boundToProperty
                 .addListener(boundChangeListener);
 

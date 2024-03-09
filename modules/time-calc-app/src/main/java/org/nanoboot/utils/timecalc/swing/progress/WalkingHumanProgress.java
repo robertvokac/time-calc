@@ -36,7 +36,7 @@ public class WalkingHumanProgress extends Widget implements
 
     public WalkingHumanProgress() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
-        
+
         setFocusable(false);
         setForeground(Color.GRAY);
         setBackground(MainWindow.BACKGROUND_COLOR);
@@ -75,9 +75,9 @@ public class WalkingHumanProgress extends Widget implements
             Visibility visibility
                     = Visibility.valueOf(visibilityProperty.getValue());
 
-            brush.setColor(visibility.isStronglyColored() ? Color.BLUE :
-                    visibility.isWeaklyColored() ? Color.GRAY :
-                            Color.LIGHT_GRAY);
+            brush.setColor(visibility.isStronglyColored() ? Color.BLUE
+                    : visibility.isWeaklyColored() ? Color.GRAY
+                    : Color.LIGHT_GRAY);
 //            if(mouseOver) {
 //                brush.drawRect(1,1,getWidth() - 2, getHeight() - 2);
 //            }
@@ -149,15 +149,15 @@ public class WalkingHumanProgress extends Widget implements
 
         sb.append(
                 WALL + createSpaces(spacesDone) + " () " + createSpaces(
-                        spacesTodo) + (spacesTodo == 0
+                spacesTodo) + (spacesTodo == 0
                         ? " \\☼☼☼☼/  "
                         : "|    _ |") + Constants.NEW_LINE
                 + WALL + createSpaces(spacesDone) + "/||\\" + createSpaces(
-                        spacesTodo) + (spacesTodo == 0
+                spacesTodo) + (spacesTodo == 0
                         ? " ☼☼☼☼☼☼ "
                         : "|   |  |") + Constants.NEW_LINE
                 + WALL + createSpaces(spacesDone) + " /\\ " + createSpaces(
-                        spacesTodo) + (spacesTodo == 0
+                spacesTodo) + (spacesTodo == 0
                         ? " /☼☼☼☼\\  "
                         : "|      |") + Constants.NEW_LINE
                 + createRepeatedString(spacesTotal + 14, '=')
