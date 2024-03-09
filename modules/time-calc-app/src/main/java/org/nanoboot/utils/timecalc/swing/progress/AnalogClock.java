@@ -5,7 +5,7 @@ import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
-import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
@@ -59,8 +59,7 @@ public class AnalogClock extends Widget {
             = new BooleanProperty(
             TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
                     .getKey());
-    private final TimeHM endTime;
-    private final int endAngle;
+
     public IntegerProperty startHourProperty
             = new IntegerProperty("startHourProperty");
     public IntegerProperty startMinuteProperty
@@ -93,25 +92,9 @@ public class AnalogClock extends Widget {
             = new BooleanProperty("handsLongProperty", true);
     public BooleanProperty handsColoredProperty
             = new BooleanProperty("handsColoredProperty", true);
-    private TimeHM startTime;
-    private int startAngle;
     private Color customCircleColor = null;
 
-    public AnalogClock(TimeHM startTimeIn,
-            TimeHM endTimeIn) {
-
-        this.endTime = endTimeIn.cloneInstance();
-        this.endAngle
-                = (int) ((endTime.getHour() + endTime.getMinute() / 60d) / 12d
-                         * 360d);
-        if (endTime.getHour() > 12) {
-            endTime.setHour(endTime.getHour() - 12);
-        }
-        this.startTime = startTimeIn.cloneInstance();
-        this.startAngle
-                =
-                (int) ((startTime.getHour() + startTime.getMinute() / 60d) / 12d
-                       * 360d);
+    public AnalogClock() {
 
         setPreferredSize(new Dimension(200, 200));
 
@@ -119,12 +102,31 @@ public class AnalogClock extends Widget {
                 -> customCircleColor = SwingUtils.getColorFromString(
                 centreCircleBorderColorProperty.getValue()));
     }
-
+    private int computeStartAngle() {
+        return computeAngle(startHourProperty.getValue(), startMinuteProperty.getValue());
+    }
+    private int computeEndAngle() {
+        return computeAngle(endHourProperty.getValue(), endMinuteProperty.getValue());
+    }
+    private int computeAngle(TTime TTime) {
+        if (TTime.getHour() > 12) {
+            TTime.setHour(TTime.getHour() - 12);
+        }
+        return computeAngle(TTime.getHour(), TTime.getMinute());
+    }
+    private int computeAngle(int hour, int minute) {
+        return (int) ((hour + minute / 60d) / 12d
+                      * 360d);
+    }
     public static void main(String[] args) {
         JFrame window = new JFrame("Analog Clock");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         AnalogClock clock
-                = new AnalogClock(new TimeHM("6:30"), new TimeHM("19:00"));
+                = new AnalogClock();
+        clock.startHourProperty.setValue(6);
+        clock.startMinuteProperty.setValue(30);
+        clock.endHourProperty.setValue(19);
+        clock.endMinuteProperty.setValue(0);
         window.add(clock);
         window.pack();
         Time time = new Time();
@@ -184,15 +186,13 @@ public class AnalogClock extends Widget {
         }
         if ((mouseOver || progressVisibleOnlyIfMouseMovingOverProperty
                 .isDisabled()) && visibility.isStronglyColored()) {
-            this.startTime = new TimeHM(hour, minute);
-            this.startAngle
-                    = (int) ((startTime.getHour() + startTime.getMinute() / 60d)
-                             / 12d * 360d);
+
 
             Color currentColor = g2d.getColor();
             g2d.setColor(Color.YELLOW);
+            int startAngle = computeStartAngle();
             g2d.fillArc(0, 0, side, side, -startAngle + 90,
-                    startAngle - endAngle);
+                    startAngle - computeEndAngle());
 
             //System.out.println("ANGLES: " + startAngle + " " + endAngle + " " + angleDiff );
             g2d.setColor(currentColor);

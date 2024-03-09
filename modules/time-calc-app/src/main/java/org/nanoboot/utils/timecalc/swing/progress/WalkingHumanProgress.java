@@ -8,7 +8,7 @@ import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
-import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 
@@ -40,7 +40,7 @@ public class WalkingHumanProgress extends Widget implements
     private int minuteRemains;
     private double done;
     private double totalSecondsRemainsDouble;
-    private TimeHM endTime;
+    private TTime endTime;
 
     public WalkingHumanProgress() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
@@ -214,12 +214,12 @@ public class WalkingHumanProgress extends Widget implements
         return sb.toString();
     }
 
-    public void printPercentToAscii(double percent, int hourRemains,
-            int minuteRemains, double done,
-            double totalSecondsRemainsDouble, TimeHM endTime) {
+    public void printPercentToAscii(double percent, long hourRemains,
+            long minuteRemains, double done,
+            double totalSecondsRemainsDouble, TTime endTime) {
         this.percent = percent;
-        this.hourRemains = hourRemains;
-        this.minuteRemains = minuteRemains;
+        this.hourRemains = (int) hourRemains;
+        this.minuteRemains = (int) minuteRemains;
         this.done = done;
         this.totalSecondsRemainsDouble = totalSecondsRemainsDouble;
         this.endTime = endTime;
@@ -227,7 +227,7 @@ public class WalkingHumanProgress extends Widget implements
 
     private String createMessage(int hourRemains, int minuteRemains,
             double done,
-            double totalSecondsRemainsDouble, TimeHM endTime) {
+            double totalSecondsRemainsDouble, TTime endTime) {
         String msg
                 = "Done=" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(
                 done * 100) + "% Remains="

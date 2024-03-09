@@ -55,12 +55,15 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private void processTestModeKeyCode(int keyCode, boolean shiftDown,
             boolean ctrlDown, boolean altDown) {
         if (shiftDown && ctrlDown) {
+            Utils.showNotification("Following key shortcut is not supported: SHIFT + CTRL");
             return;
         }
         if (shiftDown && altDown) {
+            Utils.showNotification("Following key shortcut is not supported: SHIFT + ALT");
             return;
         }
         if (ctrlDown && altDown) {
+            Utils.showNotification("Following key shortcut is not supported: CTRL + ALT");
             return;
         }
         boolean increase = shiftDown;
@@ -73,7 +76,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                         Calendar.YEAR);
                 break;
             }
-            case KeyEvent.VK_O: {
+            case KeyEvent.VK_N: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " month.");
                 updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset,
                         Calendar.MONTH);
@@ -109,10 +112,30 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                         Calendar.MILLISECOND);
                 break;
             }
+            case KeyEvent.VK_A: {
+                //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
+                if(increase) {
+                    window.increaseArrivalByOneMinute();
+                }
+                if(decrease) {
+                    window.decreaseArrivalByOneMinute();
+                }
+                break;
+            }
+            case KeyEvent.VK_O: {
+                //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
+                if(increase) {
+                    window.increaseOvertimeByOneMinute();
+                }
+                if(decrease) {
+                    window.decreaseOvertimeByOneMinute();
+                }
+                break;
+            }
             default:
-                Utils.showNotification(
-                        "Unsupported key was pressed. There is no key shortcut for this key: "
-                        + keyCode);
+//                Utils.showNotification(
+//                        "Unsupported key was pressed. There is no key shortcut for this key: "
+//                        + keyCode);
         }
     }
 
@@ -229,7 +252,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 } else {
                     timeCalcApp.visibilityProperty
                             .setValue(Visibility.GRAY.name());
-                    MainWindow.hideShowCheckBox.setSelected(false);
+                    MainWindow.hideShowFormsCheckBox.setSelected(false);
                 }
                 break;
             }
@@ -341,8 +364,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
 
             case KeyEvent.VK_B: {
-                MainWindow.hideShowCheckBox
-                        .setSelected(!MainWindow.hideShowCheckBox.isSelected());
+                MainWindow.hideShowFormsCheckBox
+                        .setSelected(!MainWindow.hideShowFormsCheckBox.isSelected());
                 break;
             }
             case KeyEvent.VK_F: {

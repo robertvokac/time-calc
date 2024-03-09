@@ -281,7 +281,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
-                MainWindow.hideShowCheckBox.setSelected(enable);
+                MainWindow.hideShowFormsCheckBox.setSelected(enable);
             });
         }
 

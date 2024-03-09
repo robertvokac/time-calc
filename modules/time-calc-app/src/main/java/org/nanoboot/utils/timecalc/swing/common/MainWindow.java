@@ -22,16 +22,15 @@ import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.swing.progress.YearBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
-import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.Calendar;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyVetoException;
 
 /**
  * @author Robert Vokac
@@ -41,7 +40,7 @@ public class MainWindow extends TWindow {
 
     public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
-    public static final JCheckBox hideShowCheckBox = new JCheckBox();
+    public static final JCheckBox hideShowFormsCheckBox = new JCheckBox();
     private final TButton workDaysButton;
     private final TButton activitiesButton;
     private final TButton exitButton;
@@ -55,12 +54,30 @@ public class MainWindow extends TWindow {
     private final AboutButton aboutButton;
     private final TimeCalcConfiguration timeCalcConfiguration
             = new TimeCalcConfiguration();
+    private final TTextField arrivalTextField;
+    private final TTextField overtimeTextField;
+    private final TCheckBox halfDayCheckBox;
+    private final TTextField pauseTimeInMinutesTextField;
+    private final TTextField noteTextField;
+    private final TTextField departureTextField;
+    private final TTextField elapsedTextField;
+    private final TTextField remainingTextField;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
     private WorkingDaysWindow workingDaysWindow = null;
     private boolean stopBeforeEnd = false;
 
+    {
+        this.arrivalTextField = new TTextField();
+        this.overtimeTextField = new TTextField();
+        this.halfDayCheckBox = new TCheckBox("Half day:", false);
+        this.pauseTimeInMinutesTextField = new TTextField("30");
+        this.noteTextField = new TTextField();
+        this.departureTextField = new TTextField();
+        this.elapsedTextField = new TTextField("", 100);
+        this.remainingTextField = new TTextField("", 100);
+    }
     public MainWindow(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
         setFocusable(true);
@@ -77,23 +94,25 @@ public class MainWindow extends TWindow {
         timeCalcConfiguration.mainWindowCustomTitleProperty.addListener(e -> {
             setTitle(getWindowTitle());
         });
-
         overTimeIn = (overTimeIn == null || overTimeIn.isEmpty())
                 ? Constants.DEFAULT_OVERTIME : overTimeIn;
 
-        TimeHM startTime = new TimeHM(startTimeIn);
-        TimeHM overtime = new TimeHM(overTimeIn);
+        arrivalTextField.valueProperty.setValue(startTimeIn);
+        overtimeTextField.valueProperty.setValue(overTimeIn);
 
-        TimeHM endTime = new TimeHM(
-                startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime
-                        .getHour(),
-                startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH
-                + overtime.getMinute());
+        arrivalTextField.addVetoableChangeListener(e -> {
+            String newValue = (String) e.getNewValue();
+            if(newValue.isEmpty()) {
+                throw new PropertyVetoException("Arrival must not be empty.", new PropertyChangeEvent(e.getSource(), e.getPropertyName(), e.getOldValue(), e.getNewValue()));
+            }
+        });
 
-        int totalMinutes = TimeHM.countDiffInMinutes(startTime, endTime);
-        int totalSeconds = totalMinutes * TimeHM.SECONDS_PER_MINUTE;
-        int totalMilliseconds = totalSeconds * TimeHM.MILLISECONDS_PER_SECOND;
-
+        overtimeTextField.addVetoableChangeListener(e -> {
+            String newValue = (String) e.getNewValue();
+            if(newValue.isEmpty()) {
+                throw new PropertyVetoException("Overtime must not be empty.", new PropertyChangeEvent(e.getSource(), e.getPropertyName(), e.getOldValue(), e.getNewValue()));
+            }
+        });
         this.configButton = new TButton("Config");
         this.workDaysButton = new TButton("Work Days");
         this.activitiesButton = new TButton("Activities"
@@ -110,7 +129,7 @@ public class MainWindow extends TWindow {
         //window.add(weatherButton);
         addAll(configButton, workDaysButton, activitiesButton, restartButton,
                 exitButton, focusButton, helpButton, commandButton, jokeButton,
-                hideShowCheckBox);
+                hideShowFormsCheckBox);
 
         timeCalcApp.visibilityProperty
                 .bindTo(timeCalcConfiguration.visibilityDefaultProperty);
@@ -124,7 +143,29 @@ public class MainWindow extends TWindow {
                         this, time);
         addKeyListener(timeCalcKeyAdapter);
 
-        AnalogClock analogClock = new AnalogClock(startTime, endTime);
+        AnalogClock analogClock = new AnalogClock();
+
+        {
+            arrivalTextField.valueProperty.addListener(e -> {
+                if (!arrivalTextField.valueProperty.getValue().isEmpty()) {
+                    TTime startTime_ = arrivalTextField.asTimeHM();
+                    analogClock.startHourProperty
+                            .setValue(startTime_.getHour());
+                    analogClock.startMinuteProperty
+                            .setValue(startTime_.getMinute());
+                }
+
+            });
+            departureTextField.valueProperty.addListener(e -> {
+                if (!departureTextField.valueProperty.getValue().isEmpty()) {
+                    TTime endTime = arrivalTextField.asTimeHM();
+                    analogClock.endHourProperty
+                            .setValue(endTime.getHour());
+                    analogClock.endMinuteProperty
+                            .setValue(endTime.getMinute());
+                }
+            });
+        }
         analogClock.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 200);
         add(analogClock);
 
@@ -160,7 +201,71 @@ public class MainWindow extends TWindow {
                                               + walkingHumanProgress.getHeight()
                                               + SwingUtils.MARGIN);
 
-        configButton.setBoundsFromTop(walkingHumanProgress);
+        TLabel arrivalTextFieldLabel = new TLabel("Arrival:");
+        arrivalTextFieldLabel.setBoundsFromTop(walkingHumanProgress);
+
+        arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
+        //
+        TLabel overtimeTextFieldLabel = new TLabel("Overtime:");
+        overtimeTextFieldLabel.setBoundsFromLeft(arrivalTextField);
+
+        overtimeTextField.setBoundsFromLeft(overtimeTextFieldLabel);
+        //
+
+        halfDayCheckBox.setBoundsFromLeft(overtimeTextField);
+        //
+        TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:");
+        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(halfDayCheckBox);
+
+        pauseTimeInMinutesTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
+        //
+        TLabel noteTextFieldLabel = new TLabel("Note:");
+        noteTextFieldLabel.setBoundsFromLeft(pauseTimeInMinutesTextField);
+
+        noteTextField.setBoundsFromLeft(noteTextFieldLabel);
+        //half day, pause time in minutes, note
+        arrivalTextField.setEditable(false);
+        overtimeTextField.setEditable(false);
+
+        add(arrivalTextFieldLabel);
+        add(arrivalTextField);
+        add(overtimeTextFieldLabel);
+        add(overtimeTextField);
+        add(halfDayCheckBox);
+
+        add(pauseTimeInMinutesFieldLabel);
+        add(pauseTimeInMinutesTextField);
+        add(noteTextFieldLabel);
+        add(noteTextField);
+        //
+        TLabel departureTextFieldLabel = new TLabel("Departure:");
+        departureTextFieldLabel.setBoundsFromTop(arrivalTextFieldLabel);
+
+        departureTextField.setBoundsFromLeft(departureTextFieldLabel);
+        departureTextField.setEditable(false);
+        //
+        TLabel elapsedTextFieldLabel = new TLabel("Elapsed:");
+        elapsedTextFieldLabel.setBoundsFromLeft(departureTextField);
+
+        elapsedTextField.setBoundsFromLeft(elapsedTextFieldLabel);
+        elapsedTextField.setEditable(false);
+        elapsedTextField.setEditable(false);
+        //
+        TLabel remainingTextFieldLabel = new TLabel("Remaining:", 100);
+        remainingTextFieldLabel.setBoundsFromLeft(elapsedTextField);
+
+        remainingTextField.setBoundsFromLeft(remainingTextFieldLabel);
+        remainingTextField.setEditable(false);
+        //
+
+        add(departureTextFieldLabel);
+        add(departureTextField);
+        add(elapsedTextFieldLabel);
+        add(elapsedTextField);
+        add(remainingTextFieldLabel);
+        add(remainingTextField);
+        //
+        configButton.setBoundsFromTop(departureTextFieldLabel);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
         restartButton.setBoundsFromLeft(activitiesButton);
@@ -171,8 +276,8 @@ public class MainWindow extends TWindow {
         focusButton.setBoundsFromLeft(helpButton);
         commandButton.setBoundsFromLeft(focusButton);
         jokeButton.setBoundsFromLeft(commandButton);
-        hideShowCheckBox.setSelected(true);
-        hideShowCheckBox.setBounds(
+        hideShowFormsCheckBox.setSelected(true);
+        hideShowFormsCheckBox.setBounds(
                 jokeButton.getX() + jokeButton.getWidth() + SwingUtils.MARGIN,
                 jokeButton.getY(), 20, 20);
         //
@@ -194,11 +299,7 @@ public class MainWindow extends TWindow {
                 Jokes.showRandom();
             }
         });
-        hideShowCheckBox.addItemListener(e ->
-
-        {
-            this.requestFocus();
-        });
+        hideShowFormsCheckBox.addItemListener(e -> this.requestFocus());
         exitButton.addActionListener(e
                 -> {
             timeCalcConfiguration.saveToTimeCalcProperties();
@@ -422,9 +523,20 @@ public class MainWindow extends TWindow {
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 
+
+
         while (true) {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
 
+            {
+                TTime startTime = arrivalTextField.asTimeHM();
+                TTime overtime = overtimeTextField.asTimeHM();
+                departureTextField.valueProperty.setValue(new TTime(
+                        startTime.getHour() + Constants.WORKING_HOURS_LENGTH + overtime
+                                .getHour(),
+                        startTime.getMinute() + Constants.WORKING_MINUTES_LENGTH
+                        + overtime.getMinute()).toString().substring(0, 5));
+            }
             Visibility currentVisibility = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue());
             if (!timeCalcConfiguration.visibilitySupportedColoredProperty
@@ -465,7 +577,7 @@ public class MainWindow extends TWindow {
                     TimeCalcProperties.getInstance().getBooleanProperty(
                             TimeCalcProperty.JOKES_VISIBLE)
                     && !currentVisibility.isNone()
-                    && MainWindow.hideShowCheckBox.isSelected());
+                    && MainWindow.hideShowFormsCheckBox.isSelected());
 
             setTitle(currentVisibility.isNone() ? "" : getWindowTitle());
 
@@ -474,17 +586,39 @@ public class MainWindow extends TWindow {
 
             int secondNow = analogClock.secondProperty.getValue();
             int millisecondNow = analogClock.millisecondProperty.getValue();
-            TimeHM timeRemains = new TimeHM(endTime.getHour() - hourNow,
-                    endTime.getMinute() - minuteNow);
+
+            TTime startTime = arrivalTextField.asTimeHM();
+            TTime endTime = departureTextField.asTimeHM();
+            TTime nowTime = TTime.of(time.asCalendar());
+            TTime timeElapsed = TTime
+                    .computeTimeDiff(startTime, nowTime);
+            TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
+            String timeElapsedString = timeElapsed.toString();
+            String timeRemainsString = timeRemains.toString();
 
             int secondsRemains = 60 - secondNow;
             int millisecondsRemains = 1000 - millisecondNow;
+            if (!remainingTextField.valueProperty.getValue()
+                    .equals(timeRemainsString)) {
+                remainingTextField.valueProperty.setValue(timeRemainsString);
+            }
+            if (!elapsedTextField.valueProperty.getValue()
+                    .equals(timeElapsedString)) {
+                elapsedTextField.valueProperty.setValue(timeElapsedString);
+            }
+//            if (!elapsedTextField.valueProperty.getValue()
+//                    .equals(timeElapsed.remove(new TimeHM(0,1)).toString())) {
+//                String s = timeElapsed.remove(new TimeHM(0,1)).toString();
+//                elapsedTextField.valueProperty.setValue(s + ":" + (secondNow < 10 ? "0" : "") + secondNow + ":" + (millisecondNow < 10 ? "00" : (millisecondNow < 100 ? "0" : millisecondNow)) + millisecondNow);
+//            }
 
-            int hourDone = Constants.WORKING_HOURS_LENGTH + overtime.getHour()
-                           - timeRemains.getHour();
+
+            TTime overtime = overtimeTextField.asTimeHM();
+            int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
+                                              - timeRemains.getHour());
             int minutesDone
-                    = Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
-                      - timeRemains.getMinute();
+                    = (int) (Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
+                                                 - timeRemains.getMinute());
             int secondsDone = secondNow;
             int millisecondsDone = millisecondNow;
 
@@ -492,6 +626,13 @@ public class MainWindow extends TWindow {
             int totalSecondsDone = totalMinutesDone * 60 + secondsDone;
             int totalMillisecondsDone
                     = totalSecondsDone * 1000 + millisecondsDone;
+
+
+            int totalMinutes = TTime.countDiffInMinutes(arrivalTextField.asTimeHM(),
+                    departureTextField.asTimeHM());
+
+            int totalSeconds = totalMinutes * TTime.SECONDS_PER_MINUTE;
+            int totalMilliseconds = totalSeconds * TTime.MILLISECONDS_PER_SECOND;
 
             double done = ((double) totalMillisecondsDone)
                           / ((double) totalMilliseconds);
@@ -532,9 +673,9 @@ public class MainWindow extends TWindow {
             yearBattery.setLabel("");
             //yearBattery.setDonePercent(YearBattery.getYearProgress(2024,0,1,0,0,0,0));
             int totalSecondsRemains
-                    = (timeRemains.getHour() * 60 * 60
-                       + timeRemains.getMinute() * 60
-                       + secondsRemains);
+                    = (int) (timeRemains.getHour() * 60 * 60
+                                                 + timeRemains.getMinute() * 60
+                                                 + secondsRemains);
             int totalMillisecondsRemains
                     = totalSecondsRemains * 1000 + millisecondsRemains;
             double totalSecondsRemainsDouble
@@ -654,5 +795,19 @@ public class MainWindow extends TWindow {
         }
 
         this.configWindow.doDisableAlmostEverything();
+    }
+    public void increaseArrivalByOneMinute() {
+        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).add(new TTime(0, 1)).toString().substring(0, 5));
+    }
+    public void decreaseArrivalByOneMinute() {
+        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).remove(new TTime(0, 1)).toString().substring(0, 5));
+    }
+    public void increaseOvertimeByOneMinute() {
+        TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).add(new TTime(0, 1));
+        overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 :5));
+    }
+    public void decreaseOvertimeByOneMinute() {
+        TTime newOvertime = new TTime(this.overtimeTextField.valueProperty.getValue()).remove(new TTime(0, 1));
+        overtimeTextField.valueProperty.setValue(newOvertime.toString().substring(0, newOvertime.isNegative() ? 6 :5));
     }
 }

@@ -6,8 +6,8 @@ import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.Timer;
 import java.awt.Color;
 
@@ -15,10 +15,13 @@ import java.awt.Color;
  * @author Robert Vokac
  * @since 21.02.2024
  */
-public class TButton extends JButton implements GetProperty {
+public class TLabel extends JLabel implements GetProperty {
 
-    private static final int BUTTON_WIDTH = 100;
-    private static final int BUTTON_HEIGHT = 30;
+    private static final int WIDTH = 60;
+    private static final int HEIGHT = 30;
+    private int customWidth = 0;
+    private Color originalBackground;
+    private Color originalForeground;
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -26,17 +29,18 @@ public class TButton extends JButton implements GetProperty {
     public StringProperty visibilityProperty
             = new StringProperty("visibilityProperty",
             Visibility.STRONGLY_COLORED.name());
-    private Color originalBackground;
-    private Color originalForeground;
-
-    public TButton(String label) {
-        super(label);
+    public TLabel(String text) {
+        this(text, 0);
+    }
+    public TLabel(String text, int customWidth) {
+        super(text);
+        this.customWidth = customWidth;
         new Timer(100, e -> {
             if (!MainWindow.hideShowFormsCheckBox.isSelected()) {
                 setVisible(false);
                 return;
             } else {
-                setVisible(true);
+                //setVisible(true);
             }
             Visibility visibility
                     = Visibility.valueOf(visibilityProperty.getValue());
@@ -52,18 +56,11 @@ public class TButton extends JButton implements GetProperty {
     }
 
     public void setBounds(int x, int y) {
-        setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        setBounds(x, y, customWidth == 0 ? WIDTH : customWidth, HEIGHT);
         this.originalBackground = getBackground();
         this.originalForeground = getForeground();
     }
 
-    public void setOriginalBackground() {
-        this.setBackground(originalBackground);
-    }
-
-    public void setOriginalForeground() {
-        this.setForeground(originalForeground);
-    }
 
     public void setBoundsFromLeft(JComponent jComponent) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
@@ -79,7 +76,13 @@ public class TButton extends JButton implements GetProperty {
                                      + jComponent.getHeight()
                                      + marginCount * SwingUtils.MARGIN);
     }
+    public void setOriginalBackground() {
+        this.setBackground(originalBackground);
+    }
 
+    public void setOriginalForeground() {
+        this.setForeground(originalForeground);
+    }
     @Override
     public Property getVisibilityProperty() {
         return visibilityProperty;
@@ -90,8 +93,4 @@ public class TButton extends JButton implements GetProperty {
         return visibilitySupportedColoredProperty;
     }
 
-    void addActionListener() {
-        throw new UnsupportedOperationException(
-                "Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

@@ -51,6 +51,10 @@ public class Property<T> {
     }
 
     public void bindTo(Property<T> anotherProperty) {
+        if(this == anotherProperty) {
+            new RuntimeException().printStackTrace();
+            throw new TimeCalcException("Cannot bind to self: " + getName());
+        }
         fireValueChangedEvent(value);
         this.boundToProperty = anotherProperty;
         this.boundChangeListener
@@ -93,7 +97,12 @@ public class Property<T> {
         }
     }
 
-    protected void fireValueChangedEvent(T oldValue) {
+    public void fireValueChangedEvent(T oldValue) {
+//        if (isBound()) {
+//            System.out.println("Property " + getName() + " calling boundProperty fire event for: " + this.boundToProperty.getName());
+//            this.boundToProperty.fireValueChangedEvent(oldValue);
+//            return;
+//        }
         //        System.out.println(name + " was changed");
         for (ChangeListener listener : changeListeners) {
             listener.changed(this, oldValue, value);

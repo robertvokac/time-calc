@@ -1,6 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
-import org.nanoboot.utils.timecalc.utils.common.TimeHM;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 
 /**
  * @author Robert Vokac
@@ -14,7 +14,7 @@ public class HourBattery extends Battery {
         super(HOUR, x, i, i1);
     }
 
-    public static double getHourProgress(TimeHM timeRemains, int secondsRemains,
+    public static double getHourProgress(TTime timeRemains, int secondsRemains,
             int millisecondsRemains) {
         if (secondsRemains < 0 || millisecondsRemains < 0
             || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {

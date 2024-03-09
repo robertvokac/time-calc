@@ -69,6 +69,7 @@ public class TimeCalcApp {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
         }
 

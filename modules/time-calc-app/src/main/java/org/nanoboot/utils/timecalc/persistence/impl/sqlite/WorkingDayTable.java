@@ -33,10 +33,12 @@ class WorkingDayTable {
     public static final String YEAR = "YEAR";
     public static final String MONTH = "MONTH";
     public static final String DAY = "DAY";
+
     public static final String ARRIVAL_HOUR = "ARRIVAL_HOUR";
     public static final String ARRIVAL_MINUTE = "ARRIVAL_MINUTE";
     public static final String HALF_DAY = "HALF_DAY";
     public static final String OVERTIME_HOUR = "OVERTIME_HOUR";
+
     public static final String OVERTIME_MINUTE = "OVERTIME_MINUTE";
     public static final String PAUSE_TIME_IN_MINUTES = "PAUSE_TIME_IN_MINUTES";
     public static final String NOTE = "NOTE";
