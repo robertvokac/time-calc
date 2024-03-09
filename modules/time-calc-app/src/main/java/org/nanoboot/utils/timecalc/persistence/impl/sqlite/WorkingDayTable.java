@@ -18,10 +18,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  *
 * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
@@ -40,6 +36,7 @@ class WorkingDayTable {
     public static final String OVERTIME_HOUR = "OVERTIME_HOUR";
 
     public static final String OVERTIME_MINUTE = "OVERTIME_MINUTE";
+    public static final String WORKING_TIME_IN_MINUTES = "WORKING_TIME_IN_MINUTES";
     public static final String PAUSE_TIME_IN_MINUTES = "PAUSE_TIME_IN_MINUTES";
     public static final String NOTE = "NOTE";
 
