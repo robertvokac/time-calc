@@ -58,7 +58,7 @@ public class MainWindow extends TWindow {
             = new TimeCalcConfiguration();
     private final TTextField arrivalTextField;
     private final TTextField overtimeTextField;
-    private final TCheckBox halfDayCheckBox;
+    private final TTextField workingTimeInMinutesTextField;
     private final TTextField pauseTimeInMinutesTextField;
     private final TTextField noteTextField;
     private final TTextField departureTextField;
@@ -73,9 +73,9 @@ public class MainWindow extends TWindow {
     {
         this.arrivalTextField = new TTextField();
         this.overtimeTextField = new TTextField();
-        this.halfDayCheckBox = new TCheckBox("Half day:", false);
+        this.workingTimeInMinutesTextField = new TTextField("480");
         this.pauseTimeInMinutesTextField = new TTextField("30");
-        this.noteTextField = new TTextField("", 120);
+        this.noteTextField = new TTextField("", 160);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
@@ -246,7 +246,7 @@ public class MainWindow extends TWindow {
         progressCircle.visibleProperty
                 .bindTo(timeCalcConfiguration.circleVisibleProperty);
         //
-        TLabel arrivalTextFieldLabel = new TLabel("Arrival:");
+        TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(clock, 3);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
@@ -257,10 +257,13 @@ public class MainWindow extends TWindow {
         overtimeTextField.setBoundsFromLeft(overtimeTextFieldLabel);
         //
 
-        halfDayCheckBox.setBoundsFromLeft(overtimeTextField);
+        TLabel workingTimeInMinutesTextFieldLabel = new TLabel("Work:", 40);
+        workingTimeInMinutesTextFieldLabel.setBoundsFromLeft(overtimeTextField);
+        
+        workingTimeInMinutesTextField.setBoundsFromLeft(workingTimeInMinutesTextFieldLabel);
         //
-        TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:");
-        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(halfDayCheckBox);
+        TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:", 40);
+        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeInMinutesTextField);
 
         pauseTimeInMinutesTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
         //
@@ -276,14 +279,15 @@ public class MainWindow extends TWindow {
         add(arrivalTextField);
         add(overtimeTextFieldLabel);
         add(overtimeTextField);
-        add(halfDayCheckBox);
+        add(workingTimeInMinutesTextFieldLabel);
+        add(workingTimeInMinutesTextField);
 
         add(pauseTimeInMinutesFieldLabel);
         add(pauseTimeInMinutesTextField);
         add(noteTextFieldLabel);
         add(noteTextField);
         //
-        TLabel departureTextFieldLabel = new TLabel("Departure:");
+        TLabel departureTextFieldLabel = new TLabel("Departure:", 70);
         departureTextFieldLabel.setBoundsFromTop(arrivalTextFieldLabel);
 
         departureTextField.setBoundsFromLeft(departureTextFieldLabel);
