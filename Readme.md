@@ -172,7 +172,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * SHIFT + A - Increase arrival time by 1 minute
 * CTRL + A - Decrease arrival time by 1 minute
 * SHIFT + O - Increase overtime by 1 minute
-* CTRL + O - Decrease overtime time by 1 minute
+* CTRL + O - Decrease overtime by 1 minute
 
 ## Command button
 
