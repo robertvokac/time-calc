@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -155,12 +156,30 @@ public class TimeCalcConfiguration {
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(
             TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
+    public final BooleanProperty testModeProperty
+            = new BooleanProperty("testModeProperty", false);
     public final StringProperty profileNameProperty
             = new StringProperty(TimeCalcProperty.PROFILE_NAME.getKey());
+    public final IntegerProperty testYearCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_YEAR
+            .getKey(), Integer.MAX_VALUE);
+    public final IntegerProperty testMonthCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_MONTH
+            .getKey(), Integer.MAX_VALUE);
+    public final IntegerProperty testDayCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_DAY
+            .getKey(), Integer.MAX_VALUE);
+    public final IntegerProperty testHourCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_HOUR
+            .getKey(), Integer.MAX_VALUE);
+    public final IntegerProperty testMinuteCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_MINUTE
+            .getKey(), Integer.MAX_VALUE);
+    public final IntegerProperty testSecondCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_SECOND
+            .getKey(), Integer.MAX_VALUE);
+    public final IntegerProperty testMillisecondCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_MILLISECOND
+            .getKey(), Integer.MAX_VALUE);
 
+    //
     private final Map<TimeCalcProperty, Property> mapOfProperties =
             new HashMap<>();
     private final List<Property> allProperties = new ArrayList<>();
+
     private TimeCalcProperties timeCalcProperties;
 
     public TimeCalcConfiguration() {
@@ -209,6 +228,13 @@ public class TimeCalcConfiguration {
                 walkingHumanVisibleProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
+                testYearCustomProperty,
+                testMonthCustomProperty,
+                testDayCustomProperty,
+                testHourCustomProperty,
+                testMinuteCustomProperty,
+                testSecondCustomProperty,
+                testMillisecondCustomProperty,
         }) {
             allProperties.add(p);
         }
@@ -237,6 +263,17 @@ public class TimeCalcConfiguration {
                     "There is no property for : " + timeCalcProperty);
         }
         return mapOfProperties.get(timeCalcProperty);
+    }
+    public String print() {
+        StringBuilder sb = new StringBuilder();
+        for(Property p: allProperties) {
+            if(!p.getName().startsWith("test")) {
+                continue;
+            }
+            sb.append(p.getName()).append("=").append(p.getValue())
+                    .append("\n");
+        }
+        return sb.toString();
     }
 
     public void saveToTimeCalcProperties() {
@@ -274,6 +311,12 @@ public class TimeCalcConfiguration {
             if (p instanceof StringProperty) {
                 p.setValue(timeCalcProperties
                         .getStringProperty(
+                                TimeCalcProperty.forKey(p.getName())));
+                continue;
+            }
+            if (p instanceof IntegerProperty) {
+                p.setValue(timeCalcProperties
+                        .getIntegerProperty(
                                 TimeCalcProperty.forKey(p.getName())));
                 continue;
             }

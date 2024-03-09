@@ -167,6 +167,10 @@ Smileys can be colored or white-black (can be set in configuration)
 * LEFT - switch to previous profile
 * RIGHT - switch to next profile
 * K - hide or show clock
+* SHIFT + {Y,O,D,H,M,S or I} - Increase test time value
+* CTRL + {Y,O,D,H,M,S or I} - Decrease test time value
+* ALT + {Y,O,D,H,M,S or I} - Rest test time value
+* D - Reset custom time values to the real time
 
 ## Command button
 

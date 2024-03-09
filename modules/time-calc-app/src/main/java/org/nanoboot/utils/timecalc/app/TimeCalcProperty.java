@@ -82,7 +82,14 @@ public enum TimeCalcProperty {
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
     MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title",
             "Main Window : Custom Title"),
-    PROFILE_NAME("profile.name", "Profile : Name");
+    PROFILE_NAME("profile.name", "Profile : Name"),
+    TEST_CLOCK_CUSTOM_YEAR("test.clock.custom.year", "Test : Clock : Custom : Year", Integer.class),
+    TEST_CLOCK_CUSTOM_MONTH("test.clock.custom.month", "Test : Clock : Custom : Month", Integer.class),
+    TEST_CLOCK_CUSTOM_DAY("test.clock.custom.day", "Test : Clock : Custom : Day", Integer.class),
+    TEST_CLOCK_CUSTOM_HOUR("test.clock.custom.hour", "Test : Clock : Custom : Hour", Integer.class),
+    TEST_CLOCK_CUSTOM_MINUTE("test.clock.custom.minute", "Test : Clock : Custom : Minute", Integer.class),
+    TEST_CLOCK_CUSTOM_SECOND("test.clock.custom.second", "Test : Clock : Custom : Second", Integer.class),
+    TEST_CLOCK_CUSTOM_MILLISECOND("test.clock.custom.millisecond", "Test : Clock : Custom : Millisecond", Integer.class);
 
     @Getter
     private final String key;

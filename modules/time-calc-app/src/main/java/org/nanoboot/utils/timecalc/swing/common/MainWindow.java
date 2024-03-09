@@ -127,9 +127,10 @@ public class MainWindow extends TWindow {
                 .isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
+        Time time = new Time();
         TimeCalcKeyAdapter timeCalcKeyAdapter =
                 new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp,
-                        this);
+                        this, time);
         addKeyListener(timeCalcKeyAdapter);
 
         AnalogClock analogClock = new AnalogClock(startTime, endTime);
@@ -258,8 +259,14 @@ public class MainWindow extends TWindow {
                     .log(Level.SEVERE, null, ex);
         }
 
-        Time time = new Time();
-
+        time.yearCustomProperty.bindTo(timeCalcConfiguration.testYearCustomProperty);
+        time.monthCustomProperty.bindTo(timeCalcConfiguration.testMonthCustomProperty);
+        time.dayCustomProperty.bindTo(timeCalcConfiguration.testDayCustomProperty);
+        time.hourCustomProperty.bindTo(timeCalcConfiguration.testHourCustomProperty);
+        time.minuteCustomProperty.bindTo(timeCalcConfiguration.testMinuteCustomProperty);
+        time.secondCustomProperty.bindTo(timeCalcConfiguration.testSecondCustomProperty);
+        time.millisecondCustomProperty.bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
+        time.allowCustomValuesProperty.setValue(true);
         bindToIfPropertyMissing(testProperties, "test.current.day", calNow,
                 Calendar.DAY_OF_MONTH, analogClock.dayProperty,
                 time.dayProperty);

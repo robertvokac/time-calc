@@ -115,7 +115,19 @@ public class TimeCalcProperties {
         }
         return (String) properties.get(key);
     }
+    public int getIntegerProperty(TimeCalcProperty timeCalcProperty) {
+        return getIntegerProperty(timeCalcProperty,
+                Integer.valueOf(getDefaultStringValue(timeCalcProperty)));
+    }
 
+    private int getIntegerProperty(TimeCalcProperty timeCalcProperty,
+            int defaultValue) {
+        String key = timeCalcProperty.getKey();
+        if (!properties.containsKey(key)) {
+            return defaultValue;
+        }
+        return Integer.valueOf((String) properties.get(key));
+    }
     private String getVisibilityProperty(TimeCalcProperty timeCalcProperty) {
         return getStringProperty(timeCalcProperty,
                 Visibility.STRONGLY_COLORED.name());

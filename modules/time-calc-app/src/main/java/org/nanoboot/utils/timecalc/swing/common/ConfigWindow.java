@@ -163,6 +163,20 @@ public class ConfigWindow extends TWindow {
             = new JTextField();
     private final JTextField profileNameProperty
             = new JTextField();
+    private final JTextField testClockCustomYearProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_YEAR.getKey());
+    private final JTextField testClockCustomMonthProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_MONTH.getKey());
+    private final JTextField testClockCustomDayProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_DAY.getKey());
+    private final JTextField testClockCustomHourProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_HOUR.getKey());
+    private final JTextField testClockCustomMinuteProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_MINUTE.getKey());
+    private final JTextField testClockCustomSecondProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_SECOND.getKey());
+    private final JTextField testClockCustomMillisecondProperty
+            = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_MILLISECOND.getKey());
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         setTitle("Configuration");
@@ -308,6 +322,13 @@ public class ConfigWindow extends TWindow {
                 smileysVisibleProperty,
                 smileysVisibleOnlyIfMouseMovingOverProperty,
                 smileysColoredProperty,
+                testClockCustomYearProperty,
+                testClockCustomMonthProperty,
+                testClockCustomDayProperty,
+                testClockCustomHourProperty,
+                testClockCustomMinuteProperty,
+                testClockCustomSecondProperty,
+                testClockCustomMillisecondProperty,
                 jokesVisibleProperty,
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
@@ -345,6 +366,10 @@ public class ConfigWindow extends TWindow {
                 p.putClientProperty(CLIENT_PROPERTY_KEY,
                         TimeCalcProperty.PROFILE_NAME.getKey());
             }
+            if (p == testClockCustomYearProperty) {
+                addToNextRow(new JLabel("Test"));
+            }
+
             if (p instanceof JComboBox) {
                 JComboBox jComboBox = ((JComboBox) p);
                 jComboBox.setMaximumSize(new Dimension(150, 25));
@@ -388,7 +413,8 @@ public class ConfigWindow extends TWindow {
                 String[] array = checkBox.getText().split(" : ");
                 String groupName = array[0];
                 if (groupName.equals("Clock") || groupName.equals("Battery")
-                    || groupName.equals("Smileys")) {
+                    || groupName.equals("Smileys")
+                    || groupName.equals("Test")) {
 
                     checkBox.setText(array.length > 1 ? (checkBox.getText()
                             .substring(groupName.length() + 3)) : "Visible");
@@ -470,30 +496,61 @@ public class ConfigWindow extends TWindow {
 
             }
             if (p instanceof JTextField) {
-                JTextField jTextField = ((JTextField) p);
-                jTextField.setMaximumSize(new Dimension(150, 25));
+                JTextField textField = ((JTextField) p);
+                if(textField.getText().startsWith("test.clock.custom.")) {
+                    String key = textField.getText();
+                    textField.setText("");
+                    textField.putClientProperty(CLIENT_PROPERTY_KEY, key);
+                    addToNextRow(new JLabel(TimeCalcProperty.forKey(key).getDescription()));
+                }
+                textField.setMaximumSize(new Dimension(150, 25));
 
                 String timeCalcPropertyKey =
-                        (String) jTextField.getClientProperty(
+                        (String) textField.getClientProperty(
                                 CLIENT_PROPERTY_KEY);
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
-                jTextField.setText((String) timeCalcConfiguration
+                boolean isInteger = Integer.class == timeCalcProperty.getClazz();
+                timeCalcConfiguration
+                        .getProperty(timeCalcProperty).addListener(e -> {
+                    System.out.println("JTextField was changed: " + timeCalcPropertyKey);
+                    textField.setText(isInteger
+                            ?
+                            String.valueOf(timeCalcConfiguration
+                                    .getProperty(timeCalcProperty).getValue())
+                            :
+                            (String) timeCalcConfiguration
+                                    .getProperty(timeCalcProperty).getValue());
+                });
+                textField.setText(isInteger
+                        ?
+                        String.valueOf(timeCalcConfiguration
+                                .getProperty(timeCalcProperty).getValue())
+                        :
+                        (String) timeCalcConfiguration
                         .getProperty(timeCalcProperty).getValue());
 
-                jTextField.getDocument()
+                textField.getDocument()
                         .addDocumentListener(new DocumentListener() {
                             public void changedUpdate(DocumentEvent e) {
+                                System.out.println("changedUpdate");
                             }
 
                             public void removeUpdate(DocumentEvent e) {
+                                System.out.println("removeUpdate");
                             }
 
                             public void insertUpdate(DocumentEvent e) {
+                                System.out.println("insertUpdate");
+                                update(e);
+                            }
+                            private void update(DocumentEvent e) {
+                                String text = textField.getText();
+                                boolean isInteger = Integer.class == timeCalcProperty.getClazz();
                                 timeCalcConfiguration
                                         .getProperty(timeCalcProperty)
-                                        .setValue(
-                                                jTextField.getText());
+                                        .setValue(isInteger ? Integer.valueOf(text):
+                                                text);
                             }
                         });
             }

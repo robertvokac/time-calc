@@ -2,14 +2,17 @@ package org.nanoboot.utils.timecalc.app;
 
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
+import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -21,20 +24,162 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow window;
+    private final Time time;
 
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
             TimeCalcApp timeCalcApp,
-            MainWindow window
+            MainWindow window,
+            Time time
     ) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         this.timeCalcApp = timeCalcApp;
         this.window = window;
+        this.time = time;
     }
 
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        processKeyCode(keyCode);
+        boolean shiftDown = e.isShiftDown();
+        boolean ctrlDown = e.isControlDown();
+        boolean altDown = e.isAltDown();
+        boolean metaDown = e.isMetaDown();
+        if(!shiftDown && !ctrlDown && !altDown) {
+            processKeyCode(keyCode);
+        } else {
+            processTestModeKeyCode(keyCode, shiftDown, ctrlDown, altDown);
+        }
+        //meta key ???
+    }
+
+    private void processTestModeKeyCode(int keyCode, boolean shiftDown,
+            boolean ctrlDown, boolean altDown) {
+        if (shiftDown && ctrlDown) {
+            return;
+        }
+        if (shiftDown && altDown) {
+            return;
+        }
+        if (ctrlDown && altDown) {
+            return;
+        }
+        boolean increase = shiftDown;
+        boolean decrease = ctrlDown;
+        boolean reset = altDown;
+        switch (keyCode) {
+            case KeyEvent.VK_Y: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " year.");
+                updateProperty(timeCalcConfiguration.testYearCustomProperty, increase, decrease, reset,
+                        Calendar.YEAR);
+                break;
+            }
+            case KeyEvent.VK_O: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " month.");
+                updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset,
+                        Calendar.MONTH);
+                break;
+            }
+            case KeyEvent.VK_D: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " day.");
+                updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset,
+                        Calendar.DAY_OF_MONTH);
+                break;
+            }
+            case KeyEvent.VK_H: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " hour.");
+                updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset,
+                        Calendar.HOUR_OF_DAY);
+                break;
+            }
+            case KeyEvent.VK_M: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " minute.");
+                updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset,
+                        Calendar.MINUTE);
+                break;
+            }
+            case KeyEvent.VK_S: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " second.");
+                updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset,
+                        Calendar.SECOND);
+                break;
+            }
+            case KeyEvent.VK_I: {
+                Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
+                updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset,
+                        Calendar.MILLISECOND);
+                break;
+            }
+            default:
+                Utils.showNotification(
+                        "Unsupported key was pressed. There is no key shortcut for this key: "
+                        + keyCode);
+        }
+    }
+
+    private void updateProperty(IntegerProperty integerProperty,
+            boolean increase, boolean decrease, boolean reset, int timeUnit) {
+        int currentValue = integerProperty.getValue();
+
+        if((increase || decrease) && currentValue == Integer.MAX_VALUE) {
+            switch(timeUnit) {
+                case Calendar.YEAR: integerProperty.setValue(time.yearProperty.getValue());break;
+                case Calendar.MONTH:integerProperty.setValue(time.monthProperty.getValue());break;
+                case Calendar.DAY_OF_MONTH:integerProperty.setValue(time.dayProperty.getValue());break;
+                case Calendar.HOUR_OF_DAY:integerProperty.setValue(time.hourProperty.getValue());break;
+                case Calendar.MINUTE:integerProperty.setValue(time.minuteProperty.getValue());break;
+                case Calendar.SECOND:integerProperty.setValue(time.secondProperty.getValue());break;
+                case Calendar.MILLISECOND:integerProperty.setValue(time.millisecondProperty.getValue());break;
+                default: throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+            }
+        }
+        Calendar cal = time.asCalendar();
+        int oldYear = cal.get(Calendar.YEAR);
+        int oldMonth = cal.get(Calendar.MONTH) + 1;
+        int oldDay = cal.get(Calendar.DAY_OF_MONTH);
+        int oldHour = cal.get(Calendar.HOUR_OF_DAY);
+        int oldMinute = cal.get(Calendar.MINUTE);
+        int oldSecond = cal.get(Calendar.SECOND);
+        int oldMillisecond = cal.get(Calendar.MILLISECOND);
+        cal.add(timeUnit, increase ? 1 : (-1));
+        int newValue = cal.get(timeUnit);
+        if(Calendar.MONTH == timeUnit) {
+            newValue ++;
+        }
+        int newYear = cal.get(Calendar.YEAR);
+        int newMonth = cal.get(Calendar.MONTH) + 1;
+        int newDay = cal.get(Calendar.DAY_OF_MONTH);
+        int newHour = cal.get(Calendar.HOUR_OF_DAY);
+        int newMinute = cal.get(Calendar.MINUTE);
+        int newSecond = cal.get(Calendar.SECOND);
+        int newMillisecond = cal.get(Calendar.MILLISECOND);
+        if(increase){
+        switch(timeUnit) {
+            case Calendar.YEAR: break;
+            case Calendar.MONTH: if(oldYear != newYear) { updateProperty(timeCalcConfiguration.testYearCustomProperty, increase, decrease, reset, Calendar.YEAR);}break;
+            case Calendar.DAY_OF_MONTH:if(oldMonth != newMonth) { updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset, Calendar.MONTH);}break;
+            case Calendar.HOUR_OF_DAY:if(oldDay != newDay) { updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);}break;
+            case Calendar.MINUTE:if(oldHour != newHour) { updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);}break;
+            case Calendar.SECOND:if(oldMinute != newMinute) { updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MINUTE);}break;
+            case Calendar.MILLISECOND:if(oldSecond != newSecond) { updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.MILLISECOND);}break;
+            default: throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+        }
+        }
+        if(decrease){
+            switch(timeUnit) {
+                case Calendar.YEAR: if(oldMonth != newMonth) { updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset, Calendar.MONTH);}break;
+                case Calendar.MONTH:if(oldDay != newDay) { updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);}break;
+                case Calendar.DAY_OF_MONTH:if(oldHour != newHour) { updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);}break;
+                case Calendar.HOUR_OF_DAY:if(oldMinute != newMinute) { updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MINUTE);}break;
+                case Calendar.MINUTE:if(oldSecond != newSecond) { updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.SECOND);}break;
+                case Calendar.SECOND:if(oldMillisecond != newMillisecond) { updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.MILLISECOND);}break;
+                case Calendar.MILLISECOND: break;
+                default: throw new TimeCalcException("Unsupported time unit: " + timeUnit);
+            }
+        }
+        if(reset) {
+            newValue = Integer.MAX_VALUE;
+        }
+        integerProperty.setValue(newValue);
     }
 
     private void processKeyCode(int keyCode) {
@@ -245,6 +390,18 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
             case KeyEvent.VK_RIGHT: {
                 switchProfile(false, true);
+                break;
+            }
+            case KeyEvent.VK_D: {
+                System.out.println("D");
+                timeCalcConfiguration.testYearCustomProperty.setValue(Integer.MAX_VALUE);
+                timeCalcConfiguration.testMonthCustomProperty.setValue(Integer.MAX_VALUE);
+                timeCalcConfiguration.testDayCustomProperty.setValue(Integer.MAX_VALUE);
+                timeCalcConfiguration.testHourCustomProperty.setValue(Integer.MAX_VALUE);
+                timeCalcConfiguration.testMinuteCustomProperty.setValue(Integer.MAX_VALUE);
+                timeCalcConfiguration.testSecondCustomProperty.setValue(Integer.MAX_VALUE);
+                timeCalcConfiguration.testMillisecondCustomProperty.setValue(Integer.MAX_VALUE);
+                Utils.showNotification(timeCalcConfiguration.print(), 15000, 400);
                 break;
             }
 
