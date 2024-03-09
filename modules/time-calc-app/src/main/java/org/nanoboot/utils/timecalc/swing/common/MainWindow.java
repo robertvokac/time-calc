@@ -611,7 +611,20 @@ public class MainWindow extends TWindow {
             workingTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(workingDay.getWorkingTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
             pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(workingDay.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
             noteTextField.valueProperty.setValue(workingDay.getNote());
-    
+        } else {
+            Calendar cal = time.asCalendar();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+                workingDay = new WorkingDay();
+                workingDay.setId(WorkingDay.createId(year, month, day));
+                workingDay.setYear(year);
+                workingDay.setMonth(month);
+                workingDay.setDay(day);
+                workingDay.setWorkingTimeInMinutes(480);
+                workingDay.setPauseTimeInMinutes(30);
+                workingDay.setNote("");
+        }
             TTime arrival_ = new TTime(arrivalTextField.getText());
             TTime overtime_ = new TTime(overtimeTextField.getText());
 //            TTime work_ = new TTime(workingTimeTextField.getText());
@@ -629,7 +642,8 @@ public class MainWindow extends TWindow {
             workingDay.setOvertimeMinute(overtime_.getMinute());
             
             workingDayRepository.update(workingDay);
-        }
+        
+        //saveButton.doClick();
 
         System.out.println(workingDay);
         
