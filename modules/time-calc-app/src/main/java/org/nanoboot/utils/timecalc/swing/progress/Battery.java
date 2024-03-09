@@ -244,8 +244,6 @@ public class Battery extends Widget {
             brush.setFont(currentFont);
         }
                 
-                
-                
         if (percentProgressVisibleProperty.isEnabled()) {
             brush.drawString(
                     NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
@@ -327,10 +325,12 @@ public class Battery extends Widget {
         this.label = label;
     }
 
+    @Override
     public void setBounds(int x, int y, int height) {
         setBounds(x, y, (int) (40d / 100d * ((double) height)), height);
     }
 
+    @Override
     public int getTimerDelay() {
         return 25;
     }

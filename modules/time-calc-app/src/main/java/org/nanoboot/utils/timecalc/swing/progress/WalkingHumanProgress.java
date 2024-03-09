@@ -36,54 +36,17 @@ public class WalkingHumanProgress extends Widget implements
 
     public WalkingHumanProgress() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
-        putClientProperty("mouseEntered", "false");
+        
         setFocusable(false);
         setForeground(Color.GRAY);
         setBackground(MainWindow.BACKGROUND_COLOR);
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (visibilitySupportedColoredProperty.isDisabled()) {
-                    //nothing to do
-                    return;
-                }
-                Visibility visibility
-                        = Visibility.valueOf(visibilityProperty.getValue());
-                if (visibility.isStronglyColored()) {
-                    visibilityProperty
-                            .setValue(Visibility.WEAKLY_COLORED.name());
-                } else {
-                    visibilityProperty
-                            .setValue(Visibility.STRONGLY_COLORED.name());
-                }
-            }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                putClientProperty("mouseEntered", "true");
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                putClientProperty("mouseEntered", "false");
-            }
-        });
         new Timer(100, e -> {
             Visibility visibility
                     = Visibility.valueOf(visibilityProperty.getValue());
             setForeground(
                     visibility.isStronglyColored()
-                    || getClientProperty("mouseEntered").equals("true")
+                    || mouseOver
                             ? Color.BLACK : Color.LIGHT_GRAY);
         }).start();
 

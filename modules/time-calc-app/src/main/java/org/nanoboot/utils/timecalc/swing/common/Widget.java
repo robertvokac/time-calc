@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import java.awt.BasicStroke;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
@@ -52,7 +53,7 @@ public class Widget extends JPanel implements
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;
-    protected boolean mouseOverCloseButton = false;
+    private boolean mouseOverCloseButton = false;
     protected JLabel smileyIcon;
 
     public Widget() {
@@ -165,8 +166,43 @@ public class Widget extends JPanel implements
                 visibility != Visibility.NONE && visibleProperty.isEnabled());
         paintWidget(brush);
 
-        SwingUtils.paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
+        paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
 
+    }
+    
+    private static void paintCloseIcon(Graphics brush, int width,
+            boolean mouseOver, boolean mouseOverCloseButton) {
+        
+        if(!mouseOver) {
+            //nothing to do
+            return;
+        }
+        if(!mouseOverCloseButton) {
+            //nothing to do
+            return;
+        }
+
+         brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
+
+//        if(!mouseOverCloseButton) {
+//            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
+//                    CLOSE_BUTTON_SIDE);
+//            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1+1, 0 + 1 +1, CLOSE_BUTTON_SIDE - 2,
+//                    CLOSE_BUTTON_SIDE - 2);
+//            return;
+//        }
+        
+        brush.fillOval(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
+                CLOSE_BUTTON_SIDE);
+        brush.setColor(Color.LIGHT_GRAY);
+        Graphics2D brush2d = (Graphics2D) brush;
+        brush2d.setStroke(new BasicStroke(2f));
+        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + 2, 0 + 1 + 2,
+                width - 0 * CLOSE_BUTTON_SIDE - 1 - 2,
+                0 + CLOSE_BUTTON_SIDE + 1 - 2);
+        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + 2,
+                0 + CLOSE_BUTTON_SIDE + 1 - 2,
+                width - 0 * CLOSE_BUTTON_SIDE - 1 - 2, 0 + 1 + 2);
     }
 
     protected void paintWidget(Graphics g) {
