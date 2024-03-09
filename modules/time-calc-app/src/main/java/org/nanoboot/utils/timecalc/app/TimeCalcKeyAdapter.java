@@ -539,7 +539,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
         Properties profiles = new Properties();
         try {
-            if(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE).isEmpty()) {
+            final String readTextFromFile = Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE);
+            if(readTextFromFile == null || readTextFromFile.isEmpty()) {
                 return;
             }
 
