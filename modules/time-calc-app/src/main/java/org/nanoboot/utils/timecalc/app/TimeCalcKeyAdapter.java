@@ -5,6 +5,7 @@ import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
@@ -14,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Properties;
-import org.nanoboot.utils.timecalc.utils.common.TTime;
 
 /**
  * @author Robert Vokac
@@ -27,19 +27,19 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
-    private final MainWindow window;
+    private final MainWindow mainWindow;
     private final Time time;
     private boolean changeByOneHour = false;
     
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
             TimeCalcApp timeCalcApp,
-            MainWindow window,
+            MainWindow mainWindow,
             Time time
     ) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         this.timeCalcApp = timeCalcApp;
-        this.window = window;
+        this.mainWindow = mainWindow;
         this.time = time;
     }
 
@@ -48,16 +48,22 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         boolean shiftDown = e.isShiftDown();
         boolean ctrlDown = e.isControlDown();
         boolean altDown = e.isAltDown();
-        boolean metaDown = e.isMetaDown();
-        if (!shiftDown && !ctrlDown && !altDown) {
+        //boolean metaDown = e.isMetaDown();
+        if (!shiftDown && !ctrlDown && !altDown /*&& !metaDown*/) {
             processKeyCode(keyCode);
-        } else {
-            processTestModeKeyCode(keyCode, shiftDown, ctrlDown, altDown);
+        } else
+            //if (!metaDown)
+        {
+            processShifCtrlAltModeKeyCodes(keyCode, shiftDown, ctrlDown,
+                    altDown);
         }
+//        else {
+//            processMetaKeyCodes(keyCode);
+//        }
         //meta key ???
     }
 
-    private void processTestModeKeyCode(int keyCode, boolean shiftDown,
+    private void processShifCtrlAltModeKeyCodes(int keyCode, boolean shiftDown,
             boolean ctrlDown, boolean altDown) {
         if (shiftDown && ctrlDown) {
             Utils.showNotification("Following key shortcut is not supported: SHIFT + CTRL");
@@ -119,46 +125,52 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_A: {
-                //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
+
                 if (increase) {
-                    window.increaseArrival(changeTTime);
+                    mainWindow.increaseArrival(changeTTime);
                 }
                 if (decrease) {
-                    window.decreaseArrival(changeTTime);
+                    mainWindow.decreaseArrival(changeTTime);
                 }
                 break;
             }
             case KeyEvent.VK_O: {
-                //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
+
                 if (increase) {
-                    window.increaseOvertime(changeTTime);
+                    mainWindow.increaseOvertime(changeTTime);
                 }
                 if (decrease) {
-                    window.decreaseOvertime(changeTTime);
+                    mainWindow.decreaseOvertime(changeTTime);
                 }
                 break;
             }
             case KeyEvent.VK_W: {
                 if (increase) {
-                    window.increaseWork(changeTTime);
+                    mainWindow.increaseWork(changeTTime);
                 }
                 if (decrease) {
-                    window.decreaseWork(changeTTime);
+                    mainWindow.decreaseWork(changeTTime);
                 }
                 break;
             }
             case KeyEvent.VK_P: {
                 if (increase) {
-                    window.increasePause(changeTTime);
+                    mainWindow.increasePause(changeTTime);
                 }
                 if (decrease) {
-                    window.decreasePause(changeTTime);
+                    mainWindow.decreasePause(changeTTime);
                 }
                 break;
             }
             case KeyEvent.VK_C: {
                 this.changeByOneHour = increase;
                 Utils.showNotification("Time will be changed by 1 " + (increase ? "hour" : "minute") + ".");
+                break;
+            }
+            case KeyEvent.VK_E: {
+                if(ctrlDown) {
+                    mainWindow.doSaveButtonClick();
+                }
                 break;
             }
             default:
@@ -168,6 +180,16 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
     }
 
+//    private void processMetaKeyCodes(int keyCode) {
+//
+//        switch (keyCode) {
+//            case KeyEvent.VK_S: {
+//
+//                break;
+//            }
+//            default:
+//        }
+//    }
     private void updateProperty(IntegerProperty integerProperty,
             boolean increase, boolean decrease, boolean reset, int timeUnit) {
         int currentValue = integerProperty.getValue();
@@ -402,11 +424,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_F2: {
-                window.doCommand();
+                mainWindow.doCommand();
                 break;
             }
             case KeyEvent.VK_R: {
-                window.doRestart();
+                mainWindow.doRestart();
                 break;
             }
             case KeyEvent.VK_N: {
@@ -414,20 +436,20 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_W: {
-                window.openWorkDaysWindow();
+                mainWindow.openWorkDaysWindow();
                 break;
             }
             case KeyEvent.VK_A: {
-                window.openActivitiesWindow();
+                mainWindow.openActivitiesWindow();
                 break;
             }
             case KeyEvent.VK_X: {
-                window.doExit();
+                mainWindow.doExit();
                 break;
             }
 
             case KeyEvent.VK_S: {
-                window.openConfigWindow();
+                mainWindow.openConfigWindow();
                 break;
             }
 
@@ -441,16 +463,16 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
 
             case KeyEvent.VK_P:
             case KeyEvent.VK_F1: {
-                window.openHelpWindow();
+                mainWindow.openHelpWindow();
                 break;
             }
             case KeyEvent.VK_U: {
-                window.doEnableEverything();
+                mainWindow.doEnableEverything();
                 break;
 
             }
             case KeyEvent.VK_I: {
-                window.doDisableAlmostEverything();
+                mainWindow.doDisableAlmostEverything();
                 break;
             }
             case KeyEvent.VK_E: {
@@ -623,7 +645,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             }
         }
 
-        window.repaint();
+        mainWindow.repaint();
     }
 
     private void switchProfile(boolean previous, boolean next) {

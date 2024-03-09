@@ -1,16 +1,16 @@
 package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
+import org.nanoboot.utils.timecalc.entity.WorkingDay;
+import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import org.nanoboot.utils.timecalc.entity.WorkingDay;
-import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
-
 import java.util.List;
-import org.nanoboot.utils.timecalc.app.TimeCalcException;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 /**
  * @author Robert Vokac
@@ -35,7 +35,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
         sb
                 .append("INSERT INTO ")
                 .append(WorkingDayTable.TABLE_NAME)
-                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?)");
+                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?)");
 
         String sql = sb.toString();
 
@@ -56,6 +56,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
             stmt.setString(++i, workingDay.getNote());
+            stmt.setInt(++i, workingDay.isTimeOff() ? 1 : 0);
 
             //
             stmt.execute();
@@ -124,13 +125,20 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
 
     @Override
     public void update(WorkingDay workingDay) {
-        if(list(workingDay.getYear(), workingDay.getMonth(),workingDay.getDay()).isEmpty()) {
+        List<WorkingDay> list =
+                list(workingDay.getYear(), workingDay.getMonth(),
+                        workingDay.getDay());
+        if(list.isEmpty()) {
             create(workingDay);
             return;
         }
 
         System.out.println("Going to update: " + workingDay.toString());
 
+        if(list.get(0).toString().equals(workingDay.toString())) {
+            System.out.println("Nothing to update.");
+            return;
+        }
         if(!Utils.askYesNo(null, "Do you want to update this Working Day? " + workingDay, "Update of Working Day")) {
             return;
         }
@@ -145,7 +153,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
                 .append(WorkingDayTable.OVERTIME_MINUTE).append("=?, ")
                 .append(WorkingDayTable.WORKING_TIME_IN_MINUTES).append("=?, ")
                 .append(WorkingDayTable.PAUSE_TIME_IN_MINUTES).append("=?, ")
-                .append(WorkingDayTable.NOTE).append("=? ")
+                .append(WorkingDayTable.NOTE).append("=?, ")
+                .append(WorkingDayTable.TIME_OFF).append("=? ")
                 .append(" WHERE ").append(
                 WorkingDayTable.ID).append("=?");
 
@@ -161,6 +170,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
             stmt.setString(++i, workingDay.getNote());
+            stmt.setInt(++i, workingDay.isTimeOff() ? 1 : 0);
 
             stmt.setString(++i, workingDay.getId());
 
@@ -193,7 +203,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
                 rs.getInt(WorkingDayTable.OVERTIME_MINUTE),
                 rs.getInt(WorkingDayTable.WORKING_TIME_IN_MINUTES),
                 rs.getInt(WorkingDayTable.PAUSE_TIME_IN_MINUTES),
-                rs.getString(WorkingDayTable.NOTE)
+                rs.getString(WorkingDayTable.NOTE),
+                rs.getInt(WorkingDayTable.TIME_OFF) != 0
         );
     }
 
@@ -234,6 +245,39 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             }
         }
         return result;
+    }
+
+    @Override
+    public void delete(int year, int month, int day) {
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("DELETE ").append(" FROM ")
+                .append(WorkingDayTable.TABLE_NAME);
+        sb.append(" WHERE ");
+        sb.append(WorkingDayTable.YEAR).append("=? AND ");
+        sb.append(WorkingDayTable.MONTH).append("=? AND ");
+        ;
+        sb.append(WorkingDayTable.DAY).append("=? ");
+        ;
+
+        String sql = sb.toString();
+        int i = 0;
+        try (
+                Connection connection = sqliteConnectionFactory
+                        .createConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql);) {
+            stmt.setInt(++i, year);
+            stmt.setInt(++i, month);
+            stmt.setInt(++i, day);
+            stmt.execute();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex);
+        }
     }
 
 }

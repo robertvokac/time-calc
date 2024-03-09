@@ -17,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class WorkingDay {
 
-    public static final String NODATA = "nodata";
+    private static final String NODATA = "nodata";
 
     public static String createId(int year, int month, int day) {
         return (year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day);
@@ -35,6 +35,10 @@ public class WorkingDay {
     private int workingTimeInMinutes;
     private int pauseTimeInMinutes;
     private String note;
+    private boolean timeOff;
 
+    public boolean isThisDayTimeOff() {
+        return timeOff || this.note.equals(NODATA);
+    }
 
 }

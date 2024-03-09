@@ -22,7 +22,7 @@ package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
  *
  * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  */
-class VersionTable {
+public class VersionTable {
 
     public static final String TABLE_NAME = "VERSION";
 

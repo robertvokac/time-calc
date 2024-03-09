@@ -1,7 +1,10 @@
 package org.nanoboot.utils.timecalc.persistence.api;
 
 import java.util.Calendar;
+
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import java.util.List;
 
@@ -29,5 +32,18 @@ public interface WorkingDayRepositoryApi {
                 cal.get(Calendar.DAY_OF_MONTH)
         );
     }
-    public List<String> getYears();
+    List<String> getYears();
+    void delete(int year, int month, int day);
+    default void delete(WorkingDay wd) {
+        delete(wd.getId());
+    }
+    default void delete(String id) {
+        String[] array = id.split("-");
+        if(array.length != 3) {
+            TimeCalcException e = new TimeCalcException("Invalid date: " + id);
+            Utils.showNotification(new TimeCalcException("Invalid date: " + id));
+            throw e;
+        }
+        delete(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]));
+    }
 }

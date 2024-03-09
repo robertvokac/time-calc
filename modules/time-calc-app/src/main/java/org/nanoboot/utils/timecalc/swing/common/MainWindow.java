@@ -64,9 +64,11 @@ public class MainWindow extends TWindow {
     private final TTextField workingTimeTextField;
     private final TTextField pauseTimeTextField;
     private final TTextField noteTextField;
+    private final TCheckBox timeOffCheckBox = new TCheckBox("Time off");
     private final TTextField departureTextField;
     private final TTextField elapsedTextField;
     private final TTextField remainingTextField;
+    private final TButton saveButton;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -79,7 +81,7 @@ public class MainWindow extends TWindow {
         this.overtimeTextField = new TTextField();
         this.workingTimeTextField = new TTextField("8:00");
         this.pauseTimeTextField = new TTextField("0:30");
-        this.noteTextField = new TTextField("", 160);
+        this.noteTextField = new TTextField("", 120);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
@@ -272,11 +274,12 @@ public class MainWindow extends TWindow {
 
         pauseTimeTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
         //
-        TLabel noteTextFieldLabel = new TLabel("Note:");
+        TLabel noteTextFieldLabel = new TLabel("Note:", 40);
         noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField);
 
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
-        //half day, pause time in minutes, note
+        timeOffCheckBox.setBoundsFromLeft(noteTextField);
+        //
         arrivalTextField.setEditable(false);
         overtimeTextField.setEditable(false);
         workingTimeTextField.setEditable(false);
@@ -293,6 +296,7 @@ public class MainWindow extends TWindow {
         add(pauseTimeTextField);
         add(noteTextFieldLabel);
         add(noteTextField);
+        add(timeOffCheckBox);
         //
         TLabel departureTextFieldLabel = new TLabel("Departure:", 70);
         departureTextFieldLabel.setBoundsFromTop(arrivalTextFieldLabel);
@@ -312,7 +316,7 @@ public class MainWindow extends TWindow {
 
         remainingTextField.setBoundsFromLeft(remainingTextFieldLabel);
         remainingTextField.setEditable(false);
-        TButton saveButton = new TButton("Save", 180);
+        this.saveButton = new TButton("Save", 180);
         saveButton.setBoundsFromLeft(remainingTextField);
         //
 
@@ -601,29 +605,35 @@ public class MainWindow extends TWindow {
             workingDay.setWorkingTimeInMinutes(work_.toTotalMilliseconds() / 1000 / 60);
             workingDay.setPauseTimeInMinutes(pause_.toTotalMilliseconds() / 1000 / 60);
             workingDay.setNote(noteTextField.getText());
+            workingDay.setTimeOff(timeOffCheckBox.isSelected());
             workingDayRepository.update(workingDay);
 
+            if(workingDaysWindow != null) {
+                workingDaysWindow.doReloadButtonClick();
+            }
         });
         
-        WorkingDay workingDay = workingDayRepository.read(time.asCalendar());
+        WorkingDay wd = workingDayRepository.read(time.asCalendar());
 
-        if (workingDay != null) {
-            workingTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(workingDay.getWorkingTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
-            pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(workingDay.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
-            noteTextField.valueProperty.setValue(workingDay.getNote());
+        if (wd != null) {
+            workingTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getWorkingTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
+            pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
+            noteTextField.valueProperty.setValue(wd.getNote());
+            timeOffCheckBox.setSelected(wd.isTimeOff());
         } else {
             Calendar cal = time.asCalendar();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
             int day = cal.get(Calendar.DAY_OF_MONTH);
-                workingDay = new WorkingDay();
-                workingDay.setId(WorkingDay.createId(year, month, day));
-                workingDay.setYear(year);
-                workingDay.setMonth(month);
-                workingDay.setDay(day);
-                workingDay.setWorkingTimeInMinutes(480);
-                workingDay.setPauseTimeInMinutes(30);
-                workingDay.setNote("");
+                wd = new WorkingDay();
+                wd.setId(WorkingDay.createId(year, month, day));
+                wd.setYear(year);
+                wd.setMonth(month);
+                wd.setDay(day);
+                wd.setWorkingTimeInMinutes(480);
+                wd.setPauseTimeInMinutes(30);
+                wd.setNote("");
+                wd.setTimeOff(false);
         }
             TTime arrival_ = new TTime(arrivalTextField.getText());
             TTime overtime_ = new TTime(overtimeTextField.getText());
@@ -635,17 +645,15 @@ public class MainWindow extends TWindow {
 //            System.out.println("work_=" + work_);
 //            System.out.println("pause_=" + pause_);
 
-            workingDay.setArrivalHour(arrival_.getHour());
-            workingDay.setArrivalMinute(arrival_.getMinute());
+            wd.setArrivalHour(arrival_.getHour());
+            wd.setArrivalMinute(arrival_.getMinute());
 
-            workingDay.setOvertimeHour(overtime_.getHour());
-            workingDay.setOvertimeMinute(overtime_.getMinute());
+            wd.setOvertimeHour(overtime_.getHour());
+            wd.setOvertimeMinute(overtime_.getMinute());
             
-            workingDayRepository.update(workingDay);
-        
-        //saveButton.doClick();
+            workingDayRepository.update(wd);
 
-        System.out.println(workingDay);
+        System.out.println(wd);
         
         while (true) {
             if (updateWindow(timeCalcApp, time, clock, minuteBattery, hourBattery,
@@ -967,6 +975,11 @@ public class MainWindow extends TWindow {
     }
 
     public void decreasePause(TTime tTime) {
-        pauseTimeTextField.valueProperty.setValue(new TTime(this.pauseTimeTextField.valueProperty.getValue()).remove(tTime).toString().substring(0, 5));
+        pauseTimeTextField.valueProperty.setValue(
+                new TTime(this.pauseTimeTextField.valueProperty.getValue())
+                        .remove(tTime).toString().substring(0, 5));
+    }
+    public void doSaveButtonClick(){
+        this.saveButton.doClick();
     }
 }

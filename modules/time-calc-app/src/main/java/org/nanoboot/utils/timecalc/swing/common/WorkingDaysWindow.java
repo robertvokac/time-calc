@@ -24,23 +24,29 @@ import org.nanoboot.utils.timecalc.utils.common.TTime;
  * @since 16.02.2024
  */
 public class WorkingDaysWindow extends TWindow {
+    private static final String NO = "NO";
+    private static final String YES = "YES";
+    private static final String THREE_DASHES = "---";
+    //
+    private static final Color RED = new Color(255,153,153);
+    public static final String E = "?";
 
     private final WorkingDayRepositoryApi workingDayRepository;
     private final Time time;
+    private final JButton reloadButton;
 
     private JTable table = null;
     private final JScrollPane scrollPane;
 
     public WorkingDaysWindow(WorkingDayRepositoryApi workingDayRepository, Time time) {
-        setSize(800, 700);
+        setSize(1100, 700);
         setTitle("Work Days");
         this.workingDayRepository = workingDayRepository;
         this.time = time;
 
         int year = time.yearProperty.getValue();
         this.setLayout(null);
-       
-        
+
         WorkingDaysWindow workingDaysWindow = this;
 
         List<String> yearsList = workingDayRepository.getYears();
@@ -51,25 +57,43 @@ public class WorkingDaysWindow extends TWindow {
         JComboBox years = new JComboBox(yearsArray);
         years.setMaximumSize(new Dimension(150, 25));
 
-        years.setSelectedItem(time.asCalendar().get(Calendar.YEAR));
+        years.setSelectedItem(String.valueOf(year));
         years.addActionListener(e -> {
             workingDaysWindow.loadYear(Integer.valueOf((String) years.getSelectedItem()), time);
         });
 
         add(years);
         years.setBounds(SwingUtils.MARGIN,SwingUtils.MARGIN, 100, 30);
-        
+
+        this.reloadButton = new JButton("Reload");
+        reloadButton.addActionListener(e -> {
+            workingDaysWindow.loadYear(Integer.valueOf((String) years.getSelectedItem()), time);
+        });
+        add(reloadButton);
+        reloadButton.setBounds(years.getX() + years.getWidth() + SwingUtils.MARGIN, years.getY(), 100, 30);
+
+
         JButton exitButton = new JButton("Exit");
         exitButton.addActionListener(e -> {
             this.setVisible(false);
         });
         add(exitButton);
-        exitButton.setBounds(years.getX() + years.getWidth() + SwingUtils.MARGIN, years.getY(), 100, 30);
+        exitButton.setBounds(reloadButton.getX() + reloadButton.getWidth() + SwingUtils.MARGIN, reloadButton.getY(), 100, 30);
+        TLabel deleteLabel = new TLabel("Delete:");
+        add(deleteLabel);
+        deleteLabel.setBounds(exitButton.getX() + exitButton.getWidth() + SwingUtils.MARGIN, exitButton.getY(), 100, 30);
+        TTextField deleteTextField = new TTextField();
+        add(deleteTextField);
+        deleteTextField.setBounds(deleteLabel.getX() + deleteLabel.getWidth() + SwingUtils.MARGIN, deleteLabel.getY(), 100, 30);
+        deleteTextField.addActionListener(e -> {
+            workingDayRepository.delete(deleteTextField.getText());
+            reloadButton.doClick();
+        });
         this.scrollPane
                 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBounds(SwingUtils.MARGIN, years.getY() + years.getHeight()+ SwingUtils.MARGIN,
-                getWidth() - 2 * SwingUtils.MARGIN,
+                getWidth() - 3 * SwingUtils.MARGIN,
                 getHeight() - 4 * SwingUtils.MARGIN - 50);
         add(scrollPane);
         scrollPane.setViewportView(table);
@@ -79,9 +103,12 @@ public class WorkingDaysWindow extends TWindow {
 
     }
 
+    public void doReloadButtonClick() {
+        this.reloadButton.doClick();
+    }
     public void loadYear(int year, Time time) {
 
-        List<WorkingDay> list = new ArrayList<>();
+        List<WorkingDay> workingDaysList = new ArrayList<>();
         Calendar now = time.asCalendar();
         final int currentYear = now.get(Calendar.YEAR);
         final int currentMonth = now.get(Calendar.MONTH) + 1;
@@ -99,9 +126,9 @@ public class WorkingDaysWindow extends TWindow {
 
                 WorkingDay wd = workingDayRepository.read(year, month, day);
                 if (wd == null) {
-                    wd = new WorkingDay(WorkingDay.createId(year, month,day), year, month, day, -1, -1, -1, -1, -1, -1, WorkingDay.NODATA);
+                    wd = new WorkingDay(WorkingDay.createId(year, month,day), year, month, day, -1, -1, -1, -1, -1, -1, "Fictive day", true);
                 }
-                list.add(wd);
+                workingDaysList.add(wd);
 
 //        System.out.println("year=" + year);
 //        System.out.println("month=" + month);
@@ -116,31 +143,46 @@ public class WorkingDaysWindow extends TWindow {
                 break;
             }
         }
+
+        List<WorkingDayForStats> wdfsList = WorkingDayForStats.createList(workingDaysList);
+        WorkingDayForStats.fillStatisticsColumns(wdfsList);
+
         List<List<String>> listForArray = new ArrayList<>();
-        for (WorkingDay wd : list) {
-            ArrayList<String> l = new ArrayList<>();
-            listForArray.add(l);
-            WorkingDayForStats wdfs = new WorkingDayForStats(wd);
-            if (wdfs.getNote().equals(WorkingDay.NODATA)) {
-                l.add(wdfs.getDayOfWeekAsString());
-                l.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ? YES : NO);
-                l.add(wdfs.getId());
-                l.add(THREE_DASHES);
-                l.add(THREE_DASHES);
-                l.add(THREE_DASHES);
-                l.add(THREE_DASHES);
-                l.add(THREE_DASHES);
-                l.add(wdfs.getNote());
+        for (WorkingDayForStats wdfs : wdfsList) {
+            ArrayList<String> list2 = new ArrayList<>();
+            listForArray.add(list2);
+            if (wdfs.isThisDayTimeOff()) {
+                list2.add(wdfs.getDayOfWeekAsString());
+                list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ? YES : NO);
+                list2.add(wdfs.getId());
+                list2.add(THREE_DASHES);
+                list2.add(THREE_DASHES);
+                list2.add(THREE_DASHES);
+                list2.add(THREE_DASHES);
+                list2.add(THREE_DASHES);
+                list2.add(wdfs.getNote());
+                list2.add(wdfs.isTimeOff() ? YES : NO);
+                list2.add(E);
+                list2.add(E);
+                list2.add(E);
+                list2.add(E);
+                list2.add(E);
             } else {
-                l.add(wdfs.getDayOfWeekAsString());
-                l.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ? YES : NO);
-                l.add(wdfs.getId());
-                l.add(new TTime(wdfs.getArrivalHour(), wdfs.getArrivalMinute()).toString().substring(0, 5));
-                l.add(new TTime(wdfs.getDepartureHour(), wdfs.getDepartureMinute()).toString().substring(0, 5));
-                l.add(new TTime(wdfs.getOvertimeHour(), wdfs.getOvertimeMinute()).toString().substring(0, 5));
-                l.add(TTime.ofMinutes(wdfs.getWorkingTimeInMinutes()).toString().substring(0, 5));
-                l.add(TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString().substring(0, 5));
-                l.add(wdfs.getNote());
+                list2.add(wdfs.getDayOfWeekAsString());
+                list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ? YES : NO);
+                list2.add(wdfs.getId());
+                list2.add(new TTime(wdfs.getArrivalHour(), wdfs.getArrivalMinute()).toString().substring(0, 5));
+                list2.add(new TTime(wdfs.getDepartureHour(), wdfs.getDepartureMinute()).toString().substring(0, 5));
+                list2.add(new TTime(wdfs.getOvertimeHour(), wdfs.getOvertimeMinute()).toString().substring(0, 5));
+                list2.add(TTime.ofMinutes(wdfs.getWorkingTimeInMinutes()).toString().substring(0, 5));
+                list2.add(TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString().substring(0, 5));
+                list2.add(wdfs.getNote());
+                list2.add(wdfs.isTimeOff() ? YES : NO);
+                list2.add(E);
+                list2.add(E);
+                list2.add(E);
+                list2.add(E);
+                list2.add(E);
             }
         }
 
@@ -154,7 +196,7 @@ public class WorkingDaysWindow extends TWindow {
             data[index] = data2;
             index++;
         }
-        String[] columns = new String[] {"Day of Week", "Weekend", "Date","Arrival","Departure","Overtime","Working time","Pause time","Note"};
+        String[] columns = new String[] {"Day of Week", "Weekend", "Date","Arrival","Departure","Overtime","Working time","Pause time","Note", "Time off", "Total overtime", "Arrival MA7", "Arrival MA14", "Arrival MA28", "Arrival MA56"};
         
         if(table != null) {
             scrollPane.remove(table);
@@ -220,12 +262,5 @@ public class WorkingDaysWindow extends TWindow {
 
 
     }
-    private static final String NO = "NO";
-    private static final String YES = "YES";
-    private static final String THREE_DASHES = "---";
-    private static final String TD_END = "</td>";
-    private static final String TD_START = "<td style=\"border: 1px solid black;border-collapse: collapse;\">";
-    private static final String TH_END = "</th>";
-    private static final String TH_START = "<th style=\"border: 1px solid black;background:grey;\">";
-    private Color RED = new Color(255,153,153);
+
 }
