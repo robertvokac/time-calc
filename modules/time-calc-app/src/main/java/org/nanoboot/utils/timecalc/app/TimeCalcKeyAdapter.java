@@ -252,7 +252,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 } else {
                     timeCalcApp.visibilityProperty
                             .setValue(Visibility.GRAY.name());
-                    MainWindow.hideShowFormsCheckBox.setSelected(false);
                 }
                 break;
             }
