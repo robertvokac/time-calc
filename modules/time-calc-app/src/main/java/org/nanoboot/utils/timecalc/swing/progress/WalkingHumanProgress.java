@@ -138,10 +138,11 @@ public class WalkingHumanProgress extends Widget implements
         this.setVisible(visibility != Visibility.NONE);
 
         StringBuilder sb = new StringBuilder();
+        final int donePercentInt = (int) (Math.floor(donePercent * 100));
 
-        int percentInt = (int) (donePercent * 100);
-        if (!alreadyShownPercents.contains((int) (donePercent * 100))) {
-            alreadyShownPercents.add((int) (donePercent * 100));
+        int percentInt = donePercentInt;
+        if (!alreadyShownPercents.contains(donePercentInt)) {
+            alreadyShownPercents.add(donePercentInt);
             Toaster toasterManager = new Toaster();
             Font font = new Font("sans", Font.PLAIN, 16);
             toasterManager.setToasterMessageFont(font);

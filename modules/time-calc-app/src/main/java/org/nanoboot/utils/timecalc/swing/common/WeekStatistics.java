@@ -49,7 +49,7 @@ public class WeekStatistics {
         String currentDayOfWeekAsString = LocalDate
                 .of(analogClock.yearProperty.getValue(),
                         analogClock.monthProperty.getValue(),
-                        analogClock.dayOfWeekProperty.getValue()).getDayOfWeek()
+                        analogClock.dayProperty.getValue()).getDayOfWeek()
                 .toString();
         this.nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY")
                             || currentDayOfWeekAsString.equals("SUNDAY");
@@ -57,5 +57,8 @@ public class WeekStatistics {
                 workDaysDoneTmp + (nowIsWeekend ? 0 : 1) + workDaysTodoTmp;
         this.workDaysDone = workDaysDoneTmp;
         this.workDaysTotal = workDaysTotalTmp;
+//        System.out.println("currentDayOfWeekAsString=" + currentDayOfWeekAsString);
+//        System.out.println("workDaysDone=" + workDaysDone);
+//        System.out.println("workDaysTotal=" + workDaysTotal);
     }
 }

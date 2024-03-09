@@ -50,6 +50,9 @@ public enum ProgressSmiley {
 
     public static ProgressSmiley forProgress(double progress) {
         progress = progress * 100;
+        if(progress <0) {
+            return SMILEY_1;
+        }
         for (int i = 1; i < 16; i++) {
             if (progress < 100d / 16d * ((double) i)) {
                 return forNumber(i);

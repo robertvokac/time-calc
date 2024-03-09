@@ -14,15 +14,12 @@ public class MonthBattery extends Battery {
 
     public static double getMonthProgress(int weekDayWhenMondayIsOne,
             int workDaysDone, int workDaysTotal, double done) {
-//        System.out.println("weekDayWhenMondayIsOne=" + weekDayWhenMondayIsOne);
-//        System.out.println("workDaysDone=" + workDaysDone);
-//        System.out.println("workDaysTotal=" + workDaysTotal);
-//        System.out.println("done=" + done);
+
         if (done > 1) {
             done = 1;
         }
-        double result = weekDayWhenMondayIsOne == 0
-                        || weekDayWhenMondayIsOne == 6
+        double result = weekDayWhenMondayIsOne == 6
+                        || weekDayWhenMondayIsOne == 7 
                 ? (double) workDaysDone / workDaysTotal
                 : (workDaysDone + done) / workDaysTotal;
 //        System.out.println("result=" + result);

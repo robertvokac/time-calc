@@ -26,6 +26,9 @@ public class TimeCalcApp {
             throw new TimeCalcException("TimeCalcApp was already started.");
         }
         startNanoTime = System.nanoTime();
+        if(!FileConstants.TC_DIRECTORY.exists()) {
+            FileConstants.TC_DIRECTORY.mkdir();
+        }
         while (true) {
             boolean test = FileConstants.TEST_TXT.exists();
             String oldStartTime = Utils.readTextFromFile(

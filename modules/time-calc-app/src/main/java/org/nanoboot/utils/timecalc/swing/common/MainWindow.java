@@ -139,6 +139,11 @@ public class MainWindow extends TWindow {
                 .isEnabled()) {
             timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
         }
+        if(Toaster.notificationsVisibleProperty.isBound()) {
+            Toaster.notificationsVisibleProperty.unBound();
+        }
+        Toaster.notificationsVisibleProperty.bindTo(timeCalcConfiguration.notificationsVisibleProperty);
+        
         Time time = new Time();
         TimeCalcKeyAdapter timeCalcKeyAdapter =
                 new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp,
@@ -159,12 +164,18 @@ public class MainWindow extends TWindow {
 
             });
             departureTextField.valueProperty.addListener(e -> {
-                if (!departureTextField.valueProperty.getValue().isEmpty()) {
-                    TTime endTime = arrivalTextField.asTTime();
-                    clock.endHourProperty
-                            .setValue(endTime.getHour());
-                    clock.endMinuteProperty
-                            .setValue(endTime.getMinute());
+                if (!departureTextField.valueProperty.getValue().isEmpty() && arrivalTextField.valueProperty.getValue().isEmpty()) {
+
+                    try {
+                        TTime endTime = arrivalTextField.asTTime();
+                        clock.endHourProperty
+                                .setValue(endTime.getHour());
+                        clock.endMinuteProperty
+                                .setValue(endTime.getMinute());
+                    } catch (Exception e2) {
+
+                    }
+
                 }
             });
         }
@@ -347,12 +358,14 @@ public class MainWindow extends TWindow {
         hideShowFormsCheckBox.addItemListener(e -> this.requestFocus());
         exitButton.addActionListener(e
                 -> {
+            saveButton.doClick();
             timeCalcConfiguration.saveToTimeCalcProperties();
             System.exit(0);
         });
         focusButton.addActionListener(e -> requestFocus(true));
         restartButton.addActionListener(e -> {
             setVisible(false);
+            saveButton.doClick();
             timeCalcConfiguration.saveToTimeCalcProperties();
             stopBeforeEnd = true;
         });
@@ -601,8 +614,17 @@ public class MainWindow extends TWindow {
         }
         {
 
-            TTime startTime = arrivalTextField.asTTime();
-            TTime overtime = overtimeTextField.asTTime();
+            TTime startTime = null;
+            TTime overtime = null;
+            try {
+                startTime = arrivalTextField.asTTime();
+                overtime = overtimeTextField.asTTime();
+            } catch (Exception e) {
+
+            }
+            if(startTime == null || overtime == null) {
+                return false;
+            }
             TTime newDeparture = startTime.add(new TTime(8,30));
             if(overtime.isNegative()) {
                 TTime tmpTTime = overtime.cloneInstance();
@@ -707,6 +729,12 @@ public class MainWindow extends TWindow {
 
         double done = ((double) totalMillisecondsDone)
                       / ((double) totalMilliseconds);
+        if(done < 0) {
+            done = 0;
+        }
+        if(done > 1) {
+            done = 1;
+        }
         progressSquare.setDonePercent(done);
         progressCircle.setDonePercent(done);
         dayBattery.setDonePercent(done);
@@ -714,7 +742,7 @@ public class MainWindow extends TWindow {
         WeekStatistics weekStatistics = new WeekStatistics(clock, time);
         final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
         final int workDaysDone = weekStatistics.getWorkDaysDone();
-        final  int workDaysTotal = weekStatistics.getWorkDaysTotal();
+        final int workDaysTotal = weekStatistics.getWorkDaysTotal();
 
         int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
         weekBattery.setDonePercent(

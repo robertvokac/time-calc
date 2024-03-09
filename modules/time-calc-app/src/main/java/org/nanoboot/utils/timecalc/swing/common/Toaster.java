@@ -41,6 +41,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
 /**
  * Class to show tosters in multiplatform
@@ -50,6 +52,11 @@ import java.awt.Rectangle;
 public class Toaster {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final BooleanProperty notificationsVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.NOTIFICATIONS_VISIBLE
+                    .getKey());
+    
     // Set the margin
     int margin;
     // Flag that indicate if use alwaysOnTop or not.
@@ -109,10 +116,10 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-        //        if (!Utils.toastsAreEnabled.getValue()) {
-        //            //nothing to do
-        //            return;
-        //        }
+        if (notificationsVisibleProperty.isDisabled()) {
+            //nothing to do
+            return;
+        }
         SingleToaster singleToaster = new SingleToaster();
         if (icon != null) {
             singleToaster.iconLabel.setIcon(icon);
