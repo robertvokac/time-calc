@@ -143,7 +143,7 @@ public class Battery extends Widget {
                 1;//donePercent < 0.5 ? 0.5 : donePercent;// (donePercent * 100 - ((int)(donePercent * 100)));
         int waterSurfaceHeight
                 = (int) (4 * surfacePower);//2 + (int) (Math.random() * 3);
-        if (waterSurfaceHeight <= 2 || wavesVisibleProperty.isDisabled()) {
+        if (waterSurfaceHeight <= 2 || wavesVisibleProperty.isDisabled() || !changedInTheLastXMilliseconds(1000)) {
             waterSurfaceHeight = 0;
         }
 
@@ -223,7 +223,7 @@ public class Battery extends Widget {
             {
                 Font currentFont = brush.getFont();
                 brush.setFont(BIG_FONT);
-                if (chargingCharacterVisibleProperty.isEnabled()) {
+                if (chargingCharacterVisibleProperty.isEnabled() && changedInTheLastXMilliseconds(1000)) {
                     paintChargingCharacter(brush);
                 }
                 brush.setFont(currentFont);
@@ -240,7 +240,7 @@ public class Battery extends Widget {
 
             paintSmiley(visibility, brush, ((int) (totalWidth * 0.45)) + 15,
                     (donePercent < 0.5 ? totalHeight / 4 * 3
-                            : totalHeight / 4 * 1) + 8 - 16);
+                            : (totalHeight / 4 * 1) + 10) + 8 - 16);
             brush.setFont(currentFont);
         }
                 
@@ -278,7 +278,7 @@ public class Battery extends Widget {
         brush.drawString(
                 CHARCHING, ((int) (totalWidth * 0.45)),
                 (donePercent < 0.5 ? totalHeight / 4 * 3
-                        : totalHeight / 4 * 1) + 10
+                        : (totalHeight / 4 * 1) + 10) + 10
         );
     }
 
@@ -334,4 +334,5 @@ public class Battery extends Widget {
     public int getTimerDelay() {
         return 25;
     }
+
 }

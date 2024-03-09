@@ -49,6 +49,9 @@ public class TimeCalcApp {
                             ? Constants.DEFAULT_START_TIME
                             : oldStartTime
             );
+            if(newStartTime == null) {
+                break;
+            }
             String newOvertime
                     = test ? (oldOvertime != null ? oldOvertime
                     : Constants.DEFAULT_OVERTIME)
@@ -64,6 +67,9 @@ public class TimeCalcApp {
                             : oldOvertime
             );
 
+            if(newOvertime == null) {
+                break;
+            }
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
             try {

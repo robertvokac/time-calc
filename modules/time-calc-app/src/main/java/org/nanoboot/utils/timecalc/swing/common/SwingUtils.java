@@ -10,8 +10,6 @@ import java.awt.Font;
 public class SwingUtils {
 
     public static final int MARGIN = 10;
-    public static final Color CLOSE_BUTTON_BACKGROUND_COLOR =
-            new Color(127, 127, 127);
     public static final Font SMALL_FONT = new Font("sans", Font.BOLD, 10);
     public static final Font MEDIUM_MONOSPACE_FONT =
             new Font(Font.MONOSPACED, Font.PLAIN, 12);

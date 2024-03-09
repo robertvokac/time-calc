@@ -29,12 +29,17 @@ import java.awt.event.MouseMotionListener;
 public class Widget extends JPanel implements
         GetProperty {
 
-    public static final int CLOSE_BUTTON_SIDE = 15;
+    public static final int CLOSE_BUTTON_SIDE = 20;
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
+    
+    public static final Color CLOSE_BUTTON_FOREGROUND_COLOR =
+            new Color(127, 127, 127);
+    public static final Color CLOSE_BUTTON_BACKGROUND_COLOR = Color.LIGHT_GRAY;
+    public static final Color CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON = new Color(255, 153, 153);
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -55,6 +60,7 @@ public class Widget extends JPanel implements
     protected boolean mouseOver = false;
     private boolean mouseOverCloseButton = false;
     protected JLabel smileyIcon;
+    private long lastUpdate = System.nanoTime();
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);
@@ -136,14 +142,20 @@ public class Widget extends JPanel implements
     //        }
     //
     //    }
-    public final void setDonePercent(double donePercent) {
-        if (donePercent > 1) {
-            donePercent = 1;
+    public final void setDonePercent(double newDonePercent) {
+        if (newDonePercent > 1) {
+            newDonePercent = 1;
         }
-        if (donePercent < 0) {
-            donePercent = 0;
+        if (newDonePercent < 0) {
+            newDonePercent = 0;
         }
-        this.donePercent = donePercent;
+        double oldDonePercent = this.donePercent;
+        int oldDonePercentInt1000Mil = (int) (oldDonePercent * 1000000000);
+        this.donePercent = newDonePercent;
+        int newDonePercentInt1000Mil = (int) (newDonePercent * 1000000000);
+        if (newDonePercentInt1000Mil != oldDonePercentInt1000Mil) {
+            lastUpdate = System.nanoTime();
+        }
     }
 
     public void setBounds(int x, int y, int side) {
@@ -169,7 +181,7 @@ public class Widget extends JPanel implements
         paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
 
     }
-    
+     
     private static void paintCloseIcon(Graphics brush, int width,
             boolean mouseOver, boolean mouseOverCloseButton) {
         
@@ -177,12 +189,12 @@ public class Widget extends JPanel implements
             //nothing to do
             return;
         }
-        if(!mouseOverCloseButton) {
-            //nothing to do
-            return;
-        }
+//        if(!mouseOverCloseButton) {
+//            //nothing to do
+//            return;
+//        }
 
-         brush.setColor(SwingUtils.CLOSE_BUTTON_BACKGROUND_COLOR);
+         brush.setColor(mouseOverCloseButton ? CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON : CLOSE_BUTTON_BACKGROUND_COLOR);
 
 //        if(!mouseOverCloseButton) {
 //            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
@@ -194,15 +206,16 @@ public class Widget extends JPanel implements
         
         brush.fillOval(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
                 CLOSE_BUTTON_SIDE);
-        brush.setColor(Color.LIGHT_GRAY);
+        brush.setColor(CLOSE_BUTTON_FOREGROUND_COLOR);
         Graphics2D brush2d = (Graphics2D) brush;
         brush2d.setStroke(new BasicStroke(2f));
-        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + 2, 0 + 1 + 2,
-                width - 0 * CLOSE_BUTTON_SIDE - 1 - 2,
-                0 + CLOSE_BUTTON_SIDE + 1 - 2);
-        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + 2,
-                0 + CLOSE_BUTTON_SIDE + 1 - 2,
-                width - 0 * CLOSE_BUTTON_SIDE - 1 - 2, 0 + 1 + 2);
+        int offset = 4;
+        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + offset, 0 + 1 + offset,
+                width - 0 * CLOSE_BUTTON_SIDE - 1 - offset,
+                0 + CLOSE_BUTTON_SIDE + 1 - offset);
+        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + offset,
+                0 + CLOSE_BUTTON_SIDE + 1 - offset,
+                width - 0 * CLOSE_BUTTON_SIDE - 1 - offset, 0 + 1 + offset);
     }
 
     protected void paintWidget(Graphics g) {
@@ -278,5 +291,7 @@ public class Widget extends JPanel implements
             this.add(smileyIcon);
         }
     }
-
+    protected boolean changedInTheLastXMilliseconds(int milliseconds) {
+        return (System.nanoTime() - lastUpdate) < milliseconds * 1000000;
+    }
 }
