@@ -224,42 +224,28 @@ public class Battery extends Widget {
                 Font currentFont = brush.getFont();
                 brush.setFont(BIG_FONT);
                 if (chargingCharacterVisibleProperty.isEnabled()) {
-                    brush.drawString(
-                            CHARCHING, ((int) (totalWidth * 0.45)),
-                            (donePercent < 0.5 ? totalHeight / 4 * 3
-                                    : totalHeight / 4 * 1) + 10
-                    );
+                    paintChargingCharacter(brush);
                 }
-                paintSmiley(visibility, brush, ((int) (totalWidth * 0.45)) + 15,
-                        (donePercent < 0.5 ? totalHeight / 4 * 3
-                                : totalHeight / 4 * 1) + 8 - 16);
                 brush.setFont(currentFont);
 
             }
             if (circleProgressVisibleProperty.isEnabled()) {
-                Color currentColor = brush.getColor();
-                brush.setColor(
-                        visibility.isStronglyColored() ? HIGH_HIGHLIGHTED :
-                                (visibility.isWeaklyColored() ? HIGH :
-                                        Color.lightGray));
-
-                double angleDouble = donePercent * 360;
-
-                brush.fillArc(((int) (totalWidth * 0.45)) + 15,
-                        totalHeight / 4 * 3 + 28,
-                        15, 15, 90, -(int) angleDouble);
-                brush.setColor(
-                        visibility.isStronglyColored() ? LIGHT_RED
-                                :
-                                visibility.isWeaklyColored() ? ULTRA_LIGHT_RED :
-                                        BACKGROUND_COLOR);
-                brush.fillArc(((int) (totalWidth * 0.45)) + 15,
-                        totalHeight / 4 * 3 + 28,
-                        15, 15, 90, +(int) (360 - angleDouble));
-
-                brush.setColor(currentColor);
+                paintCircleProgress(brush, visibility);
             }
         }
+
+        if (donePercent > 0) {
+            Font currentFont = brush.getFont();
+            brush.setFont(BIG_FONT);
+
+            paintSmiley(visibility, brush, ((int) (totalWidth * 0.45)) + 15,
+                    (donePercent < 0.5 ? totalHeight / 4 * 3
+                            : totalHeight / 4 * 1) + 8 - 16);
+            brush.setFont(currentFont);
+        }
+                
+                
+                
         if (percentProgressVisibleProperty.isEnabled()) {
             brush.drawString(
                     NumberFormats.FORMATTER_THREE_DECIMAL_PLACES
@@ -288,6 +274,38 @@ public class Battery extends Widget {
                 : Color.LIGHT_GRAY);
         brush.drawRect(1, 1, totalWidth - 2, totalHeight);
 
+    }
+
+    public void paintChargingCharacter(Graphics2D brush) {
+        brush.drawString(
+                CHARCHING, ((int) (totalWidth * 0.45)),
+                (donePercent < 0.5 ? totalHeight / 4 * 3
+                        : totalHeight / 4 * 1) + 10
+        );
+    }
+
+    private void paintCircleProgress(Graphics2D brush, Visibility visibility) {
+        Color currentColor = brush.getColor();
+        brush.setColor(
+                visibility.isStronglyColored() ? HIGH_HIGHLIGHTED :
+                        (visibility.isWeaklyColored() ? HIGH :
+                                Color.lightGray));
+        
+        double angleDouble = donePercent * 360;
+        
+        brush.fillArc(((int) (totalWidth * 0.45)) + 15,
+                totalHeight / 4 * 3 + 28,
+                15, 15, 90, -(int) angleDouble);
+        brush.setColor(
+                visibility.isStronglyColored() ? LIGHT_RED
+                        :
+                        visibility.isWeaklyColored() ? ULTRA_LIGHT_RED :
+                                BACKGROUND_COLOR);
+        brush.fillArc(((int) (totalWidth * 0.45)) + 15,
+                totalHeight / 4 * 3 + 28,
+                15, 15, 90, +(int) (360 - angleDouble));
+        
+        brush.setColor(currentColor);
     }
 
     private double getRandom(int index) {

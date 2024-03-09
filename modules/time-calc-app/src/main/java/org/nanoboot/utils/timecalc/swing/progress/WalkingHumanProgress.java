@@ -141,7 +141,7 @@ public class WalkingHumanProgress extends Widget implements
         final int donePercentInt = (int) (Math.floor(donePercent * 100));
 
         int percentInt = donePercentInt;
-        if (!alreadyShownPercents.contains(donePercentInt)) {
+        if (donePercentInt % 5 == 0 && !alreadyShownPercents.contains(donePercentInt)) {
             alreadyShownPercents.add(donePercentInt);
             Toaster toasterManager = new Toaster();
             Font font = new Font("sans", Font.PLAIN, 16);

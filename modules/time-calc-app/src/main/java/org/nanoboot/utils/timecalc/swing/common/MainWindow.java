@@ -718,8 +718,7 @@ public class MainWindow extends TWindow {
         int totalMinutes = timeTotal.getMinute();
 
         int totalMilliseconds = timeTotal.toTotalMilliseconds();
-        System.out.println("totalMillisecondsDone=" + totalMillisecondsDone);
-        System.out.println("totalMilliseconds=" + totalMilliseconds);
+        
         double done = ((double) totalMillisecondsDone)
                       / ((double) totalMilliseconds);
         if(done < 0) {
