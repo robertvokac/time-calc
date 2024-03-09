@@ -743,7 +743,7 @@ public class MainWindow extends TWindow {
                 .setDonePercent(YearBattery.getYearProgress(clock));
         yearBattery.setLabel("");
 
-        if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
+        if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0 && timeRemains.getSecond() <= 0) {
             Toaster toasterManager = new Toaster();
             toasterManager.setDisplayTime(30000);
             toasterManager.showToaster(

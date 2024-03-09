@@ -81,8 +81,8 @@ public class ProgressSquare extends Widget {
                                  .format(donePercent * 100) + "%",
                 (int) (side / 8d * 3d),
                 (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)));
-        paintSmiley(visibility, brush, (int) (side / 8d * 3d) + 65,
-                (int) ((side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 16d));
+        paintSmiley(visibility, brush, (int) (side / 8d * 3d),
+                (int) ((side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 32d));
 
     }
 

@@ -165,9 +165,7 @@ public class Widget extends JPanel implements
                 visibility != Visibility.NONE && visibleProperty.isEnabled());
         paintWidget(brush);
 
-        if (mouseOver && mouseOverCloseButton) {
-            SwingUtils.paintCloseIcon(brush, getWidth());
-        }
+        SwingUtils.paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
 
     }
 
