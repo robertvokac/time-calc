@@ -367,7 +367,9 @@ public class ConfigWindow extends TWindow {
                         TimeCalcProperty.PROFILE_NAME.getKey());
             }
             if (p == testClockCustomYearProperty) {
-                addToNextRow(new JLabel("Test"));
+                JLabel label = new JLabel("Test");
+                label.setFont(BIG_FONT);
+                addToNextRow(label);
             }
 
             if (p instanceof JComboBox) {

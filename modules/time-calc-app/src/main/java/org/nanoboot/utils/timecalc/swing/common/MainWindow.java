@@ -24,23 +24,14 @@ import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TimeHM;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
-import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
-import org.nanoboot.utils.timecalc.utils.property.Property;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Robert Vokac
@@ -245,8 +236,6 @@ public class MainWindow extends TWindow {
             }
             helpWindow.setVisible(true);
         });
-        Calendar calNow = Calendar.getInstance();
-        calNow.setTime(new Date());
 
         time.yearCustomProperty.bindTo(timeCalcConfiguration.testYearCustomProperty);
         time.monthCustomProperty.bindTo(timeCalcConfiguration.testMonthCustomProperty);
@@ -332,7 +321,7 @@ public class MainWindow extends TWindow {
         int workDaysTodo = 0;
         int workDaysTotal;
         for (int dayOfMonth = 1;
-             dayOfMonth <= calNow.getActualMaximum(Calendar.DAY_OF_MONTH);
+             dayOfMonth <= time.asCalendar().getActualMaximum(Calendar.DAY_OF_MONTH);
              dayOfMonth++) {
             DayOfWeek dayOfWeek =
                     LocalDate.of(analogClock.yearProperty.getValue(),
@@ -349,8 +338,10 @@ public class MainWindow extends TWindow {
             }
         }
         String currentDayOfWeekAsString = LocalDate
-                .of(calNow.get(Calendar.YEAR), calNow.get(Calendar.MONTH) + 1,
-                        currentDayOfMonth).getDayOfWeek().toString();
+                .of(analogClock.yearProperty.getValue(),
+                        analogClock.monthProperty.getValue(),
+                        analogClock.dayOfWeekProperty.getValue()).getDayOfWeek()
+                .toString();
         boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY")
                                || currentDayOfWeekAsString.equals("SUNDAY");
         workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
@@ -530,7 +521,7 @@ public class MainWindow extends TWindow {
             progressCircle.setDonePercent(done);
             dayBattery.setDonePercent(done);
 
-            int weekDayWhenMondayIsOne = calNow.get(Calendar.DAY_OF_WEEK) - 1;
+            int weekDayWhenMondayIsOne = analogClock.dayOfWeekProperty.getValue();
             weekBattery.setDonePercent(
                     WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done));
             weekBattery.setLabel(

@@ -88,9 +88,12 @@ public class Time extends Thread {
             secondReadWriteProperty.setValue(returnCustomValueIfNeeded(cal, Calendar.SECOND, secondCustomProperty, secondProperty));
             millisecondReadWriteProperty.setValue(returnCustomValueIfNeeded(cal, Calendar.MILLISECOND, millisecondCustomProperty, millisecondProperty));
 
-            int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            boolean customDayOfWeek = yearCustomProperty.getValue() != Integer.MAX_VALUE || monthCustomProperty.getValue() != Integer.MAX_VALUE || dayCustomProperty.getValue() != Integer.MAX_VALUE;
+
+            int dayOfWeek = customDayOfWeek ? asCalendar().get(Calendar.DAY_OF_WEEK) : cal.get(Calendar.DAY_OF_WEEK);
+            dayOfWeek = dayOfWeek == 1 ? 7 : dayOfWeek - 1;
             dayOfWeekReadWriteProperty
-                    .setValue(dayOfWeek == 1 ? 7 : dayOfWeek - 1);
+                    .setValue(dayOfWeek);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
