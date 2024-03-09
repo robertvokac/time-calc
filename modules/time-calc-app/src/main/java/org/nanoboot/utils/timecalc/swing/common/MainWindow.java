@@ -535,7 +535,7 @@ public class MainWindow extends TWindow {
 
         while (true) {
             //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
-            if(!departureTextField.valueProperty.getValue().isEmpty()){
+            if(!departureTextField.valueProperty.getValue().isEmpty() && !arrivalTextField.valueProperty.getValue().isEmpty()){
                 TTime startTime = arrivalTextField.asTTime();
                 TTime endTime = departureTextField.asTTime();
                 analogClock.startHourProperty.setValue(startTime.getHour());
