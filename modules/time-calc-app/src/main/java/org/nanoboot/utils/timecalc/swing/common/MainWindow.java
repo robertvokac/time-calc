@@ -688,6 +688,7 @@ public class MainWindow extends TWindow {
         TTime timeElapsed = TTime
                 .computeTimeDiff(startTime, nowTime);
         TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
+        TTime timeTotal = TTime.computeTimeDiff(startTime, endTime);
         String timeElapsedString = timeElapsed.toString();
         String timeRemainsString = timeRemains.toString();
 
@@ -710,23 +711,15 @@ public class MainWindow extends TWindow {
         TTime overtime = overtimeTextField.asTTime();
         int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
                                           - timeRemains.getHour());
-        int minutesDone
-                = (int) (Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
-                                             - timeRemains.getMinute());
-        int secondsDone = secondNow;
-        int millisecondsDone = millisecondNow;
 
-        int totalMinutesDone = hourDone * 60 + minutesDone;
-        int totalSecondsDone = totalMinutesDone * 60 + secondsDone;
         int totalMillisecondsDone
-                = totalSecondsDone * 1000 + millisecondsDone;
+                = timeElapsed.toTotalMilliseconds();
+        
+        int totalMinutes = timeTotal.getMinute();
 
-        int totalMinutes = TTime.countDiffInMinutes(arrivalTextField.asTTime(),
-                departureTextField.asTTime());
-
-        int totalSeconds = totalMinutes * TTime.SECONDS_PER_MINUTE;
-        int totalMilliseconds = totalSeconds * TTime.MILLISECONDS_PER_SECOND;
-
+        int totalMilliseconds = timeTotal.toTotalMilliseconds();
+        System.out.println("totalMillisecondsDone=" + totalMillisecondsDone);
+        System.out.println("totalMilliseconds=" + totalMilliseconds);
         double done = ((double) totalMillisecondsDone)
                       / ((double) totalMilliseconds);
         if(done < 0) {
@@ -771,7 +764,7 @@ public class MainWindow extends TWindow {
                 .setDonePercent(YearBattery.getYearProgress(clock));
         yearBattery.setLabel("");
 
-        if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0 && timeRemains.getSecond() <= 0) {
+        if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0 && timeRemains.getSecond() <= 0 && timeRemains.getMillisecond() <= 0) {
             Toaster toasterManager = new Toaster();
             toasterManager.setDisplayTime(30000);
             toasterManager.showToaster(
