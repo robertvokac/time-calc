@@ -42,6 +42,7 @@ public class MainWindow extends TWindow {
     public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
     public static final JCheckBox hideShowFormsCheckBox = new JCheckBox();
+    private static final int BATTERY_WIDTH = 140;
     private final TButton workDaysButton;
     private final TButton activitiesButton;
     private final TButton exitButton;
@@ -74,7 +75,7 @@ public class MainWindow extends TWindow {
         this.overtimeTextField = new TTextField();
         this.halfDayCheckBox = new TCheckBox("Half day:", false);
         this.pauseTimeInMinutesTextField = new TTextField("30");
-        this.noteTextField = new TTextField();
+        this.noteTextField = new TTextField("", 120);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
@@ -144,15 +145,15 @@ public class MainWindow extends TWindow {
                         this, time);
         addKeyListener(timeCalcKeyAdapter);
 
-        AnalogClock analogClock = new AnalogClock();
+        AnalogClock clock = new AnalogClock();
 
         {
             arrivalTextField.valueProperty.addListener(e -> {
                 if (!arrivalTextField.valueProperty.getValue().isEmpty()) {
                     TTime startTime_ = arrivalTextField.asTTime();
-                    analogClock.startHourProperty
+                    clock.startHourProperty
                             .setValue(startTime_.getHour());
-                    analogClock.startMinuteProperty
+                    clock.startMinuteProperty
                             .setValue(startTime_.getMinute());
                 }
 
@@ -160,21 +161,67 @@ public class MainWindow extends TWindow {
             departureTextField.valueProperty.addListener(e -> {
                 if (!departureTextField.valueProperty.getValue().isEmpty()) {
                     TTime endTime = arrivalTextField.asTTime();
-                    analogClock.endHourProperty
+                    clock.endHourProperty
                             .setValue(endTime.getHour());
-                    analogClock.endMinuteProperty
+                    clock.endMinuteProperty
                             .setValue(endTime.getMinute());
                 }
             });
         }
-        analogClock.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 200);
-        add(analogClock);
+        clock.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 200);
+        add(clock);
 
+        MinuteBattery minuteBattery =
+                new MinuteBattery(clock.getBounds().x + clock.getWidth() + SwingUtils.MARGIN,
+                        clock.getY(), BATTERY_WIDTH);
+        add(minuteBattery);
+        Battery hourBattery = new HourBattery(
+                minuteBattery.getBounds().x + minuteBattery.getWidth()
+                + SwingUtils.MARGIN,
+                minuteBattery.getY(),
+                BATTERY_WIDTH);
+        add(hourBattery);
+
+        Battery dayBattery = new DayBattery(
+                hourBattery.getBounds().x + hourBattery.getWidth()
+                + SwingUtils.MARGIN,
+                hourBattery.getY(),
+                BATTERY_WIDTH);
+        add(dayBattery);
+
+        Battery weekBattery = new WeekBattery(
+                dayBattery.getBounds().x + dayBattery.getWidth() + SwingUtils.MARGIN,
+                dayBattery.getY(),
+                BATTERY_WIDTH);
+        add(weekBattery);
+
+        Battery monthBattery = new MonthBattery(
+                weekBattery.getBounds().x + weekBattery.getWidth()
+                + SwingUtils.MARGIN,
+                weekBattery.getY(), BATTERY_WIDTH);
+        add(monthBattery);
+        Battery yearBattery = new YearBattery(
+                monthBattery.getBounds().x + monthBattery.getWidth()
+                + SwingUtils.MARGIN,
+                monthBattery.getY(), BATTERY_WIDTH);
+        add(yearBattery);
+
+        WalkingHumanProgress walkingHumanProgress
+                = new WalkingHumanProgress();
+        walkingHumanProgress.setBounds(minuteBattery.getX(),
+                minuteBattery.getY() + minuteBattery.getHeight(), 400, 80);
+        add(walkingHumanProgress);
+        walkingHumanProgress.visibleProperty
+                .bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
+        weatherButton
+                .setBounds(SwingUtils.MARGIN, walkingHumanProgress.getY()
+                                              + walkingHumanProgress.getHeight());
+
+        //
         ProgressSquare progressSquare = new ProgressSquare();
         progressSquare
-                .setBounds(analogClock.getX() + analogClock.getWidth()
-                           + SwingUtils.MARGIN, analogClock.getY(),
-                        200);
+                .setBounds(yearBattery.getX() + yearBattery.getWidth() + 4 * SwingUtils.MARGIN, yearBattery.getY(),
+                        100);
         add(progressSquare);
         progressSquare.visibleProperty
                 .bindTo(timeCalcConfiguration.squareVisibleProperty);
@@ -182,28 +229,14 @@ public class MainWindow extends TWindow {
         ProgressCircle progressCircle = new ProgressCircle();
         progressCircle
                 .setBounds(
-                        progressSquare.getX() + progressSquare.getWidth()
-                        + SwingUtils.MARGIN, progressSquare.getY(), 80);
+                        progressSquare.getX(), progressSquare.getY() + progressSquare.getHeight()
+                                               + SwingUtils.MARGIN, 100);
         add(progressCircle);
         progressCircle.visibleProperty
                 .bindTo(timeCalcConfiguration.circleVisibleProperty);
-
-        WalkingHumanProgress walkingHumanProgress
-                = new WalkingHumanProgress();
-        walkingHumanProgress.setBounds(analogClock.getX(),
-                analogClock.getY() + analogClock.getHeight()
-                + SwingUtils.MARGIN, 420, 180);
-        add(walkingHumanProgress);
-        walkingHumanProgress.visibleProperty
-                .bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
-
-        weatherButton
-                .setBounds(SwingUtils.MARGIN, walkingHumanProgress.getY()
-                                              + walkingHumanProgress.getHeight()
-                                              + SwingUtils.MARGIN);
-
+        //
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:");
-        arrivalTextFieldLabel.setBoundsFromTop(walkingHumanProgress);
+        arrivalTextFieldLabel.setBoundsFromTop(clock, 3);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
         //
@@ -257,7 +290,7 @@ public class MainWindow extends TWindow {
 
         remainingTextField.setBoundsFromLeft(remainingTextFieldLabel);
         remainingTextField.setEditable(false);
-        TButton saveButton = new TButton("Save", 80);
+        TButton saveButton = new TButton("Save", 180);
         saveButton.setBoundsFromLeft(remainingTextField);
         //
 
@@ -272,13 +305,16 @@ public class MainWindow extends TWindow {
             TTime overtime_ =overtimeTextField.asTTime();
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0,5));
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0,overtime_.isNegative() ? 6 : 5));
+            timeCalcConfiguration.saveToTimeCalcProperties();
         });
         //
         configButton.setBoundsFromTop(departureTextFieldLabel);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
-        restartButton.setBoundsFromLeft(activitiesButton);
-        exitButton.setBoundsFromLeft(restartButton);
+
+        exitButton.setBounds(saveButton.getX() + saveButton.getWidth() - activitiesButton.getWidth() , workDaysButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
+        restartButton.setBounds(exitButton.getX() - SwingUtils.MARGIN - activitiesButton.getWidth(), activitiesButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
+
 
         //
         helpButton.setBoundsFromTop(exitButton, 2);
@@ -364,86 +400,50 @@ public class MainWindow extends TWindow {
         time.millisecondCustomProperty
                 .bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
         time.allowCustomValuesProperty.setValue(true);
-        analogClock.dayProperty.bindTo(time.dayProperty);
-        analogClock.monthProperty.bindTo(time.monthProperty);
-        analogClock.yearProperty.bindTo(time.yearProperty);
-        analogClock.hourProperty.bindTo(time.hourProperty);
-        analogClock.minuteProperty.bindTo(time.minuteProperty);
-        analogClock.secondProperty.bindTo(time.secondProperty);
-        analogClock.millisecondProperty.bindTo(time.millisecondProperty);
+        clock.dayProperty.bindTo(time.dayProperty);
+        clock.monthProperty.bindTo(time.monthProperty);
+        clock.yearProperty.bindTo(time.yearProperty);
+        clock.hourProperty.bindTo(time.hourProperty);
+        clock.minuteProperty.bindTo(time.minuteProperty);
+        clock.secondProperty.bindTo(time.secondProperty);
+        clock.millisecondProperty.bindTo(time.millisecondProperty);
 
-        analogClock.dayOfWeekProperty.bindTo(time.dayOfWeekProperty);
+        clock.dayOfWeekProperty.bindTo(time.dayOfWeekProperty);
 
-        analogClock.millisecondEnabledProperty
+        clock.millisecondEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsMillisecondVisibleProperty);
-        analogClock.secondEnabledProperty
+        clock.secondEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsSecondVisibleProperty);
-        analogClock.minuteEnabledProperty
+        clock.minuteEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsMinuteVisibleProperty);
-        analogClock.hourEnabledProperty
+        clock.hourEnabledProperty
                 .bindTo(timeCalcConfiguration.clockHandsHourVisibleProperty);
-        analogClock.handsLongProperty
+        clock.handsLongProperty
                 .bindTo(timeCalcConfiguration.clockHandsLongVisibleProperty);
-        analogClock.borderVisibleProperty
+        clock.borderVisibleProperty
                 .bindTo(timeCalcConfiguration.clockBorderVisibleProperty);
-        analogClock.borderOnlyHoursProperty
+        clock.borderOnlyHoursProperty
                 .bindTo(timeCalcConfiguration.clockBorderOnlyHoursProperty);
-        analogClock.numbersVisibleProperty
+        clock.numbersVisibleProperty
                 .bindTo(timeCalcConfiguration.clockNumbersVisibleProperty);
-        analogClock.circleVisibleProperty
+        clock.circleVisibleProperty
                 .bindTo(timeCalcConfiguration.clockCircleVisibleProperty);
-        analogClock.circleStrongBorderProperty
+        clock.circleStrongBorderProperty
                 .bindTo(timeCalcConfiguration.clockCircleStrongBorderProperty);
-        analogClock.centreCircleVisibleProperty
+        clock.centreCircleVisibleProperty
                 .bindTo(timeCalcConfiguration.clockCentreCircleVisibleProperty);
-        analogClock.centreCircleBorderColorProperty
+        clock.centreCircleBorderColorProperty
                 .bindTo(timeCalcConfiguration.clockCircleBorderColorProperty);
-        analogClock.handsColoredProperty
+        clock.handsColoredProperty
                 .bindTo(timeCalcConfiguration.clockHandsColoredProperty);
-        analogClock.centreCircleBlackProperty
+        clock.centreCircleBlackProperty
                 .bindTo(timeCalcConfiguration.clockCentreCircleBlackProperty);
-        analogClock.progressVisibleOnlyIfMouseMovingOverProperty
+        clock.progressVisibleOnlyIfMouseMovingOverProperty
                 .bindTo(timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty);
-        analogClock.dateVisibleOnlyIfMouseMovingOverProperty
+        clock.dateVisibleOnlyIfMouseMovingOverProperty
                 .bindTo(timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty);
-        analogClock.visibleProperty
+        clock.visibleProperty
                 .bindTo(timeCalcConfiguration.clockVisibleProperty);
-
-        MinuteBattery minuteBattery =
-                new MinuteBattery(progressCircle.getBounds().x,
-                        progressCircle.getY() + SwingUtils.MARGIN
-                        + progressCircle.getHeight(), 140);
-        add(minuteBattery);
-        Battery hourBattery = new HourBattery(
-                minuteBattery.getBounds().x + minuteBattery.getWidth()
-                + SwingUtils.MARGIN,
-                minuteBattery.getY(),
-                140);
-        add(hourBattery);
-
-        Battery dayBattery = new DayBattery(
-                hourBattery.getBounds().x + hourBattery.getWidth()
-                + SwingUtils.MARGIN,
-                hourBattery.getY(),
-                140);
-        add(dayBattery);
-
-        Battery weekBattery = new WeekBattery(
-                minuteBattery.getBounds().x,
-                dayBattery.getY() + dayBattery.getHeight() + SwingUtils.MARGIN,
-                140);
-        add(weekBattery);
-
-        Battery monthBattery = new MonthBattery(
-                weekBattery.getBounds().x + weekBattery.getWidth()
-                + SwingUtils.MARGIN,
-                weekBattery.getY(), 140);
-        add(monthBattery);
-        Battery yearBattery = new YearBattery(
-                monthBattery.getBounds().x + monthBattery.getWidth()
-                + SwingUtils.MARGIN,
-                monthBattery.getY(), 140);
-        add(yearBattery);
 
         ComponentRegistry<Component> componentRegistry =
                 new ComponentRegistry();
@@ -527,196 +527,38 @@ public class MainWindow extends TWindow {
                                     .bindTo(timeCalcConfiguration.smileysColoredProperty);
                         }
                 );
-        setSize(dayBattery.getX() + dayBattery.getWidth()
+        setSize(progressSquare.getX() + progressSquare.getWidth()
                 + 3 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 
-
-        while (true) {
-            //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
-            if(!departureTextField.valueProperty.getValue().isEmpty() && !arrivalTextField.valueProperty.getValue().isEmpty()){
-                TTime startTime = arrivalTextField.asTTime();
-                TTime endTime = departureTextField.asTTime();
-                analogClock.startHourProperty.setValue(startTime.getHour());
-                analogClock.startMinuteProperty.setValue(startTime.getMinute());
-                analogClock.endHourProperty.setValue(endTime.getHour());
-                analogClock.endMinuteProperty.setValue(endTime.getMinute());
-            }
-            {
-
-                TTime startTime = arrivalTextField.asTTime();
-                TTime overtime = overtimeTextField.asTTime();
-                TTime newDeparture = startTime.add(new TTime(8,30));
-                if(overtime.isNegative()) {
-                    TTime tmpTTime = overtime.cloneInstance();
-                    tmpTTime.setNegative(false);
-                    newDeparture = newDeparture.remove(tmpTTime);
-                } else {
-                    newDeparture = newDeparture.add(overtime);
-                }
-                departureTextField.valueProperty.setValue(newDeparture.toString().substring(0, 5));
-            }
-            Visibility currentVisibility = Visibility
-                    .valueOf(timeCalcApp.visibilityProperty.getValue());
-            if (!timeCalcConfiguration.visibilitySupportedColoredProperty
-                    .isEnabled() && currentVisibility.isColored()) {
-                timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
-            }
-            if (stopBeforeEnd) {
-                if (configWindow != null) {
-                    configWindow.setVisible(false);
-                    configWindow.dispose();
-                }
-                if (workingDaysWindow != null) {
-                    workingDaysWindow.setVisible(false);
-                    workingDaysWindow.dispose();
-                }
-                if (activitiesWindow != null) {
-                    activitiesWindow.setVisible(false);
-                    activitiesWindow.dispose();
-                }
-                if (helpWindow != null) {
-                    helpWindow.setVisible(false);
-                    helpWindow.dispose();
-                }
-
-                timeCalcConfiguration.saveToTimeCalcProperties();
-                setVisible(false);
-                dispose();
-
-                break;
-            }
-
-            componentRegistry.setVisible(c -> (!(c instanceof Widget)
-                                               || ((Widget) c).visibleProperty
-                                                       .isEnabled()) /*|| (c instanceof TButton ? ((Widget)c).visibleProperty.isEnabled()
-                    : true)*/, currentVisibility.isNotNone());
-
-            jokeButton.setVisible(
-                    TimeCalcProperties.getInstance().getBooleanProperty(
-                            TimeCalcProperty.JOKES_VISIBLE)
-                    && !currentVisibility.isNone()
-                    && MainWindow.hideShowFormsCheckBox.isSelected());
-
-            setTitle(currentVisibility.isNone() ? "" : getWindowTitle());
-
-            int secondNow = analogClock.secondProperty.getValue();
-            int millisecondNow = analogClock.millisecondProperty.getValue();
-
-            TTime startTime = arrivalTextField.asTTime();
-            TTime endTime = departureTextField.asTTime();
-            TTime nowTime = TTime.of(time.asCalendar());
-            TTime timeElapsed = TTime
-                    .computeTimeDiff(startTime, nowTime);
-            TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
-            String timeElapsedString = timeElapsed.toString();
-            String timeRemainsString = timeRemains.toString();
-
-            int secondsRemains = 60 - secondNow;
-            int millisecondsRemains = 1000 - millisecondNow;
-            if (!remainingTextField.valueProperty.getValue()
-                    .equals(timeRemainsString)) {
-                remainingTextField.valueProperty.setValue(timeRemainsString);
-            }
-            if (!elapsedTextField.valueProperty.getValue()
-                    .equals(timeElapsedString)) {
-                elapsedTextField.valueProperty.setValue(timeElapsedString);
-            }
-//            if (!elapsedTextField.valueProperty.getValue()
-//                    .equals(timeElapsed.remove(new TimeHM(0,1)).toString())) {
-//                String s = timeElapsed.remove(new TimeHM(0,1)).toString();
-//                elapsedTextField.valueProperty.setValue(s + ":" + (secondNow < 10 ? "0" : "") + secondNow + ":" + (millisecondNow < 10 ? "00" : (millisecondNow < 100 ? "0" : millisecondNow)) + millisecondNow);
+//        progressCircle.visibleProperty.addListener(e -> {
+//            System.out.println("visibility of circle was changed");
+//            if(progressSquare.visibleProperty.isEnabled() || progressCircle.visibleProperty.isEnabled()) {
+//                System.out.println("square or circle is visible");
+//                arrivalTextFieldLabel.setBoundsFromTop(progressSquare);
+//            } else {
+//                System.out.println("square and circle are not visible");
+//                arrivalTextFieldLabel.setBoundsFromTop(clock);
 //            }
-
-
-            TTime overtime = overtimeTextField.asTTime();
-            int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
-                                              - timeRemains.getHour());
-            int minutesDone
-                    = (int) (Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
-                                                 - timeRemains.getMinute());
-            int secondsDone = secondNow;
-            int millisecondsDone = millisecondNow;
-
-            int totalMinutesDone = hourDone * 60 + minutesDone;
-            int totalSecondsDone = totalMinutesDone * 60 + secondsDone;
-            int totalMillisecondsDone
-                    = totalSecondsDone * 1000 + millisecondsDone;
-
-
-            int totalMinutes = TTime.countDiffInMinutes(arrivalTextField.asTTime(),
-                    departureTextField.asTTime());
-
-            int totalSeconds = totalMinutes * TTime.SECONDS_PER_MINUTE;
-            int totalMilliseconds = totalSeconds * TTime.MILLISECONDS_PER_SECOND;
-
-            double done = ((double) totalMillisecondsDone)
-                          / ((double) totalMilliseconds);
-            progressSquare.setDonePercent(done);
-            progressCircle.setDonePercent(done);
-            dayBattery.setDonePercent(done);
-
-            WeekStatistics weekStatistics = new WeekStatistics(analogClock, time);
-            final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
-            final int workDaysDone = weekStatistics.getWorkDaysDone();
-            final  int workDaysTotal = weekStatistics.getWorkDaysTotal();
-
-            int weekDayWhenMondayIsOne = analogClock.dayOfWeekProperty.getValue();
-            weekBattery.setDonePercent(
-                    WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done));
-            weekBattery.setLabel(
-                    nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
-
-            monthBattery.setDonePercent(MonthBattery
-                    .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
-                            workDaysTotal, done));
-            monthBattery.setLabel(
-                    (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
-                    + (workDaysTotal));
-
-            hourBattery.setDonePercent(
-                    HourBattery.getHourProgress(timeRemains, secondsRemains,
-                            millisecondsRemains));
-
-            if (!nowIsWeekend) {
-                hourBattery.setLabel(
-                        hourDone + "/" + (totalMinutes / 60));
-            }
-            minuteBattery.setDonePercent(
-                    MinuteBattery.getMinuteProgress(secondNow, millisecondNow));
-            yearBattery
-                    .setDonePercent(YearBattery.getYearProgress(analogClock));
-            yearBattery.setLabel("");
-            
-            if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
-                Toaster toasterManager = new Toaster();
-                toasterManager.setDisplayTime(30000);
-                toasterManager.showToaster(
-                        "Congratulation :-) It is the time to go home.");
-                walkingHumanProgress
-                        .setDonePercent(done);
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-
-                }
-                while (!stopBeforeEnd) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-
-                    }
-                }
-            } else {
-                walkingHumanProgress
-                        .setDonePercent(done);
-            }
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-
+//        });
+//        progressSquare.visibleProperty.addListener(e -> {
+//            System.out.println("visibility of square was changed");
+//            if(progressSquare.visibleProperty.isEnabled() || progressCircle.visibleProperty.isEnabled()) {
+//                System.out.println("square or circle is visible");
+//                arrivalTextFieldLabel.setBoundsFromTop(progressSquare);
+//            } else {
+//                System.out.println("square and circle are not visible");
+//                arrivalTextFieldLabel.setBoundsFromTop(clock);
+//            }
+//        });
+        while (true) {
+            if (updateWindow(timeCalcApp, time, clock, minuteBattery, hourBattery,
+                    dayBattery,
+                    weekBattery, monthBattery, yearBattery,
+                    walkingHumanProgress,
+                    progressSquare, progressCircle, componentRegistry, arrivalTextFieldLabel)) {
+                break;
             }
         }
         if (configWindow != null) {
@@ -736,9 +578,201 @@ public class MainWindow extends TWindow {
             helpWindow.dispose();
         }
 
-        timeCalcConfiguration.saveToTimeCalcProperties();
+        //timeCalcConfiguration.saveToTimeCalcProperties();
         setVisible(false);
         dispose();
+    }
+
+    private boolean updateWindow(TimeCalcApp timeCalcApp, Time time,
+            AnalogClock clock, MinuteBattery minuteBattery, Battery hourBattery,
+            Battery dayBattery, Battery weekBattery, Battery monthBattery,
+            Battery yearBattery, WalkingHumanProgress walkingHumanProgress,
+            ProgressSquare progressSquare, ProgressCircle progressCircle,
+            ComponentRegistry<Component> componentRegistry, TLabel arrivalTextFieldLabel) {
+        //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
+
+        if(!departureTextField.valueProperty.getValue().isEmpty() && !arrivalTextField.valueProperty.getValue().isEmpty()){
+            TTime startTime = arrivalTextField.asTTime();
+            TTime endTime = departureTextField.asTTime();
+            clock.startHourProperty.setValue(startTime.getHour());
+            clock.startMinuteProperty.setValue(startTime.getMinute());
+            clock.endHourProperty.setValue(endTime.getHour());
+            clock.endMinuteProperty.setValue(endTime.getMinute());
+        }
+        {
+
+            TTime startTime = arrivalTextField.asTTime();
+            TTime overtime = overtimeTextField.asTTime();
+            TTime newDeparture = startTime.add(new TTime(8,30));
+            if(overtime.isNegative()) {
+                TTime tmpTTime = overtime.cloneInstance();
+                tmpTTime.setNegative(false);
+                newDeparture = newDeparture.remove(tmpTTime);
+            } else {
+                newDeparture = newDeparture.add(overtime);
+            }
+            departureTextField.valueProperty.setValue(newDeparture.toString().substring(0, 5));
+        }
+        Visibility currentVisibility = Visibility
+                .valueOf(timeCalcApp.visibilityProperty.getValue());
+        if (!timeCalcConfiguration.visibilitySupportedColoredProperty
+                .isEnabled() && currentVisibility.isColored()) {
+            timeCalcApp.visibilityProperty.setValue(Visibility.GRAY.name());
+        }
+        if (stopBeforeEnd) {
+            if (configWindow != null) {
+                configWindow.setVisible(false);
+                configWindow.dispose();
+            }
+            if (workingDaysWindow != null) {
+                workingDaysWindow.setVisible(false);
+                workingDaysWindow.dispose();
+            }
+            if (activitiesWindow != null) {
+                activitiesWindow.setVisible(false);
+                activitiesWindow.dispose();
+            }
+            if (helpWindow != null) {
+                helpWindow.setVisible(false);
+                helpWindow.dispose();
+            }
+
+            //timeCalcConfiguration.saveToTimeCalcProperties();
+            setVisible(false);
+            dispose();
+
+            return true;
+        }
+
+        componentRegistry.setVisible(c -> (!(c instanceof Widget)
+                                           || ((Widget) c).visibleProperty
+                                                   .isEnabled()) /*|| (c instanceof TButton ? ((Widget)c).visibleProperty.isEnabled()
+                : true)*/, currentVisibility.isNotNone());
+
+        jokeButton.setVisible(
+                TimeCalcProperties.getInstance().getBooleanProperty(
+                        TimeCalcProperty.JOKES_VISIBLE)
+                && !currentVisibility.isNone()
+                && MainWindow.hideShowFormsCheckBox.isSelected());
+
+        setTitle(currentVisibility.isNone() ? "" : getWindowTitle());
+
+        int secondNow = clock.secondProperty.getValue();
+        int millisecondNow = clock.millisecondProperty.getValue();
+
+        TTime startTime = arrivalTextField.asTTime();
+        TTime endTime = departureTextField.asTTime();
+        TTime nowTime = TTime.of(time.asCalendar());
+        TTime timeElapsed = TTime
+                .computeTimeDiff(startTime, nowTime);
+        TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
+        String timeElapsedString = timeElapsed.toString();
+        String timeRemainsString = timeRemains.toString();
+
+        int secondsRemains = 60 - secondNow;
+        int millisecondsRemains = 1000 - millisecondNow;
+        if (!remainingTextField.valueProperty.getValue()
+                .equals(timeRemainsString)) {
+            remainingTextField.valueProperty.setValue(timeRemainsString);
+        }
+        if (!elapsedTextField.valueProperty.getValue()
+                .equals(timeElapsedString)) {
+            elapsedTextField.valueProperty.setValue(timeElapsedString);
+        }
+        //            if (!elapsedTextField.valueProperty.getValue()
+        //                    .equals(timeElapsed.remove(new TimeHM(0,1)).toString())) {
+        //                String s = timeElapsed.remove(new TimeHM(0,1)).toString();
+        //                elapsedTextField.valueProperty.setValue(s + ":" + (secondNow < 10 ? "0" : "") + secondNow + ":" + (millisecondNow < 10 ? "00" : (millisecondNow < 100 ? "0" : millisecondNow)) + millisecondNow);
+        //            }
+
+        TTime overtime = overtimeTextField.asTTime();
+        int hourDone = (int) (Constants.WORKING_HOURS_LENGTH + overtime.getHour()
+                                          - timeRemains.getHour());
+        int minutesDone
+                = (int) (Constants.WORKING_MINUTES_LENGTH + overtime.getMinute()
+                                             - timeRemains.getMinute());
+        int secondsDone = secondNow;
+        int millisecondsDone = millisecondNow;
+
+        int totalMinutesDone = hourDone * 60 + minutesDone;
+        int totalSecondsDone = totalMinutesDone * 60 + secondsDone;
+        int totalMillisecondsDone
+                = totalSecondsDone * 1000 + millisecondsDone;
+
+        int totalMinutes = TTime.countDiffInMinutes(arrivalTextField.asTTime(),
+                departureTextField.asTTime());
+
+        int totalSeconds = totalMinutes * TTime.SECONDS_PER_MINUTE;
+        int totalMilliseconds = totalSeconds * TTime.MILLISECONDS_PER_SECOND;
+
+        double done = ((double) totalMillisecondsDone)
+                      / ((double) totalMilliseconds);
+        progressSquare.setDonePercent(done);
+        progressCircle.setDonePercent(done);
+        dayBattery.setDonePercent(done);
+
+        WeekStatistics weekStatistics = new WeekStatistics(clock, time);
+        final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
+        final int workDaysDone = weekStatistics.getWorkDaysDone();
+        final  int workDaysTotal = weekStatistics.getWorkDaysTotal();
+
+        int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
+        weekBattery.setDonePercent(
+                WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done));
+        weekBattery.setLabel(
+                nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
+
+        monthBattery.setDonePercent(MonthBattery
+                .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
+                        workDaysTotal, done));
+        monthBattery.setLabel(
+                (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
+                + (workDaysTotal));
+
+        hourBattery.setDonePercent(
+                HourBattery.getHourProgress(timeRemains, secondsRemains,
+                        millisecondsRemains));
+
+        if (!nowIsWeekend) {
+            hourBattery.setLabel(
+                    hourDone + "/" + (totalMinutes / 60));
+        }
+        minuteBattery.setDonePercent(
+                MinuteBattery.getMinuteProgress(secondNow, millisecondNow));
+        yearBattery
+                .setDonePercent(YearBattery.getYearProgress(clock));
+        yearBattery.setLabel("");
+
+        if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0) {
+            Toaster toasterManager = new Toaster();
+            toasterManager.setDisplayTime(30000);
+            toasterManager.showToaster(
+                    "Congratulation :-) It is the time to go home.");
+            walkingHumanProgress
+                    .setDonePercent(done);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+
+            }
+            while (!stopBeforeEnd) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        } else {
+            walkingHumanProgress
+                    .setDonePercent(done);
+        }
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+
+        }
+        return false;
     }
 
     private String getWindowTitle() {

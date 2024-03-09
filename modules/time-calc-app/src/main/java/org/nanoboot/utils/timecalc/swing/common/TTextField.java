@@ -93,10 +93,12 @@ public class TTextField extends JTextField implements GetProperty {
         this.originalBackground = getBackground();
         this.originalForeground = getForeground();
     }
-
     public void setBoundsFromLeft(JComponent jComponent) {
+        setBoundsFromLeft(jComponent, 0);
+    }
+    public void setBoundsFromLeft(JComponent jComponent, int additionalY) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
-                jComponent.getY());
+                jComponent.getY() + additionalY);
     }
 
     public void setBoundsFromTop(JComponent jComponent) {

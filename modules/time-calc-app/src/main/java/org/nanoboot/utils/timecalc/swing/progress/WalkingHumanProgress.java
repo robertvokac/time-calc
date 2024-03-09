@@ -115,6 +115,9 @@ public class WalkingHumanProgress extends Widget implements
             brush.setColor(visibility.isStronglyColored() ? Color.BLUE :
                     visibility.isWeaklyColored() ? Color.GRAY :
                             Color.LIGHT_GRAY);
+            if(mouseOver) {
+                brush.drawRect(1,1,getWidth() - 2, getHeight() - 2);
+            }
             brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
             int y = SwingUtils.MARGIN;
             for (String line : lines) {
@@ -176,28 +179,29 @@ public class WalkingHumanProgress extends Widget implements
         int spacesTodo = spacesTotal - (spacesDone < 0 ? 0 : spacesDone);
 
         sb.append(WALL + createSpaces(spacesTotal + 6 - 2) + (spacesTodo == 0
-                ? "          \n" : "||======||\n"));
+                ? "          \n" : "|======|\n"));
         sb.append(WALL).append(createSpaces(spacesTotal + 4))
-                .append(spacesTodo == 0 ? "" : "|        |").append("\n");
+                .append(spacesTodo == 0 ? "" : "|      |").append("\n");
 
         sb.append(
                 WALL + createSpaces(spacesDone) + " () " + createSpaces(
                         spacesTodo) + (spacesTodo == 0
-                        ? "  \\☼☼☼☼/   "
-                        : "|     _  |") + Constants.NEW_LINE
+                        ? " \\☼☼☼☼/  "
+                        : "|    _ |") + Constants.NEW_LINE
                 + WALL + createSpaces(spacesDone) + "/||\\" + createSpaces(
                         spacesTodo) + (spacesTodo == 0
-                        ? "  ☼☼☼☼☼☼  "
-                        : "|    |   |") + Constants.NEW_LINE
+                        ? " ☼☼☼☼☼☼ "
+                        : "|   |  |") + Constants.NEW_LINE
                 + WALL + createSpaces(spacesDone) + " /\\ " + createSpaces(
                         spacesTodo) + (spacesTodo == 0
-                        ? "  /☼☼☼☼\\   "
-                        : "|        |") + Constants.NEW_LINE
-                + createRepeatedString(spacesTotal + 16, '=')
+                        ? " /☼☼☼☼\\  "
+                        : "|      |") + Constants.NEW_LINE
+                + createRepeatedString(spacesTotal + 14, '=')
                 + Constants.NEW_LINE + "Steps: "
                 + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
                         .format(donePercent * ((double) spacesTotal)) + "/"
-                + spacesTotal
+                + spacesTotal + " Done: " + NumberFormats.FORMATTER_EIGHT_DECIMAL_PLACES
+                        .format(donePercent * 100d) + "%"
         );
         return sb.toString();
     }
