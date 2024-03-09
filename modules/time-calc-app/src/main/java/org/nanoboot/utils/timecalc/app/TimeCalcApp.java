@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.app;
 
+import java.io.File;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
@@ -9,6 +10,14 @@ import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.nanoboot.utils.timecalc.persistence.api.VersionRepositoryApi;
+import org.nanoboot.utils.timecalc.persistence.impl.sqlite.SqliteConnectionFactory;
+import org.nanoboot.utils.timecalc.persistence.impl.sqlite.VersionRepositorySQLiteImpl;
 
 /**
  * @author Robert Vokac
@@ -28,6 +37,11 @@ public class TimeCalcApp {
         startNanoTime = System.nanoTime();
         if (!FileConstants.TC_DIRECTORY.exists()) {
             FileConstants.TC_DIRECTORY.mkdir();
+        }
+        try {
+        initDB();
+        } catch(Exception e) {
+            e.printStackTrace();
         }
         while (true) {
             boolean test = FileConstants.TEST_TXT.exists();
@@ -98,5 +112,55 @@ public class TimeCalcApp {
         }
         return System.nanoTime() - startNanoTime;
     }
+
+    private void initDB() {
+        SqliteConnectionFactory sqliteConnectionFactory = new SqliteConnectionFactory();
+        try {
+            Connection conn = sqliteConnectionFactory.createConnection();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TimeCalcApp.class.getName()).log(Level.SEVERE, null, ex);
+            throw new TimeCalcException(ex);
+        }
+        List<String> files;
+        try {
+            
+            files = Utils.loadFilesFromJarResources(DB_MIGRATIONSQLITETIMECALC, getClass());
+        } catch (IOException ex) {
+            Logger.getLogger(TimeCalcApp.class.getName()).log(Level.SEVERE, null, ex);
+            throw new TimeCalcException(ex);
+        }
+        Collections.sort(files);
+        int lastVersion = 0;
+        VersionRepositoryApi versionRepository = new VersionRepositorySQLiteImpl(sqliteConnectionFactory);
+        int currentVersion = 0;
+        try {
+            currentVersion = versionRepository.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("currentVersion=" + currentVersion);
+        for(String sql :files) {
+            Integer version = Integer.valueOf(sql.split("__")[0].substring(1));
+            lastVersion = version;
+            System.out.println("version=" + version);
+            if(currentVersion >= version) {
+                continue;
+            }
+            try {
+                System.out.println("Reading this file: " + DB_MIGRATIONSQLITETIMECALC + "/" + sql);
+                String text = Utils.readTextFromTextResourceInJar(DB_MIGRATIONSQLITETIMECALC + "/" + sql);
+                System.out.println("Found sql: \n\n" + text);
+                sqliteConnectionFactory.runSQL(text);
+            } catch (IOException ex) {
+                Logger.getLogger(TimeCalcApp.class.getName()).log(Level.SEVERE, null, ex);
+                throw new TimeCalcException(ex);
+            }
+        }
+        
+        if(currentVersion != lastVersion) {
+            versionRepository.update(lastVersion);
+        }
+    }
+    private static final String DB_MIGRATIONSQLITETIMECALC = "db_migrations/sqlite/timecalc";
 
 }

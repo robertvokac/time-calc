@@ -10,12 +10,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.stream.Stream;
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
 
 /**
  * @author Robert Vokac
@@ -124,7 +136,55 @@ public class Utils {
         return base64Decoder
                 .decode(s.getBytes());
     }
+    public static List<String> loadFilesFromJarResources(String p, Class<?> clazz) throws IOException {
+        List<String> result = new ArrayList<>();
+        try {
+            List<Path> paths = getPathsFromResourceJar(p, clazz);
+            for (Path path : paths) {
+                System.out.println("Path : " + path);
 
+                String filePathInJAR = path.toString();
+                
+                if (filePathInJAR.startsWith("/")) {
+                    filePathInJAR = filePathInJAR.substring(1, filePathInJAR.length());
+                }
+
+                System.out.println("filePathInJAR : " + filePathInJAR);
+                
+                String[] array = filePathInJAR.split("/");
+                result.add(array[array.length - 1]);
+            }
+
+        } catch (URISyntaxException | IOException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+                    
+            throw new TimeCalcException(e);
+        }
+        return result;
+    }
+    
+        private static List<Path> getPathsFromResourceJar(String folder, Class<?> clazz)
+            throws URISyntaxException, IOException {
+        List<Path> result;
+
+        String jarPath = clazz.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .toURI()
+                .getPath();
+        System.out.println("JAR Path : " + jarPath);
+
+        URI uri = URI.create("jar:file:" + jarPath);
+        try ( FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());Stream<Path> stream = Files.walk(fs.getPath(folder))) {
+            result = stream
+                    .filter(Files::isRegularFile)
+                    .toList();
+        } 
+
+        return result;
+
+    }
     public static String readTextFromTextResourceInJar(String pathToFile)
             throws IOException {
         InputStream inputStream = ClassLoader.getSystemClassLoader().
@@ -139,7 +199,14 @@ public class Utils {
         }
         return sb.toString();
     }
-
+    
+    public static String loadStacktrace(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
+    }
+    
     public static void showNotification(String message) {
         showNotification(message, 0);
     }

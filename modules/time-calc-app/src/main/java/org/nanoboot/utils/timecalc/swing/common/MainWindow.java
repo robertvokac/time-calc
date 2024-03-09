@@ -696,6 +696,9 @@ public class MainWindow extends TWindow {
         TTime nowTime = TTime.of(time.asCalendar());
         TTime timeElapsed = TTime
                 .computeTimeDiff(startTime, nowTime);
+        System.out.println("timeElapsed=" + timeElapsed.toString());
+        System.out.println("startTime=" + startTime.toString());
+        System.out.println("nowTime=" + nowTime.toString());
         TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
         TTime timeTotal = TTime.computeTimeDiff(startTime, endTime);
         String timeElapsedString = timeElapsed.toString();
@@ -724,8 +727,12 @@ public class MainWindow extends TWindow {
         int totalMilliseconds = timeTotal.toTotalMilliseconds();
         int totalMinutes = totalMilliseconds / 1000 / 60 ;
 
+        System.out.println("totalMillisecondsDone=" + totalMillisecondsDone);
+            System.out.println("totalMilliseconds=" + totalMilliseconds);
         double done = ((double) totalMillisecondsDone)
                 / ((double) totalMilliseconds);
+if(done == 1)
+    System.out.println("a");
         if (done < 0) {
             done = 0;
         }
@@ -788,8 +795,7 @@ public class MainWindow extends TWindow {
                 }
             }
         } else {
-            walkingHumanProgress
-                    .setDonePercent(done);
+            walkingHumanProgress.setDonePercent(done);
         }
 
         try {

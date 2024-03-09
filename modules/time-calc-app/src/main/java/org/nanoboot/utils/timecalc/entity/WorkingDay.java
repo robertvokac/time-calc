@@ -22,7 +22,6 @@ public class WorkingDay {
     private int overtimeHour;
     private int overtimeMinute;
 
-    private boolean halfDay;
     private int workingTimeInMinutes;
     private int pauseTimeInMinutes;
     private String note;

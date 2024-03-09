@@ -17,8 +17,6 @@ import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
@@ -102,6 +100,8 @@ public class WalkingHumanProgress extends Widget implements
 
         StringBuilder sb = new StringBuilder();
         final int donePercentInt = (int) (Math.floor(donePercent * 100));
+        System.out.println("donePercent=" + donePercent);
+        System.out.println("donePercentInt=" + donePercentInt);
 
         int percentInt = donePercentInt;
         if (donePercentInt % 5 == 0 && !alreadyShownPercents.contains(donePercentInt)) {

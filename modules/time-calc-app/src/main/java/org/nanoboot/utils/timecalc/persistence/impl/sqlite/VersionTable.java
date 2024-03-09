@@ -22,24 +22,13 @@ package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
  *
  * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
  */
-class WorkingDayTable {
+class VersionTable {
 
-    public static final String TABLE_NAME = "WORKING_DAY";
+    public static final String TABLE_NAME = "VERSION";
 
-    public static final String ID = "ID";
-    public static final String YEAR = "YEAR";
-    public static final String MONTH = "MONTH";
-    public static final String DAY = "DAY";
+    public static final String VALUE = "VALUE";
 
-    public static final String ARRIVAL_HOUR = "ARRIVAL_HOUR";
-    public static final String ARRIVAL_MINUTE = "ARRIVAL_MINUTE";
-    public static final String OVERTIME_HOUR = "OVERTIME_HOUR";
-    public static final String OVERTIME_MINUTE = "OVERTIME_MINUTE";
-    public static final String WORKING_TIME_IN_MINUTES = "WORKING_TIME_IN_MINUTES";
-    public static final String PAUSE_TIME_IN_MINUTES = "PAUSE_TIME_IN_MINUTES";
-    public static final String NOTE = "NOTE";
-
-    private WorkingDayTable() {
+    private VersionTable() {
         //Not meant to be instantiated.
     }
 

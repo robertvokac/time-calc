@@ -66,14 +66,21 @@ public class Time extends Thread {
 
     public Calendar asCalendar() {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, yearProperty.getValue());
-        cal.set(Calendar.MONTH, monthProperty.getValue() - 1);
-        cal.set(Calendar.DAY_OF_MONTH, dayProperty.getValue());
-        cal.set(Calendar.HOUR_OF_DAY, hourProperty.getValue());
-        cal.set(Calendar.MINUTE, minuteProperty.getValue());
-        cal.set(Calendar.SECOND, secondProperty.getValue());
-        cal.set(Calendar.MILLISECOND, millisecondProperty.getValue());
+        cal.set(Calendar.YEAR, returnValueAsNeeded(yearProperty, yearCustomProperty));
+        cal.set(Calendar.MONTH, returnValueAsNeeded(monthProperty, monthCustomProperty) - 1);
+        cal.set(Calendar.DAY_OF_MONTH, returnValueAsNeeded(dayProperty, dayCustomProperty));
+        cal.set(Calendar.HOUR_OF_DAY, returnValueAsNeeded(hourProperty, hourCustomProperty));
+        cal.set(Calendar.MINUTE, returnValueAsNeeded(minuteProperty, minuteCustomProperty));
+        cal.set(Calendar.SECOND, returnValueAsNeeded(secondProperty, secondCustomProperty));
+        cal.set(Calendar.MILLISECOND, returnValueAsNeeded(millisecondProperty, millisecondCustomProperty));
         return cal;
+    }
+       private int returnValueAsNeeded(ReadOnlyProperty<Integer> p1, IntegerProperty p2) {
+        return returnValueAsNeeded(p1.getValue(), p2.getValue());
+    }
+
+    private int returnValueAsNeeded(int i1, int i2) {
+        return i2 == Integer.MAX_VALUE ? i1 : i2;
     }
 
     public void run() {
