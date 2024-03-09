@@ -515,7 +515,7 @@ public class ConfigWindow extends TWindow {
                 boolean isInteger = Integer.class == timeCalcProperty.getClazz();
                 timeCalcConfiguration
                         .getProperty(timeCalcProperty).addListener(e -> {
-                    System.out.println("JTextField was changed: " + timeCalcPropertyKey);
+
                     textField.setText(isInteger
                             ?
                             String.valueOf(timeCalcConfiguration
@@ -535,15 +535,12 @@ public class ConfigWindow extends TWindow {
                 textField.getDocument()
                         .addDocumentListener(new DocumentListener() {
                             public void changedUpdate(DocumentEvent e) {
-                                System.out.println("changedUpdate");
                             }
 
                             public void removeUpdate(DocumentEvent e) {
-                                System.out.println("removeUpdate");
                             }
 
                             public void insertUpdate(DocumentEvent e) {
-                                System.out.println("insertUpdate");
                                 update(e);
                             }
                             private void update(DocumentEvent e) {

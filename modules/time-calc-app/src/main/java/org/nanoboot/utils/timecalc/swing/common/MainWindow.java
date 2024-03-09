@@ -239,20 +239,27 @@ public class MainWindow extends TWindow {
             helpWindow.setVisible(true);
         });
 
-        time.yearCustomProperty.bindTo(timeCalcConfiguration.testYearCustomProperty);
-        time.monthCustomProperty.bindTo(timeCalcConfiguration.testMonthCustomProperty);
-        time.dayCustomProperty.bindTo(timeCalcConfiguration.testDayCustomProperty);
-        time.hourCustomProperty.bindTo(timeCalcConfiguration.testHourCustomProperty);
-        time.minuteCustomProperty.bindTo(timeCalcConfiguration.testMinuteCustomProperty);
-        time.secondCustomProperty.bindTo(timeCalcConfiguration.testSecondCustomProperty);
-        time.millisecondCustomProperty.bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
+        time.yearCustomProperty
+                .bindTo(timeCalcConfiguration.testYearCustomProperty);
+        time.monthCustomProperty
+                .bindTo(timeCalcConfiguration.testMonthCustomProperty);
+        time.dayCustomProperty
+                .bindTo(timeCalcConfiguration.testDayCustomProperty);
+        time.hourCustomProperty
+                .bindTo(timeCalcConfiguration.testHourCustomProperty);
+        time.minuteCustomProperty
+                .bindTo(timeCalcConfiguration.testMinuteCustomProperty);
+        time.secondCustomProperty
+                .bindTo(timeCalcConfiguration.testSecondCustomProperty);
+        time.millisecondCustomProperty
+                .bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
         time.allowCustomValuesProperty.setValue(true);
         analogClock.dayProperty.bindTo(time.dayProperty);
         analogClock.monthProperty.bindTo(time.monthProperty);
         analogClock.yearProperty.bindTo(time.yearProperty);
         analogClock.hourProperty.bindTo(time.hourProperty);
         analogClock.minuteProperty.bindTo(time.minuteProperty);
-        analogClock.secondProperty.bindTo( time.secondProperty);
+        analogClock.secondProperty.bindTo(time.secondProperty);
         analogClock.millisecondProperty.bindTo(time.millisecondProperty);
 
         analogClock.dayOfWeekProperty.bindTo(time.dayOfWeekProperty);
@@ -316,37 +323,6 @@ public class MainWindow extends TWindow {
                 dayBattery.getY() + dayBattery.getHeight() + SwingUtils.MARGIN,
                 140);
         add(weekBattery);
-
-        int currentDayOfMonth = analogClock.dayProperty.getValue();
-
-        int workDaysDone = 0;
-        int workDaysTodo = 0;
-        int workDaysTotal;
-        for (int dayOfMonth = 1;
-             dayOfMonth <= time.asCalendar().getActualMaximum(Calendar.DAY_OF_MONTH);
-             dayOfMonth++) {
-            DayOfWeek dayOfWeek =
-                    LocalDate.of(analogClock.yearProperty.getValue(),
-                            analogClock.monthProperty.getValue(), dayOfMonth)
-                            .getDayOfWeek();
-            boolean weekend
-                    = dayOfWeek.toString().equals("SATURDAY") || dayOfWeek
-                    .toString().equals("SUNDAY");
-            if (dayOfMonth < currentDayOfMonth && !weekend) {
-                ++workDaysDone;
-            }
-            if (dayOfMonth > currentDayOfMonth && !weekend) {
-                ++workDaysTodo;
-            }
-        }
-        String currentDayOfWeekAsString = LocalDate
-                .of(analogClock.yearProperty.getValue(),
-                        analogClock.monthProperty.getValue(),
-                        analogClock.dayOfWeekProperty.getValue()).getDayOfWeek()
-                .toString();
-        boolean nowIsWeekend = currentDayOfWeekAsString.equals("SATURDAY")
-                               || currentDayOfWeekAsString.equals("SUNDAY");
-        workDaysTotal = workDaysDone + (nowIsWeekend ? 0 : 1) + workDaysTodo;
 
         Battery monthBattery = new MonthBattery(
                 weekBattery.getBounds().x + weekBattery.getWidth()
@@ -522,6 +498,11 @@ public class MainWindow extends TWindow {
             progressSquare.setDonePercent(done);
             progressCircle.setDonePercent(done);
             dayBattery.setDonePercent(done);
+
+            WeekStatistics weekStatistics = new WeekStatistics(analogClock, time);
+            final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
+            final int workDaysDone = weekStatistics.getWorkDaysDone();
+            final  int workDaysTotal = weekStatistics.getWorkDaysTotal();
 
             int weekDayWhenMondayIsOne = analogClock.dayOfWeekProperty.getValue();
             weekBattery.setDonePercent(
