@@ -10,6 +10,7 @@ import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
 
 import java.util.List;
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 /**
  * @author Robert Vokac
@@ -27,6 +28,9 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
     public void create(WorkingDay workingDay) {
         System.out.println("Going to create: " + workingDay.toString());
 
+        if(!Utils.askYesNo(null, "Do you want to create new Working Day? " + workingDay, "Creation of newWorking Day")) {
+            return;
+        }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("INSERT INTO ")
@@ -124,8 +128,12 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             create(workingDay);
             return;
         }
+
         System.out.println("Going to update: " + workingDay.toString());
 
+        if(!Utils.askYesNo(null, "Do you want to update this Working Day? " + workingDay, "Update of Working Day")) {
+            return;
+        }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("UPDATE ")

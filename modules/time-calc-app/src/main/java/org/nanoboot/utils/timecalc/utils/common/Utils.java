@@ -1,9 +1,12 @@
 package org.nanoboot.utils.timecalc.utils.common;
 
 import org.nanoboot.utils.timecalc.app.Main;
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 
+import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,8 +29,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.nanoboot.utils.timecalc.app.TimeCalcException;
 
 /**
  * @author Robert Vokac
@@ -179,7 +182,7 @@ public class Utils {
         try ( FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());Stream<Path> stream = Files.walk(fs.getPath(folder))) {
             result = stream
                     .filter(Files::isRegularFile)
-                    .toList();
+                    .collect(Collectors.toList());
         } 
 
         return result;
@@ -227,5 +230,20 @@ public class Utils {
 
     public static void showNotification(Exception e) {
         showNotification("Error: " + e, 15000, 200);
+    }
+
+    public static boolean askYesNo(Component frame, String question, String title) {
+        int result = JOptionPane
+                .showConfirmDialog(frame, question,
+                        title,
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION) {
+            return true;
+        } else if (result == JOptionPane.NO_OPTION) {
+            return false;
+        } else {
+            return false;
+        }
     }
 }
