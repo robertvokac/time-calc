@@ -28,9 +28,14 @@ public class TButton extends JButton implements GetProperty {
             Visibility.STRONGLY_COLORED.name());
     private Color originalBackground;
     private Color originalForeground;
+    private int customWidth = 0;
 
     public TButton(String label) {
+        this(label, 0);
+    }
+    public TButton(String label, int customWidth) {
         super(label);
+        this.customWidth = customWidth;
         new Timer(100, e -> {
             if (!MainWindow.hideShowFormsCheckBox.isSelected()) {
                 setVisible(false);
@@ -52,7 +57,7 @@ public class TButton extends JButton implements GetProperty {
     }
 
     public void setBounds(int x, int y) {
-        setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        setBounds(x, y, customWidth == 0 ? BUTTON_WIDTH : customWidth, BUTTON_HEIGHT);
         this.originalBackground = getBackground();
         this.originalForeground = getForeground();
     }

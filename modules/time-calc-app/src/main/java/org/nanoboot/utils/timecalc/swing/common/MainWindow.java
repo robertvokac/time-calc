@@ -21,6 +21,7 @@ import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.swing.progress.YearBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
@@ -31,6 +32,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
+import java.io.File;
 
 /**
  * @author Robert Vokac
@@ -256,6 +258,8 @@ public class MainWindow extends TWindow {
 
         remainingTextField.setBoundsFromLeft(remainingTextFieldLabel);
         remainingTextField.setEditable(false);
+        TButton saveButton = new TButton("Save", 80);
+        saveButton.setBoundsFromLeft(remainingTextField);
         //
 
         add(departureTextFieldLabel);
@@ -264,6 +268,12 @@ public class MainWindow extends TWindow {
         add(elapsedTextField);
         add(remainingTextFieldLabel);
         add(remainingTextField);
+        add(saveButton);
+        saveButton.addActionListener(e -> {
+            TTime overtime_ =overtimeTextField.asTimeHM();
+            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTimeHM().toString().substring(0,5));
+            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0,overtime_.isNegative() ? 6 : 5));
+        });
         //
         configButton.setBoundsFromTop(departureTextFieldLabel);
         workDaysButton.setBoundsFromLeft(configButton);
