@@ -33,14 +33,16 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     }
 
     public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        processKeyCode(keyCode);
+    }
+
+    private void processKeyCode(int keyCode) {
         boolean onlyGreyOrNone
                 = timeCalcConfiguration.visibilitySupportedColoredProperty
                 .isDisabled();
         Visibility visibility = Visibility
                 .valueOf(timeCalcApp.visibilityProperty.getValue());
-
-        int keyCode = e.getKeyCode();
-
         boolean numberKeyWasPressed = keyCode == KeyEvent.VK_0 ||
                                       keyCode == KeyEvent.VK_1 ||
                                       keyCode == KeyEvent.VK_2 ||
@@ -74,17 +76,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
 
-            case KeyEvent.VK_H: {
-                if (visibility.isNone()) {
-                    timeCalcApp.visibilityProperty
-                            .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
-                                    : Visibility.STRONGLY_COLORED.name());
-                } else {
-                    timeCalcApp.visibilityProperty
-                            .setValue(Visibility.NONE.name());
-                }
-                break;
-            }
             case KeyEvent.VK_G: {
                 if (visibility.isGray() && !onlyGreyOrNone) {
                     timeCalcApp.visibilityProperty
@@ -112,7 +103,9 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
                 break;
             }
-            case KeyEvent.VK_V: {
+            case KeyEvent.VK_V:
+
+            case KeyEvent.VK_H: {
                 if (visibility.isNone()) {
                     timeCalcApp.visibilityProperty
                             .setValue(onlyGreyOrNone ? Visibility.GRAY.name()
@@ -237,15 +230,29 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             case KeyEvent.VK_Y: {
                 timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty
                         .flip();
+                if(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty.isDisabled() && timeCalcConfiguration.smileysVisibleProperty.isDisabled()){
+                    timeCalcConfiguration.smileysVisibleProperty.enable();
+                }
                 break;
             }
             case KeyEvent.VK_M: {
                 timeCalcConfiguration.walkingHumanVisibleProperty.flip();
                 break;
             }
+            case KeyEvent.VK_LEFT: {
+                switchProfile(true, false);
+                break;
+            }
+            case KeyEvent.VK_RIGHT: {
+                switchProfile(false, true);
+                break;
+            }
             default:
-                Utils.showNotification(
-                        "Unsupported key was pressed. There is no key shortcut for this key.");
+                if(!numberKeyWasPressed) {
+                    Utils.showNotification(
+                            "Unsupported key was pressed. There is no key shortcut for this key: "
+                            + keyCode);
+                }
 
         }
         if (numberKeyWasPressed && FileConstants.TIME_CALC_PROFILES_TXT_FILE
@@ -300,12 +307,13 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                                            + "\" is already active. Nothing to do",
                             5000);
                 } else {
-                    Utils.showNotification("Info: Changing profile to: " + ((
+                    Utils.showNotification("Info: Changing profile to: #" + profileNumber + " " + ((
                             profileName.isEmpty() ? "{Default profile}" :
                                     profileName)), 5000);
                     TimeCalcProperties.getInstance().loadProfile(profileName);
                     timeCalcConfiguration.loadFromTimeCalcProperties(
                             TimeCalcProperties.getInstance());
+                    Utils.writeTextToFile(FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE, profileName);
                 }
 
             } else {
@@ -316,6 +324,93 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
 
         window.repaint();
+    }
+
+    private void switchProfile(boolean previous, boolean next) {
+        if((previous && next) || (!previous && !next)) {
+            //nothing to do
+            return;
+        }
+        Properties profiles = new Properties();
+        try {
+            if(Utils.readTextFromFile(FileConstants.TIME_CALC_PROFILES_TXT_FILE).isEmpty()) {
+                return;
+            }
+
+            try {
+                profiles.load(new FileInputStream(
+                        FileConstants.TIME_CALC_PROFILES_TXT_FILE));
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            if(profiles.size() == 1) {
+                return;
+            }
+
+        } catch (IOException ioException) {
+
+            ioException.printStackTrace();
+            Utils.showNotification(ioException);
+            return;
+        }
+
+        String currentProfileName = null;
+        try {
+            currentProfileName = Utils.readTextFromFile(FileConstants.TIME_CALC_CURRENT_PROFILE_TXT_FILE);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            Utils.showNotification(ioException);
+            return;
+        }
+
+        int numberOfCurrentProfile = next ? -1 : 9;
+        for(Object number:profiles.keySet()) {
+            String profileName = (String) profiles.get(number);
+            if(profileName.equals(currentProfileName)) {
+                numberOfCurrentProfile = Integer.valueOf(
+                        (String) number);
+                break;
+            }
+        }
+        for(int i = (numberOfCurrentProfile + (next ? 1 : -1)); next ? i <=9 : i >=0; i= next ? (i +1) : (i -1)) {
+            String number = String.valueOf(i);
+            if(!profiles.containsKey(number)) {
+                continue;
+            }
+
+            System.out.println("switching profile from " + numberOfCurrentProfile + " to profile " + number);
+            processKeyCode(getKeyCodeForNumber(Integer.parseInt(number)));
+            break;
+
+        }
+    }
+
+    private int getKeyCodeForNumber(int number) {
+        switch (number) {
+            case 0:
+                return KeyEvent.VK_0;
+            case 1:
+                return KeyEvent.VK_1;
+            case 2:
+                return KeyEvent.VK_2;
+            case 3:
+                return KeyEvent.VK_3;
+            case 4:
+                return KeyEvent.VK_4;
+            case 5:
+                return KeyEvent.VK_5;
+            case 6:
+                return KeyEvent.VK_6;
+            case 7:
+                return KeyEvent.VK_7;
+            case 8:
+                return KeyEvent.VK_8;
+            case 9:
+                return KeyEvent.VK_9;
+            default:
+                Utils.showNotification("Unsupported key: " + number);
+                return 0;
+        }
     }
 
 }

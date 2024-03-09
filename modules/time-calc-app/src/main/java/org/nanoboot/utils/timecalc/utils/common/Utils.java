@@ -157,4 +157,8 @@ public class Utils {
         }
         toaster.showToaster(message);
     }
+
+    public static void showNotification(Exception e) {
+        showNotification("Error: " + e, 15000, 200);
+    }
 }
