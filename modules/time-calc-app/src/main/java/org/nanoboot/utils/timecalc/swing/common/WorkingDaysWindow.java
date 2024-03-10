@@ -361,38 +361,23 @@ public class WorkingDaysWindow extends TWindow {
         for (WorkingDayForStats wdfs : wdfsList) {
             ArrayList<String> list2 = new ArrayList<>();
             listForArray.add(list2);
+
+            list2.add(wdfs.getDayOfWeekAsString());
+            list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ?
+                    YES : NO);
+            list2.add(wdfs.getId());
+
             if (wdfs.isThisDayTimeOff()) {
-                list2.add(wdfs.getDayOfWeekAsString());
-                list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ?
-                        YES : NO);
-                list2.add(wdfs.getId());
+
                 list2.add(THREE_DASHES);
                 list2.add(THREE_DASHES);
                 list2.add(THREE_DASHES);
                 list2.add(THREE_DASHES);
                 list2.add(THREE_DASHES);
-                list2.add(wdfs.getNote());
-                list2.add(wdfs.isTimeOff() ? YES : NO);
-                list2.add(QUESTION_MARK);
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage7Days()
-                                - target));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage14Days()
-                                - target));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage28Days()
-                                - target));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage56Days()
-                                - target));
             } else {
-                list2.add(wdfs.getDayOfWeekAsString());
                 TTime overtime = new TTime(wdfs.getOvertimeHour(),
                         wdfs.getOvertimeMinute());
-                list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ?
-                        YES : NO);
-                list2.add(wdfs.getId());
+
                 list2.add(new TTime(wdfs.getArrivalHour(),
                         wdfs.getArrivalMinute()).toString().substring(0, 5)
                           + " (" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
@@ -406,22 +391,18 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(
                         TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString()
                                 .substring(0, 5));
-                list2.add(wdfs.getNote());
-                list2.add(wdfs.isTimeOff() ? YES : NO);
-                list2.add(QUESTION_MARK);
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage7Days()
-                                - target));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage14Days()
-                                - target));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage28Days()
-                                - target));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(wdfs.getArrivalTimeMovingAverage56Days()
-                                - target));
             }
+            list2.add(wdfs.getNote());
+            list2.add(wdfs.isTimeOff() ? YES : NO);
+            list2.add(QUESTION_MARK);
+            list2.add(TTime.ofMilliseconds(
+                    (int) (wdfs.getArrivalTimeMovingAverage7Days() * 60d * 60d * 1000d)).toString().substring(0, 8));
+            list2.add(TTime.ofMilliseconds(
+                    (int) (wdfs.getArrivalTimeMovingAverage14Days() * 60d * 60d * 1000d)).toString().substring(0, 8));
+            list2.add(TTime.ofMilliseconds(
+                    (int) (wdfs.getArrivalTimeMovingAverage28Days() * 60d * 60d * 1000d)).toString().substring(0, 8));
+            list2.add(TTime.ofMilliseconds(
+                    (int) (wdfs.getArrivalTimeMovingAverage56Days() * 60d * 60d * 1000d)).toString().substring(0, 8));
         }
 
         String data[][] = new String[listForArray.size()][];

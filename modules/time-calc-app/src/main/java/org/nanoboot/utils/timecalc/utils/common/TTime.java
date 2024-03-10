@@ -140,13 +140,18 @@ public class TTime implements Comparable<TTime> {
         return ofMilliseconds(s * 1000);
     }
     public static TTime ofMilliseconds(int s) {
+        boolean negative = false;
+        if(s < 0 ) {
+            s = Math.abs(s);
+            negative = true;
+        }
         int hours = s / 60 / 60 / 1000;
         int milliseconds = s - hours * 60 * 60 * 1000;
         int minutes = milliseconds / 60 / 1000;
         milliseconds = milliseconds - minutes * 60 * 1000;
         int seconds = milliseconds / 1000;
         milliseconds = milliseconds - seconds * 1000;
-        return new TTime(s < 0, Math.abs(hours), Math.abs(minutes), Math.abs(seconds), Math.abs(milliseconds));
+        return new TTime(negative, Math.abs(hours), Math.abs(minutes), Math.abs(seconds), Math.abs(milliseconds));
     }
 
     public TTime add(TTime tTimeToBeAdded) {
