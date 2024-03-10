@@ -184,7 +184,8 @@ Smileys can be colored or white-black (can be set in configuration)
 ## Command button
 
 ## Todos
-
+ * New table: YEAR
+ * Text field : +- buttons
  * Split to Maven modules
  * Junit, Mockito, etc.
  * Checkstyle

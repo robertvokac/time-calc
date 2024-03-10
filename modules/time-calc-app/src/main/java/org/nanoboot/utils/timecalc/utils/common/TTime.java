@@ -104,7 +104,7 @@ public class TTime implements Comparable<TTime> {
     }
 
     public TTime(int hourIn, int minuteIn, int secondIn, int millisecondIn) {
-        this(false, hourIn, minuteIn, secondIn, millisecondIn);
+        this(hourIn < 0 || minuteIn < 0 || secondIn < 0 || millisecondIn < 0, Math.abs(hourIn), Math.abs(minuteIn), Math.abs(secondIn), Math.abs(millisecondIn));
     }
 
     public TTime(boolean negative, int hourIn, int minuteIn, int secondIn, int millisecondIn) {
@@ -148,20 +148,13 @@ public class TTime implements Comparable<TTime> {
     }
 
     public TTime add(TTime tTimeToBeAdded) {
-        TTime result = this.cloneInstance();
-        if (result.isNegative()) {
-            result.setNegative(false);
-            result = result.remove(tTimeToBeAdded);
-            result.setNegative(result.toTotalMilliseconds() != 0);
-            return result;
-        }
-        Calendar cal = asCalendar();
-        cal.add(Calendar.HOUR_OF_DAY, tTimeToBeAdded.hour);
-        cal.add(Calendar.MINUTE, tTimeToBeAdded.minute);
-        cal.add(Calendar.SECOND, tTimeToBeAdded.second);
-        cal.add(Calendar.MILLISECOND, tTimeToBeAdded.millisecond);
-        result = TTime.of(cal);
-        return result;
+        TTime time1 = this;
+        TTime time2 = tTimeToBeAdded;
+        int totalMilliseconds1 = time1.toTotalMilliseconds();
+        int totalMilliseconds2 = time2.toTotalMilliseconds();
+        int result = totalMilliseconds1 + totalMilliseconds2;
+        return TTime.ofMilliseconds(result);
+
     }
 
     public static int countDiffInMinutes(TTime startTime, TTime endTime) {

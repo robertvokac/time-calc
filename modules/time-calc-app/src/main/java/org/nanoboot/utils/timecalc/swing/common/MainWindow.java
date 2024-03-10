@@ -600,8 +600,8 @@ public class MainWindow extends TWindow {
             }
             workingDay.setArrivalHour(arrival_.getHour());
             workingDay.setArrivalMinute(arrival_.getMinute());
-            workingDay.setOvertimeHour(overtime_.getHour());
-            workingDay.setOvertimeMinute(overtime_.getMinute());
+            workingDay.setOvertimeHour(overtime_.getHour() * (overtime_.isNegative() ? (-1) : 1));
+            workingDay.setOvertimeMinute(overtime_.getMinute() * (overtime_.isNegative() ? (-1) : 1));
             workingDay.setWorkingTimeInMinutes(work_.toTotalMilliseconds() / 1000 / 60);
             workingDay.setPauseTimeInMinutes(pause_.toTotalMilliseconds() / 1000 / 60);
             workingDay.setNote(noteTextField.getText());
@@ -648,8 +648,8 @@ public class MainWindow extends TWindow {
             wd.setArrivalHour(arrival_.getHour());
             wd.setArrivalMinute(arrival_.getMinute());
 
-            wd.setOvertimeHour(overtime_.getHour());
-            wd.setOvertimeMinute(overtime_.getMinute());
+            wd.setOvertimeHour(overtime_.getHour() * (overtime_.isNegative() ? (-1) : 1));
+            wd.setOvertimeMinute(overtime_.getMinute() * (overtime_.isNegative() ? (-1) : 1));
             
             workingDayRepository.update(wd);
 

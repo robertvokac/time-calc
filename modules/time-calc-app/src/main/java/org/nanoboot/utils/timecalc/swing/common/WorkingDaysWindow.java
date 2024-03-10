@@ -169,11 +169,12 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(E);
             } else {
                 list2.add(wdfs.getDayOfWeekAsString());
+                TTime overtime = new TTime(wdfs.getOvertimeHour(), wdfs.getOvertimeMinute());
                 list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ? YES : NO);
                 list2.add(wdfs.getId());
                 list2.add(new TTime(wdfs.getArrivalHour(), wdfs.getArrivalMinute()).toString().substring(0, 5));
                 list2.add(new TTime(wdfs.getDepartureHour(), wdfs.getDepartureMinute()).toString().substring(0, 5));
-                list2.add(new TTime(wdfs.getOvertimeHour(), wdfs.getOvertimeMinute()).toString().substring(0, 5));
+                list2.add(overtime.toString().substring(0, overtime.isNegative() ? 6 : 5));
                 list2.add(TTime.ofMinutes(wdfs.getWorkingTimeInMinutes()).toString().substring(0, 5));
                 list2.add(TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString().substring(0, 5));
                 list2.add(wdfs.getNote());
