@@ -21,9 +21,14 @@ public class TCheckBox extends JCheckBox implements GetProperty {
     private static final int HEIGHT = 30;
     private Color originalBackground;
     private Color originalForeground;
+    private int customWidth = 0;
 
     public TCheckBox(String text) {
+        this(text, 0);
+    }
+    public TCheckBox(String text, int customWidth) {
         this(text, false);
+        this.customWidth = customWidth;
     }
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
@@ -68,7 +73,7 @@ public class TCheckBox extends JCheckBox implements GetProperty {
     public final BooleanProperty valueProperty = new BooleanProperty("");
 
     public void setBounds(int x, int y) {
-        setBounds(x, y, WIDTH, HEIGHT);
+        setBounds(x, y, customWidth == 0 ? WIDTH : customWidth, HEIGHT);
         this.originalBackground = getBackground();
         this.originalForeground = getForeground();
     }

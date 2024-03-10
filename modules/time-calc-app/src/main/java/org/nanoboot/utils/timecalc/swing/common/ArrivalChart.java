@@ -35,10 +35,11 @@ public class ArrivalChart extends JPanel {
     private static final Color PURPLE = new Color(128, 0, 255);
     public static final Rectangle EMPTY_RECTANGLE = new Rectangle();
     public static final int MIN_CHART_WIDTH = 400;
+    private final boolean arrivalEnabled;
+    private final boolean ma7Enabled;
     private final boolean ma14Enabled;
     private final boolean ma28Enabled;
     private final boolean ma56Enabled;
-
     public IntegerProperty widthProperty = new IntegerProperty("widthProperty", 600);
     public IntegerProperty heightProperty = new IntegerProperty("heightProperty", 400);
 
@@ -46,6 +47,7 @@ public class ArrivalChart extends JPanel {
         this(data.getDays(), data.getArrival(), data.getTarget(), data.getMa7(),
                 data.getMa14(), data.getMa28(), data.getMa56(),
                 data.getStartDate(), data.getEndDate(), width,
+                data.isArrivalEnabled(), data.isMa7Enabled(),
                 data.isMa14Enabled(), data.isMa28Enabled(),
                 data.isMa56Enabled());
     }
@@ -53,11 +55,15 @@ public class ArrivalChart extends JPanel {
     public ArrivalChart(String[] days, double[] arrival, double target,
             double[] ma7,
             double[] ma14, double[] ma28, double[] ma56, String startDate,
-            String endDate, int width, boolean ma14Enabled, boolean ma28Enabled,
+            String endDate, int width, boolean arrivalEnabled, boolean ma7Enabled, boolean ma14Enabled, boolean ma28Enabled,
             boolean ma56Enabled) {
         this.setLayout(null);
-
         this.setVisible(true);
+        this.arrivalEnabled = arrivalEnabled;
+        this.ma7Enabled = ma7Enabled;
+        this.ma14Enabled = ma14Enabled;
+        this.ma28Enabled = ma28Enabled;
+        this.ma56Enabled = ma56Enabled;
         //
         String title = "Arrivals";
 
@@ -86,9 +92,7 @@ public class ArrivalChart extends JPanel {
 
         widthProperty.setValue(width);
         chartPanel.setBounds(10, 10, width, 400);
-        this.ma14Enabled = ma14Enabled;
-        this.ma28Enabled = ma28Enabled;
-        this.ma56Enabled = ma56Enabled;
+
 
     }
 
@@ -104,7 +108,14 @@ public class ArrivalChart extends JPanel {
 
         XYPlot plot = (XYPlot) chart.getPlot();
         for (int i = 0; i < 6; i++) {
-            if (i == 3 && this.ma14Enabled) {
+
+            if (i == 0 && !this.arrivalEnabled) {
+                continue;
+            }
+            if (i == 2 && !this.ma7Enabled) {
+                continue;
+            }
+            if (i == 3 && !this.ma14Enabled) {
                 continue;
             }
             if (i == 4 && !this.ma28Enabled) {

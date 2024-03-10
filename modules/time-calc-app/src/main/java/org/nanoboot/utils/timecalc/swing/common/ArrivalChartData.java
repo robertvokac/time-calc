@@ -23,5 +23,5 @@ public class ArrivalChartData {
     private double[] ma56;
     private String startDate;
     private String endDate;
-    private boolean ma14Enabled = true, ma28Enabled = true, ma56Enabled = true;
+    private boolean arrivalEnabled = true, ma7Enabled = true, ma14Enabled = true, ma28Enabled = true, ma56Enabled = true;
 }

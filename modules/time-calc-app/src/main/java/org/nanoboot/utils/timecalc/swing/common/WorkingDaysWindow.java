@@ -49,6 +49,11 @@ public class WorkingDaysWindow extends TWindow {
     private final JButton decreaseEnd;
     private final TTabbedPane tp;
     private final JComboBox years;
+    private final TCheckBox enableArrival;
+    private final TCheckBox enableMa7;
+    private final TCheckBox enableMa14;
+    private final TCheckBox enableMa28;
+    private final TCheckBox enableMa56;
     private ArrivalChart arrivalChart;
 
     private JTable table = null;
@@ -133,9 +138,7 @@ public class WorkingDaysWindow extends TWindow {
 
         TLabel startLabel = new TLabel("Start:");
         add(startLabel);
-        startLabel.setBounds(deleteTextField.getX() + deleteTextField.getWidth()
-                             + 6 * SwingUtils.MARGIN, deleteTextField.getY(),
-                50, 30);
+        startLabel.setBoundsFromTop(deleteTextField);
         this.startTextField = new TTextField();
         add(startTextField);
         startTextField.setBounds(
@@ -221,6 +224,27 @@ public class WorkingDaysWindow extends TWindow {
         decreaseEnd.setBounds(decreaseStart.getX() + decreaseStart.getWidth()
                               + SwingUtils.MARGIN, decreaseStart.getY(), 120,
                 30);
+
+        this.enableArrival = new TCheckBox("Arrival", 60);
+        //enableArrival.setSelected(true);
+        this.enableMa7 = new TCheckBox("MA7", 60);
+        enableMa7.setSelected(true);
+        this.enableMa14 = new TCheckBox("MA14", 60);
+        this.enableMa28 = new TCheckBox("MA28", 60);
+        this.enableMa56 = new TCheckBox("MA56", 60);
+        enableArrival.setBoundsFromLeft(decreaseEnd);
+        enableMa7.setBoundsFromLeft(enableArrival);
+        enableMa14.setBoundsFromLeft(enableMa7);
+        enableMa28.setBoundsFromLeft(enableMa14);
+        enableMa56.setBoundsFromLeft(enableMa28);
+
+        this.enableArrival.addActionListener(e-> reloadButton.doClick());
+        this.enableMa7.addActionListener(e-> reloadButton.doClick());
+        this.enableMa14.addActionListener(e-> reloadButton.doClick());
+        this.enableMa28.addActionListener(e-> reloadButton.doClick());
+        this.enableMa56.addActionListener(e-> reloadButton.doClick());
+
+        addAll(enableArrival, enableMa7, enableMa14, enableMa28, enableMa56);
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -248,7 +272,7 @@ public class WorkingDaysWindow extends TWindow {
         ArrivalChartData acd =
                 new ArrivalChartData(new String[] {}, new double[] {}, 7d,
                         new double[] {}, new double[] {}, new double[] {},
-                        new double[] {}, null, null, false, false, false);
+                        new double[] {}, null, null, false, false, false, false, false);
         this.arrivalChart = new ArrivalChart(acd, 1000);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         this.chartWidth = (int) screen.getWidth() - 60;
@@ -261,8 +285,8 @@ public class WorkingDaysWindow extends TWindow {
         this.scrollPane
                 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        tp.setBounds(years.getX(), years.getY() + years.getHeight() + SwingUtils.MARGIN, (int) (screen.getWidth() - 50),
-                (int) (screen.getHeight() - 200));
+        tp.setBounds(startLabel.getX(), startLabel.getY() + startLabel.getHeight() + SwingUtils.MARGIN, (int) (screen.getWidth() - 50),
+                (int) (screen.getHeight() - startLabel.getY() + startLabel.getHeight() -5 * SwingUtils.MARGIN));
         tp.add(scrollPane, "Table");
         tp.add(arrivalChart, "Chart");
         add(tp);
@@ -277,8 +301,7 @@ public class WorkingDaysWindow extends TWindow {
         loadYear(year, time);
 
         setSize(tp.getWidth() + 3 * SwingUtils.MARGIN,
-                tp.getY() + tp.getHeight()
-                + 4 * SwingUtils.MARGIN);
+                tp.getY() + tp.getHeight() - 120);
     }
 
     public void doReloadButtonClick() {
@@ -475,23 +498,26 @@ public class WorkingDaysWindow extends TWindow {
         table.setBounds(30, 30, 750, 600);
         this.widthProperty.addListener(e-> {
             if(/*this.widthProperty.getValue() % 10 == 0 && */this.widthProperty.getValue() > 400) {
-                tp.setBounds(years.getX(), years.getY() + years.getHeight() + SwingUtils.MARGIN, this.widthProperty.getValue() - 50,
+                tp.setBounds(tp.getX(), tp.getY(), this.widthProperty.getValue() - 50,
                         tp.getHeight());
             }
         });
         this.heightProperty.addListener(e-> {
             if(/*this.widthProperty.getValue() % 10 == 0 && */this.heightProperty.getValue() > 400) {
-                tp.setBounds(years.getX(), years.getY() + years.getHeight() + SwingUtils.MARGIN, tp.getWidth(),
-                        getHeight() - years.getHeight() * 4);
+                tp.setBounds(tp.getX(), tp.getY(), tp.getWidth(),
+                        getHeight() - years.getHeight() * 5);
             }
         });
         //table.setDefaultRenderer(Object.class, new ColorRenderer());
         ArrivalChartData acd = WorkingDayForStats
                 .toArrivalChartData(wdfsList, 7d, startTextField.getText(),
                         endTextField.getText());
-        acd.setMa14Enabled(acd.isMa14Enabled());
-        acd.setMa28Enabled(acd.isMa28Enabled());
-        acd.setMa56Enabled(acd.isMa56Enabled());
+
+        acd.setArrivalEnabled(enableArrival.isSelected());
+        acd.setMa7Enabled(enableMa7.isSelected());
+        acd.setMa14Enabled(enableMa14.isSelected());
+        acd.setMa28Enabled(enableMa28.isSelected());
+        acd.setMa56Enabled(enableMa56.isSelected());
         reloadChart(acd);
     }
 
