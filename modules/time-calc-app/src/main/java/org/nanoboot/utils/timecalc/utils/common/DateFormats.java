@@ -15,6 +15,9 @@ public class DateFormats {
             = DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
     public static DateFormat DATE_TIME_FORMATTER_LONG
             = new SimpleDateFormat("EEEE : yyyy-MM-dd", Locale.ENGLISH);
+
+    public static DateFormat DATE_TIME_FORMATTER_YYYYMMDD
+            = new SimpleDateFormat("yyyy-MM-dd");
     //
     public static DateFormat DATE_TIME_FORMATTER_TIME
             = new SimpleDateFormat("HH:mm:ss:SSS", Locale.ENGLISH);
