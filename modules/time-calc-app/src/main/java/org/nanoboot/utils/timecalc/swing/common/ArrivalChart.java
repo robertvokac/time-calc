@@ -34,7 +34,7 @@ public class ArrivalChart extends JPanel {
     private static final Color BROWN = new Color(128, 0, 64);
     private static final Color PURPLE = new Color(128, 0, 255);
     public static final Rectangle EMPTY_RECTANGLE = new Rectangle();
-    public static final int MIN_CHART_WIDTH = 600;
+    public static final int MIN_CHART_WIDTH = 400;
     private final boolean ma14Enabled;
     private final boolean ma28Enabled;
     private final boolean ma56Enabled;
@@ -73,14 +73,16 @@ public class ArrivalChart extends JPanel {
         this.add(chartPanel);
         widthProperty.addListener(e-> {
             if (widthProperty.getValue() > MIN_CHART_WIDTH) {
-                chartPanel.setBounds(10, 10, widthProperty.getValue(),
+                chartPanel.setBounds(10, 10, widthProperty.getValue() - 60,
                         heightProperty.getValue());
             } else {widthProperty.setValue(MIN_CHART_WIDTH);}
         });
-        heightProperty.addListener(e-> chartPanel.setBounds(10, 10, widthProperty.getValue(), heightProperty.getValue()));
-
-
-
+        heightProperty.addListener(e-> {
+            if (heightProperty.getValue() > MIN_CHART_WIDTH) {
+                chartPanel.setBounds(10, 10, chartPanel.getWidth(),
+                        heightProperty.getValue() - 60);
+            } else {heightProperty.setValue(MIN_CHART_WIDTH);}
+        });
 
         widthProperty.setValue(width);
         chartPanel.setBounds(10, 10, width, 400);

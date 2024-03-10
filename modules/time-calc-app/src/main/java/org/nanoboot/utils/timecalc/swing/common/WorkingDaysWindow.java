@@ -25,7 +25,6 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @author Robert Vokac
@@ -48,12 +47,15 @@ public class WorkingDaysWindow extends TWindow {
     private final int chartWidth;
     private final JButton decreaseStart;
     private final JButton decreaseEnd;
+    private final TTabbedPane tp;
+    private final JComboBox years;
     private ArrivalChart arrivalChart;
 
     private JTable table = null;
     private final JScrollPane scrollPane;
     private int loadedYear;
-    private InvalidationListener invalidationChartWidthListener;
+    private InvalidationListener invalidationWidthListener;
+    private InvalidationListener invalidationHeightListener;
 
     public WorkingDaysWindow(WorkingDayRepositoryApi workingDayRepository,
             Time time, double target) {
@@ -73,7 +75,7 @@ public class WorkingDaysWindow extends TWindow {
         for (int i = 0; i < yearsList.size(); i++) {
             yearsArray[i] = yearsList.get(i);
         }
-        JComboBox years = new JComboBox(yearsArray);
+        this.years = new JComboBox(yearsArray);
         years.setMaximumSize(new Dimension(150, 25));
 
         years.setSelectedItem(String.valueOf(year));
@@ -240,6 +242,8 @@ public class WorkingDaysWindow extends TWindow {
             }
         });
 
+        this.tp = new TTabbedPane();
+
         //
         ArrivalChartData acd =
                 new ArrivalChartData(new String[] {}, new double[] {}, 7d,
@@ -249,26 +253,31 @@ public class WorkingDaysWindow extends TWindow {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         this.chartWidth = (int) screen.getWidth() - 60;
         arrivalChart.setBounds(SwingUtils.MARGIN,
-                years.getY() + years.getHeight() + SwingUtils.MARGIN,
+                SwingUtils.MARGIN,
                 (int) (screen.getWidth() - 50),
                 400);
-        add(arrivalChart);
+
         //
         this.scrollPane
                 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tp.setBounds(years.getX(), years.getY() + years.getHeight() + SwingUtils.MARGIN, (int) (screen.getWidth() - 50),
+                (int) (screen.getHeight() - 200));
+        tp.add(scrollPane, "Table");
+        tp.add(arrivalChart, "Chart");
+        add(tp);
+
         scrollPane.setBounds(SwingUtils.MARGIN,
-                arrivalChart.getY() + arrivalChart.getHeight()
-                + SwingUtils.MARGIN,
+                SwingUtils.MARGIN,
                 (int) (screen.getWidth() - 50),
                 300);
-        add(scrollPane);
+
         scrollPane.setViewportView(table);
 
         loadYear(year, time);
 
-        setSize(scrollPane.getWidth() + 3 * SwingUtils.MARGIN,
-                scrollPane.getY() + scrollPane.getHeight()
+        setSize(tp.getWidth() + 3 * SwingUtils.MARGIN,
+                tp.getY() + tp.getHeight()
                 + 4 * SwingUtils.MARGIN);
     }
 
@@ -465,12 +474,15 @@ public class WorkingDaysWindow extends TWindow {
         scrollPane.setViewportView(table);
         table.setBounds(30, 30, 750, 600);
         this.widthProperty.addListener(e-> {
-            if(/*this.widthProperty.getValue() % 10 == 0 && */this.widthProperty.getValue() > 100) {
-                scrollPane.setBounds(SwingUtils.MARGIN,
-                        arrivalChart.getY() + arrivalChart.getHeight()
-                        + SwingUtils.MARGIN,
-                        (this.widthProperty.getValue() - 50),
-                        scrollPane.getHeight());
+            if(/*this.widthProperty.getValue() % 10 == 0 && */this.widthProperty.getValue() > 400) {
+                tp.setBounds(years.getX(), years.getY() + years.getHeight() + SwingUtils.MARGIN, this.widthProperty.getValue() - 50,
+                        tp.getHeight());
+            }
+        });
+        this.heightProperty.addListener(e-> {
+            if(/*this.widthProperty.getValue() % 10 == 0 && */this.heightProperty.getValue() > 400) {
+                tp.setBounds(years.getX(), years.getY() + years.getHeight() + SwingUtils.MARGIN, tp.getWidth(),
+                        getHeight() - years.getHeight() * 4);
             }
         });
         //table.setDefaultRenderer(Object.class, new ColorRenderer());
@@ -485,22 +497,25 @@ public class WorkingDaysWindow extends TWindow {
 
     public void reloadChart(ArrivalChartData newArrivalChartData) {
         Rectangle bounds = this.arrivalChart.getBounds();
-        remove(this.arrivalChart);
+        String currentTitle = tp.getTitleAt(tp.getSelectedIndex());
+        this.tp.remove(this.arrivalChart);
         this.arrivalChart = new ArrivalChart(newArrivalChartData, chartWidth);
-        if(this.invalidationChartWidthListener != null) {
-            this.widthProperty.removeListener(invalidationChartWidthListener);
-            this.invalidationChartWidthListener = null;
+        if(this.invalidationWidthListener != null) {
+            this.widthProperty.removeListener(invalidationWidthListener);
+            this.invalidationWidthListener = null;
         }
-        this.invalidationChartWidthListener =
-                new InvalidationListener() {
-                    @Override
-                    public void invalidated(Property property) {
-                        arrivalChart.widthProperty.setValue(getWidth() - 30);
-                    }
-                };
-        this.widthProperty.addListener(invalidationChartWidthListener);
-        add(arrivalChart);
+        if(this.invalidationHeightListener != null) {
+            this.heightProperty.removeListener(invalidationHeightListener);
+            this.invalidationHeightListener = null;
+        }
+        this.invalidationWidthListener = property -> arrivalChart.widthProperty.setValue(tp.getWidth() - 10);
+        this.invalidationHeightListener = property -> arrivalChart.heightProperty.setValue(tp.getHeight() - 10);
+        this.widthProperty.addListener(invalidationWidthListener);
+        this.heightProperty.addListener(invalidationHeightListener);
         arrivalChart.setBounds(bounds);
-        add(arrivalChart);
+        tp.add(arrivalChart, "Chart");
+        tp.switchTo(currentTitle);
+        arrivalChart.widthProperty.setValue(tp.getWidth() - 30);
+        arrivalChart.heightProperty.setValue(tp.getHeight()  - 10);
     }
 }
