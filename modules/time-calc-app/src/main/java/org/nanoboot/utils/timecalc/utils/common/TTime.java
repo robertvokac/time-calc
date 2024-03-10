@@ -17,6 +17,9 @@ public class TTime implements Comparable<TTime> {
     public static final int MINUTES_PER_HOUR = 60;
     public static final int MILLISECONDS_PER_SECOND = 1000;
     public static final int SECONDS_PER_MINUTE = 60;
+
+    public static final TTime T_TIME_ONE_MINUTE = new TTime(0, 1);
+    public static final TTime T_TIME_ONE_HOUR = new TTime(1,0);
     @Getter
     @Setter
     private boolean negative;
@@ -144,7 +147,6 @@ public class TTime implements Comparable<TTime> {
         int seconds = milliseconds / 1000;
         milliseconds = milliseconds - seconds * 1000;
         return new TTime(s < 0, Math.abs(hours), Math.abs(minutes), Math.abs(seconds), Math.abs(milliseconds));
-
     }
 
     public TTime add(TTime tTimeToBeAdded) {

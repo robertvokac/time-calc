@@ -64,7 +64,10 @@ public class TLabel extends JLabel implements GetProperty {
     }
 
     public void setBoundsFromLeft(JComponent jComponent) {
-        setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
+        setBoundsFromLeft(jComponent, 0);
+    }
+    public void setBoundsFromLeft(JComponent jComponent, int additionalX) {
+        setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN + additionalX,
                 jComponent.getY());
     }
 

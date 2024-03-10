@@ -26,10 +26,12 @@ import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.util.Calendar;
@@ -77,10 +79,10 @@ public class MainWindow extends TWindow {
     private final WorkingDayRepositorySQLiteImpl workingDayRepository;
 
     {
-        this.arrivalTextField = new TTextField();
-        this.overtimeTextField = new TTextField();
-        this.workingTimeTextField = new TTextField("8:00");
-        this.pauseTimeTextField = new TTextField("0:30");
+        this.arrivalTextField = new TTextField("", 40);
+        this.overtimeTextField = new TTextField("", 40);
+        this.workingTimeTextField = new TTextField("8:00", 40);
+        this.pauseTimeTextField = new TTextField("0:30", 40);
         this.noteTextField = new TTextField("", 120);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
@@ -257,22 +259,42 @@ public class MainWindow extends TWindow {
         arrivalTextFieldLabel.setBoundsFromTop(clock, 3);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
+        TButton arrivalIncreaseButton = new SmallTButton('+');
+        TButton arrivalDecreaseButton = new SmallTButton('-');
+        arrivalIncreaseButton.setBounds(arrivalTextField.getX() + arrivalTextField.getWidth(), arrivalTextField.getY(), 15, 15);
+        arrivalDecreaseButton.setBounds(arrivalTextField.getX() + arrivalTextField.getWidth(), arrivalTextField.getY() + 15, 15, 15);
+
         //
         TLabel overtimeTextFieldLabel = new TLabel("Overtime:");
-        overtimeTextFieldLabel.setBoundsFromLeft(arrivalTextField);
+        overtimeTextFieldLabel.setBoundsFromLeft(arrivalTextField, 15);
 
         overtimeTextField.setBoundsFromLeft(overtimeTextFieldLabel);
+        TButton overtimeIncreaseButton = new SmallTButton('+');
+        TButton overtimeDecreaseButton = new SmallTButton('-');
+        overtimeIncreaseButton.setBounds(overtimeTextField.getX() + overtimeTextField.getWidth(), overtimeTextField.getY(), 15, 15);
+        overtimeDecreaseButton.setBounds(overtimeTextField.getX() + overtimeTextField.getWidth(), overtimeTextField.getY() + 15, 15, 15);
+
         //
 
         TLabel workingTimeInMinutesTextFieldLabel = new TLabel("Work:", 40);
-        workingTimeInMinutesTextFieldLabel.setBoundsFromLeft(overtimeTextField);
+        workingTimeInMinutesTextFieldLabel.setBoundsFromLeft(overtimeTextField, 15);
 
         workingTimeTextField.setBoundsFromLeft(workingTimeInMinutesTextFieldLabel);
+        TButton workingIncreaseButton = new SmallTButton('+');
+        TButton workingDecreaseButton = new SmallTButton('-');
+        workingIncreaseButton.setBounds(workingTimeTextField.getX() + workingTimeTextField.getWidth(), workingTimeTextField.getY(), 15, 15);
+        workingDecreaseButton.setBounds(workingTimeTextField.getX() + workingTimeTextField.getWidth(), workingTimeTextField.getY() + 15, 15, 15);
+
         //
         TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:", 40);
-        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeTextField);
+        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeTextField, 15);
 
         pauseTimeTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
+        TButton pauseIncreaseButton = new SmallTButton('+');
+        TButton pauseDecreaseButton = new SmallTButton('-');
+        pauseIncreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY(), 15, 15);
+        pauseDecreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY() + 15, 15, 15);
+
         //
         TLabel noteTextFieldLabel = new TLabel("Note:", 40);
         noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField);
@@ -287,13 +309,33 @@ public class MainWindow extends TWindow {
 
         add(arrivalTextFieldLabel);
         add(arrivalTextField);
+        add(arrivalIncreaseButton);
+        add(arrivalDecreaseButton);
+
         add(overtimeTextFieldLabel);
         add(overtimeTextField);
+        add(overtimeIncreaseButton);
+        add(overtimeDecreaseButton);
+
         add(workingTimeInMinutesTextFieldLabel);
         add(workingTimeTextField);
+        add(workingIncreaseButton);
+        add(workingDecreaseButton);
 
         add(pauseTimeInMinutesFieldLabel);
         add(pauseTimeTextField);
+        add(pauseIncreaseButton);
+        add(pauseDecreaseButton);
+
+        arrivalIncreaseButton.addActionListener(e -> increaseArrival(TTime.T_TIME_ONE_MINUTE));
+        arrivalDecreaseButton.addActionListener(e -> decreaseArrival(TTime.T_TIME_ONE_MINUTE));
+        overtimeIncreaseButton.addActionListener(e -> increaseOvertime(TTime.T_TIME_ONE_MINUTE));
+        overtimeDecreaseButton.addActionListener(e -> decreaseOvertime(TTime.T_TIME_ONE_MINUTE));
+        workingIncreaseButton.addActionListener(e -> increaseWork(TTime.T_TIME_ONE_MINUTE));
+        workingDecreaseButton.addActionListener(e -> decreaseWork(TTime.T_TIME_ONE_MINUTE));
+        pauseIncreaseButton.addActionListener(e -> increasePause(TTime.T_TIME_ONE_MINUTE));
+        pauseDecreaseButton.addActionListener(e -> decreasePause(TTime.T_TIME_ONE_MINUTE));
+
         add(noteTextFieldLabel);
         add(noteTextField);
         add(timeOffCheckBox);
@@ -948,7 +990,14 @@ public class MainWindow extends TWindow {
     }
 
     public void increaseArrival(TTime tTime) {
-        arrivalTextField.valueProperty.setValue(new TTime(this.arrivalTextField.valueProperty.getValue()).add(tTime).toString().substring(0, 5));
+        TTime oldTime =
+                new TTime(this.arrivalTextField.valueProperty.getValue());
+        TTime newTime = oldTime.add(tTime);
+//        System.out.println("oldTime=" + oldTime);
+//        System.out.println("newTime=" + newTime);
+//        System.out.println("tTime=" + tTime);
+        arrivalTextField.valueProperty.setValue(
+                newTime.toString().substring(0, 5));
     }
 
     public void decreaseArrival(TTime tTime) {

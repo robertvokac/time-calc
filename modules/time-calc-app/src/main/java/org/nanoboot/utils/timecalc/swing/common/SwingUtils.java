@@ -11,6 +11,7 @@ public class SwingUtils {
 
     public static final int MARGIN = 10;
     public static final Font SMALL_FONT = new Font("sans", Font.BOLD, 10);
+    public static final Font VERY_SMALL_FONT = new Font("sans", Font.PLAIN, 8);
     public static final Font MEDIUM_MONOSPACE_FONT
             = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 

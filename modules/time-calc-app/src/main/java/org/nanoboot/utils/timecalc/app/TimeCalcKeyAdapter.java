@@ -23,9 +23,6 @@ import java.util.Properties;
  */
 public class TimeCalcKeyAdapter extends KeyAdapter {
 
-    private static final TTime T_TIME_ONE_MINUTE = new TTime(0, 1);
-    private static final TTime T_TIME_ONE_HOUR = new TTime(1,0);
-    
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow mainWindow;
@@ -81,7 +78,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         boolean increase = shiftDown;
         boolean decrease = ctrlDown;
         boolean reset = altDown;
-        TTime changeTTime = changeByOneHour ? T_TIME_ONE_HOUR : T_TIME_ONE_MINUTE;
+        TTime changeTTime = changeByOneHour ? TTime.T_TIME_ONE_HOUR : TTime.T_TIME_ONE_MINUTE;
         switch (keyCode) {
             case KeyEvent.VK_Y: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " year.");
