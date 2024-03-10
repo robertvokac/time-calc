@@ -12,6 +12,7 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -33,9 +34,13 @@ public class ArrivalChart extends JPanel {
     private static final Color BROWN = new Color(128, 0, 64);
     private static final Color PURPLE = new Color(128, 0, 255);
     public static final Rectangle EMPTY_RECTANGLE = new Rectangle();
+    public static final int MIN_CHART_WIDTH = 600;
     private final boolean ma14Enabled;
     private final boolean ma28Enabled;
     private final boolean ma56Enabled;
+
+    public IntegerProperty widthProperty = new IntegerProperty("widthProperty", 600);
+    public IntegerProperty heightProperty = new IntegerProperty("heightProperty", 400);
 
     public ArrivalChart(ArrivalChartData data, int width) {
         this(data.getDays(), data.getArrival(), data.getTarget(), data.getMa7(),
@@ -66,10 +71,23 @@ public class ArrivalChart extends JPanel {
         chartPanel.setDomainZoomable(true);
         chartPanel.setMouseZoomable(true);
         this.add(chartPanel);
+        widthProperty.addListener(e-> {
+            if (widthProperty.getValue() > MIN_CHART_WIDTH) {
+                chartPanel.setBounds(10, 10, widthProperty.getValue(),
+                        heightProperty.getValue());
+            } else {widthProperty.setValue(MIN_CHART_WIDTH);}
+        });
+        heightProperty.addListener(e-> chartPanel.setBounds(10, 10, widthProperty.getValue(), heightProperty.getValue()));
+
+
+
+
+        widthProperty.setValue(width);
         chartPanel.setBounds(10, 10, width, 400);
         this.ma14Enabled = ma14Enabled;
         this.ma28Enabled = ma28Enabled;
         this.ma56Enabled = ma56Enabled;
+
     }
 
     private JFreeChart createChart(List<TimeSeries> timeSeries,

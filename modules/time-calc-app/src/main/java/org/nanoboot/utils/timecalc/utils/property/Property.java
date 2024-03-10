@@ -117,7 +117,9 @@ public class Property<T> {
     public void addListener(ChangeListener<T> listener) {
         this.changeListeners.add(listener);
     }
-
+    public void removeListener(InvalidationListener listener) {
+        this.invalidationListeners.remove(listener);
+    }
     public void removeListener(ChangeListener<T> listener) {
         this.changeListeners.remove(listener);
     }

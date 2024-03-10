@@ -8,6 +8,8 @@ import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.InvalidationListener;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,6 +25,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Robert Vokac
@@ -50,6 +53,7 @@ public class WorkingDaysWindow extends TWindow {
     private JTable table = null;
     private final JScrollPane scrollPane;
     private int loadedYear;
+    private InvalidationListener invalidationChartWidthListener;
 
     public WorkingDaysWindow(WorkingDayRepositoryApi workingDayRepository,
             Time time, double target) {
@@ -460,6 +464,15 @@ public class WorkingDaysWindow extends TWindow {
 
         scrollPane.setViewportView(table);
         table.setBounds(30, 30, 750, 600);
+        this.widthProperty.addListener(e-> {
+            if(/*this.widthProperty.getValue() % 10 == 0 && */this.widthProperty.getValue() > 100) {
+                scrollPane.setBounds(SwingUtils.MARGIN,
+                        arrivalChart.getY() + arrivalChart.getHeight()
+                        + SwingUtils.MARGIN,
+                        (this.widthProperty.getValue() - 50),
+                        scrollPane.getHeight());
+            }
+        });
         //table.setDefaultRenderer(Object.class, new ColorRenderer());
         ArrivalChartData acd = WorkingDayForStats
                 .toArrivalChartData(wdfsList, 7d, startTextField.getText(),
@@ -474,6 +487,18 @@ public class WorkingDaysWindow extends TWindow {
         Rectangle bounds = this.arrivalChart.getBounds();
         remove(this.arrivalChart);
         this.arrivalChart = new ArrivalChart(newArrivalChartData, chartWidth);
+        if(this.invalidationChartWidthListener != null) {
+            this.widthProperty.removeListener(invalidationChartWidthListener);
+            this.invalidationChartWidthListener = null;
+        }
+        this.invalidationChartWidthListener =
+                new InvalidationListener() {
+                    @Override
+                    public void invalidated(Property property) {
+                        arrivalChart.widthProperty.setValue(getWidth() - 30);
+                    }
+                };
+        this.widthProperty.addListener(invalidationChartWidthListener);
         add(arrivalChart);
         arrivalChart.setBounds(bounds);
         add(arrivalChart);

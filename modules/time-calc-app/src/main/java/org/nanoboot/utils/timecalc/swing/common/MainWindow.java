@@ -703,6 +703,7 @@ public class MainWindow extends TWindow {
         System.out.println(wd);
         
         while (true) {
+
             if (updateWindow(timeCalcApp, time, clock, minuteBattery, hourBattery,
                     dayBattery,
                     weekBattery, monthBattery, yearBattery,
