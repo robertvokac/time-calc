@@ -35,7 +35,9 @@ public class Widget extends JPanel implements
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     protected static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     protected static final Font MEDIUM_FONT = new Font("sans", Font.BOLD, 16);
-
+    protected static final String HEAD = " () ";
+    protected static final String BODY = "/||\\";
+    protected static final String LEGS = " /\\ ";
     public static final Color CLOSE_BUTTON_FOREGROUND_COLOR
             = new Color(127, 127, 127);
     public static final Color CLOSE_BUTTON_BACKGROUND_COLOR = Color.LIGHT_GRAY;
@@ -229,12 +231,13 @@ public class Widget extends JPanel implements
     public Property getVisibilitySupportedColoredProperty() {
         return visibilitySupportedColoredProperty;
     }
-
     protected void paintSmiley(Visibility visibility, Graphics2D brush, int x,
             int y) {
-        if (smileysVisibleProperty.isDisabled() || (!mouseOver
-                && smileysVisibleOnlyIfMouseMovingOverProperty
-                        .isEnabled())) {
+        paintSmiley(visibility, brush, x, y, false);
+    }
+    protected void paintSmiley(Visibility visibility, Graphics2D brush, int x,
+            int y, boolean paintBody) {
+        if (!shouldBeSmileyPainted()) {
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
@@ -248,7 +251,9 @@ public class Widget extends JPanel implements
             colored = false;
         }
 
+
         if (!colored) {
+            y = y - 2;
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
@@ -263,6 +268,7 @@ public class Widget extends JPanel implements
                 brush.setColor(Color.BLACK);
             }
             Color currentColor = brush.getColor();
+            Font currentFont = brush.getFont();
             brush.setColor(visibility.isStronglyColored() ? Color.WHITE
                     : BACKGROUND_COLOR);
             brush.fillRect(
@@ -274,10 +280,12 @@ public class Widget extends JPanel implements
             brush.setFont(MEDIUM_FONT);
             brush.drawString(
                     ProgressSmiley.forProgress(donePercent).getCharacter(),
-                    x, y + 16
+                    x + 1, y + 16
             );
+            brush.setFont(currentFont);
         }
         if (colored) {
+            x = x + 2;
             ImageIcon imageIcon = ProgressSmileyIcon
                     .forSmiley(ProgressSmiley.forProgress(donePercent))
                     .getIcon();
@@ -289,6 +297,20 @@ public class Widget extends JPanel implements
             smileyIcon.setBounds(x, y, 15, 15);
             this.add(smileyIcon);
         }
+        if(colored) {
+            x = x - 2;
+            y = y - 2;
+        }
+        if(paintBody) {
+            brush.drawString(BODY, x - 5, y + 26);
+            brush.drawString(LEGS, x - 5, y + 36);
+        }
+    }
+
+    protected boolean shouldBeSmileyPainted() {
+        return smileysVisibleProperty.isEnabled() && (mouseOver
+                                                       || !smileysVisibleOnlyIfMouseMovingOverProperty
+                                                               .isEnabled());
     }
 
     protected boolean changedInTheLastXMilliseconds(int milliseconds) {

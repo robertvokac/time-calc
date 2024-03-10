@@ -17,6 +17,7 @@ import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class WalkingHumanProgress extends Widget implements
 
     private static final String WALL = "||";
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
+    private static final int LINE_WHERE_HEAD_IS = 2;
 
     public WalkingHumanProgress() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
@@ -81,8 +83,18 @@ public class WalkingHumanProgress extends Widget implements
 //            }
             brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
             int y = SwingUtils.MARGIN;
+            int lineNumber = 0;
             for (String line : lines) {
+                ++lineNumber;
                 brush.drawString(line, SwingUtils.MARGIN, y);
+
+                if(lineNumber == LINE_WHERE_HEAD_IS) {
+                    paintSmiley(visibility,
+                            (Graphics2D) brush,
+                            //29 309
+                            29 + ((int) (280 * donePercent)),
+                            y - 4, true);
+                }
                 y = y + SwingUtils.MARGIN;
             }
 
@@ -94,6 +106,7 @@ public class WalkingHumanProgress extends Widget implements
             //nothing to do
             return "";
         }
+        boolean bodyEnabled = !shouldBeSmileyPainted();
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
         this.setVisible(visibility != Visibility.NONE);
@@ -146,15 +159,15 @@ public class WalkingHumanProgress extends Widget implements
                 .append(spacesTodo == 0 ? "" : "|      |").append("\n");
 
         sb.append(
-                WALL + createSpaces(spacesDone) + " () " + createSpaces(
+                WALL + createSpaces(spacesDone) + (bodyEnabled ? HEAD : "    ") + createSpaces(
                 spacesTodo) + (spacesTodo == 0
                         ? " \\☼☼☼☼/  "
                         : "|    _ |") + Constants.NEW_LINE
-                + WALL + createSpaces(spacesDone) + "/||\\" + createSpaces(
+                + WALL + createSpaces(spacesDone) + (bodyEnabled ? BODY : "    ") + createSpaces(
                 spacesTodo) + (spacesTodo == 0
                         ? " ☼☼☼☼☼☼ "
                         : "|   |  |") + Constants.NEW_LINE
-                + WALL + createSpaces(spacesDone) + " /\\ " + createSpaces(
+                + WALL + createSpaces(spacesDone) + (bodyEnabled ? LEGS : "    ") + createSpaces(
                 spacesTodo) + (spacesTodo == 0
                         ? " /☼☼☼☼\\  "
                         : "|      |") + Constants.NEW_LINE

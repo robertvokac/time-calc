@@ -775,6 +775,9 @@ public class MainWindow extends TWindow {
         int secondNow = clock.secondProperty.getValue();
         int millisecondNow = clock.millisecondProperty.getValue();
 
+        if(arrivalTextField.getText().isEmpty() || departureTextField.getText().isEmpty()) {
+            return false;
+        }
         TTime startTime = arrivalTextField.asTTime();
         TTime endTime = departureTextField.asTTime();
         TTime nowTime = TTime.of(time.asCalendar());
