@@ -3,7 +3,6 @@ package org.nanoboot.utils.timecalc.swing.common;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JButton;
@@ -11,12 +10,12 @@ import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
+
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.entity.WorkingDayForStats;
 import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
-import static org.nanoboot.utils.timecalc.swing.common.ConfigWindow.CLIENT_PROPERTY_KEY;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 
 /**
@@ -29,7 +28,7 @@ public class WorkingDaysWindow extends TWindow {
     private static final String THREE_DASHES = "---";
     //
     private static final Color RED = new Color(255,153,153);
-    public static final String E = "?";
+    public static final String QUESTION_MARK = "?";
 
     private final WorkingDayRepositoryApi workingDayRepository;
     private final Time time;
@@ -162,28 +161,28 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(THREE_DASHES);
                 list2.add(wdfs.getNote());
                 list2.add(wdfs.isTimeOff() ? YES : NO);
-                list2.add(E);
-                list2.add(E);
-                list2.add(E);
-                list2.add(E);
-                list2.add(E);
+                list2.add(QUESTION_MARK);
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage7Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage14Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage28Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage56Days() - 7));
             } else {
                 list2.add(wdfs.getDayOfWeekAsString());
                 TTime overtime = new TTime(wdfs.getOvertimeHour(), wdfs.getOvertimeMinute());
                 list2.add(wdfs.getDayOfWeek() == 6 || wdfs.getDayOfWeek() == 7 ? YES : NO);
                 list2.add(wdfs.getId());
-                list2.add(new TTime(wdfs.getArrivalHour(), wdfs.getArrivalMinute()).toString().substring(0, 5));
+                list2.add(new TTime(wdfs.getArrivalHour(), wdfs.getArrivalMinute()).toString().substring(0, 5) + " (" + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalAsDouble())+ ")");
                 list2.add(new TTime(wdfs.getDepartureHour(), wdfs.getDepartureMinute()).toString().substring(0, 5));
                 list2.add(overtime.toString().substring(0, overtime.isNegative() ? 6 : 5));
                 list2.add(TTime.ofMinutes(wdfs.getWorkingTimeInMinutes()).toString().substring(0, 5));
                 list2.add(TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString().substring(0, 5));
                 list2.add(wdfs.getNote());
                 list2.add(wdfs.isTimeOff() ? YES : NO);
-                list2.add(E);
-                list2.add(E);
-                list2.add(E);
-                list2.add(E);
-                list2.add(E);
+                list2.add(QUESTION_MARK);
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage7Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage14Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage28Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage56Days() - 7));
             }
         }
 
