@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.entity.WorkingDayForStats;
 import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;

@@ -36,6 +36,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.util.Calendar;
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
+import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
+import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
 
 /**
@@ -77,6 +79,8 @@ public class MainWindow extends TWindow {
     private WorkingDaysWindow workingDaysWindow = null;
     private boolean stopBeforeEnd = false;
     private final WorkingDayRepositorySQLiteImpl workingDayRepository;
+    private final ActivityRepositoryApi activityRepository;
+    
 
     {
         this.arrivalTextField = new TTextField("", 40);
@@ -370,6 +374,7 @@ public class MainWindow extends TWindow {
         add(remainingTextField);
         add(saveButton);
         this.workingDayRepository = new WorkingDayRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
+        this.activityRepository = new ActivityRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
 
         //
         configButton.setBoundsFromTop(departureTextFieldLabel);
@@ -429,7 +434,7 @@ public class MainWindow extends TWindow {
         });
         activitiesButton.addActionListener(e -> {
             if (activitiesWindow == null) {
-                this.activitiesWindow = new ActivitiesWindow();
+                this.activitiesWindow = new ActivitiesWindow(this.activityRepository, time);
             }
             activitiesWindow.setVisible(true);
         });

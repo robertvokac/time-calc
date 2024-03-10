@@ -18,5 +18,9 @@ public interface ActivityRepositoryApi {
     void update(Activity activity);
 
     WorkingDay read(String id);
+    
+    void delete(String id);
+    
+    public List<String> getYears();
 
 }

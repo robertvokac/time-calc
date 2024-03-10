@@ -18,5 +18,5 @@ focus.txt
 dist/*
 time-calc-current-profile.txt
 time-calc-profiles.txt
-.tc/*
+**.tc/*
 time-calc-jokes.txt
