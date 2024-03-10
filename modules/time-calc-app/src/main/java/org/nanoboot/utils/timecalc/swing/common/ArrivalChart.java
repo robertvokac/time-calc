@@ -8,10 +8,18 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.Second;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYDataset;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
 import javax.swing.BorderFactory;
@@ -20,6 +28,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -33,53 +43,58 @@ public class ArrivalChart extends JPanel {
     private static final Color PURPLE = new Color(128,0, 255);
     public static final Rectangle EMPTY_RECTANGLE = new Rectangle();
 
-    public ArrivalChart(ArrivalChartData data) {
+    public ArrivalChart(ArrivalChartData data, int width) {
         this(data.getDays(), data.getArrival(), data.getTarget(), data.getMa7(), data.getMa14(), data.getMa28(), data.getMa56(),
-        data.getStartDate(), data.getEndDate());
+        data.getStartDate(), data.getEndDate(), width);
     }
     public ArrivalChart(String[] days, double[] arrival, double target, double[] ma7,
-            double[] ma14, double[] ma28, double[] ma56, String startDate, String endDate) {
+            double[] ma14, double[] ma28, double[] ma56, String startDate, String endDate, int width) {
         this.setLayout(null);
 
         this.setVisible(true);
         //
         String title = "Arrivals";
 
-        CategoryDataset dataset =
-                createDataset(days, arrival, target, ma7, ma14, ma28, ma56, title, startDate, endDate);
-        JFreeChart chart = createChart(dataset, title);
+        List<TimeSeries> timeSeries=
+                createSeries(days, arrival, target, ma7, ma14, ma28, ma56, title, startDate, endDate);
+        JFreeChart chart = createChart(timeSeries, title);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         chartPanel.setBackground(Color.white);
         chartPanel.setDomainZoomable(true);
         chartPanel.setMouseZoomable(true);
         this.add(chartPanel);
-        chartPanel.setBounds(10, 10, 1200, 400);
+        chartPanel.setBounds(10, 10, width, 400);
 
     }
 
-    public static JFreeChart createChart(CategoryDataset dataset,
+    public static JFreeChart createChart(List<TimeSeries> timeSeries,
             String title) {
 
-        JFreeChart chart = ChartFactory.createLineChart(
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
                 title,
                 "Date",
-                title,
-                dataset,
-                PlotOrientation.VERTICAL,
-                true,
-                true,
-                false
+                "Value",
+                new TimeSeriesCollection(new TimeSeries("Date"))
         );
 
-        CategoryPlot plot = chart.getCategoryPlot();
-        LineAndShapeRenderer renderer = new LineAndShapeRenderer();
-        renderer.setDrawOutlines(false);
+        XYPlot plot = (XYPlot) chart.getPlot();
+        for(int i = 0; i < 6; i++) {
+            plot.setDataset(i, new TimeSeriesCollection(timeSeries.get(i)));
+        }
+
+
         chart.setBorderVisible(false);
         BiConsumer<Integer, Color> setSeries = (i, c) -> {
-            renderer.setSeriesPaint(i, c);
-            renderer.setSeriesStroke(i, new BasicStroke(dataset.getRowCount() > 180 ? 1.0f : (i == 1 || i == 2 ? 1.5f : 1.25f)));
-            renderer.setSeriesShape(i, EMPTY_RECTANGLE);
+            XYItemRenderer renderer = new XYLineAndShapeRenderer();
+
+//            renderer.setDefaultPaint(c);
+//            renderer.setDefaultStroke(new BasicStroke(timeSeries.get(0).getItemCount() > 180 ? 1.0f : (i == 1 || i == 2 ? 1.5f : 1.25f)));
+//            renderer.setDefaultShape(EMPTY_RECTANGLE);
+            renderer.setSeriesPaint(0, c);
+            renderer.setSeriesStroke(0, new BasicStroke(i == 1 || i == 2 ? 2.5f : 1.5f));
+            renderer.setSeriesShape(0, EMPTY_RECTANGLE);
+            plot.setRenderer(i, renderer);
         };
         setSeries.accept(0, Color.GRAY);
         setSeries.accept(1, ORANGE);
@@ -88,7 +103,6 @@ public class ArrivalChart extends JPanel {
         setSeries.accept(4, BROWN);
         setSeries.accept(5, PURPLE);
 
-        plot.setRenderer(renderer);
         plot.setBackgroundPaint(Color.white);
 
 //        plot.setRangeGridlinesVisible(true);
@@ -99,12 +113,12 @@ public class ArrivalChart extends JPanel {
 
         chart.getLegend().setFrame(BlockBorder.NONE);
 
-        CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-        domainAxis.setLabelFont(SwingUtils.VERY_SMALL_FONT);
-        domainAxis.setTickLabelFont(SwingUtils.VERY_SMALL_FONT);
-        domainAxis.setCategoryLabelPositionOffset(10);
-        domainAxis.setTickLabelsVisible(true);
+//        CategoryAxis domainAxis = plot.getDomainAxis();
+//        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+//        domainAxis.setLabelFont(SwingUtils.VERY_SMALL_FONT);
+//        domainAxis.setTickLabelFont(SwingUtils.VERY_SMALL_FONT);
+//        domainAxis.setCategoryLabelPositionOffset(10);
+//        domainAxis.setTickLabelsVisible(true);
         chart.setTitle(new TextTitle(title,
                         new Font("Serif", Font.BOLD, 18)
                 )
@@ -113,7 +127,7 @@ public class ArrivalChart extends JPanel {
         return chart;
     }
 
-    private CategoryDataset createDataset(String[] days, double[] arrival, double target,
+    private List<TimeSeries> createSeries(String[] days, double[] arrival, double target,
             double[] ma7, double[] ma14, double[] ma28,
             double[] ma56, String title, String startDate, String endDate) {
         if (startDate == null) {
@@ -122,14 +136,20 @@ public class ArrivalChart extends JPanel {
         if (endDate == null) {
             endDate = "0-0-0";
         }
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        String seriesArrival = "Arrival";
-        String seriesTarget = "Target (" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(target) + " h)";
-        String seriesMa7 = "MA7";
-        String seriesMa14 = "MA14";
-        String seriesMa28 = "MA28";
-        String seriesMa56 = "MA56";
+        List<TimeSeries> result = new ArrayList<>();
 
+        final TimeSeries seriesArrival = new TimeSeries( "Arrival" );
+        final TimeSeries seriesTarget = new TimeSeries( "Target (" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(target) + " h)");
+        final TimeSeries seriesMa7 = new TimeSeries( "MA7" );
+        final TimeSeries seriesMa14 = new TimeSeries( "MA14" );
+        final TimeSeries seriesMa28 = new TimeSeries( "MA28" );
+        final TimeSeries seriesMa56 = new TimeSeries( "MA56" );
+        result.add(seriesArrival);
+        result.add(seriesTarget);
+        result.add(seriesMa7);
+        result.add(seriesMa14);
+        result.add(seriesMa28);
+        result.add(seriesMa56);
         String[] dayArray0 = startDate.split("-");
         int year1 = Integer.valueOf(dayArray0[0]);
         int month1 = Integer.valueOf(dayArray0[1]);
@@ -161,15 +181,17 @@ public class ArrivalChart extends JPanel {
                     continue;
                 }
             }
-            dataset.addValue(arrival[i], seriesArrival, date);
-            dataset.addValue(0, seriesTarget, date);
-            dataset.addValue(ma7[i], seriesMa7, date);
-            dataset.addValue(ma14[i], seriesMa14, date);
-            dataset.addValue(ma28[i], seriesMa28, date);
-            dataset.addValue(ma56[i], seriesMa56, date);
+            Day day3 = new Day(day, month, year);
+
+            seriesArrival.add(day3, new Double(arrival[i]));
+            seriesTarget.add(day3, new Double(0d));
+            seriesMa7.add(day3, new Double(ma7[i]));
+            seriesMa14.add(day3, new Double(ma14[i]));
+            seriesMa28.add(day3, new Double(ma28[i]));
+            seriesMa56.add(day3, new Double(ma56[i]));
 
         }
 
-        return dataset;
+        return result;
     }
 }

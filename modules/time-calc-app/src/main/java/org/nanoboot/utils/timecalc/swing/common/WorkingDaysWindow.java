@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -37,6 +38,7 @@ public class WorkingDaysWindow extends TWindow {
     private final double target;
     private final TTextField startTextField;
     private final TTextField endTextField;
+    private final int chartWidth;
     private ArrivalChart arrivalChart;
 
     private JTable table = null;
@@ -127,9 +129,11 @@ public class WorkingDaysWindow extends TWindow {
 
         //
         ArrivalChartData acd = new ArrivalChartData(new String[]{}, new double[]{}, 7d, new double[]{}, new double[]{}, new double[]{}, new double[]{}, null, null);
-        this.arrivalChart = new ArrivalChart(acd);
+        this.arrivalChart = new ArrivalChart(acd, 1000);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        this.chartWidth = (int) screen.getWidth() - 60;
         arrivalChart.setBounds(SwingUtils.MARGIN, years.getY() + years.getHeight()+ SwingUtils.MARGIN,
-                1200,
+                (int) (screen.getWidth() - 50),
                 400);
         add(arrivalChart);
         //
@@ -137,7 +141,7 @@ public class WorkingDaysWindow extends TWindow {
                 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBounds(SwingUtils.MARGIN, arrivalChart.getY() + arrivalChart.getHeight()+ SwingUtils.MARGIN,
-                1200,
+                (int) (screen.getWidth() - 50),
                 300);
         add(scrollPane);
         scrollPane.setViewportView(table);
@@ -304,7 +308,7 @@ public class WorkingDaysWindow extends TWindow {
     public void reloadChart(ArrivalChartData newArrivalChartData) {
         Rectangle bounds = this.arrivalChart.getBounds();
         remove(this.arrivalChart);
-        this.arrivalChart = new ArrivalChart(newArrivalChartData);
+        this.arrivalChart = new ArrivalChart(newArrivalChartData, chartWidth);
         add(arrivalChart);
         arrivalChart.setBounds(bounds);
         add(arrivalChart);
