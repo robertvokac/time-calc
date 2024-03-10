@@ -16,11 +16,11 @@ import lombok.Setter;
 public class ArrivalChartData {
     private String[] days;
     private double[] arrival;
+    private double target;
     private double[] ma7;
     private double[] ma14;
     private double[] ma28;
     private double[] ma56;
-    private double target;
     private String startDate;
     private String endDate;
 }

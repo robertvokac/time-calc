@@ -162,20 +162,23 @@ public class WorkingDayForStats extends WorkingDay {
         list.remove(0);
         list.remove(0);
         list.remove(0);
+        while(list.get(list.size() - 1).isThisDayTimeOff()) {
+            list.remove(list.size() - 1);
+        }
         String[] days = new String[list.size()];
-        double[] arrival = new double[list.size()];
         double[] ma7 = new double[list.size()];
         double[] ma14 = new double[list.size()];
         double[] ma28 = new double[list.size()];
         double[] ma56 = new double[list.size()];
+        double[] arrival = new double[list.size()];
         ArrivalChartData acd = new ArrivalChartData();
         acd.setDays(days);
         acd.setArrival(arrival);
+        acd.setTarget(target);
         acd.setMa7(ma7);
         acd.setMa14(ma14);
         acd.setMa28(ma28);
         acd.setMa56(ma56);
-        acd.setTarget(0);
         if(startDate != null && !startDate.isEmpty()) {
             acd.setStartDate(startDate);
         }
@@ -186,7 +189,7 @@ public class WorkingDayForStats extends WorkingDay {
             WorkingDayForStats wdfs = list.get(i);
             days[i] = wdfs.getId();
 
-            arrival[i] = wdfs.isThisDayTimeOff() ? wdfs.getArrivalTimeMovingAverage7Days() - target : wdfs.getArrivalAsDouble() - target;
+            arrival[i] = (wdfs.isThisDayTimeOff() ? wdfs.getArrivalTimeMovingAverage7Days() : wdfs.getArrivalAsDouble()) - target;
             ma7[i] = wdfs.getArrivalTimeMovingAverage7Days() - target;
             ma14[i] = wdfs.getArrivalTimeMovingAverage14Days() - target;
             ma28[i] = wdfs.getArrivalTimeMovingAverage28Days() - target;

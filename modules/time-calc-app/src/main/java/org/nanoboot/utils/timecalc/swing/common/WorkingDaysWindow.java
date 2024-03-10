@@ -87,7 +87,7 @@ public class WorkingDaysWindow extends TWindow {
 
         TLabel deleteLabel = new TLabel("Delete:");
         add(deleteLabel);
-        deleteLabel.setBounds(exitButton.getX() + exitButton.getWidth() + SwingUtils.MARGIN, exitButton.getY(), 100, 30);
+        deleteLabel.setBounds(exitButton.getX() + exitButton.getWidth() + SwingUtils.MARGIN, exitButton.getY(), 50, 30);
         TTextField deleteTextField = new TTextField();
         add(deleteTextField);
         deleteTextField.setBounds(deleteLabel.getX() + deleteLabel.getWidth() + SwingUtils.MARGIN, deleteLabel.getY(), 100, 30);
@@ -106,7 +106,7 @@ public class WorkingDaysWindow extends TWindow {
 
         TLabel startLabel = new TLabel("Start:");
         add(startLabel);
-        startLabel.setBounds(deleteTextField.getX() + deleteTextField.getWidth() + SwingUtils.MARGIN, deleteTextField.getY(), 50, 30);
+        startLabel.setBounds(deleteTextField.getX() + deleteTextField.getWidth() + 6 * SwingUtils.MARGIN, deleteTextField.getY(), 50, 30);
         this.startTextField = new TTextField();
         add(startTextField);
         startTextField.setBounds(startLabel.getX() + startLabel.getWidth() + SwingUtils.MARGIN, startLabel.getY(), 100, 30);
@@ -125,12 +125,11 @@ public class WorkingDaysWindow extends TWindow {
             reloadButton.doClick();
         });
 
-
         //
-        ArrivalChartData acd = new ArrivalChartData(new String[]{}, new double[]{}, new double[]{}, new double[]{}, new double[]{}, new double[]{},7d, null, null);
+        ArrivalChartData acd = new ArrivalChartData(new String[]{}, new double[]{}, 7d, new double[]{}, new double[]{}, new double[]{}, new double[]{}, null, null);
         this.arrivalChart = new ArrivalChart(acd);
         arrivalChart.setBounds(SwingUtils.MARGIN, years.getY() + years.getHeight()+ SwingUtils.MARGIN,
-                800,
+                1200,
                 400);
         add(arrivalChart);
         //
@@ -138,7 +137,7 @@ public class WorkingDaysWindow extends TWindow {
                 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBounds(SwingUtils.MARGIN, arrivalChart.getY() + arrivalChart.getHeight()+ SwingUtils.MARGIN,
-                1000,
+                1200,
                 300);
         add(scrollPane);
         scrollPane.setViewportView(table);

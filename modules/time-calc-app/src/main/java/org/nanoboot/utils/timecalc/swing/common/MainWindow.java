@@ -87,7 +87,7 @@ public class MainWindow extends TWindow {
         this.overtimeTextField = new TTextField("", 40);
         this.workingTimeTextField = new TTextField("8:00", 40);
         this.pauseTimeTextField = new TTextField("0:30", 40);
-        this.noteTextField = new TTextField("", 120);
+        this.noteTextField = new TTextField("", 100);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
@@ -300,8 +300,8 @@ public class MainWindow extends TWindow {
         pauseDecreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY() + 15, 15, 15);
 
         //
-        TLabel noteTextFieldLabel = new TLabel("Note:", 40);
-        noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField);
+        TLabel noteTextFieldLabel = new TLabel("Note:", 30);
+        noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField, 10);
 
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
         timeOffCheckBox.setBoundsFromLeft(noteTextField);
