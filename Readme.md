@@ -185,6 +185,7 @@ Smileys can be colored or white-black (can be set in configuration)
 
 ## Todos
  * New table: YEAR
+ * Custom arrival target
  * Split to Maven modules
  * Junit, Mockito, etc.
  * Checkstyle

@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 /**
  * @author Robert Vokac
@@ -33,15 +35,20 @@ public class WorkingDaysWindow extends TWindow {
     private final WorkingDayRepositoryApi workingDayRepository;
     private final Time time;
     private final JButton reloadButton;
+    private final double target;
+    private final TTextField startTextField;
+    private final TTextField endTextField;
+    private ArrivalChart arrivalChart;
 
     private JTable table = null;
     private final JScrollPane scrollPane;
 
-    public WorkingDaysWindow(WorkingDayRepositoryApi workingDayRepository, Time time) {
-        setSize(1100, 700);
+    public WorkingDaysWindow(WorkingDayRepositoryApi workingDayRepository, Time time, double target) {
+
         setTitle("Work Days");
         this.workingDayRepository = workingDayRepository;
         this.time = time;
+        this.target = target;
 
         int year = time.yearProperty.getValue();
         this.setLayout(null);
@@ -78,6 +85,7 @@ public class WorkingDaysWindow extends TWindow {
         });
         add(exitButton);
         exitButton.setBounds(reloadButton.getX() + reloadButton.getWidth() + SwingUtils.MARGIN, reloadButton.getY(), 100, 30);
+
         TLabel deleteLabel = new TLabel("Delete:");
         add(deleteLabel);
         deleteLabel.setBounds(exitButton.getX() + exitButton.getWidth() + SwingUtils.MARGIN, exitButton.getY(), 100, 30);
@@ -85,21 +93,60 @@ public class WorkingDaysWindow extends TWindow {
         add(deleteTextField);
         deleteTextField.setBounds(deleteLabel.getX() + deleteLabel.getWidth() + SwingUtils.MARGIN, deleteLabel.getY(), 100, 30);
         deleteTextField.addActionListener(e -> {
+            if(deleteTextField.getText().isEmpty()) {
+                //nothing to do
+                return;
+            }
+            if(!Utils.askYesNo(this, "Do you really want to delete this day: " + deleteTextField.getText(), "Day deletion")) {
+                return;
+            }
             workingDayRepository.delete(deleteTextField.getText());
             reloadButton.doClick();
         });
+
+
+        TLabel startLabel = new TLabel("Start:");
+        add(startLabel);
+        startLabel.setBounds(deleteTextField.getX() + deleteTextField.getWidth() + SwingUtils.MARGIN, deleteTextField.getY(), 50, 30);
+        this.startTextField = new TTextField();
+        add(startTextField);
+        startTextField.setBounds(startLabel.getX() + startLabel.getWidth() + SwingUtils.MARGIN, startLabel.getY(), 100, 30);
+        startTextField.addActionListener(e -> {
+            reloadButton.doClick();
+        });
+
+
+        TLabel endLabel = new TLabel("End:");
+        add(endLabel);
+        endLabel.setBounds(startTextField.getX() + startTextField.getWidth() + SwingUtils.MARGIN, startTextField.getY(), 50, 30);
+        this.endTextField = new TTextField();
+        add(endTextField);
+        endTextField.setBounds(endLabel.getX() + endLabel.getWidth() + SwingUtils.MARGIN, endLabel.getY(), 100, 30);
+        endTextField.addActionListener(e -> {
+            reloadButton.doClick();
+        });
+
+
+        //
+        ArrivalChartData acd = new ArrivalChartData(new String[]{}, new double[]{}, new double[]{}, new double[]{}, new double[]{}, new double[]{},7d, null, null);
+        this.arrivalChart = new ArrivalChart(acd);
+        arrivalChart.setBounds(SwingUtils.MARGIN, years.getY() + years.getHeight()+ SwingUtils.MARGIN,
+                800,
+                400);
+        add(arrivalChart);
+        //
         this.scrollPane
                 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBounds(SwingUtils.MARGIN, years.getY() + years.getHeight()+ SwingUtils.MARGIN,
-                getWidth() - 3 * SwingUtils.MARGIN,
-                getHeight() - 4 * SwingUtils.MARGIN - 50);
+        scrollPane.setBounds(SwingUtils.MARGIN, arrivalChart.getY() + arrivalChart.getHeight()+ SwingUtils.MARGIN,
+                1000,
+                300);
         add(scrollPane);
         scrollPane.setViewportView(table);
 
-
         loadYear(year, time);
 
+        setSize(scrollPane.getWidth() + 3 * SwingUtils.MARGIN, scrollPane.getY() + scrollPane.getHeight() + 4 * SwingUtils.MARGIN);
     }
 
     public void doReloadButtonClick() {
@@ -162,10 +209,10 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(wdfs.getNote());
                 list2.add(wdfs.isTimeOff() ? YES : NO);
                 list2.add(QUESTION_MARK);
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage7Days() - 7));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage14Days() - 7));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage28Days() - 7));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage56Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage7Days() - target));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage14Days() - target));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage28Days() - target));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage56Days() - target));
             } else {
                 list2.add(wdfs.getDayOfWeekAsString());
                 TTime overtime = new TTime(wdfs.getOvertimeHour(), wdfs.getOvertimeMinute());
@@ -179,10 +226,10 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(wdfs.getNote());
                 list2.add(wdfs.isTimeOff() ? YES : NO);
                 list2.add(QUESTION_MARK);
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage7Days() - 7));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage14Days() - 7));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage28Days() - 7));
-                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage56Days() - 7));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage7Days() - target));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage14Days() - target));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage28Days() - target));
+                list2.add(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(wdfs.getArrivalTimeMovingAverage56Days() - target));
             }
         }
 
@@ -249,18 +296,19 @@ public class WorkingDaysWindow extends TWindow {
 //                return c;
 //            }
         };
-        
-
 
         scrollPane.setViewportView(table);
         table.setBounds(30, 30, 750, 600);
-
-
         //table.setDefaultRenderer(Object.class, new ColorRenderer());
-        
-
-
-
+        reloadChart(WorkingDayForStats.toArrivalChartData(wdfsList, 7d, startTextField.getText(), endTextField.getText()));
     }
 
+    public void reloadChart(ArrivalChartData newArrivalChartData) {
+        Rectangle bounds = this.arrivalChart.getBounds();
+        remove(this.arrivalChart);
+        this.arrivalChart = new ArrivalChart(newArrivalChartData);
+        add(arrivalChart);
+        arrivalChart.setBounds(bounds);
+        add(arrivalChart);
+    }
 }

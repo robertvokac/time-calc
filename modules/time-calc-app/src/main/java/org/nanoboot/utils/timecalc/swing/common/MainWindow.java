@@ -423,7 +423,7 @@ public class MainWindow extends TWindow {
         });
         workDaysButton.addActionListener(e -> {
             if (workingDaysWindow == null) {
-                this.workingDaysWindow = new WorkingDaysWindow(workingDayRepository, time);
+                this.workingDaysWindow = new WorkingDaysWindow(workingDayRepository, time, 7d);
             }
             workingDaysWindow.setVisible(true);
         });
