@@ -20,7 +20,7 @@ public class ActivityHeader extends JPanel {
     public static final Dimension PREFERRED_SIZE4 = new Dimension(40, 40);
     public static final Dimension PREFERRED_SIZE2 = new Dimension(100, 40);
 
-    private TTextField sortkey = new TTextField("Sortkey");
+    //private TTextField sortkey = new TTextField("Sortkey");
     private TTextField name = new TTextField("Name");
     private TTextField comment = new TTextField("Comment");
     private TTextField ticket = new TTextField("Ticket");
@@ -35,7 +35,7 @@ public class ActivityHeader extends JPanel {
     public ActivityHeader() {
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
-        add(sortkey);
+        //add(sortkey);
         add(name);
         add(comment);
         add(ticket);
@@ -47,7 +47,7 @@ public class ActivityHeader extends JPanel {
         add(done);
         add(todo);
 
-        sortkey.setPreferredSize(PREFERRED_SIZE1);
+        //sortkey.setPreferredSize(PREFERRED_SIZE1);
         name.setPreferredSize(PREFERRED_SIZE);
         comment.setPreferredSize(PREFERRED_SIZE);
         ticket.setPreferredSize(PREFERRED_SIZE1);
@@ -59,7 +59,7 @@ public class ActivityHeader extends JPanel {
         done.setPreferredSize(PREFERRED_SIZE3);
         todo.setPreferredSize(PREFERRED_SIZE3);
 
-        sortkey.setEditable(false);
+        //sortkey.setEditable(false);
         name.setEditable(false);
         comment.setEditable(false);
         ticket.setEditable(false);
@@ -71,7 +71,7 @@ public class ActivityHeader extends JPanel {
         done.setEditable(false);
         todo.setEditable(false);
 
-        sortkey.setFont(FONT);
+        //sortkey.setFont(FONT);
         name.setFont(FONT);
         comment.setFont(FONT);
         ticket.setFont(FONT);
@@ -83,7 +83,7 @@ public class ActivityHeader extends JPanel {
         done.setFont(FONT);
         todo.setFont(FONT);
 
-        sortkey.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        //sortkey.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         name.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         comment.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         ticket.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -98,5 +98,6 @@ public class ActivityHeader extends JPanel {
         //this.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 1));
         setAlignmentX(LEFT_ALIGNMENT);
 
+        //sortkey.setVisible(false);
     }
 }

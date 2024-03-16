@@ -17,6 +17,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -93,7 +94,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
     @Getter
     private final Activity activity;
 
-    private final TTextField sortkey;
+    //private final TTextField sortkey;
     private final TTextField name;
     private final TTextField comment;
     private final TTextField ticket;
@@ -121,7 +122,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         {
             this.subject = new TTextFieldForActivityPanel("", "subject");
             this.totalComment = new TTextFieldForActivityPanel("", "totalComment");
-            this.sortkey = new TTextFieldForActivityPanel("1", "sortkey", (a, r)->a.setSortkey(Integer.parseInt(r)), true);
+            //this.sortkey = new TTextFieldForActivityPanel("1", "sortkey", (a, r)->a.setSortkey(Integer.parseInt(r)), true);
             this.name = new TTextFieldForActivityPanel("", "name", (a, r)->{a.setName(r);getSubject().setText(a.createSubject());}, false);
             this.comment = new TTextFieldForActivityPanel("", "comment",  (a, r)->{a.setComment(r);getTotalComment().setText(a.createTotalComment());}, false);
             this.ticket = new TTextFieldForActivityPanel("", "ticket",
@@ -143,7 +144,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         }
 
         this.dayPanel = dayPanel;
-        add(sortkey);
+        //add(sortkey);
         add(name);
         add(comment);
         add(ticket);
@@ -154,23 +155,27 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         add(totalComment);
         add(today);
         add(remains);
+        //sortkey.setVisible(false);
         name.setHorizontalAlignment(JTextField.LEFT);
         comment.setHorizontalAlignment(JTextField.LEFT);
         ticket.setHorizontalAlignment(JTextField.LEFT);
 
         JButton copyButton = new SmallTButton("Copy");
         JButton deleteButton = new SmallTButton("Delete");
-        JButton moveButton = new SmallTButton("Move");
+        JButton moveThisButton = new SmallTButton("Move this");
+        JButton moveBeforeButton = new SmallTButton("Move before");
 
         add(copyButton);
         add(deleteButton);
-        add(moveButton);
+        add(moveThisButton);
+        add(moveBeforeButton);
 
         copyButton.setFont(SwingUtils.SMALL_FONT);
         deleteButton.setFont(SwingUtils.SMALL_FONT);
-        moveButton.setFont(SwingUtils.SMALL_FONT);
+        moveThisButton.setFont(SwingUtils.SMALL_FONT);
+        moveBeforeButton.setFont(SwingUtils.SMALL_FONT);
 
-        sortkey.setPreferredSize(PREFERRED_SIZE1);
+        //sortkey.setPreferredSize(PREFERRED_SIZE1);
         name.setPreferredSize(PREFERRED_SIZE);
         comment.setPreferredSize(PREFERRED_SIZE);
         ticket.setPreferredSize(PREFERRED_SIZE1);
@@ -184,10 +189,11 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
         copyButton.setPreferredSize(PREFERRED_SIZE4);
         deleteButton.setPreferredSize(PREFERRED_SIZE4);
-        moveButton.setPreferredSize(PREFERRED_SIZE4);
+        moveThisButton.setPreferredSize(PREFERRED_SIZE1);
+        moveBeforeButton.setPreferredSize(PREFERRED_SIZE1);
         this.setPreferredSize(new Dimension(getWidth(), 40));
 
-        sortkey.setText(String.valueOf(activity.getSortkey()));
+        //sortkey.setText(String.valueOf(activity.getSortkey()));
         name.setText(activity.getName());
         comment.setText(activity.getComment());
         ticket.setText(activity.getTicket());
@@ -218,8 +224,66 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         copyButton.addActionListener(e -> {
             activityRepository.putToClipboard(this.activity);
         });
-        moveButton.addActionListener(e-> {
+        moveThisButton.addActionListener(e-> {
             this.dayPanel.markActivityPanelToBeMoved(this);
+        });
+
+        moveBeforeButton.addActionListener(e-> {
+            if(dayPanel.getMarkActivityPanelToBeMoved() == null) {
+                //nothing to do
+                return;
+            }
+            List<Activity> list = dayPanel.getActivities();
+            Activity activityToBeMoved = activityRepository.read(dayPanel.getMarkActivityPanelToBeMoved().getActivity().getId());
+            Activity activityTarget = activityRepository.read(activity.getId());
+            int activityTargetSortkey = activityTarget.getSortkey();
+            int newSortKey = activityToBeMoved.getSortkey();
+            for(int i = 0; i < list.size(); i++) {
+                if(activityToBeMoved.getSortkey() == activityTarget.getSortkey()) {
+                    //nothing to do
+                    break;
+                }
+                if(i >= 1  && activityToBeMoved.getSortkey() == activityTarget.getSortkey()) {
+                    //nothing to do
+                    break;
+                }
+                if(list.get(i).getId().equals(activityTarget.getId())) {
+                    Activity activityBefore = i == 0 ? null : list.get(i - 1);
+                    if(activityBefore != null && activityBefore.getId().equals(activityToBeMoved.getId())) {
+                        //nothing to do
+                        break;
+                    }
+                    int activityBeforeSortkey = activityBefore == null ? activityTargetSortkey : activityBefore.getSortkey();
+                    int start = activityBeforeSortkey + 1;
+                    int end = activityTargetSortkey - 1;
+                    if(start > end) {
+                        start = end;
+                    }
+                    if(start == end) {
+                        newSortKey = end;
+                        break;
+                    }
+                    newSortKey = start + (end - start) / 2;
+                    if(newSortKey > activityTargetSortkey) {
+                        newSortKey = activityTargetSortkey;
+                    }
+                    break;
+                }
+
+            }
+            int oldSortkey = activityToBeMoved.getSortkey();
+            if(oldSortkey != newSortKey) {
+                activityToBeMoved.setSortkey(newSortKey);
+            }
+            ActivityPanel activityPanelForActivity =
+                    dayPanel.getActivityPanelForActivity(activityToBeMoved);
+            activityPanelForActivity.getActivity().setSortkey(newSortKey);
+//            activityPanelForActivity.getSortkeyTTextField().setText(
+//                    String.valueOf(newSortKey));
+            activityRepository.update(activityToBeMoved);
+            dayPanel.sortActivityPanels();
+
+
         });
     }
 
@@ -227,7 +291,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
     public int compareTo(ActivityPanel o) {
         return this.getActivity().compareTo(o.getActivity());
     }
-    public TTextField getSortkeyTTextField() {
-        return sortkey;
-    }
+//    public TTextField getSortkeyTTextField() {
+//        return sortkey;
+//    }
 }
