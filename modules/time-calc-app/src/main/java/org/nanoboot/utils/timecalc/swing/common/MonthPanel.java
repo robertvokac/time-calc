@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -31,6 +33,22 @@ public class MonthPanel extends JPanel {
         this.tp = new TTabbedPane();
         add(tp);
         tp.setBounds(0, 0, 1100, 650);
+
+        ChangeListener changeListener = new ChangeListener() {
+            private boolean secondOrLaterChange = false;
+            public void stateChanged(ChangeEvent changeEvent) {
+                if(!secondOrLaterChange) {
+                    secondOrLaterChange = true;
+                    return;
+                }
+                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+                int index = sourceTabbedPane.getSelectedIndex();
+
+                days.get(sourceTabbedPane.getTitleAt(index)).load();
+            }
+        };
+        tp.addChangeListener(changeListener);
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(year));
         cal.set(Calendar.MONTH, Integer.valueOf(month) - 1);

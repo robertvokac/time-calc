@@ -5,6 +5,9 @@ import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -24,6 +27,22 @@ public class YearPanel extends JPanel {
         this.tp = new TTabbedPane();
         add(tp);
         tp.setBounds(0, 0, 1150, 700);
+
+        ChangeListener changeListener = new ChangeListener() {
+            private boolean secondOrLaterChange = false;
+            public void stateChanged(ChangeEvent changeEvent) {
+                if(!secondOrLaterChange) {
+                    secondOrLaterChange = true;
+                    return;
+                }
+                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+                int index = sourceTabbedPane.getSelectedIndex();
+
+                months.get(sourceTabbedPane.getTitleAt(index)).getDayPanel("1").load();
+            }
+        };
+        tp.addChangeListener(changeListener);
+
         for (int month = 1; month <= 12; month++) {
             final String monthS = String.valueOf(month);
             MonthPanel monthPanel = new MonthPanel(year, String.valueOf(month), activityRepository);

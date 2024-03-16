@@ -358,6 +358,7 @@ public class WorkingDaysWindow extends TWindow {
         WorkingDayForStats.fillStatisticsColumns(wdfsList);
 
         List<List<String>> listForArray = new ArrayList<>();
+        int totalOvertime = workingDayRepository.getTotalOvertimeForDayInMinutes(year - 1, 12, 31);
         for (WorkingDayForStats wdfs : wdfsList) {
             ArrayList<String> list2 = new ArrayList<>();
             listForArray.add(list2);
@@ -388,13 +389,15 @@ public class WorkingDaysWindow extends TWindow {
                         .substring(0, overtime.isNegative() ? 6 : 5));
                 list2.add(TTime.ofMinutes(wdfs.getWorkingTimeInMinutes())
                         .toString().substring(0, 5));
+                totalOvertime = totalOvertime + wdfs.getOvertimeHour() * 60 + wdfs.getOvertimeMinute();
                 list2.add(
                         TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString()
                                 .substring(0, 5));
             }
             list2.add(wdfs.getNote());
             list2.add(wdfs.isTimeOff() ? YES : NO);
-            list2.add(QUESTION_MARK);
+            TTime totalOvertimeTTime = TTime.ofMinutes(totalOvertime);
+            list2.add((totalOvertimeTTime.getHour() < 10 ? "0" : "") + totalOvertimeTTime.getHour() + ":" + (totalOvertimeTTime.getMinute() < 10 ? "0" : "") + totalOvertimeTTime.getMinute());
             list2.add(TTime.ofMilliseconds(
                     (int) (wdfs.getArrivalTimeMovingAverage7Days() * 60d * 60d * 1000d)).toString().substring(0, 8));
             list2.add(TTime.ofMilliseconds(
@@ -429,8 +432,6 @@ public class WorkingDaysWindow extends TWindow {
             public Class getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
             }
-
-            ;
         };
         //        class ColorRenderer extends JLabel
         //                implements TableCellRenderer {

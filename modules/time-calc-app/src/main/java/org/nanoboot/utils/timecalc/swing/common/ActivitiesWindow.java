@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
@@ -82,7 +86,20 @@ public class ActivitiesWindow extends TWindow {
 
         });
         add(tp);
-        
+        ChangeListener changeListener = new ChangeListener() {
+            private boolean secondOrLaterChange = false;
+            public void stateChanged(ChangeEvent changeEvent) {
+                if(!secondOrLaterChange) {
+                    secondOrLaterChange = true;
+                    return;
+                }
+                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+                int index = sourceTabbedPane.getSelectedIndex();
+
+                years.get(sourceTabbedPane.getTitleAt(index)).getMonthPanel("1").getDayPanel("1").load();
+            }
+        };
+        tp.addChangeListener(changeListener);
         getYearPanel(currentYearS).setSelectedMonth(currentMonthS);
         getYearPanel(currentYearS).getMonthPanel(currentMonthS).setSelectedDay(currentDayS);
     }

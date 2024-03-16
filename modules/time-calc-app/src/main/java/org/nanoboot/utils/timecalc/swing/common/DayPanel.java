@@ -3,12 +3,16 @@ package org.nanoboot.utils.timecalc.swing.common;
 import org.nanoboot.utils.timecalc.entity.Activity;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author robertvokac
@@ -37,15 +41,22 @@ public class DayPanel extends JPanel {
         this.loadButton = new JButton("Load");
         this.loadButton.setBounds(10, 10, 200, 30);
 
-        this.loadButton.addActionListener(e -> load(activityRepository));
+        this.loadButton.addActionListener(e -> load());
         add(loadButton);
 
     }
 
-    private void load(ActivityRepositoryApi activityRepository) {
+    public void load() {
+        if(this.loadButton == null) {
+            //nothing to do
+            return;
+        }
         if (this.loadButton.isVisible()) {
             this.loadButton.setVisible(false);
             this.loadButton = null;
+        } else {
+            //already loaded
+            return;
         }
 
         BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
@@ -53,6 +64,7 @@ public class DayPanel extends JPanel {
         this.setLayout(boxLayout);
 
         JPanel buttons = new JPanel();
+        buttons.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
         buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
         buttons.setAlignmentX(LEFT_ALIGNMENT);
         JButton newButton = new JButton("New");
@@ -60,11 +72,21 @@ public class DayPanel extends JPanel {
         buttons.add(newButton);
         buttons.add(pasteButton);
         add(buttons);
-        for (int i = 0; i < 10; i++) {
-            add(new ActivityPanel(activityRepository,
-                    new Activity("aaa", 2000, 7, 7, "a", "b", "c", 2, 30,
-                            "a b c", null)));
-        }
+        buttons.setMaximumSize(new Dimension(1000, 40));
+        newButton.addActionListener(e-> {
+            Activity newActivity = new Activity(UUID.randomUUID().toString(), Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day), "", "", "", 0, 0, "", null);
+            ActivityPanel comp =
+                    new ActivityPanel(activityRepository, newActivity);
+            comp.setMaximumSize(new Dimension(1000, 40));
+            add(comp);
+            activityRepository.create(newActivity);
+            repaint();
+        });
+//        for (int i = 0; i < 10; i++) {
+//            add(new ActivityPanel(activityRepository,
+//                    new Activity("id", 2000, 7, 7, "name", "comment", "ticket", 2, 30,
+//                            "a b c", null)));
+//        }
     }
 
 }

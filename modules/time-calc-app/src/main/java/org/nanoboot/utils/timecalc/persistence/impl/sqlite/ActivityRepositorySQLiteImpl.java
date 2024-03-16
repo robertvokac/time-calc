@@ -32,7 +32,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
         sb
                 .append("INSERT INTO ")
                 .append(ActivityTable.TABLE_NAME)
-                .append(" VALUES (?,?,?,?, ?,?,?,?,?,?)");
+                .append(" VALUES (?,?,?,?,?, ?,?,?,?,? ,?)");
 
         String sql = sb.toString();
 
@@ -383,9 +383,9 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             return null;
         }
         if(result.size() == 1) {
-            result.get(0);
+            return result.get(0);
         }
-        throw new TimeCalcException("Fatal error: More than one activity per one day with next activity id set to null: " + year + ", " + month + day);
+        throw new TimeCalcException("Fatal error: More (" + result.size() + ") than one activity per one day with next activity id set to null: " + year + ", " + month + ", " + day);
     }
 
     @Override

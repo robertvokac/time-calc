@@ -280,4 +280,49 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
         }
     }
 
+    @Override
+    public int getTotalOvertimeForDayInMinutes(int year, int month, int day) {
+        System.out.println("#"+year+month+day);
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT (sum(OVERTIME_HOUR)*60 + sum(OVERTIME_MINUTE)) as total_overtime FROM ")
+                .append(WorkingDayTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(WorkingDayTable.YEAR).append(" * 10000 + ")
+                .append(WorkingDayTable.MONTH).append("* 100 + ")
+        .append(WorkingDayTable.DAY).append(" <= ? ");
+
+        String sql = sb.toString();
+        System.out.println(sql);
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            //System.err.println(stmt.toString());
+            stmt.setInt(++i, year * 10000 + month * 100 + day);
+            rs = stmt.executeQuery();
+            System.out.println(stmt);
+            while (rs.next()) {
+                return rs.getInt("total_overtime");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        throw new IllegalStateException();
+    }
+
 }

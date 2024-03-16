@@ -46,4 +46,5 @@ public interface WorkingDayRepositoryApi {
         }
         delete(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]));
     }
+    int getTotalOvertimeForDayInMinutes(int year, int month, int day);
 }
