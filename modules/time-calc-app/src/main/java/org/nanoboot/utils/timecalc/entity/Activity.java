@@ -37,7 +37,7 @@ public class Activity implements Comparable<Activity> {
         return ticket + SUBJECT_FIELD_SEPARATOR + name;
     }
 
-    public String createBugzillaComment() {
+    public String createTotalComment() {
         return ticket + SUBJECT_FIELD_SEPARATOR + year + "-" + month + "-" + day
                 + SUBJECT_FIELD_SEPARATOR + ((spentHours + spentMinutes / 60d)
                 + "h") + SUBJECT_FIELD_SEPARATOR
