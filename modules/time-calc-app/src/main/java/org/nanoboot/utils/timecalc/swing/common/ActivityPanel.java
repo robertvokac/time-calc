@@ -16,6 +16,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.function.Consumer;
 
 /**
  * @author Robert
@@ -23,6 +24,45 @@ import java.awt.datatransfer.StringSelection;
  */
 public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
+    @Getter
+    private final DayPanel dayPanel;
+
+    class TTextFieldForActivityPanel extends TTextField {
+
+        public TTextFieldForActivityPanel(String s, String name, Consumer<String> consumer, boolean sort) {
+            super(s);
+            setEditable(false);
+            setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            setCaretPosition(0);
+
+            if(consumer != null) {
+                addMouseListener((MouseClickedListener) e -> {
+                    String result = (String) JOptionPane.showInputDialog(
+                            null,
+                            "Select new " + name,
+                            "New " + name,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            getText()
+                    );
+                    if (result != null) {
+                        consumer.accept(result);
+                        activityRepository.update(activity);
+                        setText(result);
+                        if(sort) {
+                            dayPanel.sortActivityPanels();
+                        }
+                        setCaretPosition(0);
+                    }
+                });
+            }
+        }
+
+        public TTextFieldForActivityPanel(String s, String name) {
+            this(s, name, null, false);
+        }
+    }
     public static final Dimension PREFERRED_SIZE = new Dimension(200, 40);
     public static final Dimension PREFERRED_SIZE1 = new Dimension(80, 40);
     public static final Dimension PREFERRED_SIZE3 = new Dimension(60, 40);
@@ -32,17 +72,18 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
     @Getter
     private final Activity activity;
 
-    private TTextField sortkey = new TTextField("1");
-    private TTextField name = new TTextField("");
-    private TTextField comment = new TTextField("");
-    private TTextField ticket = new TTextField("");
-    private TTextField spentTime = new TTextField("00:00");
+    private TTextField sortkey = new TTextFieldForActivityPanel("1", "sortkey", (r)->getActivity().setSortkey(
+            Integer.parseInt(r)), true);
+    private TTextField name = new TTextFieldForActivityPanel("", "name");
+    private TTextField comment = new TTextFieldForActivityPanel("", "comment");
+    private TTextField ticket = new TTextFieldForActivityPanel("", "ticket");
+    private TTextField spentTime = new TTextFieldForActivityPanel("00:00", "spentTime");
 
-    private TTextField flags = new TTextField("Flags");
-    private TTextField subject = new TTextField("");
-    private TTextField totalComment = new TTextField("");
-    public TTextField today = new TTextField("00:00");
-    public TTextField remains = new TTextField("00:00");
+    private TTextField flags = new TTextFieldForActivityPanel("Flags", "flags");
+    private TTextField subject = new TTextFieldForActivityPanel("", "subject");
+    private TTextField totalComment = new TTextFieldForActivityPanel("", "totalComment");
+    public TTextField today = new TTextFieldForActivityPanel("00:00", "today");
+    public TTextField remains = new TTextFieldForActivityPanel("00:00", "remains");
     @Getter
     private boolean deleted;
 
@@ -51,6 +92,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.activity = activity;
 
+        this.dayPanel = dayPanel;
         add(sortkey);
         add(name);
         add(comment);
@@ -66,21 +108,15 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         comment.setHorizontalAlignment(JTextField.LEFT);
         ticket.setHorizontalAlignment(JTextField.LEFT);
 
-
-        //        JButton moveThisButton = new SmallTButton("Move ");
-//        JButton moveBeforeButton = new SmallTButton("Here");
         JButton copyButton = new SmallTButton("Copy");
         JButton deleteButton = new SmallTButton("Delete");
         JButton subjectButton = new SmallTButton("Sub");
         JButton totalCommentButton = new SmallTButton("TotCom");
-//        add(moveThisButton);
-//        add(moveBeforeButton);
         add(copyButton);
         add(deleteButton);
         add(subjectButton);
         add(totalCommentButton);
-//        moveThisButton.setFont(SwingUtils.SMALL_FONT);
-//        moveBeforeButton.setFont(SwingUtils.SMALL_FONT);
+
         copyButton.setFont(SwingUtils.SMALL_FONT);
         deleteButton.setFont(SwingUtils.SMALL_FONT);
         subjectButton.setFont(SwingUtils.SMALL_FONT);
@@ -98,55 +134,11 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         today.setPreferredSize(PREFERRED_SIZE3);
         remains.setPreferredSize(PREFERRED_SIZE3);
 
-//        moveThisButton.setPreferredSize(PREFERRED_SIZE4);
-//        moveBeforeButton.setPreferredSize(PREFERRED_SIZE4);
         copyButton.setPreferredSize(PREFERRED_SIZE4);
         deleteButton.setPreferredSize(PREFERRED_SIZE4);
         subjectButton.setPreferredSize(PREFERRED_SIZE4);
         totalCommentButton.setPreferredSize(PREFERRED_SIZE3);
         this.setPreferredSize(new Dimension(getWidth(), 40));
-
-        sortkey.setEditable(false);
-        name.setEditable(false);
-        comment.setEditable(false);
-        ticket.setEditable(false);
-        spentTime.setEditable(false);
-
-        flags.setEditable(false);
-        subject.setEditable(false);
-        totalComment.setEditable(false);
-        today.setEditable(false);
-        remains.setEditable(false);
-
-        sortkey.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        name.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        comment.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        ticket.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        spentTime.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-
-        flags.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        subject.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        totalComment.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        today.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        remains.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-
-        sortkey.addMouseListener((MouseClickedListener) e -> {
-            String result = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select new sortkey",
-                    "New sortkey",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    sortkey.getText()
-            );
-            if (result != null) {
-                activity.setSortkey(Integer.valueOf(result));
-                activityRepository.update(activity);
-                sortkey.setText(result);
-                dayPanel.sortActivityPanels();
-            }
-        });
 
         name.addMouseListener((MouseClickedListener) e -> {
             String result = (String) JOptionPane.showInputDialog(
@@ -238,6 +230,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
             }
         });
+        sortkey.setText(String.valueOf(activity.getSortkey()));
         name.setText(activity.getName());
         comment.setText(activity.getComment());
         ticket.setText(activity.getTicket());
@@ -245,7 +238,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         flags.setText(activity.getFlags());
         subject.setText(activity.createSubject());
         totalComment.setText(activity.createTotalComment());
-        sortkey.setText(String.valueOf(activity.getSortkey()));
+
         name.setFont(SwingUtils.VERY_SMALL_FONT);
         comment.setFont(SwingUtils.VERY_SMALL_FONT);
         ticket.setFont(SwingUtils.VERY_SMALL_FONT);
@@ -262,6 +255,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 //        });
         deleteButton.addActionListener(e -> {
             activityRepository.delete(this.activity.getId());
+            this.setVisible(false);
             deleted = true;
         });
         copyButton.addActionListener(e -> {

@@ -28,6 +28,6 @@ public interface ActivityRepositoryApi {
 
     public Activity getFromClipboard();
 
-    public int getLargestSortkey(int year, int month, int day);
+    public int getNextSortkey(int year, int month, int day);
 
 }

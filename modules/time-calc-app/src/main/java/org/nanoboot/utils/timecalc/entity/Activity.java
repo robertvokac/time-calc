@@ -39,7 +39,7 @@ public class Activity implements Comparable<Activity> {
     }
 
     public String createTotalComment() {
-        return ticket + SUBJECT_FIELD_SEPARATOR + year + "-" + month + "-" + day
+        return ticket + SUBJECT_FIELD_SEPARATOR + year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day
                 + SUBJECT_FIELD_SEPARATOR + (
                        NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(spentHours + spentMinutes / 60d)
                        + "h") + SUBJECT_FIELD_SEPARATOR

@@ -129,7 +129,7 @@ public class DayPanel extends JPanel {
         }).start();
         revalidate();
         newButton.addActionListener(e-> {
-            Activity newActivity = new Activity(UUID.randomUUID().toString(), Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day), "", "", "", 0, 0, "", 1 + activityRepository.getLargestSortkey(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day)));
+            Activity newActivity = new Activity(UUID.randomUUID().toString(), Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day), "", "", "", 0, 0, "", activityRepository.getNextSortkey(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day)));
             ActivityPanel comp =
                     new ActivityPanel(activityRepository, newActivity, this);
             comp.setMaximumSize(new Dimension(1200, 40));
@@ -147,7 +147,7 @@ public class DayPanel extends JPanel {
                 return;
             }
             Activity newActivity = new Activity(UUID.randomUUID().toString(), Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day),
-                    afc.getName(), afc.getComment(), afc.getTicket(), 0, 0, "", 1 + activityRepository.getLargestSortkey(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day)));
+                    afc.getName(), afc.getComment(), afc.getTicket(), 0, 0, "", activityRepository.getNextSortkey(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day)));
             ActivityPanel comp =
                     new ActivityPanel(activityRepository, newActivity, this);
             comp.setMaximumSize(new Dimension(1200, 40));
@@ -183,7 +183,7 @@ public class DayPanel extends JPanel {
                 done = done + now;
                 todo = todo - now;
             }
-            Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(done) + "h. todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todo));
+            Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(done) + "h, todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todo));
 
         });
         //        for (int i = 0; i < 10; i++) {
@@ -241,6 +241,8 @@ public class DayPanel extends JPanel {
             ap.today.setText(TTime.ofMilliseconds((int)(done * 60d * 60d * 1000d)).toString().substring(0,5));
             ap.remains.setText(TTime.ofMilliseconds((int)(todo * 60d * 60d * 1000d)).toString().substring(0,5));
             panelInsideScrollPane.add(ap);
+            ap.setVisible(false);
+            ap.setVisible(true);
             ap.revalidate();
         }
 

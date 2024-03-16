@@ -349,15 +349,21 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
     }
 
     @Override
-    public int getLargestSortkey(int year, int month, int day) {
+    public int getNextSortkey(int year, int month, int day) {
         OptionalInt optional =
                 list(year, month, day).stream().map(Activity::getSortkey)
                         .mapToInt(e -> e).max();
         if (optional.isPresent()) {
             System.out.println("getLargestSortkey=" +optional.getAsInt());
-            return optional.getAsInt();
+            int result = optional.getAsInt() + 10;
+            if(result % 10 != 0) {
+                while(result % 10 != 0) {
+                    result++;
+                }
+            }
+            return result;
         } else {
-            return 1;
+            return 10;
         }
     }
 
