@@ -1,5 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +20,7 @@ public class MonthPanel extends JPanel {
     private final Map<String, DayPanel> days;
     private final TTabbedPane tp;
 
-    public MonthPanel(String yearIn, String monthIn) {
+    public MonthPanel(String yearIn, String monthIn, ActivityRepositoryApi activityRepository) {
         super();
 
         this.year = yearIn;
@@ -36,7 +38,7 @@ public class MonthPanel extends JPanel {
         int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int day = 1; day <= maxDay; day++) {
             String dayS = String.valueOf(day);
-            DayPanel dayPanel = new DayPanel(year, month, dayS);
+            DayPanel dayPanel = new DayPanel(year, month, dayS, activityRepository);
             tp.add(dayS, dayPanel);
             days.put(dayS, dayPanel);
         }

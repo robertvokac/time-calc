@@ -74,7 +74,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
     @Override
     public void delete(String id) {
         System.out.println("Going to delete: " + id);
-
+        Activity activityToBeDeleted = read(id);
         if(!Utils.askYesNo(null, "Do you really want to delete this activity? " + read(id), "Deletion of activity")) {
             return;
         }
@@ -103,6 +103,13 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             ex.printStackTrace();
             throw new TimeCalcException(ex);
         }
+        Activity previousActivity = getPreviousActivity(id);
+        Activity nextActivity = read(activityToBeDeleted.getNextActivityId());
+        if(previousActivity != null) {
+            previousActivity.setNextActivityId(nextActivity == null ? null : nextActivity.getId());
+            update(previousActivity);
+        }
+
     }
 
     @Override

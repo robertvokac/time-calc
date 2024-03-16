@@ -49,13 +49,13 @@ public class ActivitiesWindow extends TWindow {
 
         tp.setBounds(addYearButton.getX(), addYearButton.getY() + addYearButton.getHeight() + SwingUtils.MARGIN, 1180, 600);
         yearsList.forEach(y -> {
-            final YearPanel yearPanel = new YearPanel(y);
+            final YearPanel yearPanel = new YearPanel(y, activityRepository);
             tp.add(y, yearPanel);
             years.put(y, yearPanel);
         }
         );
         if (!yearsList.contains(currentYearS)) {
-            YearPanel yearPanel = new YearPanel(currentYearS);
+            YearPanel yearPanel = new YearPanel(currentYearS, activityRepository);
             tp.add(currentYearS, yearPanel);
             years.put(currentYearS, yearPanel);
         }
@@ -76,7 +76,7 @@ public class ActivitiesWindow extends TWindow {
                     throw new TimeCalcException(msg);
                 }
             }
-            YearPanel yearPanel = new YearPanel(year_);
+            YearPanel yearPanel = new YearPanel(year_, activityRepository);
             tp.add(year_, yearPanel);
             years.put(currentYearS, yearPanel);
 

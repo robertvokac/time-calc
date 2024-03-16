@@ -1,5 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -14,7 +16,7 @@ public class YearPanel extends JPanel {
     private final Map<String, MonthPanel> months;
     private final TTabbedPane tp;
 
-    public YearPanel(String yearIn) {
+    public YearPanel(String yearIn, ActivityRepositoryApi activityRepository) {
         super();
         this.year = yearIn;
         this.months = new HashMap<>();
@@ -24,7 +26,7 @@ public class YearPanel extends JPanel {
         tp.setBounds(0, 0, 1150, 700);
         for (int month = 1; month <= 12; month++) {
             final String monthS = String.valueOf(month);
-            MonthPanel monthPanel = new MonthPanel(year, String.valueOf(month));
+            MonthPanel monthPanel = new MonthPanel(year, String.valueOf(month), activityRepository);
             tp.add(String.valueOf(month), monthPanel);
             months.put(monthS, monthPanel);
         }
