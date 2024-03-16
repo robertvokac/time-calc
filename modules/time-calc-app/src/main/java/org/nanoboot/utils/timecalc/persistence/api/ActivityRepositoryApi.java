@@ -22,12 +22,16 @@ public interface ActivityRepositoryApi {
     
     void delete(String id);
     
-    public List<String> getYears();
+    List<String> getYears();
 
-    public void putToClipboard(Activity activity);
+    void putToClipboard(Activity activity);
 
-    public Activity getFromClipboard();
+    Activity getFromClipboard();
 
-    public int getNextSortkey(int year, int month, int day);
+    default int getSortkeySpace() {
+        return 1000;
+    }
+
+    int getNextSortkey(int year, int month, int day);
 
 }

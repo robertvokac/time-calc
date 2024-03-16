@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
@@ -353,18 +352,26 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
         OptionalInt optional =
                 list(year, month, day).stream().map(Activity::getSortkey)
                         .mapToInt(e -> e).max();
+        int sortkeySpace = getSortkeySpace();
         if (optional.isPresent()) {
             System.out.println("getLargestSortkey=" +optional.getAsInt());
-            int result = optional.getAsInt() + 10;
-            if(result % 10 != 0) {
-                while(result % 10 != 0) {
+
+            if(optional.getAsInt() >= (Integer.MAX_VALUE - sortkeySpace - 1)) {
+                throw new TimeCalcException("Fatal exception. Cannot get new sort key, because it would exceed the Integer max value.");
+            }
+            int result = optional.getAsInt() + sortkeySpace;
+            if(result % sortkeySpace != 0) {
+                while(result % sortkeySpace != 0) {
                     result++;
                 }
             }
             return result;
         } else {
-            return 10;
+            return sortkeySpace;
         }
+    }
+    public int getSortkeySpace() {
+        return 1000;
     }
 
 }

@@ -18,6 +18,8 @@ public class YearPanel extends JPanel {
     private final String year;
     private final Map<String, MonthPanel> months;
     private final TTabbedPane tp;
+    private final ActivityRepositoryApi activityRepository;
+    private boolean loaded = false;
 
     public YearPanel(String yearIn, ActivityRepositoryApi activityRepository) {
         super();
@@ -28,6 +30,7 @@ public class YearPanel extends JPanel {
         add(tp);
         tp.setBounds(0, 0, 1450, 700);
 
+        this.activityRepository = activityRepository;
         ChangeListener changeListener = new ChangeListener() {
             private boolean secondOrLaterChange = false;
             public void stateChanged(ChangeEvent changeEvent) {
@@ -46,14 +49,22 @@ public class YearPanel extends JPanel {
         };
         tp.addChangeListener(changeListener);
 
+    }
+
+    public void load() {
+        if(loaded) {
+            //nothing to do
+            return;
+        }
+        System.out.println("Loaded: " + year);
         for (int month = 1; month <= 12; month++) {
             final String monthS = String.valueOf(month);
             MonthPanel monthPanel = new MonthPanel(year, String.valueOf(month), activityRepository);
             tp.add(String.valueOf(month), monthPanel);
             months.put(monthS, monthPanel);
         }
+        loaded = true;
     }
-
     public void setSelectedMonth(String month) {
         tp.switchTo(month);
     }

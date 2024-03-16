@@ -104,7 +104,7 @@ public class Time extends Thread {
             dayOfWeekReadWriteProperty
                     .setValue(dayOfWeek);
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 System.out.println(e);
             }

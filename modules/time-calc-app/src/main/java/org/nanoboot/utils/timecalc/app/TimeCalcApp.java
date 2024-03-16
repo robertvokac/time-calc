@@ -99,13 +99,16 @@ public class TimeCalcApp {
             }
             Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);
             Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
+            MainWindow timeCalcMainWindow = null;
             try {
-                MainWindow timeCalc
+                timeCalcMainWindow
                         = new MainWindow(newStartTime, newOvertime, this);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
+                timeCalcMainWindow.setVisible(false);
+                timeCalcMainWindow.dispose();
             }
         }
 

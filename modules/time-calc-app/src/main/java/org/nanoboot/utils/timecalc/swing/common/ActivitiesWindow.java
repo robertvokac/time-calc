@@ -98,6 +98,7 @@ public class ActivitiesWindow extends TWindow {
 
                 YearPanel yearPanel =
                         years.get(sourceTabbedPane.getTitleAt(index));
+                yearPanel.load();
                 MonthPanel monthPanel = yearPanel.getMonthPanel("1");
                 monthPanel.load();
                 monthPanel.getDayPanel("1").load();
@@ -105,8 +106,13 @@ public class ActivitiesWindow extends TWindow {
         };
         tp.addChangeListener(changeListener);
         tp.switchTo(currentYearS);
-        getYearPanel(currentYearS).setSelectedMonth(currentMonthS);
-        getYearPanel(currentYearS).getMonthPanel(currentMonthS).setSelectedDay(currentDayS);
+        YearPanel yearPanel = getYearPanel(currentYearS);
+        yearPanel.load();
+        yearPanel.setSelectedMonth(currentMonthS);
+        MonthPanel monthPanel = yearPanel.getMonthPanel(currentMonthS);
+        monthPanel.load();
+        monthPanel.setSelectedDay(currentDayS);
+        monthPanel.getDayPanel(currentDayS).load();
     }
 
     public YearPanel getYearPanel(String year) {

@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.Timer;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -33,6 +32,9 @@ import java.util.stream.Collectors;
  */
 public class DayPanel extends JPanel {
 
+    private static final String FOR_ACTIVITY_ID = "for-activity-id";
+    private static final Dimension MAXIMUM_SIZE = new Dimension(1300, 40);
+    private static final Dimension MAXIMUM_SIZE_2 = new Dimension(1200, 20);
     private final String year;
     private final String month;
     private final String day;
@@ -43,6 +45,64 @@ public class DayPanel extends JPanel {
     private JScrollPane scrollPane;
     private JPanel panelInsideScrollPane;
     private ActivityPanel markActivityPanelToBeMoved = null;
+
+    class MoveHereButton extends JButton {
+        public MoveHereButton(String activityId) {
+            setText("Move here");
+            setMaximumSize(MAXIMUM_SIZE_2);
+            putClientProperty(FOR_ACTIVITY_ID, activityId);
+            setVisible(true);
+            addActionListener(e-> {
+                List<Activity> list = getActivities();
+                Activity activityToBeMoved = activityRepository.read(markActivityPanelToBeMoved.getActivity().getId());
+                Activity activityTarget = activityRepository.read(activityId);
+                int activityTargetSortkey = activityTarget.getSortkey();
+                int newSortKey = activityToBeMoved.getSortkey();
+                for(int i = 0; i < list.size(); i++) {
+                    if(activityToBeMoved.getSortkey() == activityTarget.getSortkey()) {
+                        //nothing to do
+                        break;
+                    }
+                    if(i >= 1  && activityToBeMoved.getSortkey() == activityTarget.getSortkey()) {
+                        //nothing to do
+                        break;
+                    }
+                    if(list.get(i).getId().equals(activityTarget.getId())) {
+                        Activity activityBefore = i == 0 ? null : list.get(i - 1);
+                        int activityBeforeSortkey = activityBefore == null ? activityTargetSortkey : activityBefore.getSortkey();
+                        int start = activityBeforeSortkey + 1;
+                        int end = activityTargetSortkey - 1;
+                        if(start > end) {
+                            start = end;
+                        }
+                        if(start == end) {
+                            newSortKey = end;
+                            break;
+                        }
+                        newSortKey = start + (end - start) / 2;
+                        if(newSortKey > activityTargetSortkey) {
+                            newSortKey = activityTargetSortkey;
+                        }
+                        break;
+                    }
+
+                }
+                activityToBeMoved.setSortkey(newSortKey);
+                ActivityPanel activityPanelForActivity =
+                        getActivityPanelForActivity(activityToBeMoved);
+                activityPanelForActivity.getActivity().setSortkey(newSortKey);
+                activityPanelForActivity.getSortkeyTTextField().setText(
+                        String.valueOf(newSortKey));
+                activityRepository.update(activityToBeMoved);
+                sortActivityPanels();
+
+
+            });
+        }
+        public String getActivityId() {
+            return (String) getClientProperty(FOR_ACTIVITY_ID);
+        }
+    }
 
     public DayPanel(String yearIn, String monthIn, String dayIn,
             ActivityRepositoryApi activityRepository) {
@@ -82,7 +142,7 @@ public class DayPanel extends JPanel {
         this.setLayout(boxLayout);
 
         JPanel buttons = new JPanel();
-        //buttons.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+
         buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
         buttons.setAlignmentX(LEFT_ALIGNMENT);
         JButton newButton = new JButton("New");
@@ -107,39 +167,34 @@ public class DayPanel extends JPanel {
         panelInsideScrollPane.add(activityHeader);
         activityHeader.setMaximumSize(new Dimension(1200, 40));
 
-
         buttons.setMaximumSize(new Dimension(1000, 40));
-        for (Activity a : activityRepository.list(
+        List<Activity> list = activityRepository.list(
                 Integer.valueOf(year),
                 Integer.valueOf(month),
-                Integer.valueOf(day))) {
-
+                Integer.valueOf(day));
+        Collections.sort(list);
+        for (Activity a : list) {
             ActivityPanel comp =
                     new ActivityPanel(activityRepository, a, this);
-            comp.setMaximumSize(new Dimension(1300, 40));
+            comp.setMaximumSize(MAXIMUM_SIZE);
+
             panelInsideScrollPane.add(comp);
 
         }
-        new Timer(100, e -> {
-            List<Component>
-                    list = Arrays.stream(panelInsideScrollPane.getComponents()).filter(c-> c instanceof ActivityPanel).filter(c-> ((ActivityPanel)c).isDeleted()).collect(
-                    Collectors.toList());
 
-            if(!list.isEmpty()) {
-                list.forEach(c->panelInsideScrollPane.remove(c));
-                sortActivityPanels();
-            }
-            revalidate();
-        }).start();
         revalidate();
         newButton.addActionListener(e-> {
             Activity newActivity = new Activity(UUID.randomUUID().toString(), Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day), "", "", "", 0, 0, "", activityRepository.getNextSortkey(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day)));
             ActivityPanel comp =
                     new ActivityPanel(activityRepository, newActivity, this);
-            comp.setMaximumSize(new Dimension(1200, 40));
+            comp.setMaximumSize(new Dimension(1300, 40));
             add(comp);
             activityRepository.create(newActivity);
-
+            if(this.markActivityPanelToBeMoved != null) {
+                panelInsideScrollPane.add(new MoveHereButton(newActivity.getId()));
+            } else {
+                //comp.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+            }
             panelInsideScrollPane.add(comp);
 
             revalidate();
@@ -157,7 +212,11 @@ public class DayPanel extends JPanel {
             comp.setMaximumSize(new Dimension(1200, 40));
             add(comp);
             activityRepository.create(newActivity);
-
+            if(this.markActivityPanelToBeMoved != null) {
+                panelInsideScrollPane.add(new MoveHereButton(newActivity.getId()));
+            } else {
+                //comp.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+            }
             panelInsideScrollPane.add(comp);
 
             revalidate();
@@ -222,7 +281,7 @@ public class DayPanel extends JPanel {
         Optional<Component> optional = Arrays
                 .stream(panelInsideScrollPane.getComponents())
                 .filter(c-> c instanceof ActivityPanel)
-                .filter(c-> ((ActivityPanel) c).getActivity().equals(a))
+                .filter(c-> ((ActivityPanel) c).getActivity().getId().equals(a.getId()))
                 .findFirst();
         if(optional.isPresent()) {
             return (ActivityPanel) optional.get();
@@ -231,16 +290,45 @@ public class DayPanel extends JPanel {
         }
     }
     public void sortActivityPanels() {
+        System.out.println("sortActivityPanels()");
         List<ActivityPanel> list = new ArrayList<>();
         Arrays
                 .stream(panelInsideScrollPane.getComponents())
-                .filter(c-> c instanceof ActivityPanel).forEach(e-> list.add((ActivityPanel) e));
+                .filter(c-> c instanceof ActivityPanel).filter(c-> !((ActivityPanel)c).isDeleted()).forEach(e-> list.add((ActivityPanel) e));
         Collections.sort(list);
+        Arrays
+                .stream(panelInsideScrollPane.getComponents())
+                .filter(c-> {return (c instanceof MoveHereButton);}).forEach(c-> panelInsideScrollPane.remove(c));
+
+        //.filter(c -> getClientProperty( FOR_ACTIVITY_ID) != null)
         for(ActivityPanel ap:list) {
             panelInsideScrollPane.remove(ap);
         }
         double done = 0d;
         double todo = 8d;
+        int lastSortkey = 0;
+        boolean recalculateSortKeys = false;
+        for(ActivityPanel ap:list) {
+            if(ap.getActivity().getSortkey() - lastSortkey < 4) {
+                recalculateSortKeys = true;
+                break;
+            } else {
+                lastSortkey = ap.getActivity().getSortkey();
+            }
+        }
+        int sortkey = 0;
+        if(recalculateSortKeys) {
+            int sortkeySpace = activityRepository.getSortkeySpace();
+
+            for(ActivityPanel ap:list) {
+                sortkey = sortkey + sortkeySpace;
+                ap.getActivity().setSortkey(sortkey);
+                activityRepository.update(ap.getActivity());
+                ap.getSortkeyTTextField().setText(String.valueOf(sortkey));
+
+            }
+        }
+        Collections.sort(list);
         for(ActivityPanel ap:list) {
 
             double now = ap.getActivity().getSpentHours() + ap.getActivity().getSpentMinutes() / 60d;
@@ -252,16 +340,40 @@ public class DayPanel extends JPanel {
             TTime todoTTime =
                     TTime.ofMilliseconds((int) (todo * 60d * 60d * 1000d));
             ap.remains.setText(todoTTime.toString().substring(0,todoTTime.isNegative() ? 6 : 5));
+            {
+                if(this.markActivityPanelToBeMoved != null) {
+                    MoveHereButton mhb =
+                            new MoveHereButton(ap.getActivity().getId());
+                    panelInsideScrollPane.add(mhb);
+                } else {
+//                    Component mhb = new MoveHereButton(ap.getActivity().getId());
+//                    panelInsideScrollPane.add(mhb);
+                }
+            }
             panelInsideScrollPane.add(ap);
             ap.setVisible(false);
             ap.setVisible(true);
             ap.revalidate();
         }
 
+
         revalidate();
     }
 
     public void markActivityPanelToBeMoved(ActivityPanel activityPanel) {
-        this.markActivityPanelToBeMoved = activityPanel;
+        boolean moveHereButtonsExist = Arrays
+                .stream(panelInsideScrollPane.getComponents())
+                .filter(c-> {return (c instanceof MoveHereButton);}).findFirst().isPresent();
+        boolean deletion = this.markActivityPanelToBeMoved == activityPanel;
+        boolean enabling = this.markActivityPanelToBeMoved == null && activityPanel != null;
+        this.markActivityPanelToBeMoved = deletion ? null : activityPanel;
+        if(moveHereButtonsExist && deletion) {
+            sortActivityPanels();
+        }
+        if(!moveHereButtonsExist && enabling) {
+            sortActivityPanels();
+        }
+
     }
+
 }

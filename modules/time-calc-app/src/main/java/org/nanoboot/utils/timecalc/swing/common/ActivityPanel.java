@@ -221,11 +221,13 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         moveButton.addActionListener(e-> {
             this.dayPanel.markActivityPanelToBeMoved(this);
         });
-        dayPanel.sortActivityPanels();
     }
 
     @Override
     public int compareTo(ActivityPanel o) {
         return this.getActivity().compareTo(o.getActivity());
+    }
+    public TTextField getSortkeyTTextField() {
+        return sortkey;
     }
 }
