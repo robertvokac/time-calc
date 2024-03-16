@@ -27,12 +27,10 @@ import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -105,6 +103,9 @@ public class MainWindow extends TWindow {
 
     public MainWindow(String startTimeIn, String overTimeIn,
             TimeCalcApp timeCalcApp) {
+//        ToolTipManager ttm = ToolTipManager.sharedInstance();
+//        ttm.setInitialDelay(0);
+//        ttm.setDismissDelay(10000);
         setFocusable(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {

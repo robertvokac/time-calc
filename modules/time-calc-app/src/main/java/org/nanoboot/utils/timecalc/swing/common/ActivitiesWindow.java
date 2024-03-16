@@ -70,7 +70,7 @@ public class ActivitiesWindow extends TWindow {
             try {
                 Integer.parseInt(year_);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: this is not year: " + currentYear);
+                JOptionPane.showMessageDialog(this, "Error: this is not year: " + year_);
                 throw ex;
             }
             for (int i = 0; i < tp.getTabCount(); i++) {
@@ -100,6 +100,7 @@ public class ActivitiesWindow extends TWindow {
             }
         };
         tp.addChangeListener(changeListener);
+        tp.switchTo(currentYearS);
         getYearPanel(currentYearS).setSelectedMonth(currentMonthS);
         getYearPanel(currentYearS).getMonthPanel(currentMonthS).setSelectedDay(currentDayS);
     }

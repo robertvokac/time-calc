@@ -8,6 +8,7 @@ import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
@@ -41,6 +42,7 @@ public class DayPanel extends JPanel {
     private JButton loadButton;
     private JScrollPane scrollPane;
     private JPanel panelInsideScrollPane;
+    private ActivityPanel markActivityPanelToBeMoved = null;
 
     public DayPanel(String yearIn, String monthIn, String dayIn,
             ActivityRepositoryApi activityRepository) {
@@ -85,7 +87,7 @@ public class DayPanel extends JPanel {
         JButton newButton = new JButton("New");
         JButton pasteButton = new JButton("Paste");
 
-        JButton reviewButton = new JButton("Review");
+        JButton reviewButton = new JButton("Copy all Total comments to clipboard");
         JButton statusButton = new JButton("Status");
         buttons.add(newButton);
         buttons.add(pasteButton);
@@ -124,6 +126,7 @@ public class DayPanel extends JPanel {
 
             if(!list.isEmpty()) {
                 list.forEach(c->panelInsideScrollPane.remove(c));
+                sortActivityPanels();
             }
             revalidate();
         }).start();
@@ -159,14 +162,18 @@ public class DayPanel extends JPanel {
             revalidate();
         });
         reviewButton.addActionListener(e->{
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(new StringSelection(Arrays
+            String comments = Arrays
                     .stream(panelInsideScrollPane.getComponents())
                     .filter(c-> c instanceof ActivityPanel)
                     .map(ap->((ActivityPanel) ap).getActivity())
                     .map(a->a.createTotalComment())
                     .collect(
-                            Collectors.joining("\n"))), null);
+                            Collectors.joining("\n"));
+            JOptionPane
+                    .showMessageDialog(null, comments, "All comments for: " + year + "-" + (month.length() < 2 ? "0" : "") + month + "-" + (day.length() < 2 ? "0" : "") + day , JOptionPane.INFORMATION_MESSAGE);
+
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(new StringSelection(comments), null);
         });
         statusButton.addActionListener(e-> {
             List<ActivityPanel> activityPanels = new ArrayList<>();
@@ -238,8 +245,12 @@ public class DayPanel extends JPanel {
             double now = ap.getActivity().getSpentHours() + ap.getActivity().getSpentMinutes() / 60d;
             done = done + now;
             todo = todo - now;
-            ap.today.setText(TTime.ofMilliseconds((int)(done * 60d * 60d * 1000d)).toString().substring(0,5));
-            ap.remains.setText(TTime.ofMilliseconds((int)(todo * 60d * 60d * 1000d)).toString().substring(0,5));
+            TTime doneTTime =
+                    TTime.ofMilliseconds((int) (done * 60d * 60d * 1000d));
+            ap.today.setText(doneTTime.toString().substring(0,5));
+            TTime todoTTime =
+                    TTime.ofMilliseconds((int) (todo * 60d * 60d * 1000d));
+            ap.remains.setText(todoTTime.toString().substring(0,todoTTime.isNegative() ? 6 : 5));
             panelInsideScrollPane.add(ap);
             ap.setVisible(false);
             ap.setVisible(true);
@@ -249,4 +260,7 @@ public class DayPanel extends JPanel {
         revalidate();
     }
 
+    public void markActivityPanelToBeMoved(ActivityPanel activityPanel) {
+        this.markActivityPanelToBeMoved = activityPanel;
+    }
 }

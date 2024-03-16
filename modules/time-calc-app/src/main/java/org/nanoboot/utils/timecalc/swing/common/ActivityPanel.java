@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.nanoboot.utils.timecalc.entity.Activity;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
@@ -13,10 +14,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * @author Robert
@@ -26,42 +24,56 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
     @Getter
     private final DayPanel dayPanel;
-
+    private boolean mouseOver;
     class TTextFieldForActivityPanel extends TTextField {
 
-        public TTextFieldForActivityPanel(String s, String name, Consumer<String> consumer, boolean sort) {
+        public TTextFieldForActivityPanel(String s, String name) {
+            this(s, name, null);
+        }
+        public TTextFieldForActivityPanel(String s, String name, BiConsumer<Activity, String> additionalAction) {
+            this(s, name, additionalAction, false);
+        }
+        public TTextFieldForActivityPanel(String s, String name, BiConsumer<Activity, String> additionalAction, boolean sort) {
             super(s);
             setEditable(false);
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             setCaretPosition(0);
+            //setToolTipText(s);
 
-            if(consumer != null) {
+            if(additionalAction != null) {
                 addMouseListener((MouseClickedListener) e -> {
                     String result = (String) JOptionPane.showInputDialog(
                             null,
                             "Select new " + name,
                             "New " + name,
-                            JOptionPane.PLAIN_MESSAGE,
+                            name.equals("comment") ? JOptionPane.QUESTION_MESSAGE : JOptionPane.PLAIN_MESSAGE,
                             null,
                             null,
                             getText()
                     );
                     if (result != null) {
-                        consumer.accept(result);
+                        additionalAction.accept(activity, result);
                         activityRepository.update(activity);
                         setText(result);
                         if(sort) {
                             dayPanel.sortActivityPanels();
                         }
-                        setCaretPosition(0);
                     }
                 });
             }
+
         }
 
-        public TTextFieldForActivityPanel(String s, String name) {
-            this(s, name, null, false);
+        public void setText(String text) {
+            super.setText(text);
+            //if(!text.isEmpty()) {
+                //setToolTipText(text);
+                setCaretPosition(0);
+            //} else {
+//                setToolTipText(null);
+//            }
         }
+
     }
     public static final Dimension PREFERRED_SIZE = new Dimension(200, 40);
     public static final Dimension PREFERRED_SIZE1 = new Dimension(80, 40);
@@ -72,18 +84,23 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
     @Getter
     private final Activity activity;
 
-    private TTextField sortkey = new TTextFieldForActivityPanel("1", "sortkey", (r)->getActivity().setSortkey(
-            Integer.parseInt(r)), true);
-    private TTextField name = new TTextFieldForActivityPanel("", "name");
-    private TTextField comment = new TTextFieldForActivityPanel("", "comment");
-    private TTextField ticket = new TTextFieldForActivityPanel("", "ticket");
-    private TTextField spentTime = new TTextFieldForActivityPanel("00:00", "spentTime");
+    private final TTextField sortkey;
+    private final TTextField name;
+    private final TTextField comment;
+    private final TTextField ticket;
 
-    private TTextField flags = new TTextFieldForActivityPanel("Flags", "flags");
-    private TTextField subject = new TTextFieldForActivityPanel("", "subject");
-    private TTextField totalComment = new TTextFieldForActivityPanel("", "totalComment");
-    public TTextField today = new TTextFieldForActivityPanel("00:00", "today");
-    public TTextField remains = new TTextFieldForActivityPanel("00:00", "remains");
+    private final TTextField spentTime;
+
+    private final TTextField flags;
+
+    @Getter(AccessLevel.PRIVATE)
+    private final TTextField subject;
+    @Getter(AccessLevel.PRIVATE)
+    private final TTextField totalComment;
+
+    public final TTextField today;
+    public final TTextField remains;
+
     @Getter
     private boolean deleted;
 
@@ -91,6 +108,30 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
             Activity activity, DayPanel dayPanel) {
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.activity = activity;
+
+        {
+            this.subject = new TTextFieldForActivityPanel("", "subject");
+            this.totalComment = new TTextFieldForActivityPanel("", "totalComment");
+            this.sortkey = new TTextFieldForActivityPanel("1", "sortkey", (a, r)->a.setSortkey(Integer.parseInt(r)), true);
+            this.name = new TTextFieldForActivityPanel("", "name", (a, r)->{a.setName(r);getSubject().setText(a.createSubject());}, false);
+            this.comment = new TTextFieldForActivityPanel("", "comment",  (a, r)->{a.setComment(r);getTotalComment().setText(a.createTotalComment());}, false);
+            this.ticket = new TTextFieldForActivityPanel("", "ticket",
+                    (a, r) -> {a.setTicket(r);
+                        getSubject().setText(a.createSubject());
+                        getTotalComment().setText(a.createTotalComment());}, false);
+
+            this.spentTime =
+                    new TTextFieldForActivityPanel("00:00", "spentTime", (a, r) -> {
+                        TTime spentTimeTTime = new TTime(r);
+                        getActivity().setSpentHours(spentTimeTTime.getHour());
+                        getActivity().setSpentMinutes(spentTimeTTime.getMinute());
+                        getTotalComment().setText(getActivity().createTotalComment());
+                    }, true);
+
+            this.flags = new TTextFieldForActivityPanel("Flags", "flags", (a, r)->a.setFlags(r), false);
+            this.today = new TTextFieldForActivityPanel("00:00", "today");
+            this.remains = new TTextFieldForActivityPanel("00:00", "remains");
+        }
 
         this.dayPanel = dayPanel;
         add(sortkey);
@@ -110,17 +151,15 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
         JButton copyButton = new SmallTButton("Copy");
         JButton deleteButton = new SmallTButton("Delete");
-        JButton subjectButton = new SmallTButton("Sub");
-        JButton totalCommentButton = new SmallTButton("TotCom");
+        JButton moveButton = new SmallTButton("Move");
+
         add(copyButton);
         add(deleteButton);
-        add(subjectButton);
-        add(totalCommentButton);
+        add(moveButton);
 
         copyButton.setFont(SwingUtils.SMALL_FONT);
         deleteButton.setFont(SwingUtils.SMALL_FONT);
-        subjectButton.setFont(SwingUtils.SMALL_FONT);
-        totalCommentButton.setFont(SwingUtils.SMALL_FONT);
+        moveButton.setFont(SwingUtils.SMALL_FONT);
 
         sortkey.setPreferredSize(PREFERRED_SIZE1);
         name.setPreferredSize(PREFERRED_SIZE);
@@ -136,100 +175,9 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
         copyButton.setPreferredSize(PREFERRED_SIZE4);
         deleteButton.setPreferredSize(PREFERRED_SIZE4);
-        subjectButton.setPreferredSize(PREFERRED_SIZE4);
-        totalCommentButton.setPreferredSize(PREFERRED_SIZE3);
+        moveButton.setPreferredSize(PREFERRED_SIZE4);
         this.setPreferredSize(new Dimension(getWidth(), 40));
 
-        name.addMouseListener((MouseClickedListener) e -> {
-            String result = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select new name",
-                    "New name",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    name.getText()
-            );
-            if (result != null) {
-                activity.setName(result);
-                activityRepository.update(activity);
-                name.setText(result);
-                subject.setText(activity.createSubject());
-            }
-        });
-        comment.addMouseListener((MouseClickedListener) e -> {
-            String result = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select new comment",
-                    "New comment",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    comment.getText()
-            );
-            if (result != null) {
-                activity.setComment(result);
-                activityRepository.update(activity);
-                comment.setText(result);
-                totalComment.setText(activity.createTotalComment());
-            }
-        });
-        ticket.addMouseListener((MouseClickedListener) e -> {
-            String result = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select new ticket",
-                    "New ticket",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    ticket.getText()
-            );
-            if (result != null) {
-                activity.setTicket(result);
-                activityRepository.update(activity);
-                ticket.setText(result);
-                subject.setText(activity.createSubject());
-                totalComment.setText(activity.createTotalComment());
-            }
-        });
-        spentTime.addMouseListener((MouseClickedListener) e -> {
-            String result = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select new spent time",
-                    "New spent time",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    spentTime.getText()
-            );
-            if (result != null) {
-                TTime spentTimeTTime = new TTime(result);
-                activity.setSpentHours(spentTimeTTime.getHour());
-                activity.setSpentMinutes(spentTimeTTime.getMinute());
-                activityRepository.update(activity);
-                spentTime.setText(result);
-                totalComment.setText(activity.createTotalComment());
-                dayPanel.sortActivityPanels();
-            }
-        });
-
-        flags.addMouseListener((MouseClickedListener) e -> {
-            String result = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select new flags",
-                    "New flags",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    flags.getText()
-            );
-            if (result != null) {
-                activity.setFlags(result);
-                activityRepository.update(activity);
-                flags.setText(result);
-
-            }
-        });
         sortkey.setText(String.valueOf(activity.getSortkey()));
         name.setText(activity.getName());
         comment.setText(activity.getComment());
@@ -245,14 +193,14 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         this.activityRepository = activityRepository;
         //this.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 1));
         setAlignmentX(LEFT_ALIGNMENT);
-//        moveThisButton.addActionListener(e-> {
-//            //dayPanel.switchPositionsForThisActivityAndThePreviousActivity(getActivity());
-//            //dayPanel.markActivityAsToBeMoved(getActivity());
-//        });
-//
-//        moveBeforeButton.addActionListener(e-> {
-//            //dayPanel.moveMarkedActivityBeforeThisActivity(getActivity());
-//        });
+        //        moveThisButton.addActionListener(e-> {
+        //            //dayPanel.switchPositionsForThisActivityAndThePreviousActivity(getActivity());
+        //            //dayPanel.markActivityAsToBeMoved(getActivity());
+        //        });
+        //
+        //        moveBeforeButton.addActionListener(e-> {
+        //            //dayPanel.moveMarkedActivityBeforeThisActivity(getActivity());
+        //        });
         deleteButton.addActionListener(e -> {
             activityRepository.delete(this.activity.getId());
             this.setVisible(false);
@@ -261,13 +209,8 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         copyButton.addActionListener(e -> {
             activityRepository.putToClipboard(this.activity);
         });
-        subjectButton.addActionListener(e-> {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(new StringSelection(subject.getText()), null);
-        });
-        totalCommentButton.addActionListener(e-> {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(new StringSelection(totalComment.getText()), null);
+        moveButton.addActionListener(e-> {
+            this.dayPanel.markActivityPanelToBeMoved(this);
         });
         dayPanel.sortActivityPanels();
     }
