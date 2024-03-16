@@ -85,10 +85,12 @@ public class DayPanel extends JPanel {
         JButton newButton = new JButton("New");
         JButton pasteButton = new JButton("Paste");
 
-        JButton reviewButton = new JButton("Review");;
+        JButton reviewButton = new JButton("Review");
+        JButton statusButton = new JButton("Status");
         buttons.add(newButton);
         buttons.add(pasteButton);
         buttons.add(reviewButton);
+        buttons.add(statusButton);
         add(buttons);
 
         this.scrollPane
@@ -165,6 +167,24 @@ public class DayPanel extends JPanel {
                     .map(a->a.createTotalComment())
                     .collect(
                             Collectors.joining("\n"))), null);
+        });
+        statusButton.addActionListener(e-> {
+            List<ActivityPanel> activityPanels = new ArrayList<>();
+            Arrays
+                    .stream(panelInsideScrollPane.getComponents())
+                    .filter(c-> c instanceof ActivityPanel).forEach(f-> activityPanels.add((ActivityPanel) f));
+            Collections.sort(activityPanels);
+
+            double done = 0d;
+            double todo = 8d;
+            for(ActivityPanel ap:activityPanels) {
+
+                double now = ap.getActivity().getSpentHours() + ap.getActivity().getSpentMinutes() / 60d;
+                done = done + now;
+                todo = todo - now;
+            }
+            Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(done) + "h. todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todo));
+
         });
         //        for (int i = 0; i < 10; i++) {
         //            add(new ActivityPanel(activityRepository,
