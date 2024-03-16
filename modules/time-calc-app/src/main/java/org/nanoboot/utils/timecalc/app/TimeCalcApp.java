@@ -4,14 +4,18 @@ import java.io.File;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +39,11 @@ public class TimeCalcApp {
     private SqliteConnectionFactory sqliteConnectionFactory;
 
     public void start(String[] args) throws IOException {
+        File dbFile = new File(FileConstants.TC_DIRECTORY.getAbsolutePath() + "/" + "time-calc.sqlite3");
+        File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");
+        if(dbFile.exists() && !dbFileBackup.exists()) {
+            Files.copy(dbFile.toPath(), dbFileBackup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
         if (startNanoTime != 0l) {
             throw new TimeCalcException("TimeCalcApp was already started.");
         }

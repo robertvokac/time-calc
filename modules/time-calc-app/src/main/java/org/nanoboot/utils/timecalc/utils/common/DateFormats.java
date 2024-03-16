@@ -23,6 +23,8 @@ public class DateFormats {
             = new SimpleDateFormat("HH:mm:ss:SSS", Locale.ENGLISH);
     public static DateFormat DATE_TIME_FORMATTER_VERY_LONG
             = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss:EEEE", Locale.ENGLISH);
+    public static DateFormat DATE_TIME_FORMATTER_SHORT
+            = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private DateFormats() {
         //Not meant to be instantiated.

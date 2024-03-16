@@ -14,7 +14,21 @@ public class ActivityForStats extends Activity {
     private int todayRemainsHours;
     private int todayRemainsMinutes;
 
-    public ActivityForStats() {
+    public ActivityForStats(String id, int year, int month, int day,
+            String name,
+            String comment, String ticket, int spentHours, int spentMinutes,
+            String flags, String nextActivityId,
+            int todaySpentHours,
+            int todaySpentMinutes,
+            int todayRemainsHours,
+            int todayRemainsMinutes) {
+        super(id, year, month, day, name, comment, ticket, spentHours,
+                spentMinutes,
+                flags, nextActivityId);
+        this.todaySpentHours = todaySpentHours;
+        this.todaySpentMinutes = todaySpentMinutes;
+        this.todayRemainsHours = todayRemainsHours;
+        this.todayRemainsMinutes = todayRemainsMinutes;
     }
 
     public List<ActivityForStats> createList(List<Activity> list) {

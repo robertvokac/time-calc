@@ -14,7 +14,11 @@ public interface ActivityRepositoryApi {
 
     Activity getLastActivityForDay(int year, int month, int day);
 
+    Activity getPreviousActivity(String id);
+
     List<Activity> list(int year, int month, int day);
+
+    List<Activity> list(String ticket);
 
     void update(Activity activity);
 

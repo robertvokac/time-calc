@@ -3,6 +3,8 @@ package org.nanoboot.utils.timecalc.entity;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class Activity implements Comparable<Activity> {
 
     private static final String SUBJECT_FIELD_SEPARATOR = " : ";

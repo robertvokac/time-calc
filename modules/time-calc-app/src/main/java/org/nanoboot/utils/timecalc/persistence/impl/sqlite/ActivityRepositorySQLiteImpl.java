@@ -11,6 +11,7 @@ import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import java.util.List;
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.entity.Activity;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 /**
  * @author Robert Vokac
@@ -71,151 +72,231 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
     }
 
     @Override
+    public void delete(String id) {
+        System.out.println("Going to delete: " + id);
+
+        if(!Utils.askYesNo(null, "Do you really want to delete this activity? " + read(id), "Deletion of activity")) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("DELETE FROM ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" WHERE ").append(
+                ActivityTable.ID).append("=?");
+
+        String sql = sb.toString();
+        //System.err.println(sql);
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+            int i = 0;
+
+            stmt.setString(++i, id);
+
+            int numberOfUpdatedRows = stmt.executeUpdate();
+            //System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            throw new TimeCalcException(ex);
+        }
+    }
+
+    @Override
+    public List<Activity> list(int year, int month, int day) {
+
+        List<Activity> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT * FROM ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(ActivityTable.YEAR).append("=? AND ")
+                .append(ActivityTable.MONTH).append("=? AND ")
+                .append(ActivityTable.DAY).append("=? ");
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            stmt.setInt(++i, year);
+            stmt.setInt(++i, month);
+            stmt.setInt(++i, day);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(extractActivityFromResultSet(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        return result;
+//
+    }
+
+    @Override
+    public List<Activity> list(String ticket) {
+
+        List<Activity> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT * FROM ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(ActivityTable.TICKET).append("=? ");
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            stmt.setString(++i, ticket);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(extractActivityFromResultSet(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        return result;
+    }
+
+        @Override
     public void update(Activity activity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        System.out.println("Going to update: " + activity.toString());
+
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("UPDATE ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" SET ")
+                .append(ActivityTable.NAME).append("=?, ")
+                .append(ActivityTable.COMMENT).append("=?, ")
+                .append(ActivityTable.TICKET).append("=?, ")
+                .append(ActivityTable.SPENT_HOURS).append("=?, ")
+                .append(ActivityTable.SPENT_MINUTES).append("=?, ")
+                .append(ActivityTable.FLAGS).append("=?, ")
+                .append(ActivityTable.NEXT_ACTIVITY_ID).append("=? ")
+                .append(" WHERE ").append(
+                ActivityTable.ID).append("=?");
+
+        String sql = sb.toString();
+        //System.err.println(sql);
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+            int i = 0;
+            stmt.setString(++i, activity.getName());
+            stmt.setString(++i, activity.getComment());
+            stmt.setString(++i, activity.getTicket());
+            stmt.setInt(++i, activity.getSpentHours());
+            stmt.setInt(++i, activity.getSpentMinutes());
+            stmt.setString(++i, activity.getFlags());
+            stmt.setString(++i, activity.getNextActivityId());
+
+            stmt.setString(++i, activity.getId());
+
+            int numberOfUpdatedRows = stmt.executeUpdate();
+            //System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            throw new TimeCalcException(ex);
+        }
     }
 
     @Override
     public Activity read(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        List<Activity> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT * FROM ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(ActivityTable.ID).append("=? ");
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            stmt.setString(++i, id);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(extractActivityFromResultSet(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+
+        return result.stream().findFirst().orElse(null);
+
     }
 
-    @Override
-    public void delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private Activity extractActivityFromResultSet(final ResultSet rs) throws SQLException {
+        return new Activity(
+                rs.getString(ActivityTable.ID),
+                rs.getInt(ActivityTable.YEAR),
+                rs.getInt(ActivityTable.MONTH),
+                rs.getInt(ActivityTable.DAY),
+                rs.getString(ActivityTable.NAME),
+                rs.getString(ActivityTable.COMMENT),
+                rs.getString(ActivityTable.TICKET),
+                rs.getInt(ActivityTable.SPENT_HOURS),
+                rs.getInt(ActivityTable.SPENT_MINUTES),
+                rs.getString(ActivityTable.FLAGS),
+                rs.getString(ActivityTable.NEXT_ACTIVITY_ID)
+        );
     }
 
-//
-//    @Override
-//    public List<WorkingDay> list(int year, int month, int day) {
-//
-//        List<WorkingDay> result = new ArrayList<>();
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("SELECT * FROM ")
-//                .append(WorkingDayTable.TABLE_NAME)
-//                .append(" WHERE ")
-//                .append(WorkingDayTable.YEAR).append("=? AND ")
-//                .append(WorkingDayTable.MONTH).append("=? ");
-//        if (day != 0) {
-//            sb.append(" AND ").append(WorkingDayTable.DAY).append("=? ");
-//        }
-//
-//        String sql = sb.toString();
-//        int i = 0;
-//        ResultSet rs = null;
-//        try (
-//                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//
-//            //System.err.println(stmt.toString());
-//            stmt.setInt(++i, year);
-//            stmt.setInt(++i, month);
-//            if (day != 0) {
-//                stmt.setInt(++i, day);
-//            }
-//            rs = stmt.executeQuery();
-//
-//            while (rs.next()) {
-//                result.add(extractWorkingDayFromResultSet(rs));
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            System.out.println(ex.getMessage());
-//            throw new RuntimeException(ex);
-//        } finally {
-//            try {
-//                if (rs != null) {
-//                    rs.close();
-//                }
-//            } catch (SQLException ex) {
-//                System.out.println(ex.getMessage());
-//                throw new RuntimeException(ex);
-//            }
-//        }
-//        return result;
-////
-//    }
-//
-//    @Override
-//    public void update(WorkingDay workingDay) {
-//        if(list(workingDay.getYear(), workingDay.getMonth(),workingDay.getDay()).isEmpty()) {
-//            create(workingDay);
-//            return;
-//        }
-//        System.out.println("Going to update: " + workingDay.toString());
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("UPDATE ")
-//                .append(WorkingDayTable.TABLE_NAME)
-//                .append(" SET ")
-//                .append(WorkingDayTable.ARRIVAL_HOUR).append("=?, ")
-//                .append(WorkingDayTable.ARRIVAL_MINUTE).append("=?, ")
-//                .append(WorkingDayTable.OVERTIME_HOUR).append("=?, ")
-//                .append(WorkingDayTable.OVERTIME_MINUTE).append("=?, ")
-//                .append(WorkingDayTable.WORKING_TIME_IN_MINUTES).append("=?, ")
-//                .append(WorkingDayTable.PAUSE_TIME_IN_MINUTES).append("=?, ")
-//                .append(WorkingDayTable.NOTE).append("=? ")
-//                .append(" WHERE ").append(
-//                WorkingDayTable.ID).append("=?");
-//
-//        String sql = sb.toString();
-//        //System.err.println(sql);
-//        try (
-//                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//            int i = 0;
-//            stmt.setInt(++i, workingDay.getArrivalHour());
-//            stmt.setInt(++i, workingDay.getArrivalMinute());
-//            stmt.setInt(++i, workingDay.getOvertimeHour());
-//            stmt.setInt(++i, workingDay.getOvertimeMinute());
-//            stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
-//            stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
-//            stmt.setString(++i, workingDay.getNote());
-//
-//            stmt.setString(++i, workingDay.getId());
-//
-//            int numberOfUpdatedRows = stmt.executeUpdate();
-//            //System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException ex) {
-//            ex.printStackTrace();
-//            throw new TimeCalcException(ex);
-//        }
-//    }
-//
-//    @Override
-//    public WorkingDay read(int year, int month, int day) {
-//        List<WorkingDay> list = list(year, month, day);
-//        return list.isEmpty() ? null : list.get(0);
-//    }
-//
-//    private WorkingDay extractWorkingDayFromResultSet(final ResultSet rs) throws SQLException {
-//        return new WorkingDay(
-//                rs.getString(WorkingDayTable.ID),
-//                rs.getInt(WorkingDayTable.YEAR),
-//                rs.getInt(WorkingDayTable.MONTH),
-//                rs.getInt(WorkingDayTable.DAY),
-//                rs.getInt(WorkingDayTable.ARRIVAL_HOUR),
-//                rs.getInt(WorkingDayTable.ARRIVAL_MINUTE),
-//                rs.getInt(WorkingDayTable.OVERTIME_HOUR),
-//                rs.getInt(WorkingDayTable.OVERTIME_MINUTE),
-//                rs.getInt(WorkingDayTable.WORKING_TIME_IN_MINUTES),
-//                rs.getInt(WorkingDayTable.PAUSE_TIME_IN_MINUTES),
-//                rs.getString(WorkingDayTable.NOTE)
-//        );
-//    }
-//
     @Override
     public List<String> getYears() {
         
         List<String> result = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb
-                .append("SELECT distinct ").append(WorkingDayTable.YEAR). append(" FROM ")
+                .append("SELECT distinct ").append(ActivityTable.YEAR). append(" FROM ")
                 .append(ActivityTable.TABLE_NAME);
 
         String sql = sb.toString();
@@ -227,7 +308,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                result.add(rs.getString(WorkingDayTable.YEAR));
+                result.add(rs.getString(ActivityTable.YEAR));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -251,13 +332,98 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
 
     @Override
     public Activity getLastActivityForDay(int year, int month, int day) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        List<Activity> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT * FROM ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(ActivityTable.YEAR).append("=? AND ")
+                .append(ActivityTable.MONTH).append("=? AND ")
+                .append(ActivityTable.DAY).append("=? AND ")
+                .append(ActivityTable.NEXT_ACTIVITY_ID)
+                .append(" IS NULL ");
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            stmt.setInt(++i, year);
+            stmt.setInt(++i, month);
+            stmt.setInt(++i, day);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(extractActivityFromResultSet(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        if(result.isEmpty()) {
+            return null;
+        }
+        if(result.size() == 1) {
+            result.get(0);
+        }
+        throw new TimeCalcException("Fatal error: More than one activity per one day with next activity id set to null: " + year + ", " + month + day);
     }
 
     @Override
-    public List<Activity> list(int year, int month, int day) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public Activity getPreviousActivity(String id) {
 
+        List<Activity> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("SELECT * FROM ")
+                .append(ActivityTable.TABLE_NAME)
+                .append(" WHERE ")
+                .append(ActivityTable.NEXT_ACTIVITY_ID).append("=? ");
+
+        String sql = sb.toString();
+        int i = 0;
+        ResultSet rs = null;
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            stmt.setString(++i, id);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(extractActivityFromResultSet(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+        }
+        if(result.isEmpty()) {
+            return null;
+        }
+        if(result.size() == 1) {
+            result.get(0);
+        }
+        throw new TimeCalcException("Fatal error: More than one activity, which is previous for this activity id:" + id);
+    }
 
 }

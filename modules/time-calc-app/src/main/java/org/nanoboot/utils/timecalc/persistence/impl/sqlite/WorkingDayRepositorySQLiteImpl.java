@@ -28,7 +28,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
     public void create(WorkingDay workingDay) {
         System.out.println("Going to create: " + workingDay.toString());
 
-        if(!Utils.askYesNo(null, "Do you want to create new Working Day? " + workingDay, "Creation of newWorking Day")) {
+        if(!Utils.askYesNo(null, "Do you want to create new Working Day? " + workingDay, "Creation of new Working Day")) {
             return;
         }
         StringBuilder sb = new StringBuilder();

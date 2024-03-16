@@ -21,6 +21,7 @@ import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
 import org.nanoboot.utils.timecalc.swing.progress.YearBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
@@ -34,7 +35,13 @@ import java.awt.Component;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
+import java.util.Date;
+
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
@@ -701,8 +708,19 @@ public class MainWindow extends TWindow {
             workingDayRepository.update(wd);
 
         System.out.println(wd);
-        
+
+        File dbFile = new File(FileConstants.TC_DIRECTORY.getAbsolutePath() + "/" + "time-calc.sqlite3");
+
         while (true) {
+
+            File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");
+            if(dbFile.exists() && !dbFileBackup.exists()) {
+                try {
+                    Files.copy(dbFile.toPath(), dbFileBackup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if (updateWindow(timeCalcApp, time, clock, minuteBattery, hourBattery,
                     dayBattery,
