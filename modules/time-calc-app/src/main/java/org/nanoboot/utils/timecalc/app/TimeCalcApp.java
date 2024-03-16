@@ -1,9 +1,9 @@
 package org.nanoboot.utils.timecalc.app;
 
 import java.io.File;
+import java.io.FileInputStream;
 import org.nanoboot.utils.timecalc.entity.Visibility;
-import org.nanoboot.utils.timecalc.swing.common.MainWindow;
-import org.nanoboot.utils.timecalc.utils.common.Constants;
+import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
@@ -56,53 +56,11 @@ public class TimeCalcApp {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        
         while (true) {
-            boolean test = FileConstants.TEST_TXT.exists();
-            String oldStartTime = Utils.readTextFromFile(
-                    FileConstants.STARTTIME_TXT);
-            String oldOvertime = Utils.readTextFromFile(
-                    FileConstants.OVERTIME_TXT);
-            String newStartTime
-                    = test ? (oldStartTime != null ? oldStartTime
-                                    : Constants.DEFAULT_START_TIME)
-                            : (String) JOptionPane.showInputDialog(
-                                    null,
-                                    "Start Time:",
-                                    "Start Time",
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null,
-                                    null,
-                                    oldStartTime == null
-                                            ? Constants.DEFAULT_START_TIME
-                                            : oldStartTime
-                            );
-            if (newStartTime == null) {
-                break;
-            }
-            String newOvertime
-                    = test ? (oldOvertime != null ? oldOvertime
-                                    : Constants.DEFAULT_OVERTIME)
-                            : (String) JOptionPane.showInputDialog(
-                                    null,
-                                    "Overtime:",
-                                    "Overtime",
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null,
-                                    null,
-                                    oldOvertime == null
-                                            ? Constants.DEFAULT_OVERTIME
-                                            : oldOvertime
-                            );
-
-            if (newOvertime == null) {
-                break;
-            }
-            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, newStartTime);
-            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, newOvertime);
             MainWindow timeCalcMainWindow = null;
             try {
-                timeCalcMainWindow
-                        = new MainWindow(newStartTime, newOvertime, this);
+                timeCalcMainWindow = new MainWindow(this);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);

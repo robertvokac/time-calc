@@ -33,9 +33,7 @@ import java.util.stream.Collectors;
  */
 public class DayPanel extends JPanel {
 
-    private static final String FOR_ACTIVITY_ID = "for-activity-id";
     private static final Dimension MAXIMUM_SIZE = new Dimension(1300, 40);
-    private static final Dimension MAXIMUM_SIZE_2 = new Dimension(1200, 20);
     private final String year;
     private final String month;
     private final String day;
@@ -188,11 +186,7 @@ public class DayPanel extends JPanel {
             Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(done) + "h, todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todo));
 
         });
-        //        for (int i = 0; i < 10; i++) {
-        //            add(new ActivityPanel(activityRepository,
-        //                    new Activity("id", 2000, 7, 7, "name", "comment", "ticket", 2, 30,
-        //                            "a b c", null)));
-        //        }
+        sortActivityPanels();
     }
     public List<Activity> getActivities() {
         return Arrays

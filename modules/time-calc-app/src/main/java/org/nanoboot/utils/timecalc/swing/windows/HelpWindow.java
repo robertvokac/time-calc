@@ -1,11 +1,13 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.windows;
 
+import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.io.IOException;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 
 /**
  * @author Robert Vokac

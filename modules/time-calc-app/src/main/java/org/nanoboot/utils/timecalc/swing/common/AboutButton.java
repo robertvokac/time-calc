@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.swing.controls.TButton;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JOptionPane;

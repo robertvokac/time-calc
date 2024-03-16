@@ -1,10 +1,10 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.controls;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 14.03.2024
  */
 public interface MouseClickedListener extends MouseListener {

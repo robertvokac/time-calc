@@ -1,30 +1,37 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.controls;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
-import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JTextField;
 import javax.swing.Timer;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.Color;
+import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 
 /**
  * @author Robert Vokac
  * @since 21.02.2024
  */
-public class TTextField extends JTextField implements GetProperty {
+public class TCheckBox extends JCheckBox implements GetProperty {
 
-    private static final int WIDTH = 50;
+    private static final int WIDTH = 100;
     private static final int HEIGHT = 30;
-    private int customWidth = 0;
     private Color originalBackground;
     private Color originalForeground;
+    private int customWidth = 0;
+
+    public TCheckBox(String text) {
+        this(text, 0);
+    }
+    public TCheckBox(String text, int customWidth) {
+        this(text, false);
+        this.customWidth = customWidth;
+    }
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -32,43 +39,17 @@ public class TTextField extends JTextField implements GetProperty {
     public StringProperty visibilityProperty
             = new StringProperty("visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
-    public final StringProperty valueProperty = new StringProperty();
 
-    public TTextField() {
-        this("", 0);
-    }
+    public TCheckBox(String text, boolean b) {
+        super(text, b);
 
-    public TTextField(String s) {
-        this(s, 0);
-    }
+        valueProperty.setValue(b);
 
-    public TTextField(String s, int customWidth) {
-        super(s);
-        this.customWidth = customWidth;
-        valueProperty.setValue(s);
-        getDocument()
-                .addDocumentListener(new DocumentListener() {
-                    public void changedUpdate(DocumentEvent e) {
-                        update(e);
-                    }
-
-                    public void removeUpdate(DocumentEvent e) {
-                        update(e);
-                    }
-
-                    public void insertUpdate(DocumentEvent e) {
-                        update(e);
-                    }
-
-                    private void update(DocumentEvent e) {
-                        valueProperty.setValue(getText());
-                    }
-
-                });
+        addActionListener(e -> valueProperty.setValue(isSelected()));
         valueProperty.addListener(e
                 -> {
-            if (!valueProperty.getValue().equals(getText())) {
-                setText(valueProperty.getValue());
+            if (valueProperty.getValue().equals(getText())) {
+                setSelected(valueProperty.isEnabled());
             }
 
         });
@@ -91,6 +72,7 @@ public class TTextField extends JTextField implements GetProperty {
             }
         }).start();
     }
+    public final BooleanProperty valueProperty = new BooleanProperty("");
 
     public void setBounds(int x, int y) {
         setBounds(x, y, customWidth == 0 ? WIDTH : customWidth, HEIGHT);
@@ -99,12 +81,8 @@ public class TTextField extends JTextField implements GetProperty {
     }
 
     public void setBoundsFromLeft(JComponent jComponent) {
-        setBoundsFromLeft(jComponent, 0);
-    }
-
-    public void setBoundsFromLeft(JComponent jComponent, int additionalY) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
-                jComponent.getY() + additionalY);
+                jComponent.getY());
     }
 
     public void setBoundsFromTop(JComponent jComponent) {
@@ -133,10 +111,6 @@ public class TTextField extends JTextField implements GetProperty {
     @Override
     public Property getVisibilitySupportedColoredProperty() {
         return visibilitySupportedColoredProperty;
-    }
-
-    public TTime asTTime() {
-        return new TTime(valueProperty.getValue());
     }
 
 }

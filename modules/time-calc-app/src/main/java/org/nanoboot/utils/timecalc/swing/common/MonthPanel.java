@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 
 import java.util.Calendar;

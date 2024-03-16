@@ -1,17 +1,21 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.windows;
 
+import org.nanoboot.utils.timecalc.swing.controls.TWindow;
+import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
+import org.nanoboot.utils.timecalc.swing.common.MonthPanel;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
+import org.nanoboot.utils.timecalc.swing.common.YearPanel;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 
 /**

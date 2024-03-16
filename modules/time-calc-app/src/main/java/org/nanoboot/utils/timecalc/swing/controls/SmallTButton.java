@@ -1,9 +1,9 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.controls;
 
 import java.awt.Insets;
 
 /**
- * @author Robert
+ * @author pc00289
  * @since 11.03.2024
  */
 public class SmallTButton extends TButton {

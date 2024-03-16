@@ -8,18 +8,42 @@ _Time Calc is written in Java programming language and uses the Swing framework.
 
 ![Screenshot of application "Time Calc"](images/screenshot.jpg)
 
+Time Calc is inspired by this document: [report.ods](https://code.nanoboot.org/nanoboot/time-calc/raw/branch/rvc/report.ods)
+
+![report.ods.working_day.jpg](images/report.ods.working_day.jpg)
+
+![report.ods.activities.jpg](images/report.ods.activities.jpg)
+
+### Screenshots
+
+!["Working Days" window - table](images/working_days_window_table.jpg)
+
+!["Working Days" window - table](images/working_days_window_chart.jpg)
+
+!["Activites" window](images/activities_window.jpg)
+
+!["Config" window - clock](images/config_window_clock.jpg)
+
+!["Config" window - battery](images/config_window_battery.jpg)
+
+!["Config" window - smileys](images/config_window_smileys.jpg)
+
+!["Config" window - test](images/config_window_test.jpg)
+
+!["Config" window - misc](images/config_window_misc.jpg)
+
 ## Usage
 
 ### Start of application
 
 When "Time Calc" is started", user is asked for:
-- start time ... like 7:30
-- overtime ... like 0:45 ... overtime is optional and the default value is 0:00
+ - start time ... like 7:30
+ - overtime ... like 0:45 ... overtime is optional and the default value is 0:00
 
 ### Restart of application
 
 You can restart the app, if you press the **"Restart"** button.
-- Then you are asked again for start time and overtime.
+ - Then you are asked again for start time and overtime.
 
 ### End of application
 
@@ -33,16 +57,13 @@ If these files are present, something special happens.
 
 ### .tc/starttime.txt
 
-This file contains the default start time - used during the previous run of the app.
+This file contains the default start time - used during the previous run of the app. 
 If file starttime.txt does not exist, then the default start time is 7:00.
 
 ### .tc/overtime.txt
 
 This file contains the default overtime - used during the previous run of the app.
 If file overtime.txt does not exist, then the default overtime is 0:00.
-
-### .tc/test.txt
-If file test.txt exists, then user is not asked for start time and overtime. Instead, the values in files starttime.txt and overtime.txt are used.
 
 ### ./tc/timecalc.conf
 
@@ -64,29 +85,29 @@ Optional assignments of profiles to numbers is stored here.
 
 ### 3 Visibility modes
 
-* STRONGLY_COLORED - many colors
-* WEAKLY_COLORED - darkened colors
-* GRAY - gray colors
-* NONE - widgets are hidden
+ * STRONGLY_COLORED - many colors 
+ * WEAKLY_COLORED - darkened colors
+ * GRAY - gray colors
+ * NONE - widgets are hidden
 
 ### Widgets
 
 #### Analog Clock
 
-* hour hand
-* minute hand (can be disabled in configuration)
-* second hand (can be disabled in configuration)
-* millisecond hand  (can be disabled in configuration)
-* shows current year, month, day of month and day of week, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
-* shows yellow highlighted remaining time until end of today working hours, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
-* hands can be long or shorter (can be set in configuration)
+ * hour hand
+ * minute hand (can be disabled in configuration)
+ * second hand (can be disabled in configuration)
+ * millisecond hand  (can be disabled in configuration)
+ * shows current year, month, day of month and day of week, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
+ * shows yellow highlighted remaining time until end of today working hours, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
+ * hands can be long or shorter (can be set in configuration)
 
 #### Progress Square
-* Show graphically day progress
+ * Show graphically day progress
 
 #### Progress Circle
 
-* Show graphically day progress
+ * Show graphically day progress
 
 #### Hour Battery
 
@@ -188,12 +209,12 @@ Smileys can be colored or white-black (can be set in configuration)
 
 ### New features
 
-* Custom arrival target
-* Split to Maven modules
-* Junit, Mockito, etc.
-* Checkstyle
-* Sonarlint
-* Sonarqube
+ * Custom arrival target
+ * Split to Maven modules
+ * Junit, Mockito, etc.
+ * Checkstyle
+ * Sonarlint
+ * Sonarqube
 
 ### Fix these known bugs
 

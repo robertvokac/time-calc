@@ -1,5 +1,12 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.windows;
 
+import org.nanoboot.utils.timecalc.swing.controls.SmallTButton;
+import org.nanoboot.utils.timecalc.swing.controls.TTextField;
+import org.nanoboot.utils.timecalc.swing.controls.TLabel;
+import org.nanoboot.utils.timecalc.swing.controls.TCheckBox;
+import org.nanoboot.utils.timecalc.swing.controls.TButton;
+import org.nanoboot.utils.timecalc.swing.controls.TWindow;
+import org.nanoboot.utils.timecalc.swing.controls.ComponentRegistry;
 import org.nanoboot.utils.timecalc.app.CommandActionListener;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcApp;
@@ -44,6 +51,11 @@ import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
+import org.nanoboot.utils.timecalc.swing.common.AboutButton;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
+import org.nanoboot.utils.timecalc.swing.common.WeekStatistics;
+import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 /**
@@ -91,8 +103,8 @@ public class MainWindow extends TWindow {
     
 
     {
-        this.arrivalTextField = new TTextField("", 40);
-        this.overtimeTextField = new TTextField("", 40);
+        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40);
+        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40);
         this.workingTimeTextField = new TTextField("8:00", 40);
         this.pauseTimeTextField = new TTextField("0:30", 40);
         this.noteTextField = new TTextField("", 100);
@@ -101,8 +113,7 @@ public class MainWindow extends TWindow {
         this.remainingTextField = new TTextField("", 100);
     }
 
-    public MainWindow(String startTimeIn, String overTimeIn,
-            TimeCalcApp timeCalcApp) {
+    public MainWindow(TimeCalcApp timeCalcApp) {
 //        ToolTipManager ttm = ToolTipManager.sharedInstance();
 //        ttm.setInitialDelay(0);
 //        ttm.setDismissDelay(10000);
@@ -120,11 +131,22 @@ public class MainWindow extends TWindow {
         timeCalcConfiguration.mainWindowCustomTitleProperty.addListener(e -> {
             setTitle(getWindowTitle());
         });
-        overTimeIn = (overTimeIn == null || overTimeIn.isEmpty())
-                ? Constants.DEFAULT_OVERTIME : overTimeIn;
-
-        arrivalTextField.valueProperty.setValue(startTimeIn);
-        overtimeTextField.valueProperty.setValue(overTimeIn);
+        Time time = new Time();
+                time.yearCustomProperty
+                .bindTo(timeCalcConfiguration.testYearCustomProperty);
+        time.monthCustomProperty
+                .bindTo(timeCalcConfiguration.testMonthCustomProperty);
+        time.dayCustomProperty
+                .bindTo(timeCalcConfiguration.testDayCustomProperty);
+        time.hourCustomProperty
+                .bindTo(timeCalcConfiguration.testHourCustomProperty);
+        time.minuteCustomProperty
+                .bindTo(timeCalcConfiguration.testMinuteCustomProperty);
+        time.secondCustomProperty
+                .bindTo(timeCalcConfiguration.testSecondCustomProperty);
+        time.millisecondCustomProperty
+                .bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
+        time.allowCustomValuesProperty.setValue(true);
 
         arrivalTextField.addVetoableChangeListener(e -> {
             String newValue = (String) e.getNewValue();
@@ -168,7 +190,6 @@ public class MainWindow extends TWindow {
         }
         Toaster.notificationsVisibleProperty.bindTo(timeCalcConfiguration.notificationsVisibleProperty);
 
-        Time time = new Time();
         TimeCalcKeyAdapter timeCalcKeyAdapter
                 = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp,
                         this, time);
@@ -311,7 +332,7 @@ public class MainWindow extends TWindow {
         pauseDecreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY() + 15, 15, 15);
 
         //
-        TLabel noteTextFieldLabel = new TLabel("Note:", 30);
+        TLabel noteTextFieldLabel = new TLabel("Note:", 40);
         noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField, 10);
 
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
@@ -466,21 +487,6 @@ public class MainWindow extends TWindow {
             helpWindow.setVisible(true);
         });
 
-        time.yearCustomProperty
-                .bindTo(timeCalcConfiguration.testYearCustomProperty);
-        time.monthCustomProperty
-                .bindTo(timeCalcConfiguration.testMonthCustomProperty);
-        time.dayCustomProperty
-                .bindTo(timeCalcConfiguration.testDayCustomProperty);
-        time.hourCustomProperty
-                .bindTo(timeCalcConfiguration.testHourCustomProperty);
-        time.minuteCustomProperty
-                .bindTo(timeCalcConfiguration.testMinuteCustomProperty);
-        time.secondCustomProperty
-                .bindTo(timeCalcConfiguration.testSecondCustomProperty);
-        time.millisecondCustomProperty
-                .bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
-        time.allowCustomValuesProperty.setValue(true);
         clock.dayProperty.bindTo(time.dayProperty);
         clock.monthProperty.bindTo(time.monthProperty);
         clock.yearProperty.bindTo(time.yearProperty);
@@ -612,27 +618,6 @@ public class MainWindow extends TWindow {
                 + 3 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
-
-//        progressCircle.visibleProperty.addListener(e -> {
-//            System.out.println("visibility of circle was changed");
-//            if(progressSquare.visibleProperty.isEnabled() || progressCircle.visibleProperty.isEnabled()) {
-//                System.out.println("square or circle is visible");
-//                arrivalTextFieldLabel.setBoundsFromTop(progressSquare);
-//            } else {
-//                System.out.println("square and circle are not visible");
-//                arrivalTextFieldLabel.setBoundsFromTop(clock);
-//            }
-//        });
-//        progressSquare.visibleProperty.addListener(e -> {
-//            System.out.println("visibility of square was changed");
-//            if(progressSquare.visibleProperty.isEnabled() || progressCircle.visibleProperty.isEnabled()) {
-//                System.out.println("square or circle is visible");
-//                arrivalTextFieldLabel.setBoundsFromTop(progressSquare);
-//            } else {
-//                System.out.println("square and circle are not visible");
-//                arrivalTextFieldLabel.setBoundsFromTop(clock);
-//            }
-//        });
         
         saveButton.addActionListener(e -> {
             
@@ -645,8 +630,7 @@ public class MainWindow extends TWindow {
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            Utils.writeTextToFile(FileConstants.STARTTIME_TXT, arrivalTextField.asTTime().toString().substring(0, 5));
-            Utils.writeTextToFile(FileConstants.OVERTIME_TXT, overtime_.toString().substring(0, overtime_.isNegative() ? 6 : 5));
+            
             timeCalcConfiguration.saveToTimeCalcProperties();
             WorkingDay workingDay = workingDayRepository.read(time.asCalendar());
             if (workingDay == null) {
@@ -675,6 +659,10 @@ public class MainWindow extends TWindow {
         WorkingDay wd = workingDayRepository.read(time.asCalendar());
 
         if (wd != null) {
+            arrivalTextField.valueProperty.setValue(new TTime(wd.getArrivalHour(), wd.getArrivalMinute()).toString().substring(0, 5));
+            TTime overtime = new TTime(wd.getOvertimeHour(), wd.getOvertimeMinute());
+            overtimeTextField.valueProperty.setValue(overtime.toString().substring(0, overtime.isNegative() ? 6 : 5));
+            //
             workingTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getWorkingTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
             pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
             noteTextField.valueProperty.setValue(wd.getNote());
@@ -690,26 +678,15 @@ public class MainWindow extends TWindow {
                 wd.setYear(year);
                 wd.setMonth(month);
                 wd.setDay(day);
+                wd.setArrivalHour(7);
+                wd.setArrivalMinute(0);
+                wd.setOvertimeHour(0);
+                wd.setOvertimeMinute(0);
                 wd.setWorkingTimeInMinutes(480);
                 wd.setPauseTimeInMinutes(30);
                 wd.setNote("");
                 wd.setTimeOff(false);
         }
-            TTime arrival_ = new TTime(arrivalTextField.getText());
-            TTime overtime_ = new TTime(overtimeTextField.getText());
-//            TTime work_ = new TTime(workingTimeTextField.getText());
-//            TTime pause_ = new TTime(pauseTimeTextField.getText());
-
-//            System.out.println("arrival_=" + arrival_);
-//            System.out.println("overtime_=" + overtime_);
-//            System.out.println("work_=" + work_);
-//            System.out.println("pause_=" + pause_);
-
-            wd.setArrivalHour(arrival_.getHour());
-            wd.setArrivalMinute(arrival_.getMinute());
-
-            wd.setOvertimeHour(overtime_.getHour() * (overtime_.isNegative() ? (-1) : 1));
-            wd.setOvertimeMinute(overtime_.getMinute() * (overtime_.isNegative() ? (-1) : 1));
             
             workingDayRepository.update(wd);
 
@@ -719,12 +696,33 @@ public class MainWindow extends TWindow {
 
         while (true) {
 
-            File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");
-            if(dbFile.exists() && !dbFileBackup.exists()) {
-                try {
-                    Files.copy(dbFile.toPath(), dbFileBackup.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if(Math.random() > 0.99) {
+                File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");
+                if (dbFile.exists() && !dbFileBackup.exists()) {
+                    try {
+                        Files.copy(dbFile.toPath(), dbFileBackup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for(File file: FileConstants.TC_DIRECTORY.listFiles()) {
+                    if(file.getName().startsWith(dbFile.getName() + ".backup")) {
+                        try {
+                            long now = System.currentTimeMillis();
+                            long diff = now - Files.getLastModifiedTime(file.toPath()).toMillis();
+                            int fileAgeInDays = (int) (diff/ 1000 / 60 / 60 / 24);
+                            System.out.println("Found backup file " + file.getName() + "with age: " + fileAgeInDays);
+                            if(fileAgeInDays > 14) {
+                                file.delete();
+                            }
+                                    
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            System.err.println("Deleting old backups failed: " + ex.getMessage());
+                            break;
+                        }
+
+                    }
                 }
             }
 

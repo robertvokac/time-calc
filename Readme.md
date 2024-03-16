@@ -8,6 +8,30 @@ _Time Calc is written in Java programming language and uses the Swing framework.
 
 ![Screenshot of application "Time Calc"](images/screenshot.jpg)
 
+Time Calc is inspired by this document: [report.ods](https://code.nanoboot.org/nanoboot/time-calc/raw/branch/rvc/report.ods)
+
+![report.ods.working_day.jpg](images/report.ods.working_day.jpg)
+
+![report.ods.activities.jpg](images/report.ods.activities.jpg)
+
+### Screenshots
+
+!["Working Days" window - table](images/working_days_window_table.jpg)
+
+!["Working Days" window - table](images/working_days_window_chart.jpg)
+
+!["Activites" window](images/activities_window.jpg)
+
+!["Config" window - clock](images/config_window_clock.jpg)
+
+!["Config" window - battery](images/config_window_battery.jpg)
+
+!["Config" window - smileys](images/config_window_smileys.jpg)
+
+!["Config" window - test](images/config_window_test.jpg)
+
+!["Config" window - misc](images/config_window_misc.jpg)
+
 ## Usage
 
 ### Start of application
@@ -40,9 +64,6 @@ If file starttime.txt does not exist, then the default start time is 7:00.
 
 This file contains the default overtime - used during the previous run of the app.
 If file overtime.txt does not exist, then the default overtime is 0:00.
-
-### .tc/test.txt
-If file test.txt exists, then user is not asked for start time and overtime. Instead, the values in files starttime.txt and overtime.txt are used.
 
 ### ./tc/timecalc.conf
 

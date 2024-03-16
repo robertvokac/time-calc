@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.controls;
 
 import lombok.Getter;
 
@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
+import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 
 /**
  * @author Robert Vokac

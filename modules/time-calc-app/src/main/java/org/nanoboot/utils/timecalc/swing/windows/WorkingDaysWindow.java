@@ -1,5 +1,10 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.windows;
 
+import org.nanoboot.utils.timecalc.swing.controls.TTextField;
+import org.nanoboot.utils.timecalc.swing.controls.TLabel;
+import org.nanoboot.utils.timecalc.swing.controls.TCheckBox;
+import org.nanoboot.utils.timecalc.swing.controls.TWindow;
+import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.entity.WorkingDayForStats;
 import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
@@ -9,7 +14,6 @@ import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.InvalidationListener;
-import org.nanoboot.utils.timecalc.utils.property.Property;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,6 +29,9 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import org.nanoboot.utils.timecalc.swing.common.ArrivalChart;
+import org.nanoboot.utils.timecalc.swing.common.ArrivalChartData;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 
 /**
  * @author Robert Vokac

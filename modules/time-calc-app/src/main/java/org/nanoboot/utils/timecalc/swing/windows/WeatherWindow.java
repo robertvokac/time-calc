@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.windows;
 
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 

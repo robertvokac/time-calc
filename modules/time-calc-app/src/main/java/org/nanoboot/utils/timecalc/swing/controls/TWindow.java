@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.swing.common;
+package org.nanoboot.utils.timecalc.swing.controls;
 
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 

@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.swing.controls.TTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import java.awt.Color;
