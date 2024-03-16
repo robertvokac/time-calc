@@ -26,7 +26,7 @@ public class YearPanel extends JPanel {
         setLayout(null);
         this.tp = new TTabbedPane();
         add(tp);
-        tp.setBounds(0, 0, 1350, 700);
+        tp.setBounds(0, 0, 1450, 700);
 
         ChangeListener changeListener = new ChangeListener() {
             private boolean secondOrLaterChange = false;

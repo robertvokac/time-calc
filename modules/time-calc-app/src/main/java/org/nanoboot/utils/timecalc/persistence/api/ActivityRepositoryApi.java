@@ -12,10 +12,6 @@ public interface ActivityRepositoryApi {
 
     void create(Activity activity);
 
-    Activity getLastActivityForDay(int year, int month, int day);
-
-    Activity getPreviousActivity(String id);
-
     List<Activity> list(int year, int month, int day);
 
     List<Activity> list(String ticket);
@@ -27,5 +23,11 @@ public interface ActivityRepositoryApi {
     void delete(String id);
     
     public List<String> getYears();
+
+    public void putToClipboard(Activity activity);
+
+    public Activity getFromClipboard();
+
+    public int getLargestSortkey(int year, int month, int day);
 
 }

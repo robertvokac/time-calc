@@ -1,17 +1,18 @@
 package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
+import org.nanoboot.utils.timecalc.entity.Activity;
+import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
-
 import java.util.List;
-import org.nanoboot.utils.timecalc.app.TimeCalcException;
-import org.nanoboot.utils.timecalc.entity.Activity;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
+import java.util.OptionalInt;
 
 /**
  * @author Robert Vokac
@@ -25,9 +26,10 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
         this.sqliteConnectionFactory = sqliteConnectionFactory;
     }
 
+    private Activity activityInClipboard = null;
     @Override
     public void create(Activity activity) {
-        Activity lastActivityForDay = getLastActivityForDay(activity.getYear(), activity.getMonth(), activity.getDay());
+
         StringBuilder sb = new StringBuilder();
         sb
                 .append("INSERT INTO ")
@@ -51,7 +53,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             stmt.setInt(++i, activity.getSpentHours());
             stmt.setInt(++i, activity.getSpentMinutes());
             stmt.setString(++i, activity.getFlags());
-            stmt.setNull(++i, Types.VARCHAR);
+            stmt.setInt(++i, activity.getSortkey());
 
             //
             stmt.execute();
@@ -62,11 +64,6 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             throw new TimeCalcException(ex);
-        }
-
-        if(lastActivityForDay != null) {
-            lastActivityForDay.setNextActivityId(activity.getId());
-            update(lastActivityForDay);
         }
 
     }
@@ -103,12 +100,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             ex.printStackTrace();
             throw new TimeCalcException(ex);
         }
-        Activity previousActivity = getPreviousActivity(id);
-        Activity nextActivity = read(activityToBeDeleted.getNextActivityId());
-        if(previousActivity != null) {
-            previousActivity.setNextActivityId(nextActivity == null ? null : nextActivity.getId());
-            update(previousActivity);
-        }
+
 
     }
 
@@ -210,7 +202,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
                 .append(ActivityTable.SPENT_HOURS).append("=?, ")
                 .append(ActivityTable.SPENT_MINUTES).append("=?, ")
                 .append(ActivityTable.FLAGS).append("=?, ")
-                .append(ActivityTable.NEXT_ACTIVITY_ID).append("=? ")
+                .append(ActivityTable.SORTKEY).append("=? ")
                 .append(" WHERE ").append(
                 ActivityTable.ID).append("=?");
 
@@ -225,7 +217,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             stmt.setInt(++i, activity.getSpentHours());
             stmt.setInt(++i, activity.getSpentMinutes());
             stmt.setString(++i, activity.getFlags());
-            stmt.setString(++i, activity.getNextActivityId());
+            stmt.setInt(++i, activity.getSortkey());
 
             stmt.setString(++i, activity.getId());
 
@@ -293,7 +285,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
                 rs.getInt(ActivityTable.SPENT_HOURS),
                 rs.getInt(ActivityTable.SPENT_MINUTES),
                 rs.getString(ActivityTable.FLAGS),
-                rs.getString(ActivityTable.NEXT_ACTIVITY_ID)
+                rs.getInt(ActivityTable.SORTKEY)
         );
     }
 
@@ -336,101 +328,37 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
         return result;
     }
 
-
     @Override
-    public Activity getLastActivityForDay(int year, int month, int day) {
-
-        List<Activity> result = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        sb
-                .append("SELECT * FROM ")
-                .append(ActivityTable.TABLE_NAME)
-                .append(" WHERE ")
-                .append(ActivityTable.YEAR).append("=? AND ")
-                .append(ActivityTable.MONTH).append("=? AND ")
-                .append(ActivityTable.DAY).append("=? AND ")
-                .append(ActivityTable.NEXT_ACTIVITY_ID)
-                .append(" IS NULL ");
-
-        String sql = sb.toString();
-        int i = 0;
-        ResultSet rs = null;
-        try (
-                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-
-            stmt.setInt(++i, year);
-            stmt.setInt(++i, month);
-            stmt.setInt(++i, day);
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                result.add(extractActivityFromResultSet(rs));
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                throw new RuntimeException(ex);
-            }
-        }
-        if(result.isEmpty()) {
-            return null;
-        }
-        if(result.size() == 1) {
-            return result.get(0);
-        }
-        throw new TimeCalcException("Fatal error: More (" + result.size() + ") than one activity per one day with next activity id set to null: " + year + ", " + month + ", " + day);
+    public void putToClipboard(Activity activity) {
+        this.activityInClipboard = activity;
     }
 
     @Override
-    public Activity getPreviousActivity(String id) {
-
-        List<Activity> result = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        sb
-                .append("SELECT * FROM ")
-                .append(ActivityTable.TABLE_NAME)
-                .append(" WHERE ")
-                .append(ActivityTable.NEXT_ACTIVITY_ID).append("=? ");
-
-        String sql = sb.toString();
-        int i = 0;
-        ResultSet rs = null;
-        try (
-                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-
-            stmt.setString(++i, id);
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                result.add(extractActivityFromResultSet(rs));
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                throw new RuntimeException(ex);
-            }
-        }
-        if(result.isEmpty()) {
+    public Activity getFromClipboard() {
+        if(this.activityInClipboard == null) {
             return null;
         }
-        if(result.size() == 1) {
-            result.get(0);
+        Activity a = new Activity(
+                null,
+                2000, 1,1,
+                activityInClipboard.getName(),
+                activityInClipboard.getComment(),
+                activityInClipboard.getTicket(),
+                0,0, "", 1);
+        return activityInClipboard;
+    }
+
+    @Override
+    public int getLargestSortkey(int year, int month, int day) {
+        OptionalInt optional =
+                list(year, month, day).stream().map(Activity::getSortkey)
+                        .mapToInt(e -> e).max();
+        if (optional.isPresent()) {
+            System.out.println("getLargestSortkey=" +optional.getAsInt());
+            return optional.getAsInt();
+        } else {
+            return 1;
         }
-        throw new TimeCalcException("Fatal error: More than one activity, which is previous for this activity id:" + id);
     }
 
 }

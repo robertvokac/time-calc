@@ -37,7 +37,7 @@ class ActivityTable {
     public static final String SPENT_HOURS = "SPENT_HOURS";
     public static final String SPENT_MINUTES = "SPENT_MINUTES";
     public static final String FLAGS = "FLAGS";
-    public static final String NEXT_ACTIVITY_ID = "NEXT_ACTIVITY_ID";
+    public static final String SORTKEY = "SORTKEY";
 
     private ActivityTable() {
         //Not meant to be instantiated.

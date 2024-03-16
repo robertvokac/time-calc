@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
 /**
  * @author Robert Vokac
@@ -31,7 +32,7 @@ public class Activity implements Comparable<Activity> {
     private int spentHours;
     private int spentMinutes;
     private String flags;
-    private String nextActivityId;
+    private int sortkey;
 
     public String createSubject() {
         return ticket + SUBJECT_FIELD_SEPARATOR + name;
@@ -39,13 +40,18 @@ public class Activity implements Comparable<Activity> {
 
     public String createTotalComment() {
         return ticket + SUBJECT_FIELD_SEPARATOR + year + "-" + month + "-" + day
-                + SUBJECT_FIELD_SEPARATOR + ((spentHours + spentMinutes / 60d)
-                + "h") + SUBJECT_FIELD_SEPARATOR
+                + SUBJECT_FIELD_SEPARATOR + (
+                       NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(spentHours + spentMinutes / 60d)
+                       + "h") + SUBJECT_FIELD_SEPARATOR
                 + comment;
     }
     public Set<String> flagsAsSet() {
         Set<String> set = new HashSet<>();
         for(String flag:flags.split(":")) {
+            if(flag.isEmpty()) {
+                //nothing to do
+                continue;
+            }
             set.add(flag);
         }
         return set;
@@ -64,24 +70,10 @@ public class Activity implements Comparable<Activity> {
     @Override
     public int compareTo(Activity o) {
 
-        int result = Integer.valueOf(year).compareTo(Integer.valueOf(o.year));
-        if(result != 0) {
-            return result;
-        }
-        result = Integer.valueOf(month).compareTo(Integer.valueOf(o.month));
-        if(result != 0) {
-            return result;
-        }
-        result = Integer.valueOf(day).compareTo(Integer.valueOf(o.day));
-        if(result != 0) {
-            return result;
-        }
-        if(this.nextActivityId != null && this.nextActivityId.equals(o.getId())) {
-            return -1;
-        }
-        if(o.nextActivityId != null && o.nextActivityId.equals(o.getId())) {
-            return 1;
-        }
-        return 0;
+        return Integer.valueOf(sortkey).compareTo(Integer.valueOf(o.sortkey));
+    }
+
+    public String getSpentTimeAsString() {
+        return (getSpentHours() < 10 ? "0" : "") +  getSpentHours() + ":" + (getSpentMinutes() < 10 ? "0" : "") + getSpentMinutes();
     }
 }

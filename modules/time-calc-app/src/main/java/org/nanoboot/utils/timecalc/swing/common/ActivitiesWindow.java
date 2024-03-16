@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -41,7 +42,6 @@ public class ActivitiesWindow extends TWindow {
         List<String> yearsList = activityRepository.getYears();
 
         TTabbedPane tp = new TTabbedPane();
-
         JButton addYearButton = new JButton("Add year");
         addYearButton.setBounds(SwingUtils.MARGIN, SwingUtils.MARGIN, 150, 30);
         add(addYearButton);

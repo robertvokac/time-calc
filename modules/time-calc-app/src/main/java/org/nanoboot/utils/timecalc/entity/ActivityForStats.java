@@ -17,14 +17,14 @@ public class ActivityForStats extends Activity {
     public ActivityForStats(String id, int year, int month, int day,
             String name,
             String comment, String ticket, int spentHours, int spentMinutes,
-            String flags, String nextActivityId,
+            String flags, int sortkey,
             int todaySpentHours,
             int todaySpentMinutes,
             int todayRemainsHours,
             int todayRemainsMinutes) {
         super(id, year, month, day, name, comment, ticket, spentHours,
                 spentMinutes,
-                flags, nextActivityId);
+                flags, sortkey);
         this.todaySpentHours = todaySpentHours;
         this.todaySpentMinutes = todaySpentMinutes;
         this.todayRemainsHours = todayRemainsHours;

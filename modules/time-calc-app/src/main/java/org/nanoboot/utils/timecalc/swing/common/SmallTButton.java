@@ -10,9 +10,13 @@ public class SmallTButton extends TButton {
 
     private static final Insets INSETS = new Insets(1, 1, 1, 1);
 
-    public SmallTButton(char character) {
-        super(String.valueOf(character), 15, 15);
+    public SmallTButton(String s) {
+        super(s, 15, 15);
         //setFont(SwingUtils.SMALL_FONT);
         setMargin(INSETS);
+    }
+
+    public SmallTButton(char character) {
+        this(String.valueOf(character));
     }
 }
