@@ -38,7 +38,10 @@ public class YearPanel extends JPanel {
                 JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
                 int index = sourceTabbedPane.getSelectedIndex();
 
-                months.get(sourceTabbedPane.getTitleAt(index)).getDayPanel("1").load();
+                MonthPanel monthPanel =
+                        months.get(sourceTabbedPane.getTitleAt(index));
+                monthPanel.load();
+                monthPanel.getDayPanel("1").load();
             }
         };
         tp.addChangeListener(changeListener);

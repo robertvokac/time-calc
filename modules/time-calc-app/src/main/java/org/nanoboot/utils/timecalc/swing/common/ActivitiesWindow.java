@@ -96,7 +96,11 @@ public class ActivitiesWindow extends TWindow {
                 JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
                 int index = sourceTabbedPane.getSelectedIndex();
 
-                years.get(sourceTabbedPane.getTitleAt(index)).getMonthPanel("1").getDayPanel("1").load();
+                YearPanel yearPanel =
+                        years.get(sourceTabbedPane.getTitleAt(index));
+                MonthPanel monthPanel = yearPanel.getMonthPanel("1");
+                monthPanel.load();
+                monthPanel.getDayPanel("1").load();
             }
         };
         tp.addChangeListener(changeListener);

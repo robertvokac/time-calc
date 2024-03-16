@@ -68,6 +68,7 @@ public class DayPanel extends JPanel {
             //nothing to do
             return;
         }
+        System.out.println("Loaded: " + year + month + day);
         if (this.loadButton.isVisible()) {
             this.loadButton.setVisible(false);
             this.loadButton = null;

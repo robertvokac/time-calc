@@ -14,6 +14,9 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.function.BiConsumer;
 
 /**
@@ -59,6 +62,12 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
                             dayPanel.sortActivityPanels();
                         }
                     }
+                });
+            } else {
+                addMouseListener((MouseClickedListener) e -> {
+                    Clipboard
+                            clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(new StringSelection(getText()), null);
                 });
             }
 

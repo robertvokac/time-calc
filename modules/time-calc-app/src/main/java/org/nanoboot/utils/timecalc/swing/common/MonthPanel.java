@@ -21,9 +21,12 @@ public class MonthPanel extends JPanel {
 
     private final Map<String, DayPanel> days;
     private final TTabbedPane tp;
-
+    private final ActivityRepositoryApi activityRepository;
+    private final Calendar cal;
+    private boolean loaded = false;
     public MonthPanel(String yearIn, String monthIn, ActivityRepositoryApi activityRepository) {
         super();
+        this.activityRepository = activityRepository;
 
         this.year = yearIn;
         this.month = monthIn;
@@ -49,17 +52,27 @@ public class MonthPanel extends JPanel {
         };
         tp.addChangeListener(changeListener);
 
-        Calendar cal = Calendar.getInstance();
+        this.cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(year));
         cal.set(Calendar.MONTH, Integer.valueOf(month) - 1);
         cal.set(Calendar.DAY_OF_MONTH, 1);
+    }
+
+    public void load() {
+        if(loaded) {
+            //nothing to do
+            return;
+        }
+        System.out.println("Loaded: " + year + month);
         int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int day = 1; day <= maxDay; day++) {
             String dayS = String.valueOf(day);
-            DayPanel dayPanel = new DayPanel(year, month, dayS, activityRepository);
+            DayPanel dayPanel = new DayPanel(year, month, dayS,
+                    activityRepository);
             tp.add(dayS, dayPanel);
             days.put(dayS, dayPanel);
         }
+        loaded = true;
     }
 
     public void setSelectedDay(String day) {
