@@ -214,13 +214,16 @@ public class DayPanel extends JPanel {
         double done = 0d;
         double todo = 8d;
         for(ActivityPanel ap:list) {
-            panelInsideScrollPane.add(ap);
+
             double now = ap.getActivity().getSpentHours() + ap.getActivity().getSpentMinutes() / 60d;
             done = done + now;
             todo = todo - now;
             ap.today.setText(TTime.ofMilliseconds((int)(done * 60d * 60d * 1000d)).toString().substring(0,5));
             ap.remains.setText(TTime.ofMilliseconds((int)(todo * 60d * 60d * 1000d)).toString().substring(0,5));
+            panelInsideScrollPane.add(ap);
+            ap.revalidate();
         }
+
         revalidate();
     }
 

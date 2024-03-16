@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -61,8 +62,12 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         add(totalComment);
         add(today);
         add(remains);
+        name.setHorizontalAlignment(JTextField.LEFT);
+        comment.setHorizontalAlignment(JTextField.LEFT);
+        ticket.setHorizontalAlignment(JTextField.LEFT);
 
-//        JButton moveThisButton = new SmallTButton("Move ");
+
+        //        JButton moveThisButton = new SmallTButton("Move ");
 //        JButton moveBeforeButton = new SmallTButton("Here");
         JButton copyButton = new SmallTButton("Copy");
         JButton deleteButton = new SmallTButton("Delete");
@@ -241,6 +246,9 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         subject.setText(activity.createSubject());
         totalComment.setText(activity.createTotalComment());
         sortkey.setText(String.valueOf(activity.getSortkey()));
+        name.setFont(SwingUtils.VERY_SMALL_FONT);
+        comment.setFont(SwingUtils.VERY_SMALL_FONT);
+        ticket.setFont(SwingUtils.VERY_SMALL_FONT);
         this.activityRepository = activityRepository;
         //this.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 1));
         setAlignmentX(LEFT_ALIGNMENT);
