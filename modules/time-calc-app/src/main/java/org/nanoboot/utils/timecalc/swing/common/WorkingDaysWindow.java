@@ -334,7 +334,7 @@ public class WorkingDaysWindow extends TWindow {
                 if (wd == null) {
                     wd = new WorkingDay(WorkingDay.createId(year, month, day),
                             year, month, day, -1, -1, -1, -1, -1, -1,
-                            "Fictive day", true);
+                            "Fictive day", true,0);
                 }
                 workingDaysList.add(wd);
 
@@ -389,15 +389,17 @@ public class WorkingDaysWindow extends TWindow {
                         .substring(0, overtime.isNegative() ? 6 : 5));
                 list2.add(TTime.ofMinutes(wdfs.getWorkingTimeInMinutes())
                         .toString().substring(0, 5));
-                totalOvertime = totalOvertime + wdfs.getOvertimeHour() * 60 + wdfs.getOvertimeMinute();
+                totalOvertime = totalOvertime + wdfs.getOvertimeHour() * 60 + wdfs.getOvertimeMinute() - wdfs.getForgetOvertime();
                 list2.add(
                         TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString()
                                 .substring(0, 5));
             }
             list2.add(wdfs.getNote());
             list2.add(wdfs.isTimeOff() ? YES : NO);
+            TTime forgetOvertime = TTime.ofMinutes(wdfs.getForgetOvertime());
+            list2.add(forgetOvertime.toString().substring(0,5));
             TTime totalOvertimeTTime = TTime.ofMinutes(totalOvertime);
-            list2.add((totalOvertimeTTime.getHour() < 10 ? "0" : "") + totalOvertimeTTime.getHour() + ":" + (totalOvertimeTTime.getMinute() < 10 ? "0" : "") + totalOvertimeTTime.getMinute());
+            list2.add((totalOvertimeTTime.isNegative() ? "-" : "") + (totalOvertimeTTime.getHour() < 10 ? "0" : "") + totalOvertimeTTime.getHour() + ":" + (totalOvertimeTTime.getMinute() < 10 ? "0" : "") + totalOvertimeTTime.getMinute());
             list2.add(TTime.ofMilliseconds(
                     (int) (wdfs.getArrivalTimeMovingAverage7Days() * 60d * 60d * 1000d)).toString().substring(0, 8));
             list2.add(TTime.ofMilliseconds(
@@ -421,7 +423,7 @@ public class WorkingDaysWindow extends TWindow {
         String[] columns =
                 new String[] {"Day of Week", "Weekend", "Date", "Arrival",
                         "Departure", "Overtime", "Working time", "Pause time",
-                        "Note", "Time off", "Total overtime", "Arrival MA7",
+                        "Note", "Time off", "Forget overtime", "Total overtime", "Arrival MA7",
                         "Arrival MA14", "Arrival MA28", "Arrival MA56"};
 
         if (table != null) {

@@ -3,11 +3,9 @@ package org.nanoboot.utils.timecalc.swing.common;
 import org.nanoboot.utils.timecalc.entity.Activity;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.HashMap;
@@ -35,7 +33,7 @@ public class DayPanel extends JPanel {
         this.month = monthIn;
         this.day = dayIn;
         this.activityRepository = activityRepository;
-        setSize(1050, 600);
+        setSize(1350, 600);
 
         this.setLayout(null);
         this.loadButton = new JButton("Load");
@@ -64,7 +62,7 @@ public class DayPanel extends JPanel {
         this.setLayout(boxLayout);
 
         JPanel buttons = new JPanel();
-        buttons.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+        //buttons.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
         buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
         buttons.setAlignmentX(LEFT_ALIGNMENT);
         JButton newButton = new JButton("New");
@@ -72,15 +70,30 @@ public class DayPanel extends JPanel {
         buttons.add(newButton);
         buttons.add(pasteButton);
         add(buttons);
+        ActivityHeader activityHeader = new ActivityHeader();
+        add(activityHeader);
+        activityHeader.setMaximumSize(new Dimension(1200, 40));
         buttons.setMaximumSize(new Dimension(1000, 40));
+        for (Activity a : activityRepository.list(
+                Integer.valueOf(year),
+                Integer.valueOf(month),
+                Integer.valueOf(day))) {
+
+            ActivityPanel comp =
+                    new ActivityPanel(activityRepository, a);
+            comp.setMaximumSize(new Dimension(1200, 40));
+            add(comp);
+
+        }
+        revalidate();
         newButton.addActionListener(e-> {
             Activity newActivity = new Activity(UUID.randomUUID().toString(), Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day), "", "", "", 0, 0, "", null);
             ActivityPanel comp =
                     new ActivityPanel(activityRepository, newActivity);
-            comp.setMaximumSize(new Dimension(1000, 40));
+            comp.setMaximumSize(new Dimension(1200, 40));
             add(comp);
             activityRepository.create(newActivity);
-            repaint();
+            revalidate();
         });
 //        for (int i = 0; i < 10; i++) {
 //            add(new ActivityPanel(activityRepository,

@@ -10,6 +10,7 @@ import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
+import javax.swing.JOptionPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
@@ -564,6 +565,36 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     timeCalcConfiguration.clockCentreCircleBlackProperty.disable();
                     timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty.disable();
                     timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty.disable();
+                }
+                break;
+            }
+            case KeyEvent.VK_Z: {
+                String newForgetOvertime = (String) JOptionPane.showInputDialog(
+                        null,
+                        "Set new forget overtime. Current value is: " + mainWindow.getForgetOvertime(),
+                        "New forget overtime",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        mainWindow.getForgetOvertime()
+                );
+                int newForgetOvertimeInt = -1;
+                if(newForgetOvertime != null) {
+                    if(newForgetOvertime.contains(":")) {
+                        newForgetOvertimeInt = new TTime(newForgetOvertime).toTotalMilliseconds() / 1000 / 60;
+                    } else {
+                        try {
+                            newForgetOvertimeInt =
+                                    Integer.parseInt(newForgetOvertime);
+                        } catch (Exception e) {
+                            Utils.showNotification(e);
+                        }
+                    }
+                }
+                if(newForgetOvertimeInt >= 0) {
+                    mainWindow.setForgetOvertime(newForgetOvertimeInt);
+                } else {
+                    Utils.showNotification("Error:Forget overtime must not be less than zero.");
                 }
                 break;
             }

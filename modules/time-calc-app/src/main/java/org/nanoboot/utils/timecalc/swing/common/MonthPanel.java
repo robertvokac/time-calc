@@ -32,7 +32,7 @@ public class MonthPanel extends JPanel {
         setLayout(null);
         this.tp = new TTabbedPane();
         add(tp);
-        tp.setBounds(0, 0, 1100, 650);
+        tp.setBounds(0, 0, 1350, 650);
 
         ChangeListener changeListener = new ChangeListener() {
             private boolean secondOrLaterChange = false;

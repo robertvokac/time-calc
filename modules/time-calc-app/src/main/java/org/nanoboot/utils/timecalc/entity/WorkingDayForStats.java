@@ -198,28 +198,29 @@ public class WorkingDayForStats extends WorkingDay {
         return acd;
     }
 
-    public WorkingDayForStats(WorkingDay workingDay) {
-        this(workingDay.getId(),
-                workingDay.getYear(),
-                workingDay.getMonth(),
-                workingDay.getDay(),
-                workingDay.getArrivalHour(),
-                workingDay.getArrivalMinute(),
-                workingDay.getOvertimeHour(),
-                workingDay.getOvertimeMinute(),
-                workingDay.getWorkingTimeInMinutes(),
-                workingDay.getPauseTimeInMinutes(),
-                workingDay.getNote(),
-                workingDay.isTimeOff());
+    public WorkingDayForStats(WorkingDay wd) {
+        this(wd.getId(),
+                wd.getYear(),
+                wd.getMonth(),
+                wd.getDay(),
+                wd.getArrivalHour(),
+                wd.getArrivalMinute(),
+                wd.getOvertimeHour(),
+                wd.getOvertimeMinute(),
+                wd.getWorkingTimeInMinutes(),
+                wd.getPauseTimeInMinutes(),
+                wd.getNote(),
+                wd.isTimeOff(),
+                wd.getForgetOvertime());
     }
 
     public WorkingDayForStats(String id, int year, int month, int day,
             int arrivalHour, int arrivalMinute, int overtimeHour,
             int overtimeMinute, int workingTimeInMinutes,
-            int pauseTimeInMinutes, String note, boolean timeOff) {
+            int pauseTimeInMinutes, String note, boolean timeOff, int forgetOvertime) {
         super(id, year, month, day, arrivalHour, arrivalMinute, overtimeHour,
                 overtimeMinute, workingTimeInMinutes, pauseTimeInMinutes, note,
-                timeOff);
+                timeOff, forgetOvertime);
         this.arrival = this.isThisDayTimeOff() ? null :
                 new TTime(arrivalHour, arrivalMinute);
         this.overtime = this.isThisDayTimeOff() ? null :

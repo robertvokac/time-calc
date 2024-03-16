@@ -39,6 +39,7 @@ public class WorkingDayTable {
     public static final String PAUSE_TIME_IN_MINUTES = "PAUSE_TIME_IN_MINUTES";
     public static final String NOTE = "NOTE";
     public static final String TIME_OFF = "TIME_OFF";
+    public static final String FORGET_OVERTIME = "FORGET_OVERTIME";
 
     private WorkingDayTable() {
         //Not meant to be instantiated.

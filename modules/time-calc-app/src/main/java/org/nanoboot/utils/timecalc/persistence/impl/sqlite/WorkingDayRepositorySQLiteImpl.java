@@ -35,7 +35,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
         sb
                 .append("INSERT INTO ")
                 .append(WorkingDayTable.TABLE_NAME)
-                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?)");
+                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?,?)");
 
         String sql = sb.toString();
 
@@ -57,6 +57,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
             stmt.setString(++i, workingDay.getNote());
             stmt.setInt(++i, workingDay.isTimeOff() ? 1 : 0);
+            stmt.setInt(++i, workingDay.getForgetOvertime());
 
             //
             stmt.execute();
@@ -154,7 +155,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
                 .append(WorkingDayTable.WORKING_TIME_IN_MINUTES).append("=?, ")
                 .append(WorkingDayTable.PAUSE_TIME_IN_MINUTES).append("=?, ")
                 .append(WorkingDayTable.NOTE).append("=?, ")
-                .append(WorkingDayTable.TIME_OFF).append("=? ")
+                .append(WorkingDayTable.TIME_OFF).append("=?, ")
+                .append(WorkingDayTable.FORGET_OVERTIME).append("=? ")
                 .append(" WHERE ").append(
                 WorkingDayTable.ID).append("=?");
 
@@ -171,6 +173,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
             stmt.setString(++i, workingDay.getNote());
             stmt.setInt(++i, workingDay.isTimeOff() ? 1 : 0);
+            stmt.setInt(++i, workingDay.getForgetOvertime());
 
             stmt.setString(++i, workingDay.getId());
 
@@ -204,7 +207,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
                 rs.getInt(WorkingDayTable.WORKING_TIME_IN_MINUTES),
                 rs.getInt(WorkingDayTable.PAUSE_TIME_IN_MINUTES),
                 rs.getString(WorkingDayTable.NOTE),
-                rs.getInt(WorkingDayTable.TIME_OFF) != 0
+                rs.getInt(WorkingDayTable.TIME_OFF) != 0,
+                rs.getInt(WorkingDayTable.FORGET_OVERTIME)
         );
     }
 
@@ -285,7 +289,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
         System.out.println("#"+year+month+day);
         StringBuilder sb = new StringBuilder();
         sb
-                .append("SELECT (sum(OVERTIME_HOUR)*60 + sum(OVERTIME_MINUTE)) as total_overtime FROM ")
+                .append("SELECT (sum(OVERTIME_HOUR)*60 + sum(OVERTIME_MINUTE) - sum(FORGET_OVERTIME)) as total_overtime FROM ")
                 .append(WorkingDayTable.TABLE_NAME)
                 .append(" WHERE ")
                 .append(WorkingDayTable.YEAR).append(" * 10000 + ")

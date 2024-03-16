@@ -162,6 +162,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * L - hide or show progress circle
 * M - hide or show walking human
 * Y - hide or show smileys
+* Z - set forget overtime
 * LEFT - switch to previous profile
 * RIGHT - switch to next profile
 * K - hide or show clock

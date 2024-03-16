@@ -23,7 +23,7 @@ public class ActivitiesWindow extends TWindow {
     private final Map<String, YearPanel> years;
 
     public ActivitiesWindow(ActivityRepositoryApi activityRepositoryApiIn, Time time) {
-        setSize(1200, 800);
+        setSize(1600, 800);
         setTitle("Activities");
         this.activityRepository = activityRepositoryApiIn;
 
@@ -51,7 +51,7 @@ public class ActivitiesWindow extends TWindow {
         add(exitButton);
         exitButton.addActionListener(e -> activitiesWindow.setVisible(false));
 
-        tp.setBounds(addYearButton.getX(), addYearButton.getY() + addYearButton.getHeight() + SwingUtils.MARGIN, 1180, 600);
+        tp.setBounds(addYearButton.getX(), addYearButton.getY() + addYearButton.getHeight() + SwingUtils.MARGIN, 1500, 750);
         yearsList.forEach(y -> {
             final YearPanel yearPanel = new YearPanel(y, activityRepository);
             tp.add(y, yearPanel);

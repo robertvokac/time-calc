@@ -46,6 +46,7 @@ import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
 /**
  * @author Robert Vokac
@@ -87,6 +88,8 @@ public class MainWindow extends TWindow {
     private boolean stopBeforeEnd = false;
     private final WorkingDayRepositorySQLiteImpl workingDayRepository;
     private final ActivityRepositoryApi activityRepository;
+
+    private final IntegerProperty forgetOvertimeProperty = new IntegerProperty("forgetOvertimeProperty", 0);
     
 
     {
@@ -660,6 +663,7 @@ public class MainWindow extends TWindow {
             workingDay.setPauseTimeInMinutes(pause_.toTotalMilliseconds() / 1000 / 60);
             workingDay.setNote(noteTextField.getText());
             workingDay.setTimeOff(timeOffCheckBox.isSelected());
+            workingDay.setForgetOvertime(forgetOvertimeProperty.getValue());
             workingDayRepository.update(workingDay);
 
             if(workingDaysWindow != null) {
@@ -674,6 +678,7 @@ public class MainWindow extends TWindow {
             pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
             noteTextField.valueProperty.setValue(wd.getNote());
             timeOffCheckBox.setSelected(wd.isTimeOff());
+            forgetOvertimeProperty.setValue(wd.getForgetOvertime());
         } else {
             Calendar cal = time.asCalendar();
             int year = cal.get(Calendar.YEAR);
@@ -1058,4 +1063,6 @@ public class MainWindow extends TWindow {
     public void doSaveButtonClick(){
         this.saveButton.doClick();
     }
+    public int getForgetOvertime() {return this.forgetOvertimeProperty.getValue();}
+    public void setForgetOvertime(int minutes) {this.forgetOvertimeProperty.setValue(minutes);}
 }

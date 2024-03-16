@@ -41,6 +41,7 @@ public class WorkingDay {
     private int pauseTimeInMinutes;
     private String note;
     private boolean timeOff;
+    private int forgetOvertime;
 
     public boolean isThisDayTimeOff() {
         return timeOff || this.note.equals(NODATA);
