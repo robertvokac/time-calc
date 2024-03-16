@@ -184,13 +184,20 @@ Smileys can be colored or white-black (can be set in configuration)
 ## Command button
 
 ## Todos
-* New table: YEAR
+
+### New features
+
+* Custom arrival target
 * Split to Maven modules
 * Junit, Mockito, etc.
 * Checkstyle
 * Sonarlint
 * Sonarqube
-* Add SQLite support and store times of arrivals and departures and time of activities
+
+### Fix these known bugs
+
+* Clock, square and circle are grey, if visibility mode is weakly colored.
+* Decreasing real time sometimes does not work correctly.
 
 ## For Developers
 

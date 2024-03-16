@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
-import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 
 import java.util.List;
@@ -23,17 +23,15 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
     public ActivityRepositorySQLiteImpl(SqliteConnectionFactory sqliteConnectionFactory) {
         this.sqliteConnectionFactory = sqliteConnectionFactory;
     }
-    
-    
+
     @Override
     public void create(Activity activity) {
-                
-
+        Activity lastActivityForDay = getLastActivityForDay(activity.getYear(), activity.getMonth(), activity.getDay());
         StringBuilder sb = new StringBuilder();
         sb
                 .append("INSERT INTO ")
                 .append(ActivityTable.TABLE_NAME)
-                .append(" VALUES (?,?,?,?, ?,?,?,?,?)");
+                .append(" VALUES (?,?,?,?, ?,?,?,?,?,?)");
 
         String sql = sb.toString();
 
@@ -52,6 +50,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             stmt.setInt(++i, activity.getSpentHours());
             stmt.setInt(++i, activity.getSpentMinutes());
             stmt.setString(++i, activity.getFlags());
+            stmt.setNull(++i, Types.VARCHAR);
 
             //
             stmt.execute();
@@ -64,6 +63,11 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             throw new TimeCalcException(ex);
         }
 
+        if(lastActivityForDay != null) {
+            lastActivityForDay.setNextActivityId(activity.getId());
+            update(lastActivityForDay);
+        }
+
     }
 
     @Override
@@ -72,7 +76,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
     }
 
     @Override
-    public WorkingDay read(String id) {
+    public Activity read(String id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -242,6 +246,12 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             }
         }
         return result;
+    }
+
+
+    @Override
+    public Activity getLastActivityForDay(int year, int month, int day) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override

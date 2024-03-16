@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Activity {
+public class Activity implements Comparable<Activity> {
 
     private static final String SUBJECT_FIELD_SEPARATOR = " : ";
 
@@ -28,6 +28,7 @@ public class Activity {
     private int spentHours;
     private int spentMinutes;
     private String flags;
+    private String nextActivityId;
 
     public String createSubject() {
         return ticket + SUBJECT_FIELD_SEPARATOR + name;
@@ -56,6 +57,28 @@ public class Activity {
         set.remove(flag);
         this.flags = set.stream().collect(Collectors.joining(":"));
     }
-    
 
+    @Override
+    public int compareTo(Activity o) {
+
+        int result = Integer.valueOf(year).compareTo(Integer.valueOf(o.year));
+        if(result != 0) {
+            return result;
+        }
+        result = Integer.valueOf(month).compareTo(Integer.valueOf(o.month));
+        if(result != 0) {
+            return result;
+        }
+        result = Integer.valueOf(day).compareTo(Integer.valueOf(o.day));
+        if(result != 0) {
+            return result;
+        }
+        if(this.nextActivityId != null && this.nextActivityId.equals(o.getId())) {
+            return -1;
+        }
+        if(o.nextActivityId != null && o.nextActivityId.equals(o.getId())) {
+            return 1;
+        }
+        return 0;
+    }
 }

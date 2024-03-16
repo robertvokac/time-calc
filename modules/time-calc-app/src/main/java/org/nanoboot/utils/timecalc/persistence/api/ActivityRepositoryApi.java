@@ -1,7 +1,6 @@
 package org.nanoboot.utils.timecalc.persistence.api;
 
 import org.nanoboot.utils.timecalc.entity.Activity;
-import org.nanoboot.utils.timecalc.entity.WorkingDay;
 
 import java.util.List;
 
@@ -13,11 +12,13 @@ public interface ActivityRepositoryApi {
 
     void create(Activity activity);
 
+    Activity getLastActivityForDay(int year, int month, int day);
+
     List<Activity> list(int year, int month, int day);
 
     void update(Activity activity);
 
-    WorkingDay read(String id);
+    Activity read(String id);
     
     void delete(String id);
     
