@@ -200,6 +200,8 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.LIFE_VISIBLE.getKey());
     public final JTextField lifeTypeProperty
             = new JTextField(TimeCalcProperty.LIFE_TYPE.getKey());
+    public final JTextField lifeBirthDateProperty
+            = new JTextField(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
     public final JCheckBox moneyVisibleProperty
             = new JCheckBox(TimeCalcProperty.MONEY_VISIBLE.getKey());
     public final JTextField moneyTypeProperty
@@ -208,8 +210,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField(TimeCalcProperty.MONEY_PER_MONTH.getKey());
     public final JTextField moneyCurrencyProperty
             = new JTextField(TimeCalcProperty.MONEY_CURRENCY.getKey());
-    public final JTextField lifeBirthDateProperty
-            = new JTextField(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
+    public final JCheckBox weatherVisibleProperty
+            = new JCheckBox(TimeCalcProperty.WEATHER_VISIBLE.getKey());
     private final JTextField mainWindowCustomTitleProperty
             = new JTextField();
     private final JTextField profileNameProperty
@@ -386,6 +388,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty.setSelected(enable);
                 lifeVisibleProperty.setSelected(enable);
                 moneyVisibleProperty.setSelected(enable);
+                weatherVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
@@ -460,6 +463,7 @@ public class ConfigWindow extends TWindow {
                 moneyTypeProperty,
                 moneyPerMonthProperty,
                 moneyCurrencyProperty,
+                weatherVisibleProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
                 activityNeededFlagsProperty,

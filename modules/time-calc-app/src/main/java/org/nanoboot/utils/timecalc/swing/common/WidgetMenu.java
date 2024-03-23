@@ -4,6 +4,7 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.Battery;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressWeather;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -55,7 +56,7 @@ public class WidgetMenu extends JPopupMenu {
 
         BiConsumer<JMenuItem, WidgetType> typeActionCreator = (m,w) -> {
             m.addActionListener(e -> {
-                if(((widget instanceof Battery) || (widget instanceof AnalogClock)) && !widget.typeProperty.getValue().equals(w.name().toLowerCase(Locale.ROOT))) {
+                if(((widget instanceof Battery) || (widget instanceof AnalogClock) || (widget instanceof ProgressWeather)) && !widget.typeProperty.getValue().equals(w.name().toLowerCase(Locale.ROOT))) {
                     //nothing to do
                     return;
                 }

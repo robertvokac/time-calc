@@ -95,6 +95,7 @@ public enum TimeCalcProperty {
     MONEY_TYPE("money.type", "Money : Type"),
     MONEY_PER_MONTH("money.per-month", "Money : Per month", Integer.class),
     MONEY_CURRENCY("money.currency", "Money : Currency", String.class),
+    WEATHER_VISIBLE("weather.visible", "Weather"),
     MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title","Main Window : Custom Title"),
     PROFILE_NAME("profile.name", "Profile : Name"),
     TEST_ENABLED("test.enabled", "Test : Enabled", Boolean.class),

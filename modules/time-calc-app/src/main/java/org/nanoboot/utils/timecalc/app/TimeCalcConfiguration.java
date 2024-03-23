@@ -188,6 +188,8 @@ public class TimeCalcConfiguration {
             = new IntegerProperty(TimeCalcProperty.MONEY_PER_MONTH.getKey());
     public final StringProperty moneyCurrencyProperty
             = new StringProperty(TimeCalcProperty.MONEY_CURRENCY.getKey());
+    public final BooleanProperty weatherVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.WEATHER_VISIBLE.getKey());
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(
                     TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
@@ -278,6 +280,7 @@ public class TimeCalcConfiguration {
             moneyTypeProperty,
             moneyPerMonthProperty,
             moneyCurrencyProperty,
+            weatherVisibleProperty,
             mainWindowCustomTitleProperty,
             profileNameProperty,
             activityNeededFlagsProperty,

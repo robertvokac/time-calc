@@ -27,14 +27,12 @@ import java.util.Locale;
  */
 public class ProgressMoney extends Widget implements GetProperty {
 
-    private final Time time;
     public IntegerProperty perMonthProperty
             = new IntegerProperty("money.perMonthProperty");
     public StringProperty currencyProperty
             = new StringProperty("money.currencyProperty");
 
-    public ProgressMoney(Time time) {
-        this.time = time;
+    public ProgressMoney() {
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
 
         setFocusable(false);

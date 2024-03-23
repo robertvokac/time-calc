@@ -37,6 +37,7 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressWeather;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
@@ -102,6 +103,7 @@ public class MainWindow extends TWindow {
     private final TButton saveButton;
     private final ProgressLife progressLife;
     private final ProgressMoney progressMoney;
+    private final ProgressWeather progressWeather;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -342,7 +344,7 @@ public class MainWindow extends TWindow {
 
 
         this.progressMoney
-                = new ProgressMoney(time);
+                = new ProgressMoney();
         progressMoney.setBounds(progressLife.getX(), progressSwing.getY() + progressLife.getHeight() + SwingUtils.MARGIN,
                 100, 50);
 
@@ -354,8 +356,16 @@ public class MainWindow extends TWindow {
                     .bindTo(timeCalcConfiguration.moneyPerMonthProperty);
         progressMoney.currencyProperty
                     .bindTo(timeCalcConfiguration.moneyCurrencyProperty);
-
         add(progressMoney);
+
+        this.progressWeather
+                = new ProgressWeather(time);
+        progressWeather.setBounds(progressLife.getX() + progressLife.getWidth() + SwingUtils.MARGIN, progressLife.getY(),
+                100, 100);
+
+        progressWeather.visibleProperty
+                .bindTo(timeCalcConfiguration.weatherVisibleProperty);
+        add(progressWeather);
 
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
