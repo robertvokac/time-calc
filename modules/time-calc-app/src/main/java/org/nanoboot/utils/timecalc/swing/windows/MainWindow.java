@@ -333,6 +333,8 @@ public class MainWindow extends TWindow {
                     .bindTo(timeCalcConfiguration.lifeTypeProperty);
             progressLife.birthDateProperty
                     .bindTo(timeCalcConfiguration.lifeBirthDateProperty);
+            progressLife.visibleProperty
+                    .bindTo(timeCalcConfiguration.lifeVisibleProperty);
         }
         add(progressLife);
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
