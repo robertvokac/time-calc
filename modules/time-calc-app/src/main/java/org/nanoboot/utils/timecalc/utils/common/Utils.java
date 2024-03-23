@@ -225,6 +225,7 @@ public class Utils {
         if (height != 0) {
             toaster.setToasterHeight(height);
         }
+        toaster.setToasterWidth(400);
         toaster.showToaster(message);
     }
 

@@ -11,6 +11,8 @@ public class NumberFormats {
 
     public static final NumberFormat FORMATTER_ZERO_DECIMAL_PLACES
             = new DecimalFormat("#00");
+    public static final NumberFormat FORMATTER_ONE_DECIMAL_PLACE
+            = new DecimalFormat("#0.0");
     public static final NumberFormat FORMATTER_TWO_DECIMAL_PLACES
             = new DecimalFormat("#0.00");
     public static final NumberFormat FORMATTER_FIVE_DECIMAL_PLACES

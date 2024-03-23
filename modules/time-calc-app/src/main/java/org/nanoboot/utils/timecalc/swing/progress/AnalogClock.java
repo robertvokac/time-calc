@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import javax.swing.JMenuItem;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
@@ -107,7 +108,7 @@ public class AnalogClock extends Widget {
     private TMenuItem secondHandMenuItem;
     private TMenuItem minuteHandMenuItem;
     private TMenuItem hourHandMenuItem;
-    private List<JMenu> menuItems = null;
+    private List<JMenuItem> menuItems = null;
 
     public AnalogClock() {
         typeProperty.setValue(WidgetType.DAY.name().toLowerCase(Locale.ROOT));
@@ -421,7 +422,7 @@ public class AnalogClock extends Widget {
     }
 
     @Override
-    public List<JMenu> createAdditionalMenus() {
+    public List<JMenuItem> createAdditionalMenus() {
         if(menuItems == null) {
             menuItems = new ArrayList<>();
             JMenu hands = new JMenu("Hands");

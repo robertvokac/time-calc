@@ -31,6 +31,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import javax.swing.JMenuItem;
 
 /**
  * @author Robert Vokac
@@ -170,7 +171,7 @@ public class Widget extends JPanel implements
             private void showPopup(MouseEvent e) {
                 if(widgetMenu == null) {
                     widgetMenu = new WidgetMenu(widget, createRefreshConsumer());
-                    List<JMenu> additionalMenus = createAdditionalMenus();
+                    List<JMenuItem> additionalMenus = createAdditionalMenus();
                     if(additionalMenus != null) {
                         additionalMenus.forEach(m-> widgetMenu.add(m));
                     }
@@ -191,7 +192,7 @@ public class Widget extends JPanel implements
     protected Consumer<Object> createRefreshConsumer() {
         return null;
     }
-    protected List<JMenu> createAdditionalMenus() {
+    protected List<JMenuItem> createAdditionalMenus() {
         return null;
     }
 
@@ -242,12 +243,21 @@ public class Widget extends JPanel implements
 
         if (visibleProperty.isDisabled() || hidden) {
             if(hidden) {
+                if(this.smileyIcon != null) {
+                    this.remove(this.smileyIcon);
+                    this.smileyIcon = null;
+                }
+                if(this.smileyIcon2 != null) {
+                    this.remove(this.smileyIcon2);
+                    this.smileyIcon2 = null;
+                }
                 if (mouseOver) {
                     Color currentColor = brush.getColor();
                     brush.setColor(VERY_LIGHT_GRAY);
                     brush.fillRect(1, 1, getWidth() - 2, getHeight() - 2);
                     brush.setColor(currentColor);
                 }
+                brush.drawString("Show", (int) (getWidth() * 0.5 - 10), (int) (getHeight() * 0.5 - 10));
             }
             //nothing to do
             return;
