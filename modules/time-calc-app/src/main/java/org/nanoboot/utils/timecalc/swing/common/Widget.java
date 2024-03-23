@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
+import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.progress.Battery;
@@ -64,7 +65,7 @@ public class Widget extends JPanel implements
     public StringProperty typeProperty
             = new StringProperty("widget.typeProperty", WidgetType.DAY.name().toLowerCase());
     protected int side = 0;
-    protected double donePercent = 0;
+    private Progress progress = null;
     protected boolean mouseOver = false;
     private boolean mouseOverCloseButton = false;
     protected JLabel smileyIcon;
@@ -153,20 +154,24 @@ public class Widget extends JPanel implements
     //        }
     //
     //    }
-    public final void setDonePercent(double newDonePercent) {
-        if (newDonePercent > 1) {
-            newDonePercent = 1;
-        }
-        if (newDonePercent < 0) {
-            newDonePercent = 0;
-        }
-        double oldDonePercent = this.donePercent;
+    public final void setProgress(Progress newProgress) {
+
+        double oldDonePercent = this.progress == null ? 0 : this.progress.get(WidgetType.DAY);
         int oldDonePercentInt1000Mil = (int) (oldDonePercent * 1000000000);
-        this.donePercent = newDonePercent;
-        int newDonePercentInt1000Mil = (int) (newDonePercent * 1000000000);
+
+        int newDonePercentInt1000Mil = (int) (newProgress.get(WidgetType.DAY) * 1000000000);
         if (newDonePercentInt1000Mil != oldDonePercentInt1000Mil) {
             lastUpdate = System.nanoTime();
         }
+        this.progress = newProgress;
+    }
+
+    protected double donePercent() {
+        if(progress == null) {
+            return 0;
+        }
+        return progress.get(WidgetType.valueOf(typeProperty.getValue().toUpperCase(
+                Locale.ROOT)));
     }
 
     public void setBounds(int x, int y, int side) {
@@ -300,7 +305,7 @@ public class Widget extends JPanel implements
             brush.setColor(currentColor);
             brush.setFont(MEDIUM_FONT);
             brush.drawString(
-                    ProgressSmiley.forProgress(customDonePercent >= 0 ? customDonePercent : donePercent).getCharacter(),
+                    ProgressSmiley.forProgress(customDonePercent >= 0 ? customDonePercent : donePercent()).getCharacter(),
                     x + 1 + (getClass() == ProgressSwing.class ? -8 : 0), y + 16
             );
             brush.setFont(currentFont);
@@ -309,7 +314,7 @@ public class Widget extends JPanel implements
         if (colored) {
             x = x + 2;
             ImageIcon imageIcon = ProgressSmileyIcon
-                    .forSmiley(ProgressSmiley.forProgress(customDonePercent >= 0 ? customDonePercent : donePercent))
+                    .forSmiley(ProgressSmiley.forProgress(customDonePercent >= 0 ? customDonePercent : donePercent()))
                     .getIcon();
             if(smileyNumber < 2) {
                 if (this.smileyIcon != null) {
@@ -359,8 +364,8 @@ public class Widget extends JPanel implements
         //Color currentBackgroundColor = brush.getBackground();
         Font currentFont = brush.getFont();
         brush.setFont(BIG_FONT);
-        int q = donePercent < 0.25 ? 0 : (donePercent < 0.5 ? 1 :
-                (donePercent < 0.75 ? 2 : (donePercent < 1.0 ? 3 : 4)));
+        int q = donePercent() < 0.25 ? 0 : (donePercent() < 0.5 ? 1 :
+                (donePercent() < 0.75 ? 2 : (donePercent() < 1.0 ? 3 : 4)));
         Color color;
         Color backgroundColor;
         switch (visibility) {
@@ -400,7 +405,7 @@ public class Widget extends JPanel implements
         brush.setColor(backgroundColor);
         if(x< 0 || y < 0) {
             brush.fillRect(((int) (totalWidth * 0.08)),
-                    (donePercent < 0.5 ? totalHeight / 4 * 3
+                    (donePercent() < 0.5 ? totalHeight / 4 * 3
                             : (totalHeight / 4 * 1) + 10) + -8, 20, 20);
         } else {
             brush.fillRect(x, y, 20, 20);
@@ -409,7 +414,7 @@ public class Widget extends JPanel implements
         if(x< 0 || y < 0) {
             brush.drawString(
                     String.valueOf(q), ((int) (totalWidth * 0.13)),
-                    (donePercent < 0.5 ? totalHeight / 4 * 3
+                    (donePercent() < 0.5 ? totalHeight / 4 * 3
                             : (totalHeight / 4 * 1) + 10) + 10
             );
         } else {

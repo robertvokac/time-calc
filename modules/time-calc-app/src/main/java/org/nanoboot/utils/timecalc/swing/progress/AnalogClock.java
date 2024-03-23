@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
@@ -21,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
@@ -96,8 +98,10 @@ public class AnalogClock extends Widget {
     public final BooleanProperty smileyVisibleProperty = new BooleanProperty("smileyVisibleProperty");
     public final BooleanProperty percentProgressVisibleProperty = new BooleanProperty("percentProgressVisibleProperty");
     private Color customCircleColor = null;
+    private double dayProgress;
 
     public AnalogClock() {
+        typeProperty.setValue(WidgetType.DAY.name().toLowerCase(Locale.ROOT));
 
         setPreferredSize(new Dimension(200, 200));
 
@@ -181,7 +185,7 @@ public class AnalogClock extends Widget {
         int total = endMS - startMS;
         int done = nowMS - startMS;
         double progress = ((double)done) / ((double)total);
-        setDonePercent(progress);
+        this.dayProgress = progress;
 
         //System.out.println("clock.handsLongProperty=" + handsLongProperty.isEnabled());
         Visibility visibility
@@ -380,7 +384,7 @@ public class AnalogClock extends Widget {
         }
 
         if(percentProgressVisibleProperty.isEnabled()) {
-            brush.drawString(((int) Math.floor(donePercent * 100)) + "%",
+            brush.drawString(((int) Math.floor(dayProgress * 100)) + "%",
                     ((int) (side * 0.25)),
                     ((int) (side * 0.35)) + 35);
         }

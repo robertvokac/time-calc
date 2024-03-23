@@ -45,6 +45,7 @@ public class ProgressSwing extends Widget {
                 (int) (getHeight() * 0.66) - 10 - 3, 6, 6);
         brush.drawLine(1, getHeight() - 2, getWidth(), getHeight() - 2);
         int startX = (int) (getWidth() * 0.10);
+        double donePercent = donePercent();
         int startY = (int) (getHeight() - getHeight() * 0.66 * (1 - donePercent)) - 10;
         int endX = (int) (getWidth() * 0.90);
         int endY = (int) (getHeight() - getHeight() * 0.66 * donePercent) - 10;

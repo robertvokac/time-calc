@@ -92,7 +92,7 @@ public class WalkingHumanProgress extends Widget implements
                     paintSmiley(visibility,
                             (Graphics2D) brush,
                             //29 309
-                            29 + ((int) (280 * donePercent)),
+                            29 + ((int) (280 * donePercent())),
                             y - 4, true);
                 }
                 y = y + SwingUtils.MARGIN;
@@ -112,7 +112,7 @@ public class WalkingHumanProgress extends Widget implements
         this.setVisible(visibility != Visibility.NONE);
 
         StringBuilder sb = new StringBuilder();
-        final int donePercentInt = (int) (Math.floor(donePercent * 100));
+        final int donePercentInt = (int) (Math.floor(donePercent() * 100));
 
         int percentInt = donePercentInt;
         if (donePercentInt % 5 == 0 && !alreadyShownPercents.contains(donePercentInt)) {
@@ -147,7 +147,7 @@ public class WalkingHumanProgress extends Widget implements
 
         }
         int spacesTotal = 40;
-        int spacesDone = (int) (donePercent * spacesTotal);
+        int spacesDone = (int) (donePercent() * spacesTotal);
         if (spacesDone > spacesTotal) {
             spacesDone = spacesTotal;
         }
@@ -174,9 +174,9 @@ public class WalkingHumanProgress extends Widget implements
                 + createRepeatedString(spacesTotal + 14, '=')
                 + Constants.NEW_LINE + "Steps: "
                 + NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                        .format(donePercent * ((double) spacesTotal)) + "/"
+                        .format(donePercent() * ((double) spacesTotal)) + "/"
                 + spacesTotal + " Done: " + NumberFormats.FORMATTER_EIGHT_DECIMAL_PLACES
-                        .format(donePercent * 100d) + "%"
+                        .format(donePercent() * 100d) + "%"
         );
         return sb.toString();
     }

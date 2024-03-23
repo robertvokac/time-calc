@@ -75,7 +75,7 @@ public class ProgressLife extends Widget implements GetProperty {
             Date now = time.asCalendar().getTime();
             long diff = now.getTime() - birthDate.getTime();
             Date result = new Date(
-                    (long) (birthDate.getTime() + diff * donePercent));
+                    (long) (birthDate.getTime() + diff * donePercent()));
 
             String date =
                     DateFormats.DATE_TIME_FORMATTER_YYYYMMDD.format(result);
@@ -97,6 +97,9 @@ public class ProgressLife extends Widget implements GetProperty {
             brush.drawString(time, SwingUtils.MARGIN, (int) (SwingUtils.MARGIN
                                           + (getHeight() - SwingUtils.MARGIN)
                                             * 0.6d));
+            brush.drawString(typeProperty.getValue(), SwingUtils.MARGIN, (int) (SwingUtils.MARGIN
+                                                             + (getHeight() - SwingUtils.MARGIN)
+                                                               * 0.6d) + 20);
 
         }
     }

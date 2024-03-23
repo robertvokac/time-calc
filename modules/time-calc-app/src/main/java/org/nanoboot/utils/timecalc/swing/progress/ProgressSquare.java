@@ -30,7 +30,7 @@ public class ProgressSquare extends Widget {
         brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int dotNumber = (int) (donePercent * square);
+        int dotNumber = (int) (donePercent() * square);
         int y = dotNumber / side;
         int yOrig = y;
         int x = dotNumber - y * side;
@@ -78,11 +78,11 @@ public class ProgressSquare extends Widget {
                 : BACKGROUND_COLOR);
 
         brush.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
-                .format(donePercent * 100) + "%",
+                .format(donePercent() * 100) + "%",
                 (int) (side / 8d * 3d),
-                (int) (side / 8d * (donePercent > 0.5 ? 3d : 5d)));
+                (int) (side / 8d * (donePercent() > 0.5 ? 3d : 5d)));
         paintSmiley(visibility, brush, (int) (side / 8d * 3d),
-                (int) ((side / 8d * (donePercent > 0.5 ? 3d : 5d)) - 32d));
+                (int) ((side / 8d * (donePercent() > 0.5 ? 3d : 5d)) - 32d));
 
     }
 

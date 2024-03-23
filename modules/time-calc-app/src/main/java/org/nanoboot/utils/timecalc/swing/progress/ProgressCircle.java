@@ -30,7 +30,7 @@ public class ProgressCircle extends Widget {
         brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        double angleDouble = donePercent * 360;
+        double angleDouble = donePercent() * 360;
         double angleDouble2 = (angleDouble - (int) (angleDouble)) * 360;
         //        System.out.println("remainingAngle=" + angleDouble2);
 
@@ -45,7 +45,7 @@ public class ProgressCircle extends Widget {
 
         brush.drawString(
                 NumberFormats.FORMATTER_ZERO_DECIMAL_PLACES
-                        .format(donePercent * 100) + "%",
+                        .format(donePercent() * 100) + "%",
                 (int) (side / 8d * 0d), (int) (side / 8d * 7.5d));
         paintSmiley(visibility, brush, (int) (side / 8d * 0d) + 30,
                 (int) (side / 8d * 7.5d - 16d));

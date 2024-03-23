@@ -15,6 +15,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Battery extends Widget {
@@ -171,6 +172,8 @@ public class Battery extends Widget {
     protected Battery(String name) {
         this.name = name;
         setPreferredSize(new Dimension(40, 100));
+        this.typeProperty.setValue(getClass().getSimpleName().replace("Battery", "").toLowerCase(
+                Locale.ROOT));
     }
 
     protected Battery(String name, int i, int y, int height) {
@@ -184,9 +187,10 @@ public class Battery extends Widget {
             this.totalHeight = (int) (this.getHeight() / 10d * 7d);
             this.totalWidth = this.getWidth();
         }
+        double donePercent = donePercent();
         if (blinkingIfCriticalLowVisibleProperty.isEnabled()) {
             if (donePercent > 0 && donePercent <= CRITICAL_LOW_ENERGY
-                    && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
+                && (System.nanoTime() - tmpNanoTime) > (1000000000l) / 2l) {
                 blinking.flip();
                 tmpNanoTime = System.nanoTime();
             }
@@ -239,7 +243,7 @@ public class Battery extends Widget {
                         ? doneHeight : doneHeight - waterSurfaceHeight + 1);
         int pointCount = 8;
         if (doneHeight >= waterSurfaceHeight
-                && donePercent < 1) {// && todoHeight > waterSurfaceHeight) {
+            && donePercent < 1) {// && todoHeight > waterSurfaceHeight) {
             //g2d.fillArc(intX, intY, width_, intHeight - waterSurfaceHeight, 30, 60);
 
             brush.fillPolygon(
@@ -367,7 +371,7 @@ public class Battery extends Widget {
     public void paintChargingCharacter(Graphics2D brush) {
         brush.drawString(
                 CHARCHING, ((int) (totalWidth * 0.45)),
-                (donePercent < 0.5 ? totalHeight / 4 * 3
+                (donePercent() < 0.5 ? totalHeight / 4 * 3
                         : (totalHeight / 4 * 1) + 10) + 10
         );
     }
@@ -379,7 +383,7 @@ public class Battery extends Widget {
                 : (visibility.isWeaklyColored() ? HIGH_WEAKLY_COLORED
                 : Color.lightGray));
 
-        double angleDouble = donePercent * 360;
+        double angleDouble = donePercent() * 360;
 
         brush.fillArc(((int) (totalWidth * 0.45)) + 15,
                 totalHeight / 4 * 3 + 28,

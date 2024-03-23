@@ -7,7 +7,9 @@ import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.app.TimeCalcKeyAdapter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
+import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
@@ -328,7 +330,7 @@ public class MainWindow extends TWindow {
             progressSwing.typeProperty
                     .bindTo(timeCalcConfiguration.swingTypeProperty);
             progressLife.typeProperty
-                    .bindTo(timeCalcConfiguration.squareTypeProperty);
+                    .bindTo(timeCalcConfiguration.lifeTypeProperty);
             progressLife.birthDateProperty
                     .bindTo(timeCalcConfiguration.lifeBirthDateProperty);
         }
@@ -974,52 +976,66 @@ public class MainWindow extends TWindow {
         if (done > 1) {
             done = 1;
         }
-        progressSquare.setDonePercent(done);
-        progressCircle.setDonePercent(done);
-        progressSwing.setDonePercent(done);
-        progressLife.setDonePercent(done);
-        dayBattery.setDonePercent(done);
-        try {
-            WeekStatistics weekStatisticsTmp = new WeekStatistics(clock, time);
-            weekStatistics = weekStatisticsTmp;
-        } catch (DateTimeException e) {
-            e.printStackTrace();
+        Progress progress = new Progress();
+        progress.set(WidgetType.DAY, done);
+
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
+                WeekStatistics weekStatisticsTmp = new WeekStatistics(clock, time);
+                weekStatistics = weekStatisticsTmp;
+            } catch (DateTimeException e) {
+                e.printStackTrace();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                //            return false;
             }
-//            return false;
-        }
-        final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
-        final int workDaysDone = weekStatistics.getWorkDaysDone();
-        final int workDaysTotal = weekStatistics.getWorkDaysTotal();
+            final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
+            final int workDaysDone = weekStatistics.getWorkDaysDone();
+            final int workDaysTotal = weekStatistics.getWorkDaysTotal();
 
-        int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
-        weekBattery.setDonePercent(
-                WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done));
-        weekBattery.setLabel(
-                nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
+            int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
+        double weekProgress = WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done);
+        weekBattery.setProgress(progress);
+            weekBattery.setLabel(
+                    nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
-        monthBattery.setDonePercent(MonthBattery
-                .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
-                        workDaysTotal, done));
+            double monthProgress = MonthBattery
+                    .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
+                            workDaysTotal, done);
+            progress.set(WidgetType.MONTH, monthProgress);
+        double hourProgress =
+                HourBattery.getHourProgress(timeRemains, secondsRemains,
+                        millisecondsRemains);
+        double minuteProgress =
+                MinuteBattery.getMinuteProgress(secondNow, millisecondNow);
+        double yearProgress = YearBattery.getYearProgress(clock);
+        progress.set(WidgetType.HOUR, hourProgress);
+        progress.set(WidgetType.WEEK, weekProgress);
+        progress.set(WidgetType.MINUTE, minuteProgress);
+        progress.set(WidgetType.YEAR, yearProgress);
+        progressSquare.setProgress(progress);
+        progressCircle.setProgress(progress);
+        progressSwing.setProgress(progress);
+        progressLife.setProgress(progress);
+        dayBattery.setProgress(progress);
+
+        monthBattery.setProgress(progress);
         monthBattery.setLabel(
                 (nowIsWeekend ? workDaysDone : workDaysDone + 1) + "/"
                 + (workDaysTotal));
 
-        hourBattery.setDonePercent(
-                HourBattery.getHourProgress(timeRemains, secondsRemains,
-                        millisecondsRemains));
+        hourBattery.setProgress(progress);
 
         if (!nowIsWeekend) {
             hourBattery.setLabel(
                     totalHoursDone + "/" + (totalMinutes / 60));
         }
-        minuteBattery.setDonePercent(
-                MinuteBattery.getMinuteProgress(secondNow, millisecondNow));
-        yearBattery
-                .setDonePercent(YearBattery.getYearProgress(clock));
+
+        minuteBattery.setProgress(progress);
+
+        yearBattery.setProgress(progress);
         yearBattery.setLabel("");
 
         if (timeRemains.getHour() <= 0 && timeRemains.getMinute() <= 0 && timeRemains.getSecond() <= 0 && timeRemains.getMillisecond() <= 0) {
@@ -1028,7 +1044,7 @@ public class MainWindow extends TWindow {
             toasterManager.showToaster(
                     "Congratulation :-) It is the time to go home.");
             walkingHumanProgress
-                    .setDonePercent(done);
+                    .setProgress(progress);
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -1042,7 +1058,7 @@ public class MainWindow extends TWindow {
                 }
             }
         } else {
-            walkingHumanProgress.setDonePercent(done);
+            walkingHumanProgress.setProgress(progress);
         }
 
         try {
