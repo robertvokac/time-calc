@@ -55,6 +55,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -67,6 +68,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.Timer;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
 
 /**
@@ -116,6 +118,8 @@ public class MainWindow extends TWindow {
     private final IntegerProperty forgetOvertimeProperty = new IntegerProperty("forgetOvertimeProperty", 0);
     private WeekStatistics weekStatistics = null;
     private final ProgressDot progressDot;
+    private int speed = Integer.MIN_VALUE;
+    private final TimeCalcKeyAdapter timeCalcKeyAdapter;
 
     {
         ChangeListener valueMustBeTime =
@@ -208,7 +212,7 @@ public class MainWindow extends TWindow {
         }
         Toaster.notificationsVisibleProperty.bindTo(timeCalcConfiguration.notificationsVisibleProperty);
 
-        TimeCalcKeyAdapter timeCalcKeyAdapter
+        this.timeCalcKeyAdapter
                 = new TimeCalcKeyAdapter(timeCalcConfiguration, timeCalcApp,
                         this, time);
         addKeyListener(timeCalcKeyAdapter);
@@ -282,7 +286,7 @@ public class MainWindow extends TWindow {
         add(yearBattery);
 
         WalkingHumanProgress walkingHumanProgress
-                = new WalkingHumanProgress();
+                = new WalkingHumanProgress(this);
         walkingHumanProgress.setBounds(minuteBattery.getX(),
                 minuteBattery.getY() + minuteBattery.getHeight(), 400, 80);
         add(walkingHumanProgress);
@@ -820,6 +824,40 @@ public class MainWindow extends TWindow {
 
         workingDayRepository.update(wd);
 
+          new Timer(100, e -> {
+          if(speed == Integer.MIN_VALUE) {
+              timeCalcConfiguration.testEnabledProperty.setValue(false);
+              return;
+          }
+          if(timeCalcConfiguration.testEnabledProperty.isDisabled()) {
+              timeCalcConfiguration.testEnabledProperty.enable();
+          }
+          if(time.yearCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.yearCustomProperty.setValue(time.yearProperty.getValue());
+          }
+          if(time.monthCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.monthCustomProperty.setValue(time.monthProperty.getValue());
+          }
+          if(time.dayCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.dayCustomProperty.setValue(time.dayProperty.getValue());
+          }
+          if(time.hourCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.hourCustomProperty.setValue(time.hourProperty.getValue());
+          }
+          if(time.minuteCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.minuteCustomProperty.setValue(time.minuteProperty.getValue());
+          }
+          if(time.secondCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.secondCustomProperty.setValue(time.secondProperty.getValue());
+          }
+          if(time.millisecondCustomProperty.getValue() == Integer.MAX_VALUE) {
+              time.millisecondCustomProperty.setValue(time.millisecondProperty.getValue());
+          }
+          int msShouldBeAdded = (int) (Math.pow(2, speed) * 100d);
+          this.timeCalcKeyAdapter.setMsToAdd(msShouldBeAdded);
+          this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
+
+          }).start();
         while (true) {
 
             if(Math.random() > 0.99) {
@@ -1230,4 +1268,29 @@ public class MainWindow extends TWindow {
     }
     public int getForgetOvertime() {return this.forgetOvertimeProperty.getValue();}
     public void setForgetOvertime(int minutes) {this.forgetOvertimeProperty.setValue(minutes);}
+    public void increaseSpeed() {
+        if(speed == Integer.MIN_VALUE) {
+            speed = 0;
+        }
+        ++this.speed;
+    }
+    
+    public void decreaseSpeed() {
+        if(speed == Integer.MIN_VALUE) {
+            speed = 0;
+        }
+        if(speed == -3){
+            //nothing to do
+            return;
+        }
+        --this.speed;
+    }
+    
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void resetSpeed() {
+        this.speed = Integer.MIN_VALUE;
+    }
 }

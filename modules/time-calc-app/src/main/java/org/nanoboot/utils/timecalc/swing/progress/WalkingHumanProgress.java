@@ -33,8 +33,10 @@ public class WalkingHumanProgress extends Widget implements
     private static final String WALL = "||";
     private final Set<Integer> alreadyShownPercents = new HashSet<>();
     private static final int LINE_WHERE_HEAD_IS = 2;
+    private final MainWindow mainWindow;
 
-    public WalkingHumanProgress() {
+    public WalkingHumanProgress(MainWindow mainWindow) {
+        this.mainWindow = mainWindow;
         setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
 
         setFocusable(false);
@@ -135,14 +137,16 @@ public class WalkingHumanProgress extends Widget implements
             } catch (Exception e) {
                 System.out.println(e);
             }
-            if (image != null) {
-                //                toasterManager.setToasterWidth(600);
-                //                toasterManager.setToasterHeight(400);
-                toasterManager.showToaster(new ImageIcon(image),
-                        "Progress: " + (percentInt) + "%");
-            } else {
-                toasterManager.setToasterHeight(200);
-                toasterManager.showToaster("Progress: " + (percentInt) + "%");
+            if (this.mainWindow.getSpeed() == 0) {
+                if (image != null) {
+                    //                toasterManager.setToasterWidth(600);
+                    //                toasterManager.setToasterHeight(400);
+                    toasterManager.showToaster(new ImageIcon(image),
+                            "Progress: " + (percentInt) + "%");
+                } else {
+                    toasterManager.setToasterHeight(200);
+                    toasterManager.showToaster("Progress: " + (percentInt) + "%");
+                }
             }
 
         }

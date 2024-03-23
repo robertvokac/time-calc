@@ -16,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Properties;
+import lombok.Setter;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
 /**
  * @author Robert Vokac
@@ -28,6 +30,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private final MainWindow mainWindow;
     private final Time time;
     private boolean changeByFiveMinutes = false;
+    @Setter
+    private int msToAdd = 1;
     
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
@@ -61,7 +65,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         //meta key ???
     }
 
-    private void processShifCtrlAltModeKeyCodes(int keyCode, boolean shiftDown,
+    public void processShifCtrlAltModeKeyCodes(int keyCode, boolean shiftDown,
             boolean ctrlDown, boolean altDown) {
         if (shiftDown && ctrlDown) {
             Utils.showNotification("Following key shortcut is not supported: SHIFT + CTRL");
@@ -122,6 +126,36 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                         Calendar.MILLISECOND);
                 break;
             }
+            
+            case KeyEvent.VK_U: {
+                int ms_ = msToAdd;
+                int s_ = msToAdd / 1000;
+                ms_ = ms_ - s_ * 1000;
+                int m_ = msToAdd / 1000 / 60;
+                ms_ = ms_ - m_ * 1000 * 60;
+                int h_ = msToAdd / 1000 / 60 / 60;
+                ms_ = ms_ - h_ * 1000 * 60 * 60;
+                int d_ = msToAdd / 1000 / 60 / 60 / 24;
+                ms_ = ms_ - d_ * 1000 * 60 * 60 * 24;
+                //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " second.");
+                updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset,
+                        Calendar.DAY_OF_MONTH, d_);
+                updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset,
+                        Calendar.HOUR_OF_DAY, h_);
+                updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset,
+                        Calendar.MINUTE, m_);
+                updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset,
+                        Calendar.SECOND, s_);
+                updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset,
+                        Calendar.MILLISECOND, ms_);
+                
+                
+                
+                
+                
+                
+                break;
+            }
             case KeyEvent.VK_K: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
                 for (int i = 1; i <= 7; i++) {
@@ -130,6 +164,36 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
                 break;
             }
+            case KeyEvent.VK_Q: {
+                double oldSpeed = this.mainWindow.getSpeed();
+                if(oldSpeed < 0) {
+                    oldSpeed = 1.0d;
+                }
+                if(increase) {
+                    this.mainWindow.increaseSpeed();
+                }
+                if(decrease) {
+                    this.mainWindow.decreaseSpeed();
+                }
+                if(reset) {
+                    this.mainWindow.resetSpeed();
+                }
+                final double newSpeed = this.mainWindow.getSpeed();
+                
+                if(oldSpeed != newSpeed) {
+                Utils.showNotification("Speed was changed from " + 
+                        ((int)oldSpeed) + 
+                        " to: " + ((int)newSpeed) + " (" + (NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(Math.pow(2, newSpeed))) + ") (" + (newSpeed <= 21 ? TTime.ofMilliseconds(((int)(Math.pow(2,newSpeed) * 1000))) : "many") +" /1s)");
+                } else {
+                    if(decrease){
+                    Utils.showNotification("Current speed cannot be decreased: " + 
+                        NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(oldSpeed));
+                    }
+                }
+                
+                break;
+            }
+
             case KeyEvent.VK_A: {
 
                 if (increase) {
@@ -198,6 +262,14 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
 //    }
     private void updateProperty(IntegerProperty integerProperty,
             boolean increase, boolean decrease, boolean reset, int timeUnit) {
+        updateProperty(integerProperty, increase, decrease, reset, timeUnit, 1);
+    }
+    private void updateProperty(IntegerProperty integerProperty,
+            boolean increase, boolean decrease, boolean reset, int timeUnit, int value) {
+        if(value == 0) {
+            //nothing to do
+            return;
+        }
         int currentValue = integerProperty.getValue();
 
         if ((increase || decrease) && currentValue == Integer.MAX_VALUE) {
@@ -235,7 +307,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         int oldMinute = cal.get(Calendar.MINUTE);
         int oldSecond = cal.get(Calendar.SECOND);
         int oldMillisecond = cal.get(Calendar.MILLISECOND);
-        cal.add(timeUnit, increase ? 1 : (-1));
+        cal.add(timeUnit, increase ? value : (-value));
         int newValue = cal.get(timeUnit);
         if (Calendar.MONTH == timeUnit) {
             newValue++;
@@ -330,7 +402,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
 
     }
 
-    private void processKeyCode(int keyCode) {
+    public void processKeyCode(int keyCode) {
         boolean onlyGreyOrNone
                 = timeCalcConfiguration.visibilitySupportedColoredProperty
                         .isDisabled();
@@ -548,6 +620,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 timeCalcConfiguration.testSecondCustomProperty.setValue(Integer.MAX_VALUE);
                 timeCalcConfiguration.testMillisecondCustomProperty.setValue(Integer.MAX_VALUE);
                 Utils.showNotification(timeCalcConfiguration.print(), 15000, 400);
+                this.mainWindow.resetSpeed();
                 break;
             }
 

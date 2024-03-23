@@ -1,7 +1,6 @@
 package org.nanoboot.utils.timecalc.app;
 
 import java.io.File;
-import java.io.FileInputStream;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
