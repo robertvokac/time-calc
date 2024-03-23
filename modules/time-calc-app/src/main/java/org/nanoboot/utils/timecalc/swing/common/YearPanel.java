@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 
@@ -20,12 +21,15 @@ public class YearPanel extends JPanel {
     private final Map<String, MonthPanel> months;
     private final TTabbedPane tp;
     private final ActivityRepositoryApi activityRepository;
+    private final TimeCalcConfiguration timeCalcConfiguration;
     private boolean loaded = false;
 
-    public YearPanel(String yearIn, ActivityRepositoryApi activityRepository) {
+    public YearPanel(String yearIn, ActivityRepositoryApi activityRepository, TimeCalcConfiguration timeCalcConfiguration) {
         super();
         this.year = yearIn;
         this.months = new HashMap<>();
+        this.timeCalcConfiguration = timeCalcConfiguration;
+
         setLayout(null);
         this.tp = new TTabbedPane();
         add(tp);
@@ -60,7 +64,7 @@ public class YearPanel extends JPanel {
         System.out.println("Loaded: " + year);
         for (int month = 1; month <= 12; month++) {
             final String monthS = String.valueOf(month);
-            MonthPanel monthPanel = new MonthPanel(year, String.valueOf(month), activityRepository);
+            MonthPanel monthPanel = new MonthPanel(year, String.valueOf(month), activityRepository, timeCalcConfiguration);
             tp.add(String.valueOf(month), monthPanel);
             months.put(monthS, monthPanel);
         }

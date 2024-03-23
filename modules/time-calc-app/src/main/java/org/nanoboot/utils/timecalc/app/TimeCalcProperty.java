@@ -87,7 +87,8 @@ public enum TimeCalcProperty {
     TEST_CLOCK_CUSTOM_HOUR("test.clock.custom.hour", "Test : Clock : Custom : Hour", Integer.class),
     TEST_CLOCK_CUSTOM_MINUTE("test.clock.custom.minute", "Test : Clock : Custom : Minute", Integer.class),
     TEST_CLOCK_CUSTOM_SECOND("test.clock.custom.second", "Test : Clock : Custom : Second", Integer.class),
-    TEST_CLOCK_CUSTOM_MILLISECOND("test.clock.custom.millisecond", "Test : Clock : Custom : Millisecond", Integer.class);
+    TEST_CLOCK_CUSTOM_MILLISECOND("test.clock.custom.millisecond", "Test : Clock : Custom : Millisecond", Integer.class),
+    ACTIVITY_NEEDED_FLAGS("activity.needed-flags", "Activity : Needed flags", String.class);
 
     @Getter
     private final String key;

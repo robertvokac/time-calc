@@ -165,6 +165,8 @@ public class TimeCalcConfiguration {
             = new BooleanProperty("testModeProperty", false);
     public final StringProperty profileNameProperty
             = new StringProperty(TimeCalcProperty.PROFILE_NAME.getKey());
+    public final StringProperty activityNeededFlagsProperty
+            = new StringProperty(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
     public final BooleanProperty testEnabledProperty = new BooleanProperty(TimeCalcProperty.TEST_ENABLED.getKey(), false);
     public final IntegerProperty testYearCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_YEAR
             .getKey(), Integer.MAX_VALUE);
@@ -236,6 +238,7 @@ public class TimeCalcConfiguration {
             walkingHumanVisibleProperty,
             mainWindowCustomTitleProperty,
             profileNameProperty,
+            activityNeededFlagsProperty,
             testEnabledProperty,
             testYearCustomProperty,
             testMonthCustomProperty,

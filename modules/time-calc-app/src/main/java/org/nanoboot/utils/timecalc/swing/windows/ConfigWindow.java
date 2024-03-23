@@ -1,10 +1,14 @@
 package org.nanoboot.utils.timecalc.swing.windows;
 
-import org.nanoboot.utils.timecalc.swing.controls.TButton;
-import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
+import org.nanoboot.utils.timecalc.swing.controls.MouseClickedListener;
+import org.nanoboot.utils.timecalc.swing.controls.TButton;
+import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
+import org.nanoboot.utils.timecalc.swing.controls.TWindow;
+import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -15,6 +19,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -34,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
-import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 
 /**
  * @author Robert Vokac
@@ -50,6 +53,7 @@ public class ConfigWindow extends TWindow {
     public static final String THREE_DASHES = "---";
     private static final Font BIG_FONT = new Font("sans", Font.BOLD, 24);
     private static final String FIVE_SPACES = "     ";
+    private static final String EDITABLE_ONLY_IN_DIALOG = "editableOnlyInDialog";
     public final JComboBox visibilityDefaultProperty = new JComboBox(
             Arrays.stream(Visibility.values()).map(v -> v.name()).collect(
                     Collectors.toList()).toArray());
@@ -174,6 +178,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField();
     private final JTextField profileNameProperty
             = new JTextField();
+    public final JTextField activityNeededFlagsProperty
+            = new JTextField(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
     private final JCheckBox testEnabledProperty
             = new JCheckBox(TimeCalcProperty.TEST_ENABLED.getKey());
     private final JTextField testClockCustomYearProperty
@@ -391,6 +397,7 @@ public class ConfigWindow extends TWindow {
                 walkingHumanVisibleProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
+                activityNeededFlagsProperty,
                 visibilityDefaultProperty,
                 visibilitySupportedColoredProperty));
         //
@@ -435,6 +442,40 @@ public class ConfigWindow extends TWindow {
                 p.putClientProperty(CLIENT_PROPERTY_KEY,
                         TimeCalcProperty.PROFILE_NAME.getKey());
             }
+            if (p == activityNeededFlagsProperty) {
+                final JLabel jLabel = new JLabel(
+                        TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getDescription());
+                jLabel.putClientProperty(CLIENT_PROPERTY_KEY,
+                        TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
+                addToNextRow(jLabel);
+                p.putClientProperty(CLIENT_PROPERTY_KEY,
+                        TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
+                activityNeededFlagsProperty.setEditable(false);
+                activityNeededFlagsProperty.setBackground(Color.WHITE);
+                activityNeededFlagsProperty.putClientProperty(
+                        EDITABLE_ONLY_IN_DIALOG, "");
+                activityNeededFlagsProperty
+                        .addMouseListener((MouseClickedListener) f -> {
+
+                            String result =
+                                    (String) JOptionPane.showInputDialog(
+                                            null,
+                                            "Select new value",
+                                            "New value",
+                                            JOptionPane.PLAIN_MESSAGE,
+                                            null,
+                                            null,
+                                            activityNeededFlagsProperty
+                                                    .getText()
+                                    );
+                            if (result != null) {
+                                activityNeededFlagsProperty.setText(result);
+                                timeCalcConfiguration.activityNeededFlagsProperty.setValue(result);
+                            }
+                        });
+
+            }
+
             if (p == testClockCustomYearProperty) {
                 JLabel label = new JLabel("Test");
                 label.setFont(BIG_FONT);
@@ -584,7 +625,7 @@ public class ConfigWindow extends TWindow {
                 timeCalcConfiguration
                         .getProperty(timeCalcProperty).addListener(e -> {
 
-                    textField.setText(isInteger
+                textField.setText(isInteger
                             ? String.valueOf(timeCalcConfiguration
                                     .getProperty(timeCalcProperty).getValue())
                             : (String) timeCalcConfiguration
@@ -609,6 +650,9 @@ public class ConfigWindow extends TWindow {
                             }
 
                             private void update(DocumentEvent e) {
+                                if(textField.getClientProperty(EDITABLE_ONLY_IN_DIALOG) != null) {
+                                    return;
+                                }
                                 String text = textField.getText();
                                 boolean isInteger = Integer.class == timeCalcProperty.getClazz();
                                 timeCalcConfiguration

@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.windows;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class ActivitiesWindow extends TWindow {
     private final ActivityRepositoryApi activityRepository;
     private final Map<String, YearPanel> years;
 
-    public ActivitiesWindow(ActivityRepositoryApi activityRepositoryApiIn, Time time) {
+    public ActivitiesWindow(ActivityRepositoryApi activityRepositoryApiIn, Time time, TimeCalcConfiguration timeCalcConfiguration) {
         setSize(1600, 800);
         setTitle("Activities");
         this.activityRepository = activityRepositoryApiIn;
@@ -57,13 +58,13 @@ public class ActivitiesWindow extends TWindow {
 
         tp.setBounds(addYearButton.getX(), addYearButton.getY() + addYearButton.getHeight() + SwingUtils.MARGIN, 1500, 750);
         yearsList.forEach(y -> {
-            final YearPanel yearPanel = new YearPanel(y, activityRepository);
+            final YearPanel yearPanel = new YearPanel(y, activityRepository, timeCalcConfiguration);
             tp.add(y, yearPanel);
             years.put(y, yearPanel);
         }
         );
         if (!yearsList.contains(currentYearS)) {
-            YearPanel yearPanel = new YearPanel(currentYearS, activityRepository);
+            YearPanel yearPanel = new YearPanel(currentYearS, activityRepository, timeCalcConfiguration);
             tp.add(currentYearS, yearPanel);
             years.put(currentYearS, yearPanel);
         }
@@ -84,7 +85,7 @@ public class ActivitiesWindow extends TWindow {
                     throw new TimeCalcException(msg);
                 }
             }
-            YearPanel yearPanel = new YearPanel(year_, activityRepository);
+            YearPanel yearPanel = new YearPanel(year_, activityRepository, timeCalcConfiguration);
             tp.add(year_, yearPanel);
             years.put(currentYearS, yearPanel);
 

@@ -30,7 +30,6 @@ import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
 import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
-import org.nanoboot.utils.timecalc.swing.progress.PlaceHolderWidget;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
@@ -45,7 +44,6 @@ import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.ChangeListener;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
-import org.nanoboot.utils.timecalc.utils.property.Property;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -475,7 +473,7 @@ public class MainWindow extends TWindow {
         });
         activitiesButton.addActionListener(e -> {
             if (activitiesWindow == null) {
-                this.activitiesWindow = new ActivitiesWindow(this.activityRepository, time);
+                this.activitiesWindow = new ActivitiesWindow(this.activityRepository, time, timeCalcConfiguration);
             }
             activitiesWindow.setVisible(true);
         });

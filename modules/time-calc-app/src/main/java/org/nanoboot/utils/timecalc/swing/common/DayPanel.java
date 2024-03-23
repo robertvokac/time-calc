@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
 import lombok.Getter;
+import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.entity.Activity;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
@@ -40,6 +41,7 @@ public class DayPanel extends JPanel {
 
     private final Map<String, DayPanel> map = new HashMap<>();
     private final ActivityRepositoryApi activityRepository;
+    private final TimeCalcConfiguration timeCalcConfiguration;
     private JButton loadButton;
     private JScrollPane scrollPane;
     private JPanel panelInsideScrollPane;
@@ -47,13 +49,14 @@ public class DayPanel extends JPanel {
     private ActivityPanel markActivityPanelToBeMoved = null;
 
     public DayPanel(String yearIn, String monthIn, String dayIn,
-            ActivityRepositoryApi activityRepository) {
+            ActivityRepositoryApi activityRepository, TimeCalcConfiguration timeCalcConfiguration) {
         super();
 
         this.year = yearIn;
         this.month = monthIn;
         this.day = dayIn;
         this.activityRepository = activityRepository;
+        this.timeCalcConfiguration = timeCalcConfiguration;
         setSize(1450, 600);
 
         this.setLayout(null);
@@ -168,22 +171,41 @@ public class DayPanel extends JPanel {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(comments), null);
         });
+
         statusButton.addActionListener(e-> {
+//            String neededFlags = timeCalcConfiguration.activityNeededFlagsProperty.getValue();
+//            System.out.println("neededFlags=" + neededFlags);
+//            neededFlags.replace(",", ":");
+//            String[] neededFlagsArray = neededFlags.split(":");
+//            Set<String> neededFlagsSet = Arrays.stream(neededFlagsArray).filter(f -> !f.isEmpty()).collect(Collectors.toSet());
             List<ActivityPanel> activityPanels = new ArrayList<>();
             Arrays
                     .stream(panelInsideScrollPane.getComponents())
                     .filter(c-> c instanceof ActivityPanel).forEach(f-> activityPanels.add((ActivityPanel) f));
             Collections.sort(activityPanels);
 
-            double done = 0d;
-            double todo = 8d;
-            for(ActivityPanel ap:activityPanels) {
+//            double done = 0d;
+//            double todo = 8d;
+//            loopName:
+//            for(ActivityPanel ap:activityPanels) {
+//                Set<String> flags = ap.getActivity().flagsAsSet();
+//                if(!neededFlagsSet.isEmpty()) {
+//                    for(String f:neededFlagsSet) {
+//                        if(!flags.contains(f)) {
+//                            continue loopName;
+//                        }
+//                    }
+//                }
+//                double now = ap.getActivity().getSpentHours() + ap.getActivity().getSpentMinutes() / 60d;
+//                done = done + now;
+//                todo = todo - now;
+//            }
+//            double progress = done / 8d;
+            double progress = activityRepository.getProgressForDay(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day), timeCalcConfiguration);
 
-                double now = ap.getActivity().getSpentHours() + ap.getActivity().getSpentMinutes() / 60d;
-                done = done + now;
-                todo = todo - now;
-            }
-            Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(done) + "h, todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todo));
+            double doneHours = progress * 8d;
+            double todoHours = (8d - doneHours);
+            Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(doneHours) + "h, todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todoHours));
 
         });
         sortActivityPanels();
