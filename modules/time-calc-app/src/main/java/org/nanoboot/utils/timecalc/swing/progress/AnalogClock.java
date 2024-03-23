@@ -5,14 +5,15 @@ import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
+import org.nanoboot.utils.timecalc.swing.controls.TMenuItem;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
-import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,9 +21,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
@@ -99,6 +103,11 @@ public class AnalogClock extends Widget {
     public final BooleanProperty percentProgressVisibleProperty = new BooleanProperty("percentProgressVisibleProperty");
     private Color customCircleColor = null;
     private double dayProgress;
+    private TMenuItem millisecondHandMenuItem;
+    private TMenuItem secondHandMenuItem;
+    private TMenuItem minuteHandMenuItem;
+    private TMenuItem hourHandMenuItem;
+    private List<JMenu> menuItems = null;
 
     public AnalogClock() {
         typeProperty.setValue(WidgetType.DAY.name().toLowerCase(Locale.ROOT));
@@ -411,4 +420,76 @@ public class AnalogClock extends Widget {
         return 100;
     }
 
+    @Override
+    public List<JMenu> createAdditionalMenus() {
+        if(menuItems == null) {
+            menuItems = new ArrayList<>();
+            JMenu hands = new JMenu("Hands");
+            menuItems.add(hands);
+
+            this.millisecondHandMenuItem = new TMenuItem("Millisecond");
+            this.secondHandMenuItem = new TMenuItem("Second");
+            this.minuteHandMenuItem = new TMenuItem("Minute");
+            this.hourHandMenuItem = new TMenuItem("Hour");
+
+            if (millisecondEnabledProperty.isEnabled()) {
+                millisecondHandMenuItem.enableMenuItem();
+            }
+            if (secondEnabledProperty.isEnabled()) {
+                secondHandMenuItem.enableMenuItem();
+            }
+            if (minuteEnabledProperty.isEnabled()) {
+                minuteHandMenuItem.enableMenuItem();
+            }
+            if (hourEnabledProperty.isEnabled()) {
+                hourHandMenuItem.enableMenuItem();
+            }
+            millisecondEnabledProperty.addListener(
+                    (property, oldValue, newValue) -> millisecondHandMenuItem
+                            .setEnabledMenuItem(newValue));
+            secondEnabledProperty.addListener(
+                    (property, oldValue, newValue) -> secondHandMenuItem
+                            .setEnabledMenuItem(newValue));
+            minuteEnabledProperty.addListener(
+                    (property, oldValue, newValue) -> minuteHandMenuItem
+                            .setEnabledMenuItem(newValue));
+            hourEnabledProperty.addListener(
+                    (property, oldValue, newValue) -> hourHandMenuItem
+                            .setEnabledMenuItem(newValue));
+
+            hands.add(millisecondHandMenuItem);
+            hands.add(secondHandMenuItem);
+            hands.add(minuteHandMenuItem);
+            hands.add(hourHandMenuItem);
+
+            millisecondHandMenuItem
+                    .addActionListener(e -> millisecondEnabledProperty.flip());
+            secondHandMenuItem
+                    .addActionListener(e -> secondEnabledProperty.flip());
+            minuteHandMenuItem
+                    .addActionListener(e -> minuteEnabledProperty.flip());
+            hourHandMenuItem.addActionListener(e -> hourEnabledProperty.flip());
+        }
+        return this.menuItems;
+    }
+    protected Consumer<Object> createRefreshConsumer() {
+        return (o) -> {
+            millisecondHandMenuItem.disableMenuItem();
+            secondHandMenuItem.disableMenuItem();
+            minuteHandMenuItem.disableMenuItem();
+            hourHandMenuItem.disableMenuItem();
+            if (millisecondEnabledProperty.isEnabled()) {
+                millisecondHandMenuItem.enableMenuItem();
+            }
+            if (secondEnabledProperty.isEnabled()) {
+                secondHandMenuItem.enableMenuItem();
+            }
+            if (minuteEnabledProperty.isEnabled()) {
+                minuteHandMenuItem.enableMenuItem();
+            }
+            if (hourEnabledProperty.isEnabled()) {
+                hourHandMenuItem.enableMenuItem();
+            }
+        };
+    }
 }

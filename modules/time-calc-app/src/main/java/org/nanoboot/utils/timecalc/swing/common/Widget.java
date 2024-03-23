@@ -15,6 +15,8 @@ import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.BasicStroke;
@@ -22,10 +24,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * @author Robert Vokac
@@ -74,6 +80,7 @@ public class Widget extends JPanel implements
     private static final Color PURPLE_STRONGLY_COLORED = new Color(153,51,255);
     private static final Color PURPLE_WEAKLY_COLORED = new Color(204,153,255);
 
+    private WidgetMenu widgetMenu = null;
     public Widget() {
         setBackground(BACKGROUND_COLOR);
         new Timer(getTimerDelay(), e -> repaint()).start();
@@ -92,6 +99,7 @@ public class Widget extends JPanel implements
                         && y <= CLOSE_BUTTON_SIDE;
             }
         });
+
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -105,17 +113,17 @@ public class Widget extends JPanel implements
                     //nothing to do
                     return;
                 }
-                if (visibleProperty.isEnabled()) {
-                    Visibility visibility
-                            = Visibility.valueOf(visibilityProperty.getValue());
-                    if (visibility.isStronglyColored()) {
-                        visibilityProperty
-                                .setValue(Visibility.WEAKLY_COLORED.name());
-                    } else {
-                        visibilityProperty
-                                .setValue(Visibility.STRONGLY_COLORED.name());
-                    }
-                }
+//                if (visibleProperty.isEnabled()) {
+//                    Visibility visibility
+//                            = Visibility.valueOf(visibilityProperty.getValue());
+//                    if (visibility.isStronglyColored()) {
+//                        visibilityProperty
+//                                .setValue(Visibility.WEAKLY_COLORED.name());
+//                    } else {
+//                        visibilityProperty
+//                                .setValue(Visibility.STRONGLY_COLORED.name());
+//                    }
+//                }
             }
 
             @Override
@@ -138,6 +146,46 @@ public class Widget extends JPanel implements
                 mouseOver = false;
             }
         });
+
+        Widget widget = this;
+        addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                showPopup(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                showPopup(e);
+            }
+
+            private void showPopup(MouseEvent e) {
+                if(widgetMenu == null) {
+                    widgetMenu = new WidgetMenu(widget, createRefreshConsumer());
+                    List<JMenu> additionalMenus = createAdditionalMenus();
+                    if(additionalMenus != null) {
+                        additionalMenus.forEach(m-> widgetMenu.add(m));
+                    }
+                }
+                widgetMenu.refresh();
+                widgetMenu.markAsSelected(WidgetType.valueOf(typeProperty.getValue().toUpperCase(
+        Locale.ROOT)));
+                if (e.isPopupTrigger()) {
+                    widgetMenu.show(e.getComponent(),
+                            e.getX(), e.getY());
+
+                }
+            }
+
+
+        });
+    }
+    protected Consumer<Object> createRefreshConsumer() {
+        return null;
+    }
+    protected List<JMenu> createAdditionalMenus() {
+        return null;
     }
 
     public int getTimerDelay() {
