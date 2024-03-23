@@ -67,24 +67,40 @@ public class Time extends Thread {
     public Calendar asCalendar() {
         Calendar cal = Calendar.getInstance();
 
-        cal.set(Calendar.YEAR, returnValueAsNeeded(yearProperty, yearCustomProperty));
-        cal.set(Calendar.MONTH, returnValueAsNeeded(monthProperty, monthCustomProperty) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, returnValueAsNeeded(dayProperty, dayCustomProperty));
-        cal.set(Calendar.HOUR_OF_DAY, returnValueAsNeeded(hourProperty, hourCustomProperty));
-        cal.set(Calendar.MINUTE, returnValueAsNeeded(minuteProperty, minuteCustomProperty));
-        cal.set(Calendar.SECOND, returnValueAsNeeded(secondProperty, secondCustomProperty));
-        cal.set(Calendar.MILLISECOND, returnValueAsNeeded(millisecondProperty, millisecondCustomProperty));
+        cal.set(Calendar.YEAR, returnValueAsNeeded(yearProperty, yearCustomProperty, Calendar.YEAR));
+        cal.set(Calendar.MONTH, returnValueAsNeeded(monthProperty, monthCustomProperty, Calendar.MONTH) - 1);
+        cal.set(Calendar.DAY_OF_MONTH, returnValueAsNeeded(dayProperty, dayCustomProperty, Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, returnValueAsNeeded(hourProperty, hourCustomProperty, Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, returnValueAsNeeded(minuteProperty, minuteCustomProperty, Calendar.MINUTE));
+        cal.set(Calendar.SECOND, returnValueAsNeeded(secondProperty, secondCustomProperty, Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, returnValueAsNeeded(millisecondProperty, millisecondCustomProperty, Calendar.MILLISECOND));
         return cal;
     }
-       private int returnValueAsNeeded(ReadOnlyProperty<Integer> p1, IntegerProperty p2) {
-        return returnValueAsNeeded(p1.getValue(), p2.getValue());
+       private int returnValueAsNeeded(ReadOnlyProperty<Integer> real, IntegerProperty custom, int timeUnit) {
+        return returnValueAsNeeded(real.getValue(), custom.getValue(), timeUnit);
     }
 
-    private int returnValueAsNeeded(int i1, int i2) {
-        if(this.allowCustomValuesProperty.isDisabled()) {
-            return i1;
+    private int returnValueAsNeeded(int real, int custom, int timeUnit) {
+        if (this.allowCustomValuesProperty.isDisabled()) {
+            return real;
         }
-        return i2 == Integer.MAX_VALUE ? i1 : i2;
+
+        int month = monthProperty.getValue();
+
+        if (timeUnit == Calendar.DAY_OF_MONTH && (month == 2 || month == 4
+                                                  || month == 6 || month == 9
+                                                  || month == 11)) {
+            if (month == 2) {
+                if (custom > 28) {
+                    custom = 28;
+                } else {
+                    if (custom > 30) {
+                        custom = 30;
+                    }
+                }
+            }
+        }
+        return custom == Integer.MAX_VALUE ? real : custom;
     }
 
     public void run() {
@@ -127,14 +143,22 @@ public class Time extends Thread {
                 + dayOfWeekProperty.getValue() + " "
         );
     }
-
+//    private int returnCustomValueIfNeeded(Calendar cal, int timeUnit,ReadOnlyProperty<Integer> real,IntegerProperty custom) {
+//        return returnCustomValueIfNeeded(cal, timeUnit, real, custom);
+//    }
     private int returnCustomValueIfNeeded(Calendar cal, int timeUnit,
             IntegerProperty custom,
             ReadOnlyProperty<Integer> real) {
         boolean allow = allowCustomValuesProperty.isEnabled();
         Integer customValue = custom.getValue();
 
+        int month = monthProperty.getValue();
         if (allow && customValue != Integer.MAX_VALUE) {
+            if(timeUnit == Calendar.DAY_OF_MONTH && (month == 2 || month ==4 || month == 6 || month == 9 || month == 11)) {
+                if(cal.getActualMaximum(Calendar.DAY_OF_MONTH) < custom.getValue()) {
+                    return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                }
+            }
             return custom.getValue();
         } else {
             return timeUnit == Calendar.MONTH ? (cal.get(timeUnit) + 1) : cal.get(timeUnit);

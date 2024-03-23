@@ -292,27 +292,27 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     break;
                 case Calendar.DAY_OF_MONTH:
                     if (oldMonth != newMonth) {
-                        updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MONTH);
+                        updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset, Calendar.MONTH);
                     }
                     break;
                 case Calendar.HOUR_OF_DAY:
                     if (oldDay != newDay) {
-                        updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);
+                        updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset, Calendar.DAY_OF_MONTH);
                     }
                     break;
                 case Calendar.MINUTE:
                     if (oldHour != newHour) {
-                        updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);
+                        updateProperty(timeCalcConfiguration.testHourCustomProperty, increase, decrease, reset, Calendar.HOUR_OF_DAY);
                     }
                     break;
                 case Calendar.SECOND:
                     if (oldMinute != newMinute) {
-                        updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.MINUTE);
+                        updateProperty(timeCalcConfiguration.testMinuteCustomProperty, increase, decrease, reset, Calendar.MINUTE);
                     }
                     break;
                 case Calendar.MILLISECOND:
                     if (oldSecond != newSecond) {
-                        updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset, Calendar.SECOND);
+                        updateProperty(timeCalcConfiguration.testSecondCustomProperty, increase, decrease, reset, Calendar.SECOND);
                     }
                     break;
                 default:
