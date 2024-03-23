@@ -31,8 +31,9 @@ public class ProgressDot extends Widget {
 
     @Override
     public void paintWidget(Graphics g) {
+        int dotSize = 1;
         if (side == 0) {
-            this.side = Math.min(getWidth(), getHeight());
+            this.side = Math.min(getWidth(), getHeight()) / dotSize;
             this.square = side * side;
             for (int y = 1; y <= side; y++) {
                 for (int x = 1; x <= side; x++) {
@@ -43,8 +44,8 @@ public class ProgressDot extends Widget {
         Double done = donePercent();
         int enabledDotsExpectedSize = (int) (done * square);
         int disabledDotsExpectedSize = square - enabledDotsExpectedSize;
-//        System.out.println("enabledDots.size()=" + enabledDots.size());
-//        System.out.println("disabledDots.size()=" + disabledDots.size());
+        System.out.println("enabledDots.size()=" + enabledDots.size());
+        System.out.println("disabledDots.size()=" + disabledDots.size());
         while (enabledDots.size() > enabledDotsExpectedSize) {
             int randomIndex = (int) (enabledDots.size() * Math.random());
             Dot randomDot = enabledDots.remove(randomIndex);
@@ -62,15 +63,23 @@ public class ProgressDot extends Widget {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         int numberOfDots = (int) (donePercent() * square);
-      
+
         Visibility visibility = Visibility.ofProperty(visibilityProperty);
         {
             if (visibility.isStronglyColored() || mouseOver) {
                 brush.setColor(Color.GRAY);
             }
-         
-            for(Dot d:enabledDots) {
-                brush.drawLine(d.x, d.y, d.x, d.y);
+
+            for (Dot d : enabledDots) {
+                brush.fillRect(((d.x - 1) * dotSize) + d.x, ((d.y - 1) * dotSize) + d.y, dotSize+(dotSize > 1 ? 1 : 1), dotSize+(dotSize > 1 ? 1 : 1));
+            }
+            if(visibility.isStronglyColored()){
+            //Color currentColor = brush.getColor();
+            brush.setColor(Battery.LOW_WEAKLY_COLORED);
+            for (Dot d : disabledDots) {
+                brush.fillRect(((d.x - 1) * dotSize) + d.x, ((d.y - 1) * dotSize) + d.y, dotSize+(dotSize > 1 ? 1 : 1), dotSize+(dotSize > 1 ? 1 : 1));
+            }
+            //brush.setColor(currentColor);
             }
             brush.setColor(FOREGROUND_COLOR);
         }
