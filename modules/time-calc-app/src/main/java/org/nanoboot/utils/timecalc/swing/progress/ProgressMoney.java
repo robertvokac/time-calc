@@ -16,6 +16,7 @@ import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -84,7 +85,8 @@ public class ProgressMoney extends Widget implements GetProperty {
                     : Color.LIGHT_GRAY);
             brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
 
-            String valueFinal = NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(value) + " " + this.currencyProperty.getValue();
+            NumberFormat formatter = value >= 10000d ? NumberFormats.FORMATTER_TWO_DECIMAL_PLACES : NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES;
+            String valueFinal = formatter.format(value) + " " + this.currencyProperty.getValue();
             brush.drawString(valueFinal, SwingUtils.MARGIN, SwingUtils.MARGIN + 10);
             brush.drawString(typeProperty.getValue(), SwingUtils.MARGIN, SwingUtils.MARGIN + 25);
 
