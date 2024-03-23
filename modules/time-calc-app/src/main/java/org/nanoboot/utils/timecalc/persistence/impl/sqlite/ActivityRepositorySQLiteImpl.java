@@ -68,11 +68,11 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
     }
 
     @Override
-    public void delete(String id) {
+    public boolean delete(String id) {
         System.out.println("Going to delete: " + id);
         Activity activityToBeDeleted = read(id);
         if(!Utils.askYesNo(null, "Do you really want to delete this activity? " + read(id), "Deletion of activity")) {
-            return;
+            return false;
         }
 
         StringBuilder sb = new StringBuilder();
@@ -99,7 +99,7 @@ public class ActivityRepositorySQLiteImpl implements ActivityRepositoryApi {
             ex.printStackTrace();
             throw new TimeCalcException(ex);
         }
-
+        return true;
 
     }
 

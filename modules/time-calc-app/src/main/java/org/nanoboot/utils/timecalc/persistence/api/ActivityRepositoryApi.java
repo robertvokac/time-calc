@@ -20,7 +20,7 @@ public interface ActivityRepositoryApi {
 
     Activity read(String id);
     
-    void delete(String id);
+    boolean delete(String id);
     
     List<String> getYears();
 
