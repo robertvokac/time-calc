@@ -90,50 +90,52 @@ public class Battery extends Widget {
 //        return getColorBetween(result, result == low ? medium : (result == medium ? high : highest), transition, donePercent);
     }
     private static Map<String, Color> colorCache = new HashMap<>();
-    private static Color getColorBetween(Color color1, Color color2, double transition, double progress) {
-        if(color1.equals(color2)) {
-            return color1;
-        }
-        int red1 = color1.getRed();
-        int green1 = color1.getGreen();
-        int blue1 = color1.getBlue();
-        int red2 = color2.getRed();
-        int green2 = color2.getGreen();
-        int blue2 = color2.getBlue();
-        int redDiff = Math.abs(red2-red1);
-        int greenDiff = Math.abs(green2-green1);
-        int blueDiff = Math.abs(blue2-blue1);
-        int red = (int) (Math.min(red1, red2) + ((double)redDiff) * transition);
-        int green  = (int) (Math.min(green1, green2) + ((double)greenDiff) * transition);
-        int blue = (int) (Math.min(blue1, blue2) + ((double)blueDiff) * transition);
-        String key = red + COLON + green + COLON + blue;
 
-//        try {new Color(red, green, blue);} catch (Exception e) {
-//            System.out.println(key);
-//            System.out.println("\n\n\nred1=" + red1);
-//            System.out.println("green1=" + green1);
-//            System.out.println("blue1=" + blue1);
-//            System.out.println("red2=" + red2);
-//            System.out.println("green2=" + green2);
-//            System.out.println("blue2=" + blue2);
-//            System.out.println("redDiff=" + redDiff);
-//            System.out.println("greenDiff=" + greenDiff);
-//            System.out.println("blueDiff=" + blueDiff);
-//            System.out.println("red=" + red);
-//            System.out.println("green=" + green);
-//            System.out.println("blue=" + blue);
-//            System.out.println("transition=" + transition);
-//            System.out.println("progress=" + progress);
-//
-//            return Color.LIGHT_GRAY;
+//    private static Color getColorBetween(Color color1, Color color2, double transition, double progress) {
+//        if(color1.equals(color2)) {
+//            return color1;
 //        }
+//        int red1 = color1.getRed();
+//        int green1 = color1.getGreen();
+//        int blue1 = color1.getBlue();
+//        int red2 = color2.getRed();
+//        int green2 = color2.getGreen();
+//        int blue2 = color2.getBlue();
+//        int redDiff = Math.abs(red2-red1);
+//        int greenDiff = Math.abs(green2-green1);
+//        int blueDiff = Math.abs(blue2-blue1);
+//        int red = (int) (Math.min(red1, red2) + ((double)redDiff) * transition);
+//        int green  = (int) (Math.min(green1, green2) + ((double)greenDiff) * transition);
+//        int blue = (int) (Math.min(blue1, blue2) + ((double)blueDiff) * transition);
+//        String key = red + COLON + green + COLON + blue;
+//
+////        try {new Color(red, green, blue);} catch (Exception e) {
+////            System.out.println(key);
+////            System.out.println("\n\n\nred1=" + red1);
+////            System.out.println("green1=" + green1);
+////            System.out.println("blue1=" + blue1);
+////            System.out.println("red2=" + red2);
+////            System.out.println("green2=" + green2);
+////            System.out.println("blue2=" + blue2);
+////            System.out.println("redDiff=" + redDiff);
+////            System.out.println("greenDiff=" + greenDiff);
+////            System.out.println("blueDiff=" + blueDiff);
+////            System.out.println("red=" + red);
+////            System.out.println("green=" + green);
+////            System.out.println("blue=" + blue);
+////            System.out.println("transition=" + transition);
+////            System.out.println("progress=" + progress);
+////
+////            return Color.LIGHT_GRAY;
+////        }
+//
+//        if(!colorCache.containsKey(key)) {
+//            colorCache.put(key, new Color(red, green, blue));
+//        }
+//        return colorCache.get(key);
+//
+//    }
 
-        if(!colorCache.containsKey(key)) {
-            colorCache.put(key, new Color(red, green, blue));
-        }
-        return colorCache.get(key);
-
-    }
     public BooleanProperty wavesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
                     .getKey(), true);

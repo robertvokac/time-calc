@@ -30,6 +30,7 @@ import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
 import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
+import org.nanoboot.utils.timecalc.swing.progress.PlaceHolderWidget;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
@@ -298,6 +299,11 @@ public class MainWindow extends TWindow {
         progressCircle.visibleProperty
                 .bindTo(timeCalcConfiguration.circleVisibleProperty);
         //
+//        PlaceHolderWidget placeHolderWidget = new PlaceHolderWidget();
+//        add(placeHolderWidget);
+//        placeHolderWidget.setBounds(progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 50, 50);
+
+
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(clock, 3);
 
