@@ -175,6 +175,10 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
     private final JCheckBox circleVisibleProperty
             = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
+    private final JCheckBox swingVisibleProperty
+            = new JCheckBox(TimeCalcProperty.SWING_VISIBLE.getKey());
+    private final JCheckBox swingQuarterIconVisibleProperty
+            = new JCheckBox(TimeCalcProperty.SWING_QUARTER_ICON_VISIBLE.getKey());
     private final JCheckBox walkingHumanVisibleProperty
             = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
     private final JTextField mainWindowCustomTitleProperty
@@ -342,6 +346,8 @@ public class ConfigWindow extends TWindow {
                         .setSelected(!enable);
                 squareVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
+                swingVisibleProperty.setSelected(enable);
+                swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
                 MainWindow.hideShowFormsCheckBox.setSelected(enable);
             });
@@ -399,6 +405,8 @@ public class ConfigWindow extends TWindow {
                 notificationsVisibleProperty,
                 squareVisibleProperty,
                 circleVisibleProperty,
+                swingVisibleProperty,
+                swingQuarterIconVisibleProperty,
                 walkingHumanVisibleProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,

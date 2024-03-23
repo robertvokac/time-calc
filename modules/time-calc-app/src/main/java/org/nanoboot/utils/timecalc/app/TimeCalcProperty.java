@@ -76,6 +76,8 @@ public enum TimeCalcProperty {
             "Smileys : Visible only, if mouse moving over"),
     SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
     SQUARE_VISIBLE("square.visible", "Square"),
+    SWING_VISIBLE("swing.visible", "Swing"),
+    SWING_QUARTER_ICON_VISIBLE("swing.quarter-icon.visible", "Swing: Quarter icon"),
     CIRCLE_VISIBLE("circle.visible", "Circle"),
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
     MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title",

@@ -156,6 +156,10 @@ public class TimeCalcConfiguration {
 
     public final BooleanProperty squareVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
+    public final BooleanProperty swingVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SWING_VISIBLE.getKey());
+    public final BooleanProperty swingQuarterIconVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SWING_QUARTER_ICON_VISIBLE.getKey());
     public final BooleanProperty circleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     public final BooleanProperty walkingHumanVisibleProperty
@@ -239,6 +243,8 @@ public class TimeCalcConfiguration {
             smileysColoredProperty,
             squareVisibleProperty,
             circleVisibleProperty,
+            swingVisibleProperty,
+            swingQuarterIconVisibleProperty,
             walkingHumanVisibleProperty,
             mainWindowCustomTitleProperty,
             profileNameProperty,

@@ -32,6 +32,7 @@ import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
@@ -203,6 +204,7 @@ public class MainWindow extends TWindow {
 
         AnalogClock clock = new AnalogClock();
 
+
         {
             arrivalTextField.valueProperty.addListener(e -> {
                 if (!arrivalTextField.valueProperty.getValue().isEmpty()) {
@@ -301,9 +303,16 @@ public class MainWindow extends TWindow {
 //        add(placeHolderWidget);
 //        placeHolderWidget.setBounds(progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 50, 50);
 
+        ProgressSwing progressSwing = new ProgressSwing();
+        progressSwing.setBounds(clock.getX(), clock.getY() + clock.getHeight() + SwingUtils.MARGIN,
+                200, 100);
+        add(progressSwing);
+        progressSwing.visibleProperty
+                .bindTo(timeCalcConfiguration.swingVisibleProperty);
+        progressSwing.quarterIconVisibleProperty.bindTo(timeCalcConfiguration.swingQuarterIconVisibleProperty);
 
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
-        arrivalTextFieldLabel.setBoundsFromTop(clock, 3);
+        arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
         TButton arrivalIncreaseButton = new SmallTButton('+');
@@ -781,7 +790,7 @@ public class MainWindow extends TWindow {
                     dayBattery,
                     weekBattery, monthBattery, yearBattery,
                     walkingHumanProgress,
-                    progressSquare, progressCircle, componentRegistry, arrivalTextFieldLabel)) {
+                    progressSquare, progressCircle, progressSwing, componentRegistry, arrivalTextFieldLabel)) {
                 break;
             }
         }
@@ -812,7 +821,9 @@ public class MainWindow extends TWindow {
             Battery dayBattery, Battery weekBattery, Battery monthBattery,
             Battery yearBattery, WalkingHumanProgress walkingHumanProgress,
             ProgressSquare progressSquare, ProgressCircle progressCircle,
-            ComponentRegistry<Component> componentRegistry, TLabel arrivalTextFieldLabel) {
+            ProgressSwing progressSwing,
+            ComponentRegistry<Component> componentRegistry,
+            TLabel arrivalTextFieldLabel) {
         //System.out.println("timeCalcConfiguration.handsLongProperty=" + timeCalcConfiguration.clockHandLongProperty.isEnabled());
 
         if (!departureTextField.valueProperty.getValue().isEmpty() && !arrivalTextField.valueProperty.getValue().isEmpty()) {
@@ -943,6 +954,7 @@ public class MainWindow extends TWindow {
         }
         progressSquare.setDonePercent(done);
         progressCircle.setDonePercent(done);
+        progressSwing.setDonePercent(done);
         dayBattery.setDonePercent(done);
 
         WeekStatistics weekStatistics = new WeekStatistics(clock, time);

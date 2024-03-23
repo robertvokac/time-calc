@@ -1,10 +1,11 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
-import java.awt.BasicStroke;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.swing.progress.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
@@ -14,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -62,7 +64,10 @@ public class Widget extends JPanel implements
     protected boolean mouseOver = false;
     private boolean mouseOverCloseButton = false;
     protected JLabel smileyIcon;
+    protected JLabel smileyIcon2;
     private long lastUpdate = System.nanoTime();
+    private static final Color PURPLE_STRONGLY_COLORED = new Color(153,51,255);
+    private static final Color PURPLE_WEAKLY_COLORED = new Color(204,153,255);
 
     public Widget() {
         setBackground(BACKGROUND_COLOR);
@@ -237,10 +242,18 @@ public class Widget extends JPanel implements
     }
     protected void paintSmiley(Visibility visibility, Graphics2D brush, int x,
             int y, boolean paintBody) {
+        paintSmiley(visibility, brush, x, y, paintBody, -1, 1);
+    }
+    protected void paintSmiley(Visibility visibility, Graphics2D brush, int x,
+            int y, boolean paintBody, double customDonePercent, int smileyNumber) {
         if (!shouldBeSmileyPainted()) {
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
+            }
+            if (this.smileyIcon2 != null) {
+                this.remove(smileyIcon2);
+                this.smileyIcon2 = null;
             }
 
             //nothing more to do
@@ -251,12 +264,15 @@ public class Widget extends JPanel implements
             colored = false;
         }
 
-
         if (!colored) {
             y = y - 2;
             if (this.smileyIcon != null) {
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
+            }
+            if (this.smileyIcon2 != null) {
+                this.remove(smileyIcon2);
+                this.smileyIcon2 = null;
             }
             Color originalColor = brush.getColor();
             if (!visibility.isStronglyColored()) {
@@ -280,8 +296,8 @@ public class Widget extends JPanel implements
             brush.setColor(currentColor);
             brush.setFont(MEDIUM_FONT);
             brush.drawString(
-                    ProgressSmiley.forProgress(donePercent).getCharacter(),
-                    x + 1, y + 16
+                    ProgressSmiley.forProgress(customDonePercent >= 0 ? customDonePercent : donePercent).getCharacter(),
+                    x + 1 + (getClass() == ProgressSwing.class ? -8 : 0), y + 16
             );
             brush.setFont(currentFont);
             brush.setColor(originalColor);
@@ -289,15 +305,25 @@ public class Widget extends JPanel implements
         if (colored) {
             x = x + 2;
             ImageIcon imageIcon = ProgressSmileyIcon
-                    .forSmiley(ProgressSmiley.forProgress(donePercent))
+                    .forSmiley(ProgressSmiley.forProgress(customDonePercent >= 0 ? customDonePercent : donePercent))
                     .getIcon();
-            if (this.smileyIcon != null) {
-                this.remove(smileyIcon);
-                this.smileyIcon = null;
+            if(smileyNumber < 2) {
+                if (this.smileyIcon != null) {
+                    this.remove(smileyIcon);
+                    this.smileyIcon = null;
+                }
+                this.smileyIcon = new JLabel(imageIcon);
+                smileyIcon.setBounds(x + (getClass() == ProgressSwing.class ? - 8 : 0), y, 15, 15);
+                this.add(smileyIcon);
+            } else {
+                if (this.smileyIcon2 != null) {
+                    this.remove(smileyIcon2);
+                    this.smileyIcon2 = null;
+                }
+                this.smileyIcon2 = new JLabel(imageIcon);
+                smileyIcon2.setBounds(x + (getClass() == ProgressSwing.class ? - 8 : 0), y, 15, 15);
+                this.add(smileyIcon2);
             }
-            this.smileyIcon = new JLabel(imageIcon);
-            smileyIcon.setBounds(x, y, 15, 15);
-            this.add(smileyIcon);
         }
         if(colored) {
             x = x - 2;
@@ -317,5 +343,76 @@ public class Widget extends JPanel implements
 
     protected boolean changedInTheLastXMilliseconds(int milliseconds) {
         return (System.nanoTime() - lastUpdate) < milliseconds * 1000000;
+    }
+
+    protected void paintQuarterIcon(Graphics2D brush,
+            Visibility visibility, int totalWidth, int totalHeight) {
+        paintQuarterIcon(brush, visibility, totalWidth, totalHeight, -1, -1);
+    }
+    protected void paintQuarterIcon(Graphics2D brush,
+            Visibility visibility, int totalWidth, int totalHeight, int x, int y) {
+        Color currentColor = brush.getColor();
+        //Color currentBackgroundColor = brush.getBackground();
+        Font currentFont = brush.getFont();
+        brush.setFont(BIG_FONT);
+        int q = donePercent < 0.25 ? 0 : (donePercent < 0.5 ? 1 :
+                (donePercent < 0.75 ? 2 : (donePercent < 1.0 ? 3 : 4)));
+        Color color;
+        Color backgroundColor;
+        switch (visibility) {
+            case STRONGLY_COLORED:
+                backgroundColor = Color.WHITE;
+                break;
+            case WEAKLY_COLORED:
+                backgroundColor = Color.LIGHT_GRAY;
+                break;
+            default:
+                backgroundColor = Color.LIGHT_GRAY;
+        }
+
+        switch (q) {
+            case 0:
+                color = Battery.getColourForProgress(0.05, visibility,
+                        mouseOver);
+                break;
+            case 1:
+                color = Battery.getColourForProgress(0.25, visibility,
+                        mouseOver);
+                break;
+            case 2:
+                color = Battery.getColourForProgress(0.85, visibility,
+                        mouseOver);
+                break;
+            case 3:
+                color = Battery.getColourForProgress(0.95, visibility,
+                        mouseOver);
+                break;
+            case 4:
+                color = visibility.isStronglyColored() ? PURPLE_STRONGLY_COLORED : (visibility.isWeaklyColored() ? PURPLE_WEAKLY_COLORED : Color.GRAY);
+                break;
+            default:
+                color = Color.LIGHT_GRAY;
+        }
+        brush.setColor(backgroundColor);
+        if(x< 0 || y < 0) {
+            brush.fillRect(((int) (totalWidth * 0.08)),
+                    (donePercent < 0.5 ? totalHeight / 4 * 3
+                            : (totalHeight / 4 * 1) + 10) + -8, 20, 20);
+        } else {
+            brush.fillRect(x, y, 20, 20);
+        }
+        brush.setColor(color);
+        if(x< 0 || y < 0) {
+            brush.drawString(
+                    String.valueOf(q), ((int) (totalWidth * 0.13)),
+                    (donePercent < 0.5 ? totalHeight / 4 * 3
+                            : (totalHeight / 4 * 1) + 10) + 10
+            );
+        } else {
+            brush.drawString(String.valueOf(q), x + 4, y + 18);
+        }
+        brush.setColor(currentColor);
+        //brush.setBackground(currentBackgroundColor);
+        brush.setFont(currentFont);
     }
 }
