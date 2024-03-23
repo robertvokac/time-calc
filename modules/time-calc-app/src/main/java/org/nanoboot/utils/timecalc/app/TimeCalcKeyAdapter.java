@@ -291,10 +291,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     }
                     break;
                 case Calendar.DAY_OF_MONTH:
-                    System.out.println("oldMonth=" + oldMonth);
-                    System.out.println("newMonth=" + newMonth);
-                    System.out.println("oldDay=" + oldDay);
-                    System.out.println("newDay=" + newDay);
                     if (oldMonth != newMonth) {
                         updateProperty(timeCalcConfiguration.testMonthCustomProperty, increase, decrease, reset, Calendar.MONTH);
                     }

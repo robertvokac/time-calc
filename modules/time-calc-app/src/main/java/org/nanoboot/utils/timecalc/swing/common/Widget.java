@@ -3,6 +3,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.progress.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
@@ -23,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Locale;
 
 /**
  * @author Robert Vokac
@@ -59,6 +61,8 @@ public class Widget extends JPanel implements
     public StringProperty visibilityProperty
             = new StringProperty("widget.visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
+    public StringProperty typeProperty
+            = new StringProperty("widget.typeProperty", WidgetType.DAY.name().toLowerCase());
     protected int side = 0;
     protected double donePercent = 0;
     protected boolean mouseOver = false;

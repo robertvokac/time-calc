@@ -156,20 +156,33 @@ public class TimeCalcConfiguration {
 
     public final BooleanProperty squareVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
-    public final BooleanProperty swingVisibleProperty
-            = new BooleanProperty(TimeCalcProperty.SWING_VISIBLE.getKey());
-    public final BooleanProperty swingQuarterIconVisibleProperty
-            = new BooleanProperty(TimeCalcProperty.SWING_QUARTER_ICON_VISIBLE.getKey());
+    public final StringProperty squareTypeProperty
+            = new StringProperty(TimeCalcProperty.SQUARE_TYPE.getKey());
     public final BooleanProperty circleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
+    public final StringProperty circleTypeProperty
+            = new StringProperty(TimeCalcProperty.CIRCLE_TYPE.getKey());
     public final BooleanProperty walkingHumanVisibleProperty
             = new BooleanProperty(
                     TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
+    public final StringProperty walkingHumanTypeProperty
+            = new StringProperty(TimeCalcProperty.WALKING_HUMAN_TYPE.getKey());
+    public final BooleanProperty swingVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SWING_VISIBLE.getKey());
+    public final StringProperty swingTypeProperty
+            = new StringProperty(TimeCalcProperty.SWING_TYPE.getKey());
+    public final BooleanProperty swingQuarterIconVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.SWING_QUARTER_ICON_VISIBLE.getKey());
+
+    public final BooleanProperty lifeVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.LIFE_VISIBLE.getKey());
+    public final StringProperty lifeTypeProperty
+            = new StringProperty(TimeCalcProperty.LIFE_TYPE.getKey());
+    public final StringProperty lifeBirthDateProperty
+            = new StringProperty(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(
                     TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
-    public final BooleanProperty testModeProperty
-            = new BooleanProperty("testModeProperty", false);
     public final StringProperty profileNameProperty
             = new StringProperty(TimeCalcProperty.PROFILE_NAME.getKey());
     public final StringProperty activityNeededFlagsProperty
@@ -242,10 +255,17 @@ public class TimeCalcConfiguration {
             smileysVisibleOnlyIfMouseMovingOverProperty,
             smileysColoredProperty,
             squareVisibleProperty,
+            squareTypeProperty,
             circleVisibleProperty,
+            circleTypeProperty,
             swingVisibleProperty,
+            swingTypeProperty,
             swingQuarterIconVisibleProperty,
             walkingHumanVisibleProperty,
+            walkingHumanTypeProperty,
+            lifeVisibleProperty,
+            lifeTypeProperty,
+            lifeBirthDateProperty,
             mainWindowCustomTitleProperty,
             profileNameProperty,
             activityNeededFlagsProperty,

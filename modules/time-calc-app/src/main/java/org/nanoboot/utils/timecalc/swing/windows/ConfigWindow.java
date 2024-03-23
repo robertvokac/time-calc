@@ -1,14 +1,15 @@
 package org.nanoboot.utils.timecalc.swing.windows;
 
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.controls.MouseClickedListener;
 import org.nanoboot.utils.timecalc.swing.controls.TButton;
 import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
-import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -173,14 +175,28 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.SMILEYS_COLORED.getKey());
     private final JCheckBox squareVisibleProperty
             = new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
+    private final JTextField squareTypeProperty
+            = new JTextField(TimeCalcProperty.SQUARE_TYPE.getKey());
     private final JCheckBox circleVisibleProperty
             = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
+    private final JTextField circleTypeProperty
+            = new JTextField(TimeCalcProperty.CIRCLE_TYPE.getKey());
     private final JCheckBox swingVisibleProperty
             = new JCheckBox(TimeCalcProperty.SWING_VISIBLE.getKey());
+    private final JTextField swingTypeProperty
+            = new JTextField(TimeCalcProperty.SWING_TYPE.getKey());
     private final JCheckBox swingQuarterIconVisibleProperty
             = new JCheckBox(TimeCalcProperty.SWING_QUARTER_ICON_VISIBLE.getKey());
     private final JCheckBox walkingHumanVisibleProperty
             = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
+    private final JTextField walkingHumanTypeProperty
+            = new JTextField(TimeCalcProperty.WALKING_HUMAN_TYPE.getKey());
+    public final JCheckBox lifeVisibleProperty
+            = new JCheckBox(TimeCalcProperty.LIFE_VISIBLE.getKey());
+    public final JTextField lifeTypeProperty
+            = new JTextField(TimeCalcProperty.LIFE_TYPE.getKey());
+    public final JTextField lifeBirthDateProperty
+            = new JTextField(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
     private final JTextField mainWindowCustomTitleProperty
             = new JTextField();
     private final JTextField profileNameProperty
@@ -345,6 +361,7 @@ public class ConfigWindow extends TWindow {
                 smileysVisibleOnlyIfMouseMovingOverProperty
                         .setSelected(!enable);
                 squareVisibleProperty.setSelected(enable);
+                lifeVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
@@ -404,10 +421,17 @@ public class ConfigWindow extends TWindow {
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
                 squareVisibleProperty,
+                squareTypeProperty,
                 circleVisibleProperty,
+                circleTypeProperty,
                 swingVisibleProperty,
+                swingTypeProperty,
                 swingQuarterIconVisibleProperty,
                 walkingHumanVisibleProperty,
+                walkingHumanTypeProperty,
+                lifeVisibleProperty,
+                lifeTypeProperty,
+                lifeBirthDateProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
                 activityNeededFlagsProperty,
@@ -455,38 +479,26 @@ public class ConfigWindow extends TWindow {
                 p.putClientProperty(CLIENT_PROPERTY_KEY,
                         TimeCalcProperty.PROFILE_NAME.getKey());
             }
+            if (p == squareTypeProperty) {
+                addLabelToNextRow(TimeCalcProperty.SQUARE_TYPE);
+            }
+            if (p == circleTypeProperty) {
+                addLabelToNextRow(TimeCalcProperty.CIRCLE_TYPE);
+            }
+            if (p == walkingHumanTypeProperty) {
+                addLabelToNextRow(TimeCalcProperty.WALKING_HUMAN_TYPE);
+            }
+            if (p == swingTypeProperty) {
+                addLabelToNextRow(TimeCalcProperty.SWING_TYPE);
+            }
+            if (p == lifeTypeProperty) {
+                addLabelToNextRow(TimeCalcProperty.LIFE_TYPE);
+            }
+            if (p == lifeBirthDateProperty) {
+                addLabelToNextRow(TimeCalcProperty.LIFE_BIRTH_DATE);
+            }
             if (p == activityNeededFlagsProperty) {
-                final JLabel jLabel = new JLabel(
-                        TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getDescription());
-                jLabel.putClientProperty(CLIENT_PROPERTY_KEY,
-                        TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
-                addToNextRow(jLabel);
-                p.putClientProperty(CLIENT_PROPERTY_KEY,
-                        TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
-                activityNeededFlagsProperty.setEditable(false);
-                activityNeededFlagsProperty.setBackground(Color.WHITE);
-                activityNeededFlagsProperty.putClientProperty(
-                        EDITABLE_ONLY_IN_DIALOG, "");
-                activityNeededFlagsProperty
-                        .addMouseListener((MouseClickedListener) f -> {
-
-                            String result =
-                                    (String) JOptionPane.showInputDialog(
-                                            null,
-                                            "Select new value",
-                                            "New value",
-                                            JOptionPane.PLAIN_MESSAGE,
-                                            null,
-                                            null,
-                                            activityNeededFlagsProperty
-                                                    .getText()
-                                    );
-                            if (result != null) {
-                                activityNeededFlagsProperty.setText(result);
-                                timeCalcConfiguration.activityNeededFlagsProperty.setValue(result);
-                            }
-                        });
-
+                addLabelToNextRow(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS);
             }
 
             if (p == testClockCustomYearProperty) {
@@ -525,6 +537,8 @@ public class ConfigWindow extends TWindow {
 
                 checkBox.setText(timeCalcProperty.getDescription());
 
+                System.out.println(((JCheckBox) p).getText());
+                System.out.println(timeCalcProperty);
                 BooleanProperty property
                         = (BooleanProperty) timeCalcConfiguration
                                 .getProperty(timeCalcProperty);
@@ -632,9 +646,54 @@ public class ConfigWindow extends TWindow {
                 String timeCalcPropertyKey
                         = (String) textField.getClientProperty(
                                 CLIENT_PROPERTY_KEY);
+                if(timeCalcPropertyKey == null) {
+                    timeCalcPropertyKey = textField.getText();
+                    textField.putClientProperty(CLIENT_PROPERTY_KEY, timeCalcPropertyKey);
+                }
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
                 boolean isInteger = Integer.class == timeCalcProperty.getClazz();
+
+
+
+
+                {
+                    textField.setEditable(false);
+                    textField.setBackground(Color.WHITE);
+                    textField.putClientProperty(
+                            EDITABLE_ONLY_IN_DIALOG, "");
+                    textField
+                            .addMouseListener((MouseClickedListener) f -> {
+
+                                String result =
+                                        (String) JOptionPane.showInputDialog(
+                                                null,
+                                                "Select new value",
+                                                "New value",
+                                                JOptionPane.PLAIN_MESSAGE,
+                                                null,
+                                                null,
+                                                textField
+                                                        .getText()
+                                        );
+                                if (result != null) {
+                                    if(timeCalcProperty.name().contains("TYPE")) {
+                                        try {
+                                            WidgetType widgetType =
+                                                    WidgetType.valueOf(result.toUpperCase(
+                                                            Locale.ROOT));
+                                        } catch (Exception e) {
+                                            throw new TimeCalcException("Invalid format. Only these values are allowed: " + Arrays
+                                                    .stream(WidgetType.values()).map(WidgetType::name).map(String::toLowerCase).collect(
+                                                            Collectors.joining(", ")));
+                                        }
+                                    }
+                                    textField.setText(result);
+                                    timeCalcConfiguration.getProperty(timeCalcProperty).setValue(timeCalcProperty.getClazz() == Integer.class ? Integer.valueOf(result) : result);
+                                }
+                            });
+
+                }
                 timeCalcConfiguration
                         .getProperty(timeCalcProperty).addListener(e -> {
 
@@ -728,6 +787,13 @@ public class ConfigWindow extends TWindow {
 
             }
         });
+    }
+
+    private void addLabelToNextRow(TimeCalcProperty timeCalcProperty) {
+        final JLabel jLabel = new JLabel(
+                timeCalcProperty.getDescription());
+        jLabel.putClientProperty(CLIENT_PROPERTY_KEY,timeCalcProperty.getKey());
+        addToNextRow(jLabel);
     }
 
     private void addToNextRow(JComponent jComponent) {

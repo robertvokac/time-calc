@@ -11,8 +11,8 @@ import java.util.Locale;
  */
 public class DateFormats {
 
-    public final static DateTimeFormatter DATE_TIME_FORMATTER_HHmmssSSS
-            = DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
+    public final static DateFormat DATE_TIME_FORMATTER_HHmmssSSS
+            = new SimpleDateFormat("HH:mm:ss:SSS", Locale.ENGLISH);
     public static DateFormat DATE_TIME_FORMATTER_LONG
             = new SimpleDateFormat("yyyy-MM-dd : EEEE", Locale.ENGLISH);
 

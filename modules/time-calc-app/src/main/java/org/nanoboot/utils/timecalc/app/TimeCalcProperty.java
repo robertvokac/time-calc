@@ -1,10 +1,14 @@
 package org.nanoboot.utils.timecalc.app;
 
 import lombok.Getter;
+import org.nanoboot.utils.timecalc.utils.common.Utils;
 
+import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Robert Vokac
@@ -76,12 +80,18 @@ public enum TimeCalcProperty {
             "Smileys : Visible only, if mouse moving over"),
     SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
     SQUARE_VISIBLE("square.visible", "Square"),
-    SWING_VISIBLE("swing.visible", "Swing"),
-    SWING_QUARTER_ICON_VISIBLE("swing.quarter-icon.visible", "Swing: Quarter icon"),
+    SQUARE_TYPE("square.type", "Square : Type"),
     CIRCLE_VISIBLE("circle.visible", "Circle"),
+    CIRCLE_TYPE("circle.type", "Circle : Type"),
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
-    MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title",
-            "Main Window : Custom Title"),
+    WALKING_HUMAN_TYPE("walking-human.type", "Walking Human : Type"),
+    SWING_VISIBLE("swing.visible", "Swing"),
+    SWING_TYPE("swing.type", "Swing : Type"),
+    SWING_QUARTER_ICON_VISIBLE("swing.quarter-icon.visible", "Swing: Quarter icon"),
+    LIFE_VISIBLE("life.visible", "Life"),
+    LIFE_TYPE("life.type", "Life : Type"),
+    LIFE_BIRTH_DATE("life.birth-date", "Life : Birth date"),
+    MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title","Main Window : Custom Title"),
     PROFILE_NAME("profile.name", "Profile : Name"),
     TEST_ENABLED("test.enabled", "Test : Enabled", Boolean.class),
     TEST_CLOCK_CUSTOM_YEAR("test.clock.custom.year", "Test : Clock : Custom : Year", Integer.class),
@@ -100,6 +110,20 @@ public enum TimeCalcProperty {
     @Getter
     private final Class clazz;
 
+
+
+    static {
+        Set<String> uniqueKeys = new HashSet<>();
+        for(TimeCalcProperty tcp:TimeCalcProperty.values()) {
+            if(uniqueKeys.contains(tcp.getKey())) {
+                String msg = "Fatal exception: TimeCalcProperty key must be unique: " + tcp.getKey();
+                JOptionPane.showMessageDialog(null, msg);
+                throw new TimeCalcException(msg);
+            } else {
+                uniqueKeys.add(tcp.getKey());
+            }
+        }
+    }
     TimeCalcProperty(String key, String description, Class clazz) {
         this.key = key;
         this.description = description;

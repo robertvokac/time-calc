@@ -31,6 +31,7 @@ import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
@@ -96,6 +97,7 @@ public class MainWindow extends TWindow {
     private final TTextField elapsedTextField;
     private final TTextField remainingTextField;
     private final TButton saveButton;
+    private final ProgressLife progressLife;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -305,13 +307,32 @@ public class MainWindow extends TWindow {
 //        placeHolderWidget.setBounds(progressSquare.getX() + progressSquare.getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 50, 50);
 
         ProgressSwing progressSwing = new ProgressSwing();
-        progressSwing.setBounds(clock.getX(), clock.getY() + clock.getHeight() + SwingUtils.MARGIN,
+        progressSwing.setBounds(clock.getX(), walkingHumanProgress.getY() + walkingHumanProgress.getHeight() + SwingUtils.MARGIN,
                 200, 100);
         add(progressSwing);
         progressSwing.visibleProperty
                 .bindTo(timeCalcConfiguration.swingVisibleProperty);
         progressSwing.quarterIconVisibleProperty.bindTo(timeCalcConfiguration.swingQuarterIconVisibleProperty);
 
+        this.progressLife = new ProgressLife(time);
+        progressLife.setBounds(progressSwing.getX() + progressSwing.getWidth() + SwingUtils.MARGIN, progressSwing.getY(),
+                100, 100);
+
+        {
+            progressSquare.typeProperty
+                    .bindTo(timeCalcConfiguration.squareTypeProperty);
+            progressCircle.typeProperty
+                    .bindTo(timeCalcConfiguration.circleTypeProperty);
+            walkingHumanProgress.typeProperty
+                    .bindTo(timeCalcConfiguration.walkingHumanTypeProperty);
+            progressSwing.typeProperty
+                    .bindTo(timeCalcConfiguration.swingTypeProperty);
+            progressLife.typeProperty
+                    .bindTo(timeCalcConfiguration.squareTypeProperty);
+            progressLife.birthDateProperty
+                    .bindTo(timeCalcConfiguration.lifeBirthDateProperty);
+        }
+        add(progressLife);
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
 
@@ -956,15 +977,12 @@ public class MainWindow extends TWindow {
         progressSquare.setDonePercent(done);
         progressCircle.setDonePercent(done);
         progressSwing.setDonePercent(done);
+        progressLife.setDonePercent(done);
         dayBattery.setDonePercent(done);
         try {
             WeekStatistics weekStatisticsTmp = new WeekStatistics(clock, time);
             weekStatistics = weekStatisticsTmp;
         } catch (DateTimeException e) {
-            System.out.println("time.monthProperty=" + time.monthProperty);
-            System.out.println("time.dayProperty=" + time.dayProperty);
-            System.out.println("time.monthCustomProperty=" + time.monthCustomProperty);
-            System.out.println("time.dayCustomProperty=" + time.dayCustomProperty);
             e.printStackTrace();
             try {
                 Thread.sleep(1000);
