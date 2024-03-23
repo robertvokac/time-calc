@@ -55,16 +55,6 @@ You can stop the app, if you press the **"Exit"** button or click on the exit wi
 
 If these files are present, something special happens.
 
-### .tc/starttime.txt
-
-This file contains the default start time - used during the previous run of the app. 
-If file starttime.txt does not exist, then the default start time is 7:00.
-
-### .tc/overtime.txt
-
-This file contains the default overtime - used during the previous run of the app.
-If file overtime.txt does not exist, then the default overtime is 0:00.
-
 ### ./tc/timecalc.conf
 
 Configuration is stored here.
@@ -83,7 +73,7 @@ Optional assignments of profiles to numbers is stored here.
 
 ## Features
 
-### 3 Visibility modes
+### 4 Visibility modes
 
  * STRONGLY_COLORED - many colors 
  * WEAKLY_COLORED - darkened colors
@@ -187,16 +177,17 @@ Smileys can be colored or white-black (can be set in configuration)
 * LEFT - switch to previous profile
 * RIGHT - switch to next profile
 * K - hide or show clock
-* SHIFT + {Y,N,D,H,M,S or I} - Increase test time value
-* CTRL + {Y,N,D,H,M,S or I} - Decrease test time value
-* ALT + {Y,N,D,H,M,S or I} - Rest test time value
+* SHIFT + {Y,N,D,H,M,S,I,K} - Increase test time value
+* CTRL + {Y,N,D,H,M,S,I,K} - Decrease test time value
+* ALT + {Y,N,D,H,M,S,I,K} - Rest test time value
+* Y=year, N=month, D=day of month, H=hour, M=minute, S=second, I=millisecond, K=week
 * D - Reset custom time values to the real time
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time
 * SHIFT + O - Increase overtime
 * CTRL + O - Decrease overtime
 * SHIFT + W - Increase working time
-* CTRL + W - Decrease worknig time
+* CTRL + W - Decrease working time
 * SHIFT + P - Increase pause
 * CTRL + P - Decrease pause
 * SHIFT + C - Increase or decrease of time is change by 1 hour

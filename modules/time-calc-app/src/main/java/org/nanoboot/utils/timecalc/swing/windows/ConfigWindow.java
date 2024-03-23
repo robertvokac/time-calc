@@ -186,6 +186,10 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.SQUARE_VISIBLE.getKey());
     private final JTextField squareTypeProperty
             = new JTextField(TimeCalcProperty.SQUARE_TYPE.getKey());
+    private final JCheckBox dotVisibleProperty
+            = new JCheckBox(TimeCalcProperty.DOT_VISIBLE.getKey());
+    private final JTextField dotTypeProperty
+            = new JTextField(TimeCalcProperty.DOT_TYPE.getKey());
     private final JCheckBox circleVisibleProperty
             = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     private final JTextField circleTypeProperty
@@ -391,6 +395,7 @@ public class ConfigWindow extends TWindow {
                 smileysVisibleOnlyIfMouseMovingOverProperty
                         .setSelected(!enable);
                 squareVisibleProperty.setSelected(enable);
+                dotVisibleProperty.setSelected(enable);
                 lifeVisibleProperty.setSelected(enable);
                 moneyVisibleProperty.setSelected(enable);
                 weatherVisibleProperty.setSelected(enable);
@@ -455,6 +460,8 @@ public class ConfigWindow extends TWindow {
                 notificationsVisibleProperty,
                 squareVisibleProperty,
                 squareTypeProperty,
+                dotVisibleProperty,
+                dotTypeProperty,
                 circleVisibleProperty,
                 circleTypeProperty,
                 swingVisibleProperty,

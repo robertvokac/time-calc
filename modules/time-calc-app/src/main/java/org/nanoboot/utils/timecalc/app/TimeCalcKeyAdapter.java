@@ -122,6 +122,14 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                         Calendar.MILLISECOND);
                 break;
             }
+            case KeyEvent.VK_K: {
+                //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " millisecond.");
+                for (int i = 1; i <= 7; i++) {
+                    updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset,
+                            Calendar.DAY_OF_MONTH);
+                }
+                break;
+            }
             case KeyEvent.VK_A: {
 
                 if (increase) {

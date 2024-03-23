@@ -67,6 +67,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
 
 /**
  * @author Robert Vokac
@@ -114,6 +115,7 @@ public class MainWindow extends TWindow {
 
     private final IntegerProperty forgetOvertimeProperty = new IntegerProperty("forgetOvertimeProperty", 0);
     private WeekStatistics weekStatistics = null;
+    private final ProgressDot progressDot;
 
     {
         ChangeListener valueMustBeTime =
@@ -324,22 +326,6 @@ public class MainWindow extends TWindow {
         progressLife.setBounds(progressSwing.getX() + progressSwing.getWidth() + SwingUtils.MARGIN, progressSwing.getY(),
                 100, 50);
 
-        {
-            progressSquare.typeProperty
-                    .bindTo(timeCalcConfiguration.squareTypeProperty);
-            progressCircle.typeProperty
-                    .bindTo(timeCalcConfiguration.circleTypeProperty);
-            walkingHumanProgress.typeProperty
-                    .bindTo(timeCalcConfiguration.walkingHumanTypeProperty);
-            progressSwing.typeProperty
-                    .bindTo(timeCalcConfiguration.swingTypeProperty);
-            progressLife.typeProperty
-                    .bindTo(timeCalcConfiguration.lifeTypeProperty);
-            progressLife.birthDateProperty
-                    .bindTo(timeCalcConfiguration.lifeBirthDateProperty);
-            progressLife.visibleProperty
-                    .bindTo(timeCalcConfiguration.lifeVisibleProperty);
-        }
         add(progressLife);
 
 
@@ -366,7 +352,38 @@ public class MainWindow extends TWindow {
         progressWeather.visibleProperty
                 .bindTo(timeCalcConfiguration.weatherVisibleProperty);
         add(progressWeather);
+        
+        
+        this.progressDot
+                = new ProgressDot();
+        progressDot.setBounds(progressWeather.getX() + progressWeather.getWidth() + SwingUtils.MARGIN, progressWeather.getY(),
+                100, 100);
 
+        progressDot.visibleProperty
+                .bindTo(timeCalcConfiguration.weatherVisibleProperty);
+        add(progressDot);
+
+                {
+            progressSquare.typeProperty
+                    .bindTo(timeCalcConfiguration.squareTypeProperty);
+            progressDot.typeProperty
+                    .bindTo(timeCalcConfiguration.dotTypeProperty);
+            progressDot.visibleProperty
+                    .bindTo(timeCalcConfiguration.dotVisibleProperty);
+            progressCircle.typeProperty
+                    .bindTo(timeCalcConfiguration.circleTypeProperty);
+            walkingHumanProgress.typeProperty
+                    .bindTo(timeCalcConfiguration.walkingHumanTypeProperty);
+            progressSwing.typeProperty
+                    .bindTo(timeCalcConfiguration.swingTypeProperty);
+            progressLife.typeProperty
+                    .bindTo(timeCalcConfiguration.lifeTypeProperty);
+            progressLife.birthDateProperty
+                    .bindTo(timeCalcConfiguration.lifeBirthDateProperty);
+            progressLife.visibleProperty
+                    .bindTo(timeCalcConfiguration.lifeVisibleProperty);
+        }
+                
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
 
@@ -1055,6 +1072,7 @@ public class MainWindow extends TWindow {
         progressSwing.setProgress(progress);
         progressLife.setProgress(progress);
         progressMoney.setProgress(progress);
+        progressDot.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);

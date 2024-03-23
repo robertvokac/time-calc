@@ -36,14 +36,14 @@ Time Calc is inspired by this document: [report.ods](https://code.nanoboot.org/n
 
 ### Start of application
 
-When "Time Calc" is started", user should fill the correct value for:
-- start time ... like 7:30
-- overtime ... like 0:45 ... overtime is optional and the default value is 0:00
+When "Time Calc" is started", user is asked for:
+ - start time ... like 7:30
+ - overtime ... like 0:45 ... overtime is optional and the default value is 0:00
 
 ### Restart of application
 
 You can restart the app, if you press the **"Restart"** button.
-- Then you are asked again for start time and overtime.
+ - Then you are asked again for start time and overtime.
 
 ### End of application
 
@@ -73,31 +73,31 @@ Optional assignments of profiles to numbers is stored here.
 
 ## Features
 
-### 3 Visibility modes
+### 4 Visibility modes
 
-* STRONGLY_COLORED - many colors
-* WEAKLY_COLORED - darkened colors
-* GRAY - gray colors
-* NONE - widgets are hidden
+ * STRONGLY_COLORED - many colors 
+ * WEAKLY_COLORED - darkened colors
+ * GRAY - gray colors
+ * NONE - widgets are hidden
 
 ### Widgets
 
 #### Analog Clock
 
-* hour hand
-* minute hand (can be disabled in configuration)
-* second hand (can be disabled in configuration)
-* millisecond hand  (can be disabled in configuration)
-* shows current year, month, day of month and day of week, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
-* shows yellow highlighted remaining time until end of today working hours, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
-* hands can be long or shorter (can be set in configuration)
+ * hour hand
+ * minute hand (can be disabled in configuration)
+ * second hand (can be disabled in configuration)
+ * millisecond hand  (can be disabled in configuration)
+ * shows current year, month, day of month and day of week, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
+ * shows yellow highlighted remaining time until end of today working hours, if analog clock is hovered by mouse cursor and Visibility is STRONGLY_COLORED
+ * hands can be long or shorter (can be set in configuration)
 
 #### Progress Square
-* Show graphically day progress
+ * Show graphically day progress
 
 #### Progress Circle
 
-* Show graphically day progress
+ * Show graphically day progress
 
 #### Hour Battery
 
@@ -177,19 +177,20 @@ Smileys can be colored or white-black (can be set in configuration)
 * LEFT - switch to previous profile
 * RIGHT - switch to next profile
 * K - hide or show clock
-* SHIFT + {Y,N,D,H,M,S or I} - Increase test time value
-* CTRL + {Y,N,D,H,M,S or I} - Decrease test time value
-* ALT + {Y,N,D,H,M,S or I} - Rest test time value
+* SHIFT + {Y,N,D,H,M,S,I,K} - Increase test time value
+* CTRL + {Y,N,D,H,M,S,I,K} - Decrease test time value
+* ALT + {Y,N,D,H,M,S,I,K} - Rest test time value
+* Y=year, N=month, D=day of month, H=hour, M=minute, S=second, I=millisecond, K=week
 * D - Reset custom time values to the real time
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time
 * SHIFT + O - Increase overtime
 * CTRL + O - Decrease overtime
 * SHIFT + W - Increase working time
-* CTRL + W - Decrease worknig time
+* CTRL + W - Decrease working time
 * SHIFT + P - Increase pause
 * CTRL + P - Decrease pause
-* SHIFT + C - Increase or decrease of time is change by 5 minutes
+* SHIFT + C - Increase or decrease of time is change by 1 hour
 * CTRL + C - Increase or decrease of time is change by 1 minute
 * CTRL + E - Save arrival, overtime, working time, pause time and note
 
@@ -199,12 +200,12 @@ Smileys can be colored or white-black (can be set in configuration)
 
 ### New features
 
-* Custom arrival target
-* Split to Maven modules
-* Junit, Mockito, etc.
-* Checkstyle
-* Sonarlint
-* Sonarqube
+ * Custom arrival target
+ * Split to Maven modules
+ * Junit, Mockito, etc.
+ * Checkstyle
+ * Sonarlint
+ * Sonarqube
 
 ### Fix these known bugs
 

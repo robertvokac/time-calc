@@ -402,7 +402,7 @@ public class Battery extends Widget {
 
     @Override
     public int getTimerDelay() {
-        return 25;
+        return 1000;
     }
 
 }

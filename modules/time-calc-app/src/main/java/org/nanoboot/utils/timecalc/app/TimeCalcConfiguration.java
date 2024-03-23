@@ -162,6 +162,10 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
     public final StringProperty squareTypeProperty
             = new StringProperty(TimeCalcProperty.SQUARE_TYPE.getKey());
+    public final BooleanProperty dotVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.DOT_VISIBLE.getKey());
+    public final StringProperty dotTypeProperty
+            = new StringProperty(TimeCalcProperty.DOT_TYPE.getKey());
     public final BooleanProperty circleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     public final StringProperty circleTypeProperty
@@ -271,6 +275,8 @@ public class TimeCalcConfiguration {
             smileysColoredProperty,
             squareVisibleProperty,
             squareTypeProperty,
+            dotVisibleProperty,
+            dotTypeProperty,
             circleVisibleProperty,
             circleTypeProperty,
             swingVisibleProperty,

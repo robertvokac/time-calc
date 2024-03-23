@@ -1,7 +1,6 @@
 package org.nanoboot.utils.timecalc.app;
 
 import lombok.Getter;
-import org.nanoboot.utils.timecalc.utils.common.Utils;
 
 import javax.swing.JOptionPane;
 import java.awt.Color;
@@ -82,6 +81,8 @@ public enum TimeCalcProperty {
     SMILEYS_COLORED("smileys.colored", "Smileys : Colored"),
     SQUARE_VISIBLE("square.visible", "Square"),
     SQUARE_TYPE("square.type", "Square : Type"),
+    DOT_VISIBLE("dot.visible", "Dot"),
+    DOT_TYPE("dot.type", "Dot : Type"),
     CIRCLE_VISIBLE("circle.visible", "Circle"),
     CIRCLE_TYPE("circle.type", "Circle : Type"),
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
