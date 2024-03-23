@@ -19,15 +19,17 @@ public interface ActivityRepositoryApi {
         double done = 0d;
         double todo = 8d;
 
+        String neededFlags = timeCalcConfiguration.activityNeededFlagsProperty.getValue();
+        System.out.println("neededFlags=" + neededFlags);
+        neededFlags.replace(",", ":");
+        String[] neededFlagsArray = neededFlags.split(":");
+        Set<String> neededFlagsSet = Arrays.stream(neededFlagsArray).filter(f -> !f.isEmpty()).collect(
+                Collectors.toSet());
+
         loopName:
         for(Activity a:list) {
             Set<String> flags = a.flagsAsSet();
-            String neededFlags = timeCalcConfiguration.activityNeededFlagsProperty.getValue();
-            System.out.println("neededFlags=" + neededFlags);
-            neededFlags.replace(",", ":");
-            String[] neededFlagsArray = neededFlags.split(":");
-            Set<String> neededFlagsSet = Arrays.stream(neededFlagsArray).filter(f -> !f.isEmpty()).collect(
-                    Collectors.toSet());
+
             if(!neededFlagsSet.isEmpty()) {
                 for(String f:neededFlagsSet) {
                     if(!flags.contains(f)) {
