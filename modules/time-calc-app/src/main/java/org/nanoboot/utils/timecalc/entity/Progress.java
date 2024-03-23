@@ -92,14 +92,14 @@ public class Progress {
         cal.set(Calendar.MILLISECOND, millisecond);
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         if(month == 1) {
-            return (daysInMonth * monthProgress + totalCountOfDaysInAYear - daysInMonth) / totalCountOfDaysInAYear;
+            return (daysInMonth * monthProgress) / totalCountOfDaysInAYear;
         } else {
             cal.set(Calendar.MONTH, month - 2);
             cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
             int totalDaysUntilLastDayOfLastMonth =  cal.get(Calendar.DAY_OF_YEAR);
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, day);
-            return (totalDaysUntilLastDayOfLastMonth + (daysInMonth * monthProgress) + (totalCountOfDaysInAYear - totalDaysUntilLastDayOfLastMonth - daysInMonth))/totalCountOfDaysInAYear;
+            return (totalDaysUntilLastDayOfLastMonth + (daysInMonth * monthProgress)) / totalCountOfDaysInAYear;
         }
     }
 
