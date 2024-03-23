@@ -78,6 +78,7 @@ public enum TimeCalcProperty {
     MAIN_WINDOW_CUSTOM_TITLE("main-window.custom-title",
             "Main Window : Custom Title"),
     PROFILE_NAME("profile.name", "Profile : Name"),
+    TEST_ENABLED("test.enabled", "Test : Enabled", Boolean.class),
     TEST_CLOCK_CUSTOM_YEAR("test.clock.custom.year", "Test : Clock : Custom : Year", Integer.class),
     TEST_CLOCK_CUSTOM_MONTH("test.clock.custom.month", "Test : Clock : Custom : Month", Integer.class),
     TEST_CLOCK_CUSTOM_DAY("test.clock.custom.day", "Test : Clock : Custom : Day", Integer.class),

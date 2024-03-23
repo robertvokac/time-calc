@@ -286,7 +286,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
 
     @Override
     public int getTotalOvertimeForDayInMinutes(int year, int month, int day) {
-        System.out.println("#"+year+month+day);
+
         StringBuilder sb = new StringBuilder();
         sb
                 .append("SELECT (sum(OVERTIME_HOUR)*60 + sum(OVERTIME_MINUTE) - sum(FORGET_OVERTIME)) as total_overtime FROM ")

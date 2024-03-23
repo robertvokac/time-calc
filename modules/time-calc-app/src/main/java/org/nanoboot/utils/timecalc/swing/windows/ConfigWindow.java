@@ -166,6 +166,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField();
     private final JTextField profileNameProperty
             = new JTextField();
+    private final JCheckBox testEnabledProperty
+            = new JCheckBox(TimeCalcProperty.TEST_ENABLED.getKey());
     private final JTextField testClockCustomYearProperty
             = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_YEAR.getKey());
     private final JTextField testClockCustomMonthProperty
@@ -203,7 +205,7 @@ public class ConfigWindow extends TWindow {
                 panelInsideScrollPaneBattery,
                 panelInsideScrollPaneSmileys,
                 panelInsideScrollPaneTest,
-                panelInsideScrollPaneMisc).toList();
+                panelInsideScrollPaneMisc).collect(Collectors.toList());
         panelsInsideScrollPane.forEach(p-> {
             final BoxLayout boxLayout = new BoxLayout(p, BoxLayout.Y_AXIS);
             p.setLayout(boxLayout);
@@ -229,7 +231,7 @@ public class ConfigWindow extends TWindow {
                 scrollPaneSmileys,
                 scrollPaneTest,
                 scrollPaneMisc
-                ).toList();
+                ).collect(Collectors.toList());
                 
         tp.add("Clock", scrollPaneClock);
         tp.add("Battery", scrollPaneBattery);
@@ -361,6 +363,7 @@ public class ConfigWindow extends TWindow {
                 smileysVisibleProperty,
                 smileysVisibleOnlyIfMouseMovingOverProperty,
                 smileysColoredProperty,
+                testEnabledProperty,
                 testClockCustomYearProperty,
                 testClockCustomMonthProperty,
                 testClockCustomDayProperty,

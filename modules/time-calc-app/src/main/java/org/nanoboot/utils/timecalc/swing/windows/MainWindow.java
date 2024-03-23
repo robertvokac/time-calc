@@ -146,7 +146,7 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.testSecondCustomProperty);
         time.millisecondCustomProperty
                 .bindTo(timeCalcConfiguration.testMillisecondCustomProperty);
-        time.allowCustomValuesProperty.setValue(true);
+        time.allowCustomValuesProperty.bindTo(timeCalcConfiguration.testEnabledProperty);
 
         arrivalTextField.addVetoableChangeListener(e -> {
             String newValue = (String) e.getNewValue();
@@ -696,7 +696,7 @@ public class MainWindow extends TWindow {
 
         while (true) {
 
-            if(Math.random() > 0.99) {
+            if(Math.random() > 0.999) {
                 File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");
                 if (dbFile.exists() && !dbFileBackup.exists()) {
                     try {
@@ -711,7 +711,7 @@ public class MainWindow extends TWindow {
                             long now = System.currentTimeMillis();
                             long diff = now - Files.getLastModifiedTime(file.toPath()).toMillis();
                             int fileAgeInDays = (int) (diff/ 1000 / 60 / 60 / 24);
-                            System.out.println("Found backup file " + file.getName() + "with age: " + fileAgeInDays);
+                            System.out.println("Found backup file " + file.getName() + " with age: " + fileAgeInDays);
                             if(fileAgeInDays > 14) {
                                 file.delete();
                             }

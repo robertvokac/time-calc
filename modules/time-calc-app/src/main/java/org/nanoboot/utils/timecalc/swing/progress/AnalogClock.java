@@ -376,7 +376,7 @@ public class AnalogClock extends Widget {
     }
 
     public int getTimerDelay() {
-        return 10;
+        return 100;
     }
 
 }

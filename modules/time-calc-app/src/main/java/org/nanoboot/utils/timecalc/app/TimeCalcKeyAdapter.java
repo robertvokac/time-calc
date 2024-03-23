@@ -597,6 +597,16 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
                 break;
             }
+            case KeyEvent.VK_SLASH: {
+                if(timeCalcConfiguration.testEnabledProperty.isDisabled()) {
+                    if(!Utils.askYesNo(null, "Do you really want to enable \"Test mode\"? If yes, then you will be allowed to set custom time.", "Enabling \"Test mode\"")) {
+                        break;
+                    }
+                }
+                timeCalcConfiguration.testEnabledProperty.flip();
+                Utils.showNotification((timeCalcConfiguration.testEnabledProperty.isEnabled()? "Enabled" : "Disabled") + " \"Test mode\".");
+                break;
+            }
             default:
                 if (!numberKeyWasPressed) {
                     Utils.showNotification(
