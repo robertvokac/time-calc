@@ -220,6 +220,9 @@ public class TimeCalcConfiguration {
             .getKey(), Integer.MAX_VALUE);
     public final IntegerProperty testMillisecondCustomProperty = new IntegerProperty(TimeCalcProperty.TEST_CLOCK_CUSTOM_MILLISECOND
             .getKey(), Integer.MAX_VALUE);
+    
+    public final IntegerProperty speedProperty = new IntegerProperty(TimeCalcProperty.SPEED
+            .getKey(), 1);
 
     //
     private final Map<TimeCalcProperty, Property> mapOfProperties
@@ -295,6 +298,7 @@ public class TimeCalcConfiguration {
             mainWindowCustomTitleProperty,
             profileNameProperty,
             activityNeededFlagsProperty,
+            speedProperty,
             testEnabledProperty,
             testYearCustomProperty,
             testMonthCustomProperty,

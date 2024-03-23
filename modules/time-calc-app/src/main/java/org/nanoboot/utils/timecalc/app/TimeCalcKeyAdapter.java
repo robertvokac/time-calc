@@ -129,7 +129,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             
             case KeyEvent.VK_U: {
                 int ms_ = msToAdd;
-                System.out.println("going to add ms:" +msToAdd);
+                //System.out.println("going to add ms:" +msToAdd);
                 int s_ = msToAdd / 1000;
                 ms_ = ms_ - s_ * 1000;
                 int m_ = msToAdd / 1000 / 60;

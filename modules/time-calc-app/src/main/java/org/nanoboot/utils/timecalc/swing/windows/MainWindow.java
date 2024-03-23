@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.Timer;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
 /**
  * @author Robert Vokac
@@ -122,12 +123,12 @@ public class MainWindow extends TWindow {
     private final TimeCalcKeyAdapter timeCalcKeyAdapter;
 
     {
-        ChangeListener valueMustBeTime =
-                (property, oldValue, newValue) -> new TTime((String) newValue);
-        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40, true,valueMustBeTime);
-        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40, true,valueMustBeTime);
-        this.workingTimeTextField = new TTextField("08:00", 40, true,valueMustBeTime);
-        this.pauseTimeTextField = new TTextField("00:30", 40, true,valueMustBeTime);
+        ChangeListener valueMustBeTime
+                = (property, oldValue, newValue) -> new TTime((String) newValue);
+        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40, true, valueMustBeTime);
+        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40, true, valueMustBeTime);
+        this.workingTimeTextField = new TTextField("08:00", 40, true, valueMustBeTime);
+        this.pauseTimeTextField = new TTextField("00:30", 40, true, valueMustBeTime);
 
         this.noteTextField = new TTextField("", 100);
         this.departureTextField = new TTextField();
@@ -154,7 +155,7 @@ public class MainWindow extends TWindow {
             setTitle(getWindowTitle());
         });
         Time time = new Time();
-                time.yearCustomProperty
+        time.yearCustomProperty
                 .bindTo(timeCalcConfiguration.testYearCustomProperty);
         time.monthCustomProperty
                 .bindTo(timeCalcConfiguration.testMonthCustomProperty);
@@ -218,7 +219,6 @@ public class MainWindow extends TWindow {
         addKeyListener(timeCalcKeyAdapter);
 
         AnalogClock clock = new AnalogClock();
-
 
         {
             arrivalTextField.valueProperty.addListener(e -> {
@@ -332,7 +332,6 @@ public class MainWindow extends TWindow {
 
         add(progressLife);
 
-
         this.progressMoney
                 = new ProgressMoney();
         progressMoney.setBounds(progressLife.getX(), progressSwing.getY() + progressLife.getHeight() + SwingUtils.MARGIN,
@@ -341,11 +340,11 @@ public class MainWindow extends TWindow {
         progressMoney.visibleProperty
                 .bindTo(timeCalcConfiguration.moneyVisibleProperty);
         progressMoney.typeProperty
-                    .bindTo(timeCalcConfiguration.moneyTypeProperty);
+                .bindTo(timeCalcConfiguration.moneyTypeProperty);
         progressMoney.perMonthProperty
-                    .bindTo(timeCalcConfiguration.moneyPerMonthProperty);
+                .bindTo(timeCalcConfiguration.moneyPerMonthProperty);
         progressMoney.currencyProperty
-                    .bindTo(timeCalcConfiguration.moneyCurrencyProperty);
+                .bindTo(timeCalcConfiguration.moneyCurrencyProperty);
         add(progressMoney);
 
         this.progressWeather
@@ -356,8 +355,7 @@ public class MainWindow extends TWindow {
         progressWeather.visibleProperty
                 .bindTo(timeCalcConfiguration.weatherVisibleProperty);
         add(progressWeather);
-        
-        
+
         this.progressDot
                 = new ProgressDot();
         progressDot.setBounds(progressWeather.getX() + progressWeather.getWidth() + SwingUtils.MARGIN, progressWeather.getY(),
@@ -367,7 +365,7 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.weatherVisibleProperty);
         add(progressDot);
 
-                {
+        {
             progressSquare.typeProperty
                     .bindTo(timeCalcConfiguration.squareTypeProperty);
             progressDot.typeProperty
@@ -387,7 +385,7 @@ public class MainWindow extends TWindow {
             progressLife.visibleProperty
                     .bindTo(timeCalcConfiguration.lifeVisibleProperty);
         }
-                
+
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
 
@@ -408,7 +406,6 @@ public class MainWindow extends TWindow {
         overtimeDecreaseButton.setBounds(overtimeTextField.getX() + overtimeTextField.getWidth(), overtimeTextField.getY() + 15, 15, 15);
 
         //
-
         TLabel workingTimeInMinutesTextFieldLabel = new TLabel("Work:", 40);
         workingTimeInMinutesTextFieldLabel.setBoundsFromLeft(overtimeTextField, 15);
 
@@ -715,19 +712,19 @@ public class MainWindow extends TWindow {
                 + 3 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
-        
+
         saveButton.addActionListener(e -> {
-            
+
             TTime arrival_ = new TTime(arrivalTextField.getText());
             TTime overtime_ = new TTime(overtimeTextField.getText());
             TTime work_ = new TTime(workingTimeTextField.getText());
-            TTime pause_ = new TTime(pauseTimeTextField.getText()); 
-           
+            TTime pause_ = new TTime(pauseTimeTextField.getText());
+
             Calendar cal = time.asCalendar();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            
+
             timeCalcConfiguration.saveToTimeCalcProperties();
             WorkingDay workingDay = workingDayRepository.read(time.asCalendar());
             if (workingDay == null) {
@@ -748,11 +745,11 @@ public class MainWindow extends TWindow {
             workingDay.setForgetOvertime(forgetOvertimeProperty.getValue());
             workingDayRepository.update(workingDay);
 
-            if(workingDaysWindow != null) {
+            if (workingDaysWindow != null) {
                 workingDaysWindow.doReloadButtonClick();
             }
         });
-        
+
         WorkingDay wd = workingDayRepository.read(time.asCalendar());
 
         if (wd != null) {
@@ -772,29 +769,29 @@ public class MainWindow extends TWindow {
                 Calendar cal2 = Calendar.getInstance();
                 cal2.setTime(cal.getTime());
                 List<WorkingDay> arrivals = new ArrayList<>();
-                for(int i = 1; i <= 90; i++) {
+                for (int i = 1; i <= 90; i++) {
                     cal2.add(Calendar.DAY_OF_MONTH, -1);
                     WorkingDay wd_ = workingDayRepository.read(cal2);
-                    if(wd_ == null || wd_.isThisDayTimeOff()) {
+                    if (wd_ == null || wd_.isThisDayTimeOff()) {
                         continue;
                     }
                     arrivals.add(wd_);
-                    if(arrivals.size() == 20) {
+                    if (arrivals.size() == 20) {
                         break;
                     }
                 }
 
-                if(!arrivals.isEmpty()) {
+                if (!arrivals.isEmpty()) {
 //                    double averageArrival = arrivals.size() == 1 ? arrivals.get(0) : arrivals.stream().mapToDouble(Double::doubleValue).sorted().average().getAsDouble();
-                    double medianArrival = arrivals.stream().map(a->a.getArrivalAsDouble())
+                    double medianArrival = arrivals.stream().map(a -> a.getArrivalAsDouble())
                             .sorted()
                             .collect(Collectors.collectingAndThen(
                                     Collectors.toList(),
                                     a -> (a.size() % 2 == 0) ? ((a.get(a.size() / 2 - 1) + a.get(a.size() / 2)) / 2) : (a.get(a.size() / 2))));
 
-                    TTime arrivalTTime = TTime.ofMilliseconds((int)(medianArrival * 60 * 60 * 1000));
-                    while(arrivalTTime.getMinute() % 5 != 0) {
-                        arrivalTTime = arrivalTTime.add(new TTime(0,1));
+                    TTime arrivalTTime = TTime.ofMilliseconds((int) (medianArrival * 60 * 60 * 1000));
+                    while (arrivalTTime.getMinute() % 5 != 0) {
+                        arrivalTTime = arrivalTTime.add(new TTime(0, 1));
                     }
                     arrivalTextField.valueProperty.setValue(arrivalTTime.toString().substring(0, 5));
                     wd.setArrivalHour(arrivalTTime.getHour());
@@ -824,65 +821,62 @@ public class MainWindow extends TWindow {
 
         workingDayRepository.update(wd);
 
-          new Timer(100, e -> {
-          if(speed == Integer.MIN_VALUE) {
-              timeCalcConfiguration.testEnabledProperty.setValue(false);
-              return;
-          }
-          if(speed < -6) {
-              if(speed == -7) {
-                  if(Math.random() > 0.5) {
-                      return;
-                  }
-              }
-              if(speed == -8) {
-                  if(Math.random() > 0.25) {
-                      return;
-                  }
-              }
-              if(speed == -9) {
-                  if(Math.random() > 0.125) {
-                      return;
-                  }
-              }
-              if(speed == -10) {
-                  if(Math.random() > 0.625) {
-                      return;
-                  }
-              }
-          }
-          if(timeCalcConfiguration.testEnabledProperty.isDisabled()) {
-              timeCalcConfiguration.testEnabledProperty.enable();
-          }
-          if(time.yearCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.yearCustomProperty.setValue(time.yearProperty.getValue());
-          }
-          if(time.monthCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.monthCustomProperty.setValue(time.monthProperty.getValue());
-          }
-          if(time.dayCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.dayCustomProperty.setValue(time.dayProperty.getValue());
-          }
-          if(time.hourCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.hourCustomProperty.setValue(time.hourProperty.getValue());
-          }
-          if(time.minuteCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.minuteCustomProperty.setValue(time.minuteProperty.getValue());
-          }
-          if(time.secondCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.secondCustomProperty.setValue(time.secondProperty.getValue());
-          }
-          if(time.millisecondCustomProperty.getValue() == Integer.MAX_VALUE) {
-              time.millisecondCustomProperty.setValue(time.millisecondProperty.getValue());
-          }
-          int msShouldBeAdded = speed < -6 ? 1 : (int) (Math.pow(2, speed) * 100d);
-          this.timeCalcKeyAdapter.setMsToAdd(msShouldBeAdded);
-          this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
+        new Timer(100, e -> {
+//            if (speed == Integer.MIN_VALUE) {
+//                timeCalcConfiguration.testEnabledProperty.setValue(false);
+//                return;
+//            }
+            double r = Math.pow(2, speed + 6);
+            if (speed < -6 && Math.random() > r) {
+//                System.out.println(NumberFormats.FORMATTER_EIGHT_DECIMAL_PLACES.format(r));
+                return;
 
-          }).start();
+            }
+            if (timeCalcConfiguration.testEnabledProperty.isDisabled()) {
+                timeCalcConfiguration.testEnabledProperty.enable();
+            }
+            if (time.yearCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.yearCustomProperty.setValue(time.yearProperty.getValue());
+            }
+            if (time.monthCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.monthCustomProperty.setValue(time.monthProperty.getValue());
+            }
+            if (time.dayCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.dayCustomProperty.setValue(time.dayProperty.getValue());
+            }
+            if (time.hourCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.hourCustomProperty.setValue(time.hourProperty.getValue());
+            }
+            if (time.minuteCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.minuteCustomProperty.setValue(time.minuteProperty.getValue());
+            }
+            if (time.secondCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.secondCustomProperty.setValue(time.secondProperty.getValue());
+            }
+            if (time.millisecondCustomProperty.getValue() == Integer.MAX_VALUE) {
+                time.millisecondCustomProperty.setValue(time.millisecondProperty.getValue());
+            }
+            int msShouldBeAdded = speed < -6 ? 1 : (int) (Math.pow(2, speed) * 100d);
+            this.timeCalcKeyAdapter.setMsToAdd(msShouldBeAdded);
+            this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
+
+        }).start();
+        this.timeCalcConfiguration.speedProperty.addListener(e -> {
+            
+            int newSpeed = Integer.valueOf(timeCalcConfiguration.speedProperty.getValue());
+            if(newSpeed < MIN_SPEED) {
+                newSpeed = MIN_SPEED;
+            }
+            this.speed = newSpeed;
+        });
+        int newSpeed = Integer.valueOf(timeCalcConfiguration.speedProperty.getValue());
+            if(newSpeed < MIN_SPEED) {
+                newSpeed = MIN_SPEED;
+            }
+            this.speed = newSpeed;
         while (true) {
 
-            if(Math.random() > 0.99) {
+            if (Math.random() > 0.99) {
                 File dbFileBackup = new File(
                         FileConstants.DB_FILE.getAbsolutePath() + ".backup."
                         + DateFormats.DATE_TIME_FORMATTER_SHORT
@@ -898,18 +892,18 @@ public class MainWindow extends TWindow {
                     }
                 }
             }
-            if(Math.random() > 0.9999) {
-                for(File file: FileConstants.TC_DIRECTORY.listFiles()) {
-                    if(file.getName().startsWith(FileConstants.DB_FILE.getName() + ".backup")) {
+            if (Math.random() > 0.9999) {
+                for (File file : FileConstants.TC_DIRECTORY.listFiles()) {
+                    if (file.getName().startsWith(FileConstants.DB_FILE.getName() + ".backup")) {
                         try {
                             long now = System.currentTimeMillis();
                             long diff = now - Files.getLastModifiedTime(file.toPath()).toMillis();
-                            int fileAgeInDays = (int) (diff/ 1000 / 60 / 60 / 24);
+                            int fileAgeInDays = (int) (diff / 1000 / 60 / 60 / 24);
                             System.out.println("Found backup file " + file.getName() + " with age: " + fileAgeInDays);
-                            if(fileAgeInDays > 14) {
+                            if (fileAgeInDays > 14) {
                                 file.delete();
                             }
-                                    
+
                         } catch (IOException ex) {
                             ex.printStackTrace();
                             System.err.println("Deleting old backups failed: " + ex.getMessage());
@@ -983,7 +977,7 @@ public class MainWindow extends TWindow {
             if (startTime == null || overtime == null || workDuration == null || pauseDuration == null) {
                 return false;
             }
- 
+
             TTime newDeparture = startTime.add(workDuration).add(pauseDuration);
             if (overtime.isNegative()) {
                 TTime tmpTTime = overtime.cloneInstance();
@@ -1041,7 +1035,7 @@ public class MainWindow extends TWindow {
         int secondNow = clock.secondProperty.getValue();
         int millisecondNow = clock.millisecondProperty.getValue();
 
-        if(arrivalTextField.getText().isEmpty() || departureTextField.getText().isEmpty()) {
+        if (arrivalTextField.getText().isEmpty() || departureTextField.getText().isEmpty()) {
             return false;
         }
         TTime startTime = arrivalTextField.asTTime();
@@ -1049,7 +1043,7 @@ public class MainWindow extends TWindow {
         TTime nowTime = TTime.of(time.asCalendar());
         TTime timeElapsed = TTime
                 .computeTimeDiff(startTime, nowTime);
-        
+
         TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
         TTime timeTotal = TTime.computeTimeDiff(startTime, endTime);
         String timeElapsedString = timeElapsed.toString();
@@ -1073,10 +1067,10 @@ public class MainWindow extends TWindow {
 
         int totalMillisecondsDone
                 = timeElapsed.toTotalMilliseconds();
-        int totalHoursDone = totalMillisecondsDone / 1000 / 60 /60;
+        int totalHoursDone = totalMillisecondsDone / 1000 / 60 / 60;
 
         int totalMilliseconds = timeTotal.toTotalMilliseconds();
-        int totalMinutes = totalMilliseconds / 1000 / 60 ;
+        int totalMinutes = totalMilliseconds / 1000 / 60;
 
         double done = ((double) totalMillisecondsDone)
                 / ((double) totalMilliseconds);
@@ -1110,18 +1104,18 @@ public class MainWindow extends TWindow {
         int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
         double weekProgress = Progress.getWeekProgress(weekDayWhenMondayIsOne, done);
         weekBattery.setProgress(progress);
-            weekBattery.setLabel(
-                    nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
+        weekBattery.setLabel(
+                nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
-            double monthProgress = Progress
-                    .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
-                            workDaysTotal, done);
-            progress.set(WidgetType.MONTH, monthProgress);
-        double hourProgress =
-                Progress.getHourProgress(timeRemains, secondsRemains,
+        double monthProgress = Progress
+                .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
+                        workDaysTotal, done);
+        progress.set(WidgetType.MONTH, monthProgress);
+        double hourProgress
+                = Progress.getHourProgress(timeRemains, secondsRemains,
                         millisecondsRemains);
-        double minuteProgress =
-                Progress.getMinuteProgress(secondNow, millisecondNow);
+        double minuteProgress
+                = Progress.getMinuteProgress(secondNow, millisecondNow);
         double yearProgress = Progress.getYearProgress(clock, monthProgress);
         progress.set(WidgetType.HOUR, hourProgress);
         progress.set(WidgetType.WEEK, weekProgress);
@@ -1244,8 +1238,8 @@ public class MainWindow extends TWindow {
     }
 
     public void increaseArrival(TTime tTime) {
-        TTime oldTime =
-                new TTime(this.arrivalTextField.valueProperty.getValue());
+        TTime oldTime
+                = new TTime(this.arrivalTextField.valueProperty.getValue());
         TTime newTime = oldTime.add(tTime);
 //        System.out.println("oldTime=" + oldTime);
 //        System.out.println("newTime=" + newTime);
@@ -1285,35 +1279,46 @@ public class MainWindow extends TWindow {
                 new TTime(this.pauseTimeTextField.valueProperty.getValue())
                         .remove(tTime).toString().substring(0, 5));
     }
-    public void doSaveButtonClick(){
+
+    public void doSaveButtonClick() {
         this.saveButton.doClick();
     }
-    public int getForgetOvertime() {return this.forgetOvertimeProperty.getValue();}
-    public void setForgetOvertime(int minutes) {this.forgetOvertimeProperty.setValue(minutes);}
+
+    public int getForgetOvertime() {
+        return this.forgetOvertimeProperty.getValue();
+    }
+
+    public void setForgetOvertime(int minutes) {
+        this.forgetOvertimeProperty.setValue(minutes);
+    }
+
     public void increaseSpeed() {
-        if(speed == Integer.MIN_VALUE) {
+        if (speed == Integer.MIN_VALUE) {
             speed = 0;
         }
         ++this.speed;
+        timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
-    
+
     public void decreaseSpeed() {
-        if(speed == Integer.MIN_VALUE) {
+        if (speed == Integer.MIN_VALUE) {
             speed = 0;
         }
-        if(speed == MIN_SPEED){
+        if (speed == MIN_SPEED) {
             //nothing to do
             return;
         }
         --this.speed;
+        timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
-    public static final int MIN_SPEED = -10;
-    
+    public static final int MIN_SPEED = -15;
+
     public int getSpeed() {
         return speed;
     }
 
     public void resetSpeed() {
         this.speed = Integer.MIN_VALUE;
+        timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
 }

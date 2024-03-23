@@ -50,7 +50,6 @@ You can restart the app, if you press the **"Restart"** button.
 You can stop the app, if you press the **"Exit"** button or click on the exit window button.
 - Then application is stopped.
 
-
 ## Special files
 
 If these files are present, something special happens.
@@ -179,8 +178,11 @@ Smileys can be colored or white-black (can be set in configuration)
 * K - hide or show clock
 * SHIFT + {Y,N,D,H,M,S,I,K} - Increase test time value
 * CTRL + {Y,N,D,H,M,S,I,K} - Decrease test time value
-* ALT + {Y,N,D,H,M,S,I,K} - Rest test time value
+* ALT + {Y,N,D,H,M,S,I,K} - Reset test time value
 * Y=year, N=month, D=day of month, H=hour, M=minute, S=second, I=millisecond, K=week
+* SHIFT + Q - Increase speed of time
+* CTRL + Q - Decrease speed of time
+* ALT + Q - Reset speed of time
 * D - Reset custom time values to the real time
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time

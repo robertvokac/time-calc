@@ -14,8 +14,8 @@ import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 public enum Cloudiness {
     CLOUDY("Cloudy", 7d/8d),
     MOSTLY_CLOUDY("Mostly cloudy", 5d/8d),
-    PARTLY_CLOUDY("Partly cloudy+sunny", 3d/8d),
-    MOSTLY_SUNNY("Mostly clear+sunny", 1d/8d),
+    PARTLY_CLOUDY("Partly cloudy and partly sunny", 3d/8d),
+    MOSTLY_SUNNY("Mostly clear and mostly sunny", 1d/8d),
     SUNNY("Clear/Sunny", 0/8);
     @Getter
     private String description;

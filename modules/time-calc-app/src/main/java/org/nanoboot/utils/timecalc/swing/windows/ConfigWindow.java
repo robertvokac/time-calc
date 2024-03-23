@@ -226,6 +226,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField();
     public final JTextField activityNeededFlagsProperty
             = new JTextField(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
+    public final JTextField speedProperty
+            = new JTextField(TimeCalcProperty.SPEED.getKey());
     private final JCheckBox testEnabledProperty
             = new JCheckBox(TimeCalcProperty.TEST_ENABLED.getKey());
     private final JTextField testClockCustomYearProperty
@@ -480,6 +482,7 @@ public class ConfigWindow extends TWindow {
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
                 activityNeededFlagsProperty,
+                speedProperty,
                 visibilityDefaultProperty,
                 visibilitySupportedColoredProperty));
         //
