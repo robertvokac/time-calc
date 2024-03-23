@@ -1,20 +1,24 @@
 package org.nanoboot.utils.timecalc.swing.controls;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
+import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
+import org.nanoboot.utils.timecalc.utils.property.ChangeListener;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Color;
-import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
-import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 
 /**
  * @author Robert Vokac
@@ -35,7 +39,13 @@ public class TTextField extends JTextField implements GetProperty {
             = new StringProperty("visibilityProperty",
                     Visibility.STRONGLY_COLORED.name());
     public final StringProperty valueProperty = new StringProperty();
+    @Getter
+    @Setter
+    private ChangeListener vetoableChangeListener = null;
 
+    @Getter
+    @Setter
+    private boolean editingOnlyInDialog = false;
     public TTextField() {
         this("", 0);
     }
@@ -45,9 +55,23 @@ public class TTextField extends JTextField implements GetProperty {
     }
 
     public TTextField(String s, int customWidth) {
+        this(s, customWidth, false);
+    }
+
+    public TTextField(String s, int customWidth, boolean editingOnlyInDialog) {
+        this(s, customWidth, editingOnlyInDialog, null);
+    }
+    public TTextField(String s, int customWidth, boolean editingOnlyInDialog, ChangeListener vetoableChangeListener) {
         super(s);
+        setEditingOnlyInDialog(editingOnlyInDialog);
+        setVetoableChangeListener(vetoableChangeListener);
         this.customWidth = customWidth;
         valueProperty.setValue(s);
+        new Timer(100, e -> {
+            if (editingOnlyInDialog) {
+                setEditable(false);
+            }
+        }).start();
         getDocument()
                 .addDocumentListener(new DocumentListener() {
                     public void changedUpdate(DocumentEvent e) {
@@ -67,6 +91,40 @@ public class TTextField extends JTextField implements GetProperty {
                     }
 
                 });
+
+        addMouseListener((MouseClickedListener) f -> {
+            if(editingOnlyInDialog) {
+                String result = (String) JOptionPane.showInputDialog(
+                        null,
+                        "Select new value",
+                        "New value",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        getText()
+                );
+                if (result != null) {
+                    String oldText = getText();
+                    boolean vetoed = false;
+                    if(vetoableChangeListener != null) {
+                        try {
+                            vetoableChangeListener
+                                    .changed(null, oldText, result);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.err.println(e.getMessage());
+                            vetoed = true;
+                        }
+                    }
+                    if(!vetoed) {
+                        TTime tTime = new TTime(result);
+                        result = tTime.toString().substring(0, tTime.isNegative() ? 6 : 5);
+                        setText(result);
+                        valueProperty.setValue(result);
+                    }
+                }
+            }});
+
         valueProperty.addListener(e
                 -> {
             if (!valueProperty.getValue().equals(getText())) {

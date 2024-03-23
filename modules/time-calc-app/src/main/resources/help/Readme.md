@@ -199,7 +199,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * CTRL + W - Decrease worknig time
 * SHIFT + P - Increase pause
 * CTRL + P - Decrease pause
-* SHIFT + C - Increase or decrease of time is change by 1 hour
+* SHIFT + C - Increase or decrease of time is change by 5 minutes
 * CTRL + C - Increase or decrease of time is change by 1 minute
 * CTRL + E - Save arrival, overtime, working time, pause time and note
 

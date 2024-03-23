@@ -1,12 +1,5 @@
 package org.nanoboot.utils.timecalc.swing.windows;
 
-import org.nanoboot.utils.timecalc.swing.controls.SmallTButton;
-import org.nanoboot.utils.timecalc.swing.controls.TTextField;
-import org.nanoboot.utils.timecalc.swing.controls.TLabel;
-import org.nanoboot.utils.timecalc.swing.controls.TCheckBox;
-import org.nanoboot.utils.timecalc.swing.controls.TButton;
-import org.nanoboot.utils.timecalc.swing.controls.TWindow;
-import org.nanoboot.utils.timecalc.swing.controls.ComponentRegistry;
 import org.nanoboot.utils.timecalc.app.CommandActionListener;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcApp;
@@ -15,6 +8,22 @@ import org.nanoboot.utils.timecalc.app.TimeCalcKeyAdapter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
+import org.nanoboot.utils.timecalc.entity.WorkingDay;
+import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
+import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
+import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
+import org.nanoboot.utils.timecalc.swing.common.AboutButton;
+import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
+import org.nanoboot.utils.timecalc.swing.common.Toaster;
+import org.nanoboot.utils.timecalc.swing.common.WeekStatistics;
+import org.nanoboot.utils.timecalc.swing.common.Widget;
+import org.nanoboot.utils.timecalc.swing.controls.ComponentRegistry;
+import org.nanoboot.utils.timecalc.swing.controls.SmallTButton;
+import org.nanoboot.utils.timecalc.swing.controls.TButton;
+import org.nanoboot.utils.timecalc.swing.controls.TCheckBox;
+import org.nanoboot.utils.timecalc.swing.controls.TLabel;
+import org.nanoboot.utils.timecalc.swing.controls.TTextField;
+import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
@@ -33,6 +42,9 @@ import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Jokes;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.ChangeListener;
+import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -44,19 +56,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import org.nanoboot.utils.timecalc.entity.WorkingDay;
-import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
-import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQLiteImpl;
-import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
-import org.nanoboot.utils.timecalc.swing.common.AboutButton;
-import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
-import org.nanoboot.utils.timecalc.swing.common.Toaster;
-import org.nanoboot.utils.timecalc.swing.common.WeekStatistics;
-import org.nanoboot.utils.timecalc.swing.common.Widget;
-import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Robert Vokac
@@ -103,10 +107,18 @@ public class MainWindow extends TWindow {
     
 
     {
-        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40);
-        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40);
-        this.workingTimeTextField = new TTextField("8:00", 40);
-        this.pauseTimeTextField = new TTextField("0:30", 40);
+        ChangeListener valueMustBeTime = new ChangeListener() {
+            @Override
+            public void changed(Property property, Object oldValue,
+                    Object newValue) {
+                new TTime((String) newValue);
+            }
+        };
+        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40, true,valueMustBeTime);
+        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40, true,valueMustBeTime);
+        this.workingTimeTextField = new TTextField("08:00", 40, true,valueMustBeTime);
+        this.pauseTimeTextField = new TTextField("00:30", 40, true,valueMustBeTime);
+
         this.noteTextField = new TTextField("", 100);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
@@ -338,10 +350,6 @@ public class MainWindow extends TWindow {
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
         timeOffCheckBox.setBoundsFromLeft(noteTextField);
         //
-        arrivalTextField.setEditable(false);
-        overtimeTextField.setEditable(false);
-        workingTimeTextField.setEditable(false);
-        pauseTimeTextField.setEditable(false);
 
         add(arrivalTextFieldLabel);
         add(arrivalTextField);
@@ -670,43 +678,84 @@ public class MainWindow extends TWindow {
             forgetOvertimeProperty.setValue(wd.getForgetOvertime());
         } else {
             Calendar cal = time.asCalendar();
+            wd = new WorkingDay();
+            {
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTime(cal.getTime());
+                List<WorkingDay> arrivals = new ArrayList<>();
+                for(int i = 1; i <= 90; i++) {
+                    cal2.add(Calendar.DAY_OF_MONTH, -1);
+                    WorkingDay wd_ = workingDayRepository.read(cal2);
+                    if(wd_ == null || wd_.isThisDayTimeOff()) {
+                        continue;
+                    }
+                    arrivals.add(wd_);
+                    if(arrivals.size() == 20) {
+                        break;
+                    }
+                }
+
+                if(!arrivals.isEmpty()) {
+//                    double averageArrival = arrivals.size() == 1 ? arrivals.get(0) : arrivals.stream().mapToDouble(Double::doubleValue).sorted().average().getAsDouble();
+                    double medianArrival = arrivals.stream().map(a->a.getArrivalAsDouble())
+                            .sorted()
+                            .collect(Collectors.collectingAndThen(
+                                    Collectors.toList(),
+                                    a -> (a.size() % 2 == 0) ? ((a.get(a.size() / 2 - 1) + a.get(a.size() / 2)) / 2) : (a.get(a.size() / 2))));
+
+                    TTime arrivalTTime = TTime.ofMilliseconds((int)(medianArrival * 60 * 60 * 1000));
+                    while(arrivalTTime.getMinute() % 5 != 0) {
+                        arrivalTTime = arrivalTTime.add(new TTime(0,1));
+                    }
+                    arrivalTextField.valueProperty.setValue(arrivalTTime.toString().substring(0, 5));
+                    wd.setArrivalHour(arrivalTTime.getHour());
+                    wd.setArrivalMinute(arrivalTTime.getMinute());
+
+                } else {
+                    wd.setArrivalHour(7);
+                    wd.setArrivalMinute(0);
+                }
+
+            }
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
             int day = cal.get(Calendar.DAY_OF_MONTH);
-                wd = new WorkingDay();
-                wd.setId(WorkingDay.createId(year, month, day));
-                wd.setYear(year);
-                wd.setMonth(month);
-                wd.setDay(day);
-                wd.setArrivalHour(7);
-                wd.setArrivalMinute(0);
-                wd.setOvertimeHour(0);
-                wd.setOvertimeMinute(0);
-                wd.setWorkingTimeInMinutes(480);
-                wd.setPauseTimeInMinutes(30);
-                wd.setNote("");
-                wd.setTimeOff(false);
+
+            wd.setId(WorkingDay.createId(year, month, day));
+            wd.setYear(year);
+            wd.setMonth(month);
+            wd.setDay(day);
+            wd.setOvertimeHour(0);
+            wd.setOvertimeMinute(0);
+            wd.setWorkingTimeInMinutes(480);
+            wd.setPauseTimeInMinutes(30);
+            wd.setNote("");
+            wd.setTimeOff(false);
         }
-            
-            workingDayRepository.update(wd);
 
-        System.out.println(wd);
-
-        File dbFile = new File(FileConstants.TC_DIRECTORY.getAbsolutePath() + "/" + "time-calc.sqlite3");
+        workingDayRepository.update(wd);
 
         while (true) {
 
-            if(Math.random() > 0.999) {
-                File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");
-                if (dbFile.exists() && !dbFileBackup.exists()) {
+            if(Math.random() > 0.99) {
+                File dbFileBackup = new File(
+                        FileConstants.DB_FILE.getAbsolutePath() + ".backup."
+                        + DateFormats.DATE_TIME_FORMATTER_SHORT
+                                .format(new Date()).substring(0, 10)
+                        + ".sqlite3");
+                if (FileConstants.DB_FILE.exists() && !dbFileBackup.exists()) {
                     try {
-                        Files.copy(dbFile.toPath(), dbFileBackup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        Files.copy(FileConstants.DB_FILE.toPath(),
+                                dbFileBackup.toPath(),
+                                StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+            }
+            if(Math.random() > 0.9999) {
                 for(File file: FileConstants.TC_DIRECTORY.listFiles()) {
-                    if(file.getName().startsWith(dbFile.getName() + ".backup")) {
+                    if(file.getName().startsWith(FileConstants.DB_FILE.getName() + ".backup")) {
                         try {
                             long now = System.currentTimeMillis();
                             long diff = now - Files.getLastModifiedTime(file.toPath()).toMillis();

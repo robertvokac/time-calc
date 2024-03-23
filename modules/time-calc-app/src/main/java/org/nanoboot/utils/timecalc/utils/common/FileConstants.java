@@ -17,6 +17,7 @@ public class FileConstants {
     public static final File FILE_WITHOUT_ANY_PROFILE
             = new File(TC_DIRECTORY, "timecalc.conf");
     public static final File JOKES_TXT = new File(TC_DIRECTORY, "time-calc-jokes.txt");
+    public static final File DB_FILE =  new File(FileConstants.TC_DIRECTORY.getAbsolutePath() + "/" + "time-calc.sqlite3");
 
     private FileConstants() {
         //Not meant to be instantiated.

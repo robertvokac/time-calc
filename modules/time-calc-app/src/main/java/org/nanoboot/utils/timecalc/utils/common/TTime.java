@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.utils.common;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -20,6 +21,7 @@ public class TTime implements Comparable<TTime> {
 
     public static final TTime T_TIME_ONE_MINUTE = new TTime(0, 1);
     public static final TTime T_TIME_ONE_HOUR = new TTime(1,0);
+    public static final TTime T_TIME_FIVE_MINUTES = new TTime(0,5);
     @Getter
     @Setter
     private boolean negative;
@@ -100,6 +102,9 @@ public class TTime implements Comparable<TTime> {
             string = string.replace("-", "");
         }
         String[] array = string.split(":");
+        if(array.length < 2) {
+            throw new TimeCalcException("Wrong format of time: " + string);
+        }
         this.hour = (negative ? (1) : 1) * Integer.valueOf(array[0]);
         this.minute = (negative ? (1) : 1) * Integer.valueOf(array[1]);
         this.second = array.length >= 3 ? ((negative ? (1) : 1) * Integer.valueOf(array[2])) : 0;
@@ -167,7 +172,7 @@ public class TTime implements Comparable<TTime> {
     public static int countDiffInMinutes(TTime startTime, TTime endTime) {
         return (endTime.getHour() * TTime.MINUTES_PER_HOUR + endTime
                 .getMinute()) - (startTime.getHour() * TTime.MINUTES_PER_HOUR
-                + startTime.getMinute());
+                                 + startTime.getMinute());
     }
 
     public TTime cloneInstance() {

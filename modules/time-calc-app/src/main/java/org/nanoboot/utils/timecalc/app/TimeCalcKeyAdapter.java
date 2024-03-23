@@ -27,7 +27,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
     private final TimeCalcApp timeCalcApp;
     private final MainWindow mainWindow;
     private final Time time;
-    private boolean changeByOneHour = false;
+    private boolean changeByFiveMinutes = false;
     
     public TimeCalcKeyAdapter(
             TimeCalcConfiguration timeCalcConfiguration,
@@ -78,7 +78,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         boolean increase = shiftDown;
         boolean decrease = ctrlDown;
         boolean reset = altDown;
-        TTime changeTTime = changeByOneHour ? TTime.T_TIME_ONE_HOUR : TTime.T_TIME_ONE_MINUTE;
+        TTime changeTTime = changeByFiveMinutes ? TTime.T_TIME_FIVE_MINUTES : TTime.T_TIME_ONE_MINUTE;
         switch (keyCode) {
             case KeyEvent.VK_Y: {
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " year.");
@@ -161,8 +161,8 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_C: {
-                this.changeByOneHour = increase;
-                Utils.showNotification("Time will be changed by 1 " + (increase ? "hour" : "minute") + ".");
+                this.changeByFiveMinutes = increase;
+                Utils.showNotification("Time will be changed by " + (increase ? "5 minutes" : "1 minute") + ".");
                 break;
             }
             case KeyEvent.VK_E: {
