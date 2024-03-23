@@ -580,7 +580,8 @@ public class MainWindow extends TWindow {
                     battery.labelVisibleProperty
                             .bindTo(timeCalcConfiguration.batteryLabelVisibleProperty);
                     battery.blinkingIfCriticalLowVisibleProperty
-                            .bindTo(timeCalcConfiguration.batteryBlinkingIfCriticalLowVisibleProperty);
+                            .bindTo(timeCalcConfiguration.batteryQuarterIconVisibleProperty);
+                    battery.quarterIconVisibleProperty.bindTo(timeCalcConfiguration.batteryQuarterIconVisibleProperty);
                     switch (battery.getName()) {
                         case MinuteBattery.MINUTE:
                             battery.visibleProperty

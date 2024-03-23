@@ -159,6 +159,10 @@ public class Battery extends Widget {
             = new BooleanProperty(
                     TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
                             .getKey(), true);
+    public final BooleanProperty quarterIconVisibleProperty
+            = new BooleanProperty(
+            TimeCalcProperty.BATTERY_QUARTER_ICON_VISIBLE
+                    .getKey(), true);
     private long tmpNanoTime = 0l;
     private int totalHeight = 0;
     private int totalWidth;
@@ -311,6 +315,11 @@ public class Battery extends Widget {
             }
 
         }
+
+        if (quarterIconVisibleProperty.isEnabled()) {
+            paintQuarterIcon(brush, visibility);
+        }
+
         if (circleProgressVisibleProperty.isEnabled()) {
             paintCircleProgress(brush, visibility);
         }
@@ -353,6 +362,68 @@ public class Battery extends Widget {
                 : Color.LIGHT_GRAY);
         brush.drawRect(1, 1, totalWidth - 2, totalHeight);
 
+    }
+
+    private static final Color PURPLE_STRONGLY_COLORED = new Color(153,51,255);
+    private static final Color PURPLE_WEAKLY_COLORED = new Color(204,153,255);
+
+    private void paintQuarterIcon(Graphics2D brush,
+            Visibility visibility) {
+        Color currentColor = brush.getColor();
+        //Color currentBackgroundColor = brush.getBackground();
+        Font currentFont = brush.getFont();
+        brush.setFont(BIG_FONT);
+        int q = donePercent < 0.25 ? 0 : (donePercent < 0.5 ? 1 :
+                (donePercent < 0.75 ? 2 : (donePercent < 1.0 ? 3 : 4)));
+        Color color;
+        Color backgroundColor;
+        switch (visibility) {
+            case STRONGLY_COLORED:
+                backgroundColor = Color.WHITE;
+                break;
+            case WEAKLY_COLORED:
+                backgroundColor = Color.LIGHT_GRAY;
+                break;
+            default:
+                backgroundColor = Color.LIGHT_GRAY;
+        }
+
+        switch (q) {
+            case 0:
+                color = Battery.getColourForProgress(0.05, visibility,
+                        mouseOver);
+                break;
+            case 1:
+                color = Battery.getColourForProgress(0.25, visibility,
+                        mouseOver);
+                break;
+            case 2:
+                color = Battery.getColourForProgress(0.85, visibility,
+                        mouseOver);
+                break;
+            case 3:
+                color = Battery.getColourForProgress(0.95, visibility,
+                        mouseOver);
+                break;
+            case 4:
+                color = visibility.isStronglyColored() ? PURPLE_STRONGLY_COLORED : (visibility.isWeaklyColored() ? PURPLE_WEAKLY_COLORED : Color.GRAY);
+                break;
+            default:
+                color = Color.LIGHT_GRAY;
+        }
+        brush.setColor(backgroundColor);
+        brush.fillRect( ((int) (totalWidth * 0.08)),
+                (donePercent < 0.5 ? totalHeight / 4 * 3
+                        : (totalHeight / 4 * 1) + 10) + -8, 20, 20);
+        brush.setColor(color);
+        brush.drawString(
+                String.valueOf(q), ((int) (totalWidth * 0.13)),
+                (donePercent < 0.5 ? totalHeight / 4 * 3
+                        : (totalHeight / 4 * 1) + 10) + 10
+        );
+        brush.setColor(currentColor);
+        //brush.setBackground(currentBackgroundColor);
+        brush.setFont(currentFont);
     }
 
     public void paintChargingCharacter(Graphics2D brush) {

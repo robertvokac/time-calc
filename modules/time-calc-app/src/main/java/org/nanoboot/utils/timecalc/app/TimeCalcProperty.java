@@ -66,6 +66,7 @@ public enum TimeCalcProperty {
     BATTERY_YEAR_VISIBLE("battery.year.visible", "Battery : Year"),
     BATTERY_BLINKING_IF_CRITICAL_LOW("battery.blinking-if-critical-low",
             "Battery : Blinking, if critical low"),
+    BATTERY_QUARTER_ICON_VISIBLE("battery.quarter-icon.visible", "Battery : Quarter icon"),
     JOKES_VISIBLE("jokes.visible", "Jokes"),
     COMMANDS_VISIBLE("commands.visible", "Commands"),
     NOTIFICATIONS_VISIBLE("notifications.visible", "Notifications"),

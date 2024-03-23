@@ -154,6 +154,9 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox batteryBlinkingIfCriticalLowVisibleProperty
             = new JCheckBox(
                     TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW.getKey());
+    private final JCheckBox batteryQuarterIconVisibleProperty
+            = new JCheckBox(
+            TimeCalcProperty.BATTERY_QUARTER_ICON_VISIBLE.getKey());
     private final JCheckBox jokesVisibleProperty
             = new JCheckBox(TimeCalcProperty.JOKES_VISIBLE.getKey());
     private final JCheckBox commandsVisibleProperty
@@ -328,6 +331,7 @@ public class ConfigWindow extends TWindow {
                 batteryMonthVisibleProperty.setSelected(enable);
                 batteryYearVisibleProperty.setSelected(enable);
                 batteryBlinkingIfCriticalLowVisibleProperty.setSelected(enable);
+                batteryQuarterIconVisibleProperty.setSelected(enable);
                 //
                 jokesVisibleProperty.setSelected(true);
                 commandsVisibleProperty.setSelected(enable);
@@ -377,6 +381,7 @@ public class ConfigWindow extends TWindow {
                 batteryMonthVisibleProperty,
                 batteryYearVisibleProperty,
                 batteryBlinkingIfCriticalLowVisibleProperty,
+                batteryQuarterIconVisibleProperty,
                 //
                 smileysVisibleProperty,
                 smileysVisibleOnlyIfMouseMovingOverProperty,

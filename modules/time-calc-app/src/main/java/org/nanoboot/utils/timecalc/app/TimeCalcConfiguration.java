@@ -132,7 +132,10 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(
                     TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
                             .getKey());
-
+    public final BooleanProperty batteryQuarterIconVisibleProperty
+            = new BooleanProperty(
+            TimeCalcProperty.BATTERY_QUARTER_ICON_VISIBLE
+                    .getKey());
     public final BooleanProperty jokesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.JOKES_VISIBLE
                     .getKey());
@@ -227,6 +230,7 @@ public class TimeCalcConfiguration {
             batteryMonthVisibleProperty,
             batteryYearVisibleProperty,
             batteryBlinkingIfCriticalLowVisibleProperty,
+            batteryQuarterIconVisibleProperty,
             jokesVisibleProperty,
             commandsVisibleProperty,
             notificationsVisibleProperty,
