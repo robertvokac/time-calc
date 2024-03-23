@@ -829,6 +829,28 @@ public class MainWindow extends TWindow {
               timeCalcConfiguration.testEnabledProperty.setValue(false);
               return;
           }
+          if(speed < -6) {
+              if(speed == -7) {
+                  if(Math.random() > 0.5) {
+                      return;
+                  }
+              }
+              if(speed == -8) {
+                  if(Math.random() > 0.25) {
+                      return;
+                  }
+              }
+              if(speed == -9) {
+                  if(Math.random() > 0.125) {
+                      return;
+                  }
+              }
+              if(speed == -10) {
+                  if(Math.random() > 0.625) {
+                      return;
+                  }
+              }
+          }
           if(timeCalcConfiguration.testEnabledProperty.isDisabled()) {
               timeCalcConfiguration.testEnabledProperty.enable();
           }
@@ -853,7 +875,7 @@ public class MainWindow extends TWindow {
           if(time.millisecondCustomProperty.getValue() == Integer.MAX_VALUE) {
               time.millisecondCustomProperty.setValue(time.millisecondProperty.getValue());
           }
-          int msShouldBeAdded = (int) (Math.pow(2, speed) * 100d);
+          int msShouldBeAdded = speed < -6 ? 1 : (int) (Math.pow(2, speed) * 100d);
           this.timeCalcKeyAdapter.setMsToAdd(msShouldBeAdded);
           this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
 
@@ -1279,12 +1301,13 @@ public class MainWindow extends TWindow {
         if(speed == Integer.MIN_VALUE) {
             speed = 0;
         }
-        if(speed == -3){
+        if(speed == MIN_SPEED){
             //nothing to do
             return;
         }
         --this.speed;
     }
+    public static final int MIN_SPEED = -10;
     
     public int getSpeed() {
         return speed;

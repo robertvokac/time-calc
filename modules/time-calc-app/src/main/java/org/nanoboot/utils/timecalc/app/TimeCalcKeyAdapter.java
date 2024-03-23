@@ -129,6 +129,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             
             case KeyEvent.VK_U: {
                 int ms_ = msToAdd;
+                System.out.println("going to add ms:" +msToAdd);
                 int s_ = msToAdd / 1000;
                 ms_ = ms_ - s_ * 1000;
                 int m_ = msToAdd / 1000 / 60;
@@ -181,9 +182,12 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 final double newSpeed = this.mainWindow.getSpeed();
                 
                 if(oldSpeed != newSpeed) {
+                    TTime t= TTime.ofMilliseconds(((int)(Math.pow(2,newSpeed) * 1000)));
                 Utils.showNotification("Speed was changed from " + 
                         ((int)oldSpeed) + 
-                        " to: " + ((int)newSpeed) + " (" + (NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(Math.pow(2, newSpeed))) + ") (" + (newSpeed <= 21 ? TTime.ofMilliseconds(((int)(Math.pow(2,newSpeed) * 1000))) : "many") +" /1s)");
+                        " to: " + ((int)newSpeed) + " (" + (NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(Math.pow(2, newSpeed))) + ") (" + 
+                        (newSpeed <= -10 ? "few" : (newSpeed <=21 ? t : "many"))
+                        +" /1s)");
                 } else {
                     if(decrease){
                     Utils.showNotification("Current speed cannot be decreased: " + 
