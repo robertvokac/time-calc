@@ -107,13 +107,8 @@ public class MainWindow extends TWindow {
     
 
     {
-        ChangeListener valueMustBeTime = new ChangeListener() {
-            @Override
-            public void changed(Property property, Object oldValue,
-                    Object newValue) {
-                new TTime((String) newValue);
-            }
-        };
+        ChangeListener valueMustBeTime =
+                (property, oldValue, newValue) -> new TTime((String) newValue);
         this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40, true,valueMustBeTime);
         this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40, true,valueMustBeTime);
         this.workingTimeTextField = new TTextField("08:00", 40, true,valueMustBeTime);
