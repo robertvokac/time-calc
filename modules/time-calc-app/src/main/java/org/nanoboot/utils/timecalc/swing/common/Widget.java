@@ -243,7 +243,12 @@ public class Widget extends JPanel implements
         paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
 
         if (mouseOver) {
+            Color currentColor = brush.getColor();
+            if(visibility.isStronglyColored()) {
+                brush.setColor(Color.BLUE);
+            }
             brush.drawRect(1, 1, getWidth() - 2, getHeight() - 2);
+            brush.setColor(currentColor);
         }
     }
 

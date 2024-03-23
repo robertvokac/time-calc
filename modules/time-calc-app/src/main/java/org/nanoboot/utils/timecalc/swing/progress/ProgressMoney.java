@@ -64,9 +64,9 @@ public class ProgressMoney extends Widget implements GetProperty {
             double value = 0;
             switch(WidgetType.valueOf(this.typeProperty.getValue().toUpperCase(
                     Locale.ROOT))) {
-                case MINUTE: value = perDay / 8d / 60d * progress.get(WidgetType.MINUTE);break;
-                case HOUR: value = perDay / 8d * progress.get(WidgetType.HOUR);break;
-                case DAY: value = perDay * progress.get(WidgetType.DAY);break;
+                case MINUTE: value = isWeekend ? 0d : perDay / 8d / 60d * progress.get(WidgetType.MINUTE);break;
+                case HOUR: value = isWeekend ? 0d : perDay / 8d * progress.get(WidgetType.HOUR);break;
+                case DAY: value = isWeekend ? 0d : perDay * progress.get(WidgetType.DAY);break;
                 case WEEK: value = perDay * 5d * progress.get(WidgetType.WEEK);break;
                 case MONTH: value = perMonth * progress.get(WidgetType.MONTH);break;
                 case YEAR: value = perMonth * 12 * progress.get(WidgetType.YEAR);break;

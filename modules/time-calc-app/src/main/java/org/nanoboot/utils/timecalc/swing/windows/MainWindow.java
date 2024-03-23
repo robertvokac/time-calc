@@ -1034,7 +1034,7 @@ public class MainWindow extends TWindow {
                         millisecondsRemains);
         double minuteProgress =
                 Progress.getMinuteProgress(secondNow, millisecondNow);
-        double yearProgress = Progress.getYearProgress(clock);
+        double yearProgress = Progress.getYearProgress(clock, monthProgress);
         progress.set(WidgetType.HOUR, hourProgress);
         progress.set(WidgetType.WEEK, weekProgress);
         progress.set(WidgetType.MINUTE, minuteProgress);
