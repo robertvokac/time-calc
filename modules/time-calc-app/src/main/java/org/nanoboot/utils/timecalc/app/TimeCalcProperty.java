@@ -51,6 +51,7 @@ public enum TimeCalcProperty {
             "Clock : Date visible only, if mouse moving over"),
     CLOCK_SMILEY_VISIBLE("clock.smiley.visible","Clock : Smiley : Visible"),
     CLOCK_PERCENT_PROGRESS_VISIBLE("clock.percent-progress.visible","Clock : Percent progress : Visible"),
+    CLOCK_CIRCLE_PROGRESS_VISIBLE("clock.circle-progress.visible", "Clock : Circle Progress"),
     //
     BATTERY_WAVES_VISIBLE("battery.waves.visible", "Battery : Waves"),
     BATTERY_CIRCLE_PROGRESS_VISIBLE("battery.circle-progress.visible",

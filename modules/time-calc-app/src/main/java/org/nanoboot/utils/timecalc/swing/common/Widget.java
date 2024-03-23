@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import javax.swing.JMenuItem;
+import static org.nanoboot.utils.timecalc.swing.progress.Battery.HIGH_STRONGLY_COLORED;
+import static org.nanoboot.utils.timecalc.swing.progress.Battery.HIGH_WEAKLY_COLORED;
+import static org.nanoboot.utils.timecalc.swing.progress.Battery.LIGHT_RED;
+import static org.nanoboot.utils.timecalc.swing.progress.Battery.ULTRA_LIGHT_RED;
 
 /**
  * @author Robert Vokac
@@ -533,6 +537,29 @@ public class Widget extends JPanel implements
         brush.setColor(currentColor);
         //brush.setBackground(currentBackgroundColor);
         brush.setFont(currentFont);
+    }
+    
+    protected void paintCircleProgress(Graphics2D brush, Visibility visibility, int totalWidth, int totalHeight) {
+        Color currentColor = brush.getColor();
+        brush.setColor(
+                visibility.isStronglyColored() ? HIGH_STRONGLY_COLORED
+                : (visibility.isWeaklyColored() ? HIGH_WEAKLY_COLORED
+                : Color.lightGray));
+
+        double angleDouble = donePercent() * 360;
+
+        brush.fillArc(((int) (totalWidth * 1)) - 15,
+                totalHeight / 4 * 3 + 28,
+                15, 15, 90, -(int) angleDouble);
+        brush.setColor(
+                visibility.isStronglyColored() ? LIGHT_RED
+                : visibility.isWeaklyColored() ? ULTRA_LIGHT_RED
+                : BACKGROUND_COLOR);
+        brush.fillArc(((int) (totalWidth * 1)) - 15,
+                totalHeight / 4 * 3 + 28,
+                15, 15, 90, +(int) (360 - angleDouble));
+
+        brush.setColor(currentColor);
     }
 
     public void hideWidget() {

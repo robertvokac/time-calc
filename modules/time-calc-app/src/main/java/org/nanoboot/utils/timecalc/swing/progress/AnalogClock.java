@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import javax.swing.JMenuItem;
+import org.nanoboot.utils.timecalc.entity.Progress;
 
 //https://kodejava.org/how-do-i-write-a-simple-analog-clock-using-java-2d/
 public class AnalogClock extends Widget {
@@ -67,6 +68,10 @@ public class AnalogClock extends Widget {
             = new BooleanProperty(
                     TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
                             .getKey());
+
+    public BooleanProperty circleProgressVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_CIRCLE_PROGRESS_VISIBLE
+                    .getKey(), true);
 
     public IntegerProperty startHourProperty
             = new IntegerProperty("startHourProperty");
@@ -194,14 +199,14 @@ public class AnalogClock extends Widget {
         int nowMS = now.toTotalMilliseconds();
         int total = endMS - startMS;
         int done = nowMS - startMS;
-        double progress = ((double)done) / ((double)total);
-        this.dayProgress = progress;
+        double progress_ = ((double) done) / ((double) total);
+        this.dayProgress = progress_;
 
         //System.out.println("clock.handsLongProperty=" + handsLongProperty.isEnabled());
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        Graphics2D brush = (Graphics2D) g;
+        brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         this.side = Math.min(getWidth(), getHeight());
@@ -220,27 +225,26 @@ public class AnalogClock extends Widget {
         if ((mouseOver || progressVisibleOnlyIfMouseMovingOverProperty
                 .isDisabled()) && visibility.isStronglyColored()) {
 
-            Color currentColor = g2d.getColor();
+            Color currentColor = brush.getColor();
 
-
-            g2d.setColor(Battery.getColourForProgress(progress, Visibility.WEAKLY_COLORED, mouseOver));
+            brush.setColor(Battery.getColourForProgress(progress_, Visibility.WEAKLY_COLORED, mouseOver));
             int startAngle = computeStartAngle();
-            g2d.fillArc(0, 0, side, side, -startAngle + 90,
+            brush.fillArc(0, 0, side, side, -startAngle + 90,
                     startAngle - computeEndAngle());
 
             //System.out.println("ANGLES: " + startAngle + " " + endAngle + " " + angleDiff );
-            g2d.setColor(currentColor);
+            brush.setColor(currentColor);
         }
 
         //
         if (millisecondEnabledProperty.isEnabled() && secondEnabledProperty
                 .isEnabled() && minuteEnabledProperty.isEnabled()
                 && hourEnabledProperty.isEnabled()) {
-            drawHand(g2d, side / 2 - 10, millisecond / 1000.0, 1.0f,
+            drawHand(brush, side / 2 - 10, millisecond / 1000.0, 1.0f,
                     COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED, visibility);
 
             if (handsLongProperty.isEnabled()) {
-                drawHand(g2d, (side / 2 - 10) / 4,
+                drawHand(brush, (side / 2 - 10) / 4,
                         (millisecond > 500 ? millisecond - 500
                                 : millisecond + 500) / 1000.0, 1.0f,
                         COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED,
@@ -250,11 +254,11 @@ public class AnalogClock extends Widget {
 
         if (secondEnabledProperty.isEnabled() && minuteEnabledProperty
                 .isEnabled() && hourEnabledProperty.isEnabled()) {
-            drawHand(g2d, side / 2 - 10, second / 60.0, 0.5f, Color.RED,
+            drawHand(brush, side / 2 - 10, second / 60.0, 0.5f, Color.RED,
                     visibility);
 
             if (handsLongProperty.isEnabled()) {
-                drawHand(g2d, (side / 2 - 10) / 4,
+                drawHand(brush, (side / 2 - 10) / 4,
                         (second > 30 ? second - 30 : second + 30) / 60.0, 0.5f,
                         Color.RED, visibility);
             }
@@ -262,10 +266,10 @@ public class AnalogClock extends Widget {
         if (minuteEnabledProperty.isEnabled() && hourEnabledProperty
                 .isEnabled()) {
             double minutes = minute / 60.0 + second / 60.0 / 60.0;
-            drawHand(g2d, side / 2 - 20, minutes, 2.0f,
+            drawHand(brush, side / 2 - 20, minutes, 2.0f,
                     Color.BLUE, visibility);
             if (handsLongProperty.isEnabled()) {
-                drawHand(g2d, (side / 2 - 20) / 4,
+                drawHand(brush, (side / 2 - 20) / 4,
                         minutes + minutes > 0.5 ? minutes - 0.5
                                 : minutes + (minutes > 0.5 ? (-1) : 1) * 0.5,
                         2.0f,
@@ -275,11 +279,11 @@ public class AnalogClock extends Widget {
         if (hourEnabledProperty.isEnabled()) {
             double hours
                     = hour / 12.0 + minute / 60.0 / 12 + second / 60 / 60 / 12;
-            drawHand(g2d, side / 2 - 40,
+            drawHand(brush, side / 2 - 40,
                     hours, 4.0f,
                     Color.BLACK, visibility);
             if (handsLongProperty.isEnabled()) {
-                drawHand(g2d, (side / 2 - 40) / 4,
+                drawHand(brush, (side / 2 - 40) / 4,
                         hours + hours > 0.5 ? hours - 0.5
                                 : hours + (hours > 0.5 ? (-1) : 1) * 0.5, 4.0f,
                         Color.BLACK, visibility);
@@ -290,16 +294,25 @@ public class AnalogClock extends Widget {
                 if (borderOnlyHoursProperty.isEnabled() && minuteI % 5 != 0) {
                     continue;
                 }
-                drawBorder(g2d, minuteI, minuteI % 5 == 0
+                drawBorder(brush, minuteI, minuteI % 5 == 0
                         ? (numbersVisibleProperty.isEnabled() ? 2f : 4f) : 1f,
                         Color.BLACK, visibility);
             }
         }
         if (centreCircleVisibleProperty.isEnabled()) {
-            drawCentreCircle(g2d, centerX, centerY);
+            drawCentreCircle(brush, centerX, centerY);
         }
 
-        drawClockFace(g2d, centerX, centerY, side / 2 - 40, visibility);
+        drawClockFace(brush, centerX, centerY, side / 2 - 40, visibility);
+
+        if (progress == null) {
+            progress = new Progress();
+        }
+        progress.set(WidgetType.DAY, (hour * 60 * 60 + minute * 60 + second) / (24d * 60d * 60d));
+        if (circleProgressVisibleProperty.isEnabled()) {
+            paintCircleProgress(brush, visibility, getWidth(), getHeight());
+        }
+
 
     }
 
@@ -393,13 +406,20 @@ public class AnalogClock extends Widget {
                     ((int) (side * 0.35)) + 60);
         }
 
-        if(percentProgressVisibleProperty.isEnabled()) {
-            brush.drawString(((int) Math.floor(dayProgress * 100)) + "%",
+        if (percentProgressVisibleProperty.isEnabled()) {
+            int d = (int) Math.floor(dayProgress * 100);
+            if(d < 0) {
+                d = 0;
+            }
+            if(d > 100) {
+                d = 100;
+            }
+            brush.drawString(d + "%",
                     ((int) (side * 0.25)),
                     ((int) (side * 0.35)) + 35);
         }
 
-        if(smileyVisibleProperty.isEnabled()) {
+        if (smileyVisibleProperty.isEnabled()) {
             paintSmiley(visibility, brush, ((int) (side * 0.25) + 90),
                     ((int) (side * 0.35)) + 20);
         }
@@ -423,7 +443,7 @@ public class AnalogClock extends Widget {
 
     @Override
     public List<JMenuItem> createAdditionalMenus() {
-        if(menuItems == null) {
+        if (menuItems == null) {
             menuItems = new ArrayList<>();
             JMenu hands = new JMenu("Hands");
             menuItems.add(hands);
@@ -473,6 +493,7 @@ public class AnalogClock extends Widget {
         }
         return this.menuItems;
     }
+
     protected Consumer<Object> createRefreshConsumer() {
         return (o) -> {
             millisecondHandMenuItem.disableMenuItem();

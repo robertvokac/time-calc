@@ -605,6 +605,7 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.clockVisibleProperty);
         clock.percentProgressVisibleProperty.bindTo(timeCalcConfiguration.clockPercentProgressVisibleProperty);
         clock.smileyVisibleProperty.bindTo(timeCalcConfiguration.clockSmileyVisibleProperty);
+        clock.circleProgressVisibleProperty.bindTo(timeCalcConfiguration.clockCircleProgressVisibleProperty);
 
         ComponentRegistry<Component> componentRegistry
                 = new ComponentRegistry();
