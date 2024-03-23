@@ -258,6 +258,7 @@ public class Widget extends JPanel implements
                 this.remove(smileyIcon);
                 this.smileyIcon = null;
             }
+            Color originalColor = brush.getColor();
             if (!visibility.isStronglyColored()) {
                 brush.setColor(Color.GRAY);
             }
@@ -283,6 +284,7 @@ public class Widget extends JPanel implements
                     x + 1, y + 16
             );
             brush.setFont(currentFont);
+            brush.setColor(originalColor);
         }
         if (colored) {
             x = x + 2;

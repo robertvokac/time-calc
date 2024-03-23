@@ -5,6 +5,7 @@ import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
+import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
@@ -92,6 +93,8 @@ public class AnalogClock extends Widget {
             = new BooleanProperty("handsLongProperty", true);
     public BooleanProperty handsColoredProperty
             = new BooleanProperty("handsColoredProperty", true);
+    public final BooleanProperty smileyVisibleProperty = new BooleanProperty("smileyVisibleProperty");
+    public final BooleanProperty percentProgressVisibleProperty = new BooleanProperty("percentProgressVisibleProperty");
     private Color customCircleColor = null;
 
     public AnalogClock() {
@@ -178,6 +181,7 @@ public class AnalogClock extends Widget {
         int total = endMS - startMS;
         int done = nowMS - startMS;
         double progress = ((double)done) / ((double)total);
+        setDonePercent(progress);
 
         //System.out.println("clock.handsLongProperty=" + handsLongProperty.isEnabled());
         Visibility visibility
@@ -374,6 +378,18 @@ public class AnalogClock extends Widget {
                     ((int) (side * 0.25) + 30),
                     ((int) (side * 0.35)) + 60);
         }
+
+        if(percentProgressVisibleProperty.isEnabled()) {
+            brush.drawString(((int) Math.floor(donePercent * 100)) + "%",
+                    ((int) (side * 0.25)),
+                    ((int) (side * 0.35)) + 35);
+        }
+
+        if(smileyVisibleProperty.isEnabled()) {
+            paintSmiley(visibility, brush, ((int) (side * 0.25) + 90),
+                    ((int) (side * 0.35)) + 20);
+        }
+
         if (numbersVisibleProperty.isEnabled()) {
             for (int i = 1; i <= 12; i++) {
                 double angle = Math.PI * 2 * (i / 12.0 - 0.25);

@@ -78,6 +78,14 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(
                     TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
                             .getKey());
+    public final BooleanProperty clockSmileyVisibleProperty
+            = new BooleanProperty(
+            TimeCalcProperty.CLOCK_SMILEY_VISIBLE
+                    .getKey());
+    public final BooleanProperty clockPercentProgressVisibleProperty
+            = new BooleanProperty(
+            TimeCalcProperty.CLOCK_PERCENT_PROGRESS_VISIBLE
+                    .getKey());
     //
     public final BooleanProperty batteryWavesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
@@ -201,6 +209,8 @@ public class TimeCalcConfiguration {
             clockCentreCircleBlackProperty,
             clockProgressVisibleOnlyIfMouseMovingOverProperty,
             clockDateVisibleOnlyIfMouseMovingOverProperty,
+            clockSmileyVisibleProperty,
+            clockPercentProgressVisibleProperty,
             batteryWavesVisibleProperty,
             batteryCircleProgressProperty,
             batteryPercentProgressProperty,

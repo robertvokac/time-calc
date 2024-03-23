@@ -534,6 +534,8 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty);
         clock.visibleProperty
                 .bindTo(timeCalcConfiguration.clockVisibleProperty);
+        clock.percentProgressVisibleProperty.bindTo(timeCalcConfiguration.clockPercentProgressVisibleProperty);
+        clock.smileyVisibleProperty.bindTo(timeCalcConfiguration.clockSmileyVisibleProperty);
 
         ComponentRegistry<Component> componentRegistry
                 = new ComponentRegistry();

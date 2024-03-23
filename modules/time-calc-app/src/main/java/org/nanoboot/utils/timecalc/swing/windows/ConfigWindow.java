@@ -109,6 +109,14 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(
                     TimeCalcProperty.CLOCK_DATE_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
                             .getKey());
+    private final JCheckBox clockSmileyVisibleProperty
+            = new JCheckBox(
+            TimeCalcProperty.CLOCK_SMILEY_VISIBLE
+                    .getKey());
+    private final JCheckBox clockPercentProgressVisibleProperty
+            = new JCheckBox(
+            TimeCalcProperty.CLOCK_PERCENT_PROGRESS_VISIBLE
+                    .getKey());
     //
     private final JCheckBox batteryWavesVisibleProperty
             = new JCheckBox(TimeCalcProperty.BATTERY_WAVES_VISIBLE.getKey());
@@ -298,6 +306,8 @@ public class ConfigWindow extends TWindow {
                         .setSelected(!enable);
                 clockDateVisibleOnlyIfMouseMovingOverProperty
                         .setSelected(false);
+                clockSmileyVisibleProperty.setSelected(enable);
+                clockPercentProgressVisibleProperty.setSelected(enable);
                 batteryVisibleProperty.setSelected(true);
                 batteryWavesVisibleProperty.setSelected(enable);
                 batteryCircleProgressVisibleProperty.setSelected(enable);
@@ -345,6 +355,8 @@ public class ConfigWindow extends TWindow {
                 clockCentreCircleBlackProperty,
                 clockProgressVisibleOnlyIfMouseMovingOverProperty,
                 clockDateVisibleOnlyIfMouseMovingOverProperty,
+                clockSmileyVisibleProperty,
+                clockPercentProgressVisibleProperty,
                 batteryVisibleProperty,
                 batteryWavesVisibleProperty,
                 batteryCircleProgressVisibleProperty,
