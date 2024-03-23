@@ -31,7 +31,7 @@ public class ProgressDot extends Widget {
 
     @Override
     public void paintWidget(Graphics g) {
-        int dotSize = 1;
+        int dotSize = 2;
         if (side == 0) {
             this.side = Math.min(getWidth(), getHeight()) / dotSize;
             this.square = side * side;
@@ -44,8 +44,8 @@ public class ProgressDot extends Widget {
         Double done = donePercent();
         int enabledDotsExpectedSize = (int) (done * square);
         int disabledDotsExpectedSize = square - enabledDotsExpectedSize;
-        System.out.println("enabledDots.size()=" + enabledDots.size());
-        System.out.println("disabledDots.size()=" + disabledDots.size());
+//        System.out.println("enabledDots.size()=" + enabledDots.size());
+//        System.out.println("disabledDots.size()=" + disabledDots.size());
         while (enabledDots.size() > enabledDotsExpectedSize) {
             int randomIndex = (int) (enabledDots.size() * Math.random());
             Dot randomDot = enabledDots.remove(randomIndex);
@@ -67,17 +67,21 @@ public class ProgressDot extends Widget {
         Visibility visibility = Visibility.ofProperty(visibilityProperty);
         {
             if (visibility.isStronglyColored() || mouseOver) {
-                brush.setColor(Color.GRAY);
+                //brush.setColor(Color.GRAY);
+                brush.setColor(Battery.HIGHEST_WEAKLY_COLORED);
             }
 
+            
             for (Dot d : enabledDots) {
                 brush.fillRect(((d.x - 1) * dotSize) + d.x, ((d.y - 1) * dotSize) + d.y, dotSize+(dotSize > 1 ? 1 : 1), dotSize+(dotSize > 1 ? 1 : 1));
+                //brush.drawLine(d.x, d.y, d.x, d.y);
             }
             if(visibility.isStronglyColored()){
             //Color currentColor = brush.getColor();
             brush.setColor(Battery.LOW_WEAKLY_COLORED);
             for (Dot d : disabledDots) {
                 brush.fillRect(((d.x - 1) * dotSize) + d.x, ((d.y - 1) * dotSize) + d.y, dotSize+(dotSize > 1 ? 1 : 1), dotSize+(dotSize > 1 ? 1 : 1));
+                //brush.drawLine(d.x, d.y, d.x, d.y);
             }
             //brush.setColor(currentColor);
             }
@@ -89,9 +93,9 @@ public class ProgressDot extends Widget {
         brush.drawString(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES
                 .format(donePercent() * 100) + "%",
                 (int) (side / 8d * 3d),
-                (int) (side / 8d * (donePercent() > 0.5 ? 3d : 5d)));
+                (int) (side / 8d * (5d)));
         paintSmiley(visibility, brush, (int) (side / 8d * 3d),
-                (int) ((side / 8d * (donePercent() > 0.5 ? 3d : 5d)) - 32d));
+                (int) ((side / 8d * (5d)) - 32d));
 
     }
 
