@@ -193,7 +193,17 @@ public class AnalogClock extends Widget {
                 .isDisabled()) && visibility.isStronglyColored()) {
 
             Color currentColor = g2d.getColor();
-            g2d.setColor(Color.YELLOW);
+            TTime start = new TTime(this.startHourProperty.getValue(), this.startMinuteProperty.getValue());
+            TTime end = new TTime(this.endHourProperty.getValue(), this.endMinuteProperty.getValue());
+            TTime now = new TTime(this.hourProperty.getValue(), this.minuteProperty.getValue());
+            int startMS = start.toTotalMilliseconds();
+            int endMS = end.toTotalMilliseconds();
+            int nowMS = now.toTotalMilliseconds();
+            int total = endMS - startMS;
+            int done = nowMS - startMS;
+            double progress = ((double)done) / ((double)total);
+
+            g2d.setColor(Battery.getColourForProgress(progress, Visibility.WEAKLY_COLORED, mouseOver));
             int startAngle = computeStartAngle();
             g2d.fillArc(0, 0, side, side, -startAngle + 90,
                     startAngle - computeEndAngle());

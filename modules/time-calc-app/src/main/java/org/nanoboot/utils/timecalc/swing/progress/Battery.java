@@ -14,19 +14,21 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Battery extends Widget {
 
-    public static final Color LOW = new Color(253, 130, 130);
-    public static final Color MEDIUM = new Color(255, 204, 153);
-    public static final Color HIGH = new Color(204, 255, 204);
-    public static final Color HIGHEST = new Color(153, 255, 153);
-    public static final Color LOW_HIGHLIGHTED = Color.red;
-    public static final Color MEDIUM_HIGHLIGHTED = Color.ORANGE;
-    public static final Color HIGH_HIGHLIGHTED = new Color(158, 227, 158);
-    public static final Color HIGHEST_HIGHLIGHTED = Color.green;
+    public static final Color LOW_WEAKLY_COLORED = new Color(253, 130, 130);
+    public static final Color MEDIUM_WEAKLY_COLORED = new Color(255, 204, 153);
+    public static final Color HIGH_WEAKLY_COLORED = new Color(204, 255, 204);
+    public static final Color HIGHEST_WEAKLY_COLORED = new Color(153, 255, 153);
+    public static final Color LOW_STRONGLY_COLORED = Color.red;
+    public static final Color MEDIUM_STRONGLY_COLORED = Color.ORANGE;
+    public static final Color HIGH_STRONGLY_COLORED = new Color(158, 227, 158);
+    public static final Color HIGHEST_STRONGLY_COLORED = Color.green;
     public static final double CRITICAL_LOW_ENERGY = 0.10;
-    public static final double LOW_ENERGY = 0.15;
+    public static final double LOW_ENERGY = 0.20;
     public static final double HIGH_ENERGY = 0.75;
     public static final double VERY_HIGH_ENERGY = 0.9;
     public static final Color LIGHT_RED = new Color(
@@ -34,11 +36,104 @@ public class Battery extends Widget {
     public static final Color ULTRA_LIGHT_RED = new Color(
             238, 196, 196);
     public static final String CHARCHING = "⚡";
+    public static final String COLON = ":";
     @Getter
     private final String name;
     private final double[] randomDoubles
             = new double[]{1d, 1d, 1d, 1d, 1d, 1d, 1};
     private final BooleanProperty blinking = new BooleanProperty("blinking");
+
+    public static Color getColourForProgress(double donePercent,
+            Visibility visibility, boolean mouseOver) {
+        if (visibility.isGray()) {
+            return Utils.ULTRA_LIGHT_GRAY;
+        }
+
+        boolean stronglyColored = visibility.isStronglyColored() || mouseOver;
+        Color low = stronglyColored ? LOW_STRONGLY_COLORED : LOW_WEAKLY_COLORED;
+        Color medium = stronglyColored ? MEDIUM_STRONGLY_COLORED :
+                MEDIUM_WEAKLY_COLORED;
+        Color high = stronglyColored ? HIGH_STRONGLY_COLORED : HIGH_WEAKLY_COLORED;
+        Color highest = stronglyColored ? HIGHEST_STRONGLY_COLORED :
+                HIGHEST_WEAKLY_COLORED;
+        Color result =  donePercent < LOW_ENERGY ? low
+                    : (donePercent < HIGH_ENERGY
+                    ? medium
+                    : (donePercent < VERY_HIGH_ENERGY
+                    ? high
+                    : highest));
+
+        return result;
+
+//        if(donePercent < CRITICAL_LOW_ENERGY) {
+//            return result;
+//        }
+//        if(donePercent > VERY_HIGH_ENERGY) {
+//            return result;
+//        }
+//        double transition = 0d;
+//        if (donePercent < LOW_ENERGY) {
+//            transition = (donePercent - CRITICAL_LOW_ENERGY) / (LOW_ENERGY
+//                                                                - CRITICAL_LOW_ENERGY);
+//        } else {
+//            if (donePercent < HIGH_ENERGY) {
+//                transition =
+//                        (donePercent - LOW_ENERGY) / (HIGH_ENERGY - LOW_ENERGY);
+//            } else {
+//                if (donePercent < VERY_HIGH_ENERGY) {
+//                    transition = (donePercent - HIGH_ENERGY) / (VERY_HIGH_ENERGY
+//                                                                - HIGH_ENERGY);
+//                }
+//            }
+//        }
+//
+//        return getColorBetween(result, result == low ? medium : (result == medium ? high : highest), transition, donePercent);
+    }
+    private static Map<String, Color> colorCache = new HashMap<>();
+    private static Color getColorBetween(Color color1, Color color2, double transition, double progress) {
+        if(color1.equals(color2)) {
+            return color1;
+        }
+        int red1 = color1.getRed();
+        int green1 = color1.getGreen();
+        int blue1 = color1.getBlue();
+        int red2 = color2.getRed();
+        int green2 = color2.getGreen();
+        int blue2 = color2.getBlue();
+        int redDiff = Math.abs(red2-red1);
+        int greenDiff = Math.abs(green2-green1);
+        int blueDiff = Math.abs(blue2-blue1);
+        int red = (int) (Math.min(red1, red2) + ((double)redDiff) * transition);
+        int green  = (int) (Math.min(green1, green2) + ((double)greenDiff) * transition);
+        int blue = (int) (Math.min(blue1, blue2) + ((double)blueDiff) * transition);
+        String key = red + COLON + green + COLON + blue;
+
+//        try {new Color(red, green, blue);} catch (Exception e) {
+//            System.out.println(key);
+//            System.out.println("\n\n\nred1=" + red1);
+//            System.out.println("green1=" + green1);
+//            System.out.println("blue1=" + blue1);
+//            System.out.println("red2=" + red2);
+//            System.out.println("green2=" + green2);
+//            System.out.println("blue2=" + blue2);
+//            System.out.println("redDiff=" + redDiff);
+//            System.out.println("greenDiff=" + greenDiff);
+//            System.out.println("blueDiff=" + blueDiff);
+//            System.out.println("red=" + red);
+//            System.out.println("green=" + green);
+//            System.out.println("blue=" + blue);
+//            System.out.println("transition=" + transition);
+//            System.out.println("progress=" + progress);
+//
+//            return Color.LIGHT_GRAY;
+//        }
+
+        if(!colorCache.containsKey(key)) {
+            colorCache.put(key, new Color(red, green, blue));
+        }
+        return colorCache.get(key);
+
+    }
     public BooleanProperty wavesVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_WAVES_VISIBLE
                     .getKey(), true);
@@ -114,24 +209,8 @@ public class Battery extends Widget {
         if (!visibility.isGray()) {
             brush.fillRect(1, 1, totalWidth, totalHeight);
         }
+        brush.setColor(getColourForProgress(donePercent, visibility, mouseOver));
 
-        if (visibility.isStronglyColored() || mouseOver) {
-            brush.setColor(
-                    donePercent < LOW_ENERGY ? LOW_HIGHLIGHTED
-                            : (donePercent < HIGH_ENERGY
-                                    ? MEDIUM_HIGHLIGHTED
-                                    : (donePercent < VERY_HIGH_ENERGY
-                                            ? HIGH_HIGHLIGHTED
-                                            : HIGHEST_HIGHLIGHTED)));
-        } else {
-            brush.setColor(donePercent < LOW_ENERGY ? LOW
-                    : (donePercent < HIGH_ENERGY
-                            ? MEDIUM
-                            : (donePercent < VERY_HIGH_ENERGY ? HIGH : HIGHEST)));
-        }
-        if (visibility.isGray()) {
-            brush.setColor(Utils.ULTRA_LIGHT_GRAY);
-        }
         if (blinking.getValue()) {
             brush.setColor(BACKGROUND_COLOR);
         }
@@ -285,8 +364,8 @@ public class Battery extends Widget {
     private void paintCircleProgress(Graphics2D brush, Visibility visibility) {
         Color currentColor = brush.getColor();
         brush.setColor(
-                visibility.isStronglyColored() ? HIGH_HIGHLIGHTED
-                : (visibility.isWeaklyColored() ? HIGH
+                visibility.isStronglyColored() ? HIGH_STRONGLY_COLORED
+                : (visibility.isWeaklyColored() ? HIGH_WEAKLY_COLORED
                 : Color.lightGray));
 
         double angleDouble = donePercent * 360;
