@@ -104,7 +104,7 @@ public class AnalogClock extends Widget {
     }
 
     private int computeStartAngle() {
-        return computeAngle(startHourProperty.getValue(), startMinuteProperty.getValue());
+        return computeAngle(hourProperty.getValue(), minuteProperty.getValue());
     }
 
     private int computeEndAngle() {
