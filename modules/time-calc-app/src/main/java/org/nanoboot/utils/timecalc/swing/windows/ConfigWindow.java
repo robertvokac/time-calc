@@ -28,7 +28,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.LayoutManager;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -62,10 +64,13 @@ public class ConfigWindow extends TWindow {
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final JPanel panelInsideScrollPaneClock;
     private final JPanel panelInsideScrollPaneBattery;
+    private final JPanel panelInsideScrollPaneLife;
+    private final JPanel panelInsideScrollPaneMoney;
     private final JPanel panelInsideScrollPaneSmileys;
     private final JPanel panelInsideScrollPaneTest;
-    private final JPanel panelInsideScrollPaneMisc;
-    private final int[] currentY = new int[]{SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN};
+    private final JPanel panelInsideScrollPaneOther;
+    private final int[] currentY = new int[]{SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN};
+    private final int[] currentX = new int[]{SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN};
     private final List<JComponent> propertiesList = new ArrayList<>();
     private final Map<TimeCalcProperty, JComponent> propertiesMap = new HashMap<>();
     private final TButton enableAsMuchAsPossible
@@ -241,16 +246,20 @@ public class ConfigWindow extends TWindow {
         //tp.setBackground(Color.red);
         this.panelInsideScrollPaneClock = new JPanel();
         this.panelInsideScrollPaneBattery = new JPanel();
+        this.panelInsideScrollPaneLife = new JPanel();
+        this.panelInsideScrollPaneMoney = new JPanel();
         this.panelInsideScrollPaneSmileys = new JPanel();
         this.panelInsideScrollPaneTest = new JPanel();
-        this.panelInsideScrollPaneMisc = new JPanel();
+        this.panelInsideScrollPaneOther = new JPanel();
         
         List<JPanel> panelsInsideScrollPane = Stream.of(
                 panelInsideScrollPaneClock,
                 panelInsideScrollPaneBattery,
+                panelInsideScrollPaneLife,
+                panelInsideScrollPaneMoney,
                 panelInsideScrollPaneSmileys,
                 panelInsideScrollPaneTest,
-                panelInsideScrollPaneMisc).collect(Collectors.toList());
+                panelInsideScrollPaneOther).collect(Collectors.toList());
         panelsInsideScrollPane.forEach(p-> {
             final BoxLayout boxLayout = new BoxLayout(p, BoxLayout.Y_AXIS);
             p.setLayout(boxLayout);
@@ -266,23 +275,29 @@ public class ConfigWindow extends TWindow {
 
         JScrollPane scrollPaneClock = new JScrollPane(panelInsideScrollPaneClock);
         JScrollPane scrollPaneBattery = new JScrollPane(panelInsideScrollPaneBattery);
+        JScrollPane scrollPaneLife = new JScrollPane(panelInsideScrollPaneLife);
+        JScrollPane scrollPaneMoney = new JScrollPane(panelInsideScrollPaneMoney);
         JScrollPane scrollPaneSmileys = new JScrollPane(panelInsideScrollPaneSmileys);
         JScrollPane scrollPaneTest = new JScrollPane(panelInsideScrollPaneTest);
-        JScrollPane scrollPaneMisc = new JScrollPane(panelInsideScrollPaneMisc);
+        JScrollPane scrollPaneOther = new JScrollPane(panelInsideScrollPaneOther);
         
                 List<JScrollPane> scrollPanes = Stream.of(
                 scrollPaneClock,
                 scrollPaneBattery,
+                scrollPaneLife,
+                scrollPaneMoney,
                 scrollPaneSmileys,
                 scrollPaneTest,
-                scrollPaneMisc
+                scrollPaneOther
                 ).collect(Collectors.toList());
                 
         tp.add("Clock", scrollPaneClock);
         tp.add("Battery", scrollPaneBattery);
+        tp.add("Life", scrollPaneLife);
+        tp.add("Money", scrollPaneMoney);
         tp.add("Smileys", scrollPaneSmileys);
         tp.add("Test", scrollPaneTest);
-        tp.add("Misc", scrollPaneMisc); 
+        tp.add("Other", scrollPaneOther);
                 scrollPanes.forEach(s->
      {
             s.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -474,21 +489,21 @@ public class ConfigWindow extends TWindow {
                 addToNextRow(label);
             }
             if (p == mainWindowCustomTitleProperty) {
-                final JLabel jLabel = new JLabel(
-                        TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE
-                                .getDescription());
-                jLabel.putClientProperty(CLIENT_PROPERTY_KEY,
-                        TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
-                addToNextRow(jLabel);
+//                final JLabel jLabel = new JLabel(
+//                        TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE
+//                                .getDescription());
+//                jLabel.putClientProperty(CLIENT_PROPERTY_KEY,
+//                        TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
+//                addToNextRow(jLabel);
                 p.putClientProperty(CLIENT_PROPERTY_KEY,
                         TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
             }
             if (p == profileNameProperty) {
-                final JLabel jLabel = new JLabel(
-                        TimeCalcProperty.PROFILE_NAME.getDescription());
-                jLabel.putClientProperty(CLIENT_PROPERTY_KEY,
-                        TimeCalcProperty.PROFILE_NAME.getKey());
-                addToNextRow(jLabel);
+//                final JLabel jLabel = new JLabel(
+//                        TimeCalcProperty.PROFILE_NAME.getDescription());
+//                jLabel.putClientProperty(CLIENT_PROPERTY_KEY,
+//                        TimeCalcProperty.PROFILE_NAME.getKey());
+//                addToNextRow(jLabel);
                 p.putClientProperty(CLIENT_PROPERTY_KEY,
                         TimeCalcProperty.PROFILE_NAME.getKey());
             }
@@ -559,8 +574,8 @@ public class ConfigWindow extends TWindow {
 
                 checkBox.setText(timeCalcProperty.getDescription());
 
-                System.out.println(((JCheckBox) p).getText());
-                System.out.println(timeCalcProperty);
+                //System.out.println(((JCheckBox) p).getText());
+                //System.out.println(timeCalcProperty);
                 BooleanProperty property
                         = (BooleanProperty) timeCalcConfiguration
                                 .getProperty(timeCalcProperty);
@@ -659,11 +674,12 @@ public class ConfigWindow extends TWindow {
                     String key = textField.getText();
                     textField.setText("");
                     textField.putClientProperty(CLIENT_PROPERTY_KEY, key);
-                    JComponent label = new JLabel(TimeCalcProperty.forKey(key).getDescription());
-                    label.putClientProperty(CLIENT_PROPERTY_KEY, key);
-                    addToNextRow(label);
+//                    JComponent label = new JLabel(TimeCalcProperty.forKey(key).getDescription());
+//                    label.putClientProperty(CLIENT_PROPERTY_KEY, key);
+//                    addToNextRow(label);
                 }
-                textField.setMaximumSize(new Dimension(150, 25));
+                textField.setMaximumSize(new Dimension(400, 25));
+                textField.setMinimumSize(new Dimension(100, 25));
 
                 String timeCalcPropertyKey
                         = (String) textField.getClientProperty(
@@ -812,14 +828,18 @@ public class ConfigWindow extends TWindow {
     }
 
     private void addLabelToNextRow(TimeCalcProperty timeCalcProperty) {
-        final JLabel jLabel = new JLabel(
-                timeCalcProperty.getDescription());
-        jLabel.putClientProperty(CLIENT_PROPERTY_KEY,timeCalcProperty.getKey());
-        addToNextRow(jLabel);
+//        final JLabel jLabel = new JLabel(
+//                timeCalcProperty.getDescription());
+//        jLabel.putClientProperty(CLIENT_PROPERTY_KEY,timeCalcProperty.getKey());
+//        addToNextRow(jLabel, false);
+
     }
 
     private void addToNextRow(JComponent jComponent) {
-        int index = 4;
+        addToNextRow(jComponent, true);
+    }
+    private void addToNextRow(JComponent jComponent, boolean nextRow) {
+        int index = 6;
         String key = (String) jComponent.getClientProperty(CLIENT_PROPERTY_KEY);
         if(key == null) {
             //nothing to do
@@ -827,26 +847,61 @@ public class ConfigWindow extends TWindow {
         }
         if(key.startsWith("clock")) index = 0;
         if(key.startsWith("battery")) index = 1;
-        if(key.startsWith("smileys")) index = 2;
-        if(key.startsWith("test")) index = 3;
+        if(key.startsWith("life")) index = 2;
+        if(key.startsWith("money")) index = 3;
+        if(key.startsWith("smileys")) index = 4;
+        if(key.startsWith("test")) index = 5;
         
         JPanel panel = null;
         switch(index) {
             case 0: panel=panelInsideScrollPaneClock;break;
             case 1: panel=panelInsideScrollPaneBattery;break;
-            case 2: panel=panelInsideScrollPaneSmileys;break;
-            case 3: panel=panelInsideScrollPaneTest;break;
-            default:panel=panelInsideScrollPaneMisc;
+            case 2: panel=panelInsideScrollPaneLife;break;
+            case 3: panel=panelInsideScrollPaneMoney;break;
+            case 4: panel=panelInsideScrollPaneSmileys;break;
+            case 5: panel=panelInsideScrollPaneTest;break;
+            default:panel= panelInsideScrollPaneOther;
         }
-        panel.add(jComponent);
-        jComponent.setBounds(SwingUtils.MARGIN, currentY[index], 200,
+        if(jComponent instanceof JTextField) {
+            JPanel p = new JPanel();
+            //p.setLayout(null);
+
+            JLabel label = new JLabel(TimeCalcProperty.forKey(key).getDescription() + ": ");
+            p.add(label);
+            p.add(jComponent);
+            label.setBounds(10,0, 200, 25);
+
+            jComponent.setBounds(220, 0, 200, 25);
+            LayoutManager flowLayout = new FlowLayout(FlowLayout.LEFT);
+            p.setLayout(flowLayout);
+            p.setAlignmentX(LEFT_ALIGNMENT);
+
+            label.setPreferredSize(new Dimension(key.startsWith("test.") ? 240: 200, 25));
+            jComponent.setPreferredSize(new Dimension(200, 25));
+
+            p.setMaximumSize(new Dimension(600, 30));
+            panel.add(p);
+
+
+            //jComponent.setMinimumSize(new Dimension(60, 30));
+            //label.setBounds(0,0,100, 30);
+        } else {
+            panel.add(jComponent);
+        }
+
+        jComponent.setBounds(currentX[index], currentY[index], 200,
                 HEIGHT1);
-        panel.add(Box.createRigidArea(new Dimension(5, 10)));
-        nextRow(index);
+        panel.add(Box.createRigidArea(new Dimension(5, 5)));
+        if(nextRow) {
+            nextRow(index);
+        } else {
+            currentX[index] = currentX[index] + SwingUtils.MARGIN + jComponent.getWidth();
+        }
     }
 
     private void nextRow(int index) {
         currentY[index] = (int) (currentY[index] + 3.0d * SwingUtils.MARGIN);
+        currentX[index] = SwingUtils.MARGIN;
     }
 
     public void doEnableEverything() {

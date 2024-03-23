@@ -114,8 +114,6 @@ public enum TimeCalcProperty {
     @Getter
     private final Class clazz;
 
-
-
     static {
         Set<String> uniqueKeys = new HashSet<>();
         for(TimeCalcProperty tcp:TimeCalcProperty.values()) {
