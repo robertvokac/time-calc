@@ -107,21 +107,21 @@ public class ArrivalChart extends JPanel {
         );
 
         XYPlot plot = (XYPlot) chart.getPlot();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
 
             if (i == 0 && !this.arrivalEnabled) {
                 continue;
             }
-            if (i == 2 && !this.ma7Enabled) {
+            if (i == 4 && !this.ma7Enabled) {
                 continue;
             }
-            if (i == 3 && !this.ma14Enabled) {
+            if (i == 5 && !this.ma14Enabled) {
                 continue;
             }
-            if (i == 4 && !this.ma28Enabled) {
+            if (i == 6 && !this.ma28Enabled) {
                 continue;
             }
-            if (i == 5 && !this.ma56Enabled) {
+            if (i == 7 && !this.ma56Enabled) {
                 continue;
             }
             plot.setDataset(i, new TimeSeriesCollection(timeSeries.get(i)));
@@ -137,7 +137,7 @@ public class ArrivalChart extends JPanel {
             //            renderer.setDefaultShape(EMPTY_RECTANGLE);
 
             renderer.setSeriesPaint(0, c);
-            float strength = i == 1 || i == 2 ? 3f : 1.5f;
+            float strength = i == 1 || i == 4 ? 3f : 1.5f;
             BasicStroke stroke = new BasicStroke(strength);
 
             renderer.setSeriesStroke(0, stroke);
@@ -146,10 +146,12 @@ public class ArrivalChart extends JPanel {
         };
         setSeries.accept(0, Color.GRAY);
         setSeries.accept(1, ORANGE);
-        setSeries.accept(2, BLUE);
-        setSeries.accept(3, Color.GREEN);
-        setSeries.accept(4, BROWN);
-        setSeries.accept(5, PURPLE);
+        setSeries.accept(2, ORANGE);
+        setSeries.accept(3, ORANGE);
+        setSeries.accept(4, BLUE);
+        setSeries.accept(5, Color.GREEN);
+        setSeries.accept(6, BROWN);
+        setSeries.accept(7, PURPLE);
 
         plot.setBackgroundPaint(Color.white);
 
@@ -191,12 +193,20 @@ public class ArrivalChart extends JPanel {
         final TimeSeries seriesTarget = new TimeSeries(
                 "Target (" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES
                         .format(target) + " h)");
+        final TimeSeries seriesTargetMinus30Minutes = new TimeSeries(
+                NumberFormats.FORMATTER_TWO_DECIMAL_PLACES
+                        .format(target - 0.5d) + " h");
+        final TimeSeries seriesTargetMinus60Minutes = new TimeSeries(
+                NumberFormats.FORMATTER_TWO_DECIMAL_PLACES
+                        .format(target - 1.0d) + " h");
         final TimeSeries seriesMa7 = new TimeSeries("MA7");
         final TimeSeries seriesMa14 = new TimeSeries("MA14");
         final TimeSeries seriesMa28 = new TimeSeries("MA28");
         final TimeSeries seriesMa56 = new TimeSeries("MA56");
         result.add(seriesArrival);
         result.add(seriesTarget);
+        result.add(seriesTargetMinus30Minutes);
+        result.add(seriesTargetMinus60Minutes);
         result.add(seriesMa7);
         result.add(seriesMa14);
         result.add(seriesMa28);
@@ -236,6 +246,8 @@ public class ArrivalChart extends JPanel {
 
             seriesArrival.add(day3, new Double(arrival[i]));
             seriesTarget.add(day3, new Double(0d));
+            seriesTargetMinus30Minutes.add(day3, new Double(-0.5d));
+            seriesTargetMinus60Minutes.add(day3, new Double(-1.0d));
             seriesMa7.add(day3, new Double(ma7[i]));
             seriesMa14.add(day3, new Double(ma14[i]));
             seriesMa28.add(day3, new Double(ma28[i]));
