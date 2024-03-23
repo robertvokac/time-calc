@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,7 +105,7 @@ public class MainWindow extends TWindow {
     private final ActivityRepositoryApi activityRepository;
 
     private final IntegerProperty forgetOvertimeProperty = new IntegerProperty("forgetOvertimeProperty", 0);
-    
+    private WeekStatistics weekStatistics = null;
 
     {
         ChangeListener valueMustBeTime =
@@ -956,8 +957,22 @@ public class MainWindow extends TWindow {
         progressCircle.setDonePercent(done);
         progressSwing.setDonePercent(done);
         dayBattery.setDonePercent(done);
-
-        WeekStatistics weekStatistics = new WeekStatistics(clock, time);
+        try {
+            WeekStatistics weekStatisticsTmp = new WeekStatistics(clock, time);
+            weekStatistics = weekStatisticsTmp;
+        } catch (DateTimeException e) {
+            System.out.println("time.monthProperty=" + time.monthProperty);
+            System.out.println("time.dayProperty=" + time.dayProperty);
+            System.out.println("time.monthCustomProperty=" + time.monthCustomProperty);
+            System.out.println("time.dayCustomProperty=" + time.dayCustomProperty);
+            e.printStackTrace();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+//            return false;
+        }
         final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
         final int workDaysDone = weekStatistics.getWorkDaysDone();
         final int workDaysTotal = weekStatistics.getWorkDaysTotal();

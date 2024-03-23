@@ -91,12 +91,13 @@ public class Time extends Thread {
                                                   || month == 6 || month == 9
                                                   || month == 11)) {
             if (month == 2) {
-                if (custom > 28) {
-                    custom = 28;
-                } else {
-                    if (custom > 30) {
-                        custom = 30;
-                    }
+                boolean leapYear = this.yearProperty.getValue() % 4 == 0;
+                if (custom > (leapYear ? 29 : 28)) {
+                    custom = (leapYear ? 29 : 28);
+                }
+            } else {
+                if (custom > 30) {
+                    custom = 30;
                 }
             }
         }

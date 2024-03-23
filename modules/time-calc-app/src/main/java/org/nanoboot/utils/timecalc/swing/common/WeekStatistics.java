@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -24,15 +25,14 @@ public class WeekStatistics {
         int workDaysTodoTmp = 0;
         int workDaysTotalTmp;
         {
-            int currentDayOfMonth = analogClock.dayProperty.getValue();
+            int currentDayOfMonth = time.dayProperty.getValue();
 
             for (int dayOfMonth = 1;
                     dayOfMonth <= time.asCalendar()
                             .getActualMaximum(Calendar.DAY_OF_MONTH);
                     dayOfMonth++) {
-                DayOfWeek dayOfWeek
-                        = LocalDate.of(analogClock.yearProperty.getValue(),
-                                analogClock.monthProperty.getValue(),
+                DayOfWeek dayOfWeek = LocalDate.of(time.yearProperty.getValue(),
+                        time.monthProperty.getValue(),
                                 dayOfMonth)
                                 .getDayOfWeek();
                 boolean weekend
