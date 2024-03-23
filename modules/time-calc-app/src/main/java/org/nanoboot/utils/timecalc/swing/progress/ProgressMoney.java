@@ -58,6 +58,10 @@ public class ProgressMoney extends Widget implements GetProperty {
             //nothing to do
             return;
         } else {
+            if(progress == null) {
+                //nothing to do
+                return;
+            }
             double workDaysInMonth = progress.getWorkDaysInMonth();
             boolean isWeekend = progress.isWeekend();
             double perDay = perMonth / workDaysInMonth;

@@ -88,6 +88,12 @@ public class WidgetMenu extends JPopupMenu {
         //if(!aClass.getSimpleName().contains("Battery")) {
             add(typeMenuItem);
         //}
+
+        JMenuItem hideMenuItem = new JMenuItem("Hide");
+        add(hideMenuItem);
+        hideMenuItem.addActionListener(e -> {
+            this.widget.hideWidget();
+        });
     }
     public void markAsSelected(WidgetType widgetType) {
         this.typeMinuteMenuItem.setText(WidgetType.MINUTE.name());

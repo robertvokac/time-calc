@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import lombok.Getter;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Progress;
@@ -38,7 +39,7 @@ import java.util.function.Consumer;
 public class Widget extends JPanel implements
         GetProperty {
 
-    private static final int CLOSE_BUTTON_SIDE = 25;
+    private static final int CLOSE_OR_MINIMIZE_BUTTON_SIDE = 25;
     protected static final Color FOREGROUND_COLOR = new Color(220, 220, 220);
     protected static final Color FOREGROUND_COLOR2 = new Color(210, 210, 210);
     protected static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
@@ -49,8 +50,11 @@ public class Widget extends JPanel implements
     protected static final String LEGS = " /\\ ";
     public static final Color CLOSE_BUTTON_FOREGROUND_COLOR
             = new Color(127, 127, 127);
-    public static final Color CLOSE_BUTTON_BACKGROUND_COLOR = Color.LIGHT_GRAY;
+    public static final Color CLOSE_OR_MINIMIZE_BUTTON_BACKGROUND_COLOR = Color.LIGHT_GRAY;
     public static final Color CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON = new Color(255, 153, 153);
+    public static final Color MINIMIZE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON = new Color(
+            126, 179, 227);
+    private static final Color VERY_LIGHT_GRAY = new Color(220, 220, 220);
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -72,11 +76,15 @@ public class Widget extends JPanel implements
     protected Progress progress = null;
     protected boolean mouseOver = false;
     private boolean mouseOverCloseButton = false;
+    private boolean mouseOverMinimizeButton = false;
     protected JLabel smileyIcon;
     protected JLabel smileyIcon2;
     private long lastUpdate = System.nanoTime();
     private static final Color PURPLE_STRONGLY_COLORED = new Color(153,51,255);
     private static final Color PURPLE_WEAKLY_COLORED = new Color(204,153,255);
+
+    @Getter
+    private boolean hidden;
 
     private WidgetMenu widgetMenu = null;
     public Widget() {
@@ -93,17 +101,28 @@ public class Widget extends JPanel implements
 
                 int x = e.getX();
                 int y = e.getY();
-                mouseOverCloseButton = x >= getWidth() - CLOSE_BUTTON_SIDE
-                        && y <= CLOSE_BUTTON_SIDE;
+                mouseOverCloseButton = x >= getWidth() - CLOSE_OR_MINIMIZE_BUTTON_SIDE
+                        && y <= CLOSE_OR_MINIMIZE_BUTTON_SIDE;
+                mouseOverMinimizeButton = x < getWidth() - CLOSE_OR_MINIMIZE_BUTTON_SIDE
+                                       && x > getWidth() - 2 * CLOSE_OR_MINIMIZE_BUTTON_SIDE
+                                       && y <= CLOSE_OR_MINIMIZE_BUTTON_SIDE;
             }
         });
 
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(hidden) {
+                    hidden = false;
+                }
 
                 if (mouseOverCloseButton) {
                     visibleProperty.setValue(false);
+                    return;
+                }
+
+                if(mouseOverMinimizeButton) {
+                    hidden = true;
                     return;
                 }
 
@@ -111,17 +130,7 @@ public class Widget extends JPanel implements
                     //nothing to do
                     return;
                 }
-//                if (visibleProperty.isEnabled()) {
-//                    Visibility visibility
-//                            = Visibility.valueOf(visibilityProperty.getValue());
-//                    if (visibility.isStronglyColored()) {
-//                        visibilityProperty
-//                                .setValue(Visibility.WEAKLY_COLORED.name());
-//                    } else {
-//                        visibilityProperty
-//                                .setValue(Visibility.STRONGLY_COLORED.name());
-//                    }
-//                }
+
             }
 
             @Override
@@ -227,20 +236,29 @@ public class Widget extends JPanel implements
     @Override
     public final void paintComponent(Graphics brush) {
         super.paintComponent(brush);
-
         setVisible(visibleProperty.isEnabled());
+        Visibility visibility
+                = Visibility.valueOf(visibilityProperty.getValue());
 
-        if (visibleProperty.isDisabled()) {
+        if (visibleProperty.isDisabled() || hidden) {
+            if(hidden) {
+                if (mouseOver) {
+                    Color currentColor = brush.getColor();
+                    brush.setColor(VERY_LIGHT_GRAY);
+                    brush.fillRect(1, 1, getWidth() - 2, getHeight() - 2);
+                    brush.setColor(currentColor);
+                }
+            }
             //nothing to do
             return;
         }
-        Visibility visibility
-                = Visibility.valueOf(visibilityProperty.getValue());
+
         super.setVisible(
                 visibility != Visibility.NONE && visibleProperty.isEnabled());
         paintWidget(brush);
 
         paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
+        paintMinimizeIcon(brush, getWidth(), mouseOver, mouseOverMinimizeButton);
 
         if (mouseOver) {
             Color currentColor = brush.getColor();
@@ -264,7 +282,8 @@ public class Widget extends JPanel implements
 //            return;
 //        }
 
-        brush.setColor(mouseOverCloseButton ? CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON : CLOSE_BUTTON_BACKGROUND_COLOR);
+        brush.setColor(mouseOverCloseButton ? CLOSE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON :
+                CLOSE_OR_MINIMIZE_BUTTON_BACKGROUND_COLOR);
 
 //        if(!mouseOverCloseButton) {
 //            brush.drawRect(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
@@ -273,18 +292,45 @@ public class Widget extends JPanel implements
 //                    CLOSE_BUTTON_SIDE - 2);
 //            return;
 //        }
-        brush.fillOval(width - CLOSE_BUTTON_SIDE - 1, 0 + 1, CLOSE_BUTTON_SIDE,
-                CLOSE_BUTTON_SIDE);
+        brush.fillOval(width - CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1, 0 + 1,
+                CLOSE_OR_MINIMIZE_BUTTON_SIDE,
+                CLOSE_OR_MINIMIZE_BUTTON_SIDE);
         brush.setColor(CLOSE_BUTTON_FOREGROUND_COLOR);
         Graphics2D brush2d = (Graphics2D) brush;
         brush2d.setStroke(new BasicStroke(2f));
         int offset = 6;
-        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + offset, 0 + 1 + offset,
-                width - 0 * CLOSE_BUTTON_SIDE - 1 - offset,
-                0 + CLOSE_BUTTON_SIDE + 1 - offset);
-        brush.drawLine(width - CLOSE_BUTTON_SIDE - 1 + offset,
-                0 + CLOSE_BUTTON_SIDE + 1 - offset,
-                width - 0 * CLOSE_BUTTON_SIDE - 1 - offset, 0 + 1 + offset);
+        brush.drawLine(width - CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 + offset, 0 + 1 + offset,
+                width - 0 * CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 - offset,
+                0 + CLOSE_OR_MINIMIZE_BUTTON_SIDE + 1 - offset);
+        brush.drawLine(width - CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 + offset,
+                0 + CLOSE_OR_MINIMIZE_BUTTON_SIDE + 1 - offset,
+                width - 0 * CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 - offset, 0 + 1 + offset);
+    }
+
+    private static void paintMinimizeIcon(Graphics brush, int width,
+            boolean mouseOver, boolean mouseOverMinimizeButton) {
+
+        if (!mouseOver) {
+            //nothing to do
+            return;
+        }
+
+        brush.setColor(mouseOverMinimizeButton ? MINIMIZE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON :
+                CLOSE_OR_MINIMIZE_BUTTON_BACKGROUND_COLOR);
+
+        brush.fillOval(width - CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 - CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1, 0 + 1,
+                CLOSE_OR_MINIMIZE_BUTTON_SIDE,
+                CLOSE_OR_MINIMIZE_BUTTON_SIDE);
+        brush.setColor(CLOSE_BUTTON_FOREGROUND_COLOR);
+        Graphics2D brush2d = (Graphics2D) brush;
+        brush2d.setStroke(new BasicStroke(2f));
+        int offset = 6;
+        int y = ((int)(0 + 1 + CLOSE_OR_MINIMIZE_BUTTON_SIDE / 2d)) + 2;
+        brush.drawLine(width - CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 - CLOSE_OR_MINIMIZE_BUTTON_SIDE
+                       - 1 + offset, y,
+                width - 0 * CLOSE_OR_MINIMIZE_BUTTON_SIDE - 1 - offset - CLOSE_OR_MINIMIZE_BUTTON_SIDE
+                - 1,
+                y);
     }
 
     protected void paintWidget(Graphics g) {
@@ -477,5 +523,9 @@ public class Widget extends JPanel implements
         brush.setColor(currentColor);
         //brush.setBackground(currentBackgroundColor);
         brush.setFont(currentFont);
+    }
+
+    public void hideWidget() {
+        this.hidden = true;
     }
 }
