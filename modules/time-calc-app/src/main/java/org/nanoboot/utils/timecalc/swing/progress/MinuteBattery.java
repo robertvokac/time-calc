@@ -12,7 +12,4 @@ public class MinuteBattery extends Battery {
         super(MINUTE, x, i, i1);
     }
 
-    public static double getMinuteProgress(int secondNow, int millisecondNow) {
-        return millisecondNow / 60d / 1000d + secondNow / 60d;
-    }
 }

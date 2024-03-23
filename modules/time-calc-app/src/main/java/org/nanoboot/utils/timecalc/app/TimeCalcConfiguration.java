@@ -180,6 +180,14 @@ public class TimeCalcConfiguration {
             = new StringProperty(TimeCalcProperty.LIFE_TYPE.getKey());
     public final StringProperty lifeBirthDateProperty
             = new StringProperty(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
+    public final BooleanProperty moneyVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.MONEY_VISIBLE.getKey());
+    public final StringProperty moneyTypeProperty
+            = new StringProperty(TimeCalcProperty.MONEY_TYPE.getKey());
+    public final IntegerProperty moneyPerMonthProperty
+            = new IntegerProperty(TimeCalcProperty.MONEY_PER_MONTH.getKey());
+    public final StringProperty moneyCurrencyProperty
+            = new StringProperty(TimeCalcProperty.MONEY_CURRENCY.getKey());
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(
                     TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
@@ -266,6 +274,10 @@ public class TimeCalcConfiguration {
             lifeVisibleProperty,
             lifeTypeProperty,
             lifeBirthDateProperty,
+            moneyVisibleProperty,
+            moneyTypeProperty,
+            moneyPerMonthProperty,
+            moneyCurrencyProperty,
             mainWindowCustomTitleProperty,
             profileNameProperty,
             activityNeededFlagsProperty,

@@ -16,7 +16,6 @@ import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.BasicStroke;
@@ -28,7 +27,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -71,7 +69,7 @@ public class Widget extends JPanel implements
     public StringProperty typeProperty
             = new StringProperty("widget.typeProperty", WidgetType.DAY.name().toLowerCase());
     protected int side = 0;
-    private Progress progress = null;
+    protected Progress progress = null;
     protected boolean mouseOver = false;
     private boolean mouseOverCloseButton = false;
     protected JLabel smileyIcon;
@@ -244,6 +242,9 @@ public class Widget extends JPanel implements
 
         paintCloseIcon(brush, getWidth(), mouseOver, mouseOverCloseButton);
 
+        if (mouseOver) {
+            brush.drawRect(1, 1, getWidth() - 2, getHeight() - 2);
+        }
     }
 
     private static void paintCloseIcon(Graphics brush, int width,

@@ -34,6 +34,7 @@ import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
@@ -100,6 +101,7 @@ public class MainWindow extends TWindow {
     private final TTextField remainingTextField;
     private final TButton saveButton;
     private final ProgressLife progressLife;
+    private final ProgressMoney progressMoney;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -318,7 +320,7 @@ public class MainWindow extends TWindow {
 
         this.progressLife = new ProgressLife(time);
         progressLife.setBounds(progressSwing.getX() + progressSwing.getWidth() + SwingUtils.MARGIN, progressSwing.getY(),
-                100, 100);
+                100, 50);
 
         {
             progressSquare.typeProperty
@@ -337,6 +339,24 @@ public class MainWindow extends TWindow {
                     .bindTo(timeCalcConfiguration.lifeVisibleProperty);
         }
         add(progressLife);
+
+
+        this.progressMoney
+                = new ProgressMoney(time);
+        progressMoney.setBounds(progressLife.getX(), progressSwing.getY() + progressLife.getHeight() + SwingUtils.MARGIN,
+                100, 50);
+
+        progressMoney.visibleProperty
+                .bindTo(timeCalcConfiguration.moneyVisibleProperty);
+        progressMoney.typeProperty
+                    .bindTo(timeCalcConfiguration.moneyTypeProperty);
+        progressMoney.perMonthProperty
+                    .bindTo(timeCalcConfiguration.moneyPerMonthProperty);
+        progressMoney.currencyProperty
+                    .bindTo(timeCalcConfiguration.moneyCurrencyProperty);
+
+        add(progressMoney);
+
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
 
@@ -981,38 +1001,40 @@ public class MainWindow extends TWindow {
         Progress progress = new Progress();
         progress.set(WidgetType.DAY, done);
 
+        try {
+            WeekStatistics weekStatisticsTmp = new WeekStatistics(clock, time);
+            weekStatistics = weekStatisticsTmp;
+        } catch (DateTimeException e) {
+            e.printStackTrace();
             try {
-                WeekStatistics weekStatisticsTmp = new WeekStatistics(clock, time);
-                weekStatistics = weekStatisticsTmp;
-            } catch (DateTimeException e) {
-                e.printStackTrace();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-                //            return false;
+                Thread.sleep(1000);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
             }
-            final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
-            final int workDaysDone = weekStatistics.getWorkDaysDone();
-            final int workDaysTotal = weekStatistics.getWorkDaysTotal();
+            //            return false;
+        }
+        final boolean nowIsWeekend = weekStatistics.isNowIsWeekend();
+        final int workDaysDone = weekStatistics.getWorkDaysDone();
+        final int workDaysTotal = weekStatistics.getWorkDaysTotal();
 
-            int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
-        double weekProgress = WeekBattery.getWeekProgress(weekDayWhenMondayIsOne, done);
+        progress.setWorkDaysInMonth(workDaysTotal);
+        progress.setWeekend(nowIsWeekend);
+        int weekDayWhenMondayIsOne = clock.dayOfWeekProperty.getValue();
+        double weekProgress = Progress.getWeekProgress(weekDayWhenMondayIsOne, done);
         weekBattery.setProgress(progress);
             weekBattery.setLabel(
                     nowIsWeekend ? "5/5" : (weekDayWhenMondayIsOne + "/5"));
 
-            double monthProgress = MonthBattery
+            double monthProgress = Progress
                     .getMonthProgress(weekDayWhenMondayIsOne, workDaysDone,
                             workDaysTotal, done);
             progress.set(WidgetType.MONTH, monthProgress);
         double hourProgress =
-                HourBattery.getHourProgress(timeRemains, secondsRemains,
+                Progress.getHourProgress(timeRemains, secondsRemains,
                         millisecondsRemains);
         double minuteProgress =
-                MinuteBattery.getMinuteProgress(secondNow, millisecondNow);
-        double yearProgress = YearBattery.getYearProgress(clock);
+                Progress.getMinuteProgress(secondNow, millisecondNow);
+        double yearProgress = Progress.getYearProgress(clock);
         progress.set(WidgetType.HOUR, hourProgress);
         progress.set(WidgetType.WEEK, weekProgress);
         progress.set(WidgetType.MINUTE, minuteProgress);
@@ -1021,6 +1043,7 @@ public class MainWindow extends TWindow {
         progressCircle.setProgress(progress);
         progressSwing.setProgress(progress);
         progressLife.setProgress(progress);
+        progressMoney.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);

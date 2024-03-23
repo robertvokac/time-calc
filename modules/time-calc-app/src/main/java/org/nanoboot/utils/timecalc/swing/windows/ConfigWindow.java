@@ -195,6 +195,14 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.LIFE_VISIBLE.getKey());
     public final JTextField lifeTypeProperty
             = new JTextField(TimeCalcProperty.LIFE_TYPE.getKey());
+    public final JCheckBox moneyVisibleProperty
+            = new JCheckBox(TimeCalcProperty.MONEY_VISIBLE.getKey());
+    public final JTextField moneyTypeProperty
+            = new JTextField(TimeCalcProperty.MONEY_TYPE.getKey());
+    public final JTextField moneyPerMonthProperty
+            = new JTextField(TimeCalcProperty.MONEY_PER_MONTH.getKey());
+    public final JTextField moneyCurrencyProperty
+            = new JTextField(TimeCalcProperty.MONEY_CURRENCY.getKey());
     public final JTextField lifeBirthDateProperty
             = new JTextField(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
     private final JTextField mainWindowCustomTitleProperty
@@ -362,6 +370,7 @@ public class ConfigWindow extends TWindow {
                         .setSelected(!enable);
                 squareVisibleProperty.setSelected(enable);
                 lifeVisibleProperty.setSelected(enable);
+                moneyVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
@@ -432,6 +441,10 @@ public class ConfigWindow extends TWindow {
                 lifeVisibleProperty,
                 lifeTypeProperty,
                 lifeBirthDateProperty,
+                moneyVisibleProperty,
+                moneyTypeProperty,
+                moneyPerMonthProperty,
+                moneyCurrencyProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
                 activityNeededFlagsProperty,
@@ -499,6 +512,15 @@ public class ConfigWindow extends TWindow {
             }
             if (p == activityNeededFlagsProperty) {
                 addLabelToNextRow(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS);
+            }
+            if (p == moneyTypeProperty) {
+                addLabelToNextRow(TimeCalcProperty.MONEY_TYPE);
+            }
+            if (p == moneyPerMonthProperty) {
+                addLabelToNextRow(TimeCalcProperty.MONEY_PER_MONTH);
+            }
+            if (p == moneyCurrencyProperty) {
+                addLabelToNextRow(TimeCalcProperty.MONEY_CURRENCY);
             }
 
             if (p == testClockCustomYearProperty) {

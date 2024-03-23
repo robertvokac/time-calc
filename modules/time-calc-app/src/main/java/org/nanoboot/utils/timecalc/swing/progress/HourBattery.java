@@ -14,25 +14,4 @@ public class HourBattery extends Battery {
         super(HOUR, x, i, i1);
     }
 
-    public static double getHourProgress(TTime timeRemains, int secondsRemains,
-            int millisecondsRemains) {
-        if (secondsRemains < 0 || millisecondsRemains < 0
-                || timeRemains.getHour() < 0 || timeRemains.getMinute() < 0) {
-            return 1;
-        }
-        double minutesRemainsD = timeRemains.getMinute();
-        double secondsRemainsD = secondsRemains;
-        double millisecondsRemainsD = millisecondsRemains;
-        minutesRemainsD = minutesRemainsD + secondsRemainsD / 60d;
-        minutesRemainsD
-                = minutesRemainsD + millisecondsRemainsD / 1000d / 60d;
-        if (secondsRemainsD > 0) {
-            minutesRemainsD = minutesRemainsD - 1d;
-        }
-        if (millisecondsRemainsD > 0) {
-            minutesRemainsD = minutesRemainsD - 1d / 1000d;
-        }
-        double hourProgress = 1 - ((minutesRemainsD % 60d) / 60d);
-        return hourProgress;
-    }
 }
