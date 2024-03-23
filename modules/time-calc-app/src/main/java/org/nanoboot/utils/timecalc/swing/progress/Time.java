@@ -66,6 +66,7 @@ public class Time extends Thread {
 
     public Calendar asCalendar() {
         Calendar cal = Calendar.getInstance();
+
         cal.set(Calendar.YEAR, returnValueAsNeeded(yearProperty, yearCustomProperty));
         cal.set(Calendar.MONTH, returnValueAsNeeded(monthProperty, monthCustomProperty) - 1);
         cal.set(Calendar.DAY_OF_MONTH, returnValueAsNeeded(dayProperty, dayCustomProperty));
@@ -80,6 +81,9 @@ public class Time extends Thread {
     }
 
     private int returnValueAsNeeded(int i1, int i2) {
+        if(this.allowCustomValuesProperty.isDisabled()) {
+            return i1;
+        }
         return i2 == Integer.MAX_VALUE ? i1 : i2;
     }
 
