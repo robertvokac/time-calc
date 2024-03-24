@@ -230,6 +230,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField(TimeCalcProperty.SPEED.getKey());
     public final JCheckBox speedNegativeProperty
             = new JCheckBox(TimeCalcProperty.SPEED_NEGATIVE.getKey());
+    public final JCheckBox speedFloatingProperty
+            = new JCheckBox(TimeCalcProperty.SPEED_FLOATING.getKey());
 
     //
     public final JCheckBox clockHiddenProperty
@@ -455,6 +457,14 @@ public class ConfigWindow extends TWindow {
                 moneyHiddenProperty.setSelected(!enable);
                 weatherHiddenProperty.setSelected(!enable);
                 dotHiddenProperty.setSelected(!enable);
+                if (enable) {
+                    speedProperty.setText("0");
+                    speedFloatingProperty.setSelected(true);
+                }
+                if (!enable) {
+                    speedProperty.setText(String.valueOf(Integer.MIN_VALUE));
+                    speedFloatingProperty.setSelected(false);
+                }
                 MainWindow.hideShowFormsCheckBox.setSelected(enable);
             });
         }
@@ -549,6 +559,7 @@ public class ConfigWindow extends TWindow {
                 activityNeededFlagsProperty,
                 speedProperty,
                 speedNegativeProperty,
+                speedFloatingProperty,
                 visibilityDefaultProperty,
                 visibilitySupportedColoredProperty));
         //

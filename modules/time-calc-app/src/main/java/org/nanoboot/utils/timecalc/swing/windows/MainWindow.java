@@ -122,7 +122,6 @@ public class MainWindow extends TWindow {
     private final TimeCalcKeyAdapter timeCalcKeyAdapter;
     private double msRemaining = 0d;
     private final Time timeAlwaysReal;
-    private boolean floatingTime = false;
 
     {
         ChangeListener valueMustBeTime
@@ -850,7 +849,12 @@ public class MainWindow extends TWindow {
         new Timer(100, e -> {
             if (speed == Integer.MIN_VALUE) {
                 //timeCalcConfiguration.testEnabledProperty.setValue(false);
-                return;
+                if (timeCalcConfiguration.speedFloatingProperty.isEnabled()) {
+                    speed = 0;
+                } else {
+                    return;
+                }
+
             }
             double r = Math.pow(2, speed + 6);
             if (speed < -6 && Math.random() > r) {
@@ -861,6 +865,7 @@ public class MainWindow extends TWindow {
             if (timeCalcConfiguration.testEnabledProperty.isDisabled()) {
                 timeCalcConfiguration.testEnabledProperty.enable();
             }
+
             if (time.yearCustomProperty.getValue() == Integer.MAX_VALUE) {
                 time.yearCustomProperty.setValue(time.yearProperty.getValue());
             }
@@ -882,26 +887,92 @@ public class MainWindow extends TWindow {
             if (time.millisecondCustomProperty.getValue() == Integer.MAX_VALUE) {
                 time.millisecondCustomProperty.setValue(time.millisecondProperty.getValue());
             }
+
+            if (timeCalcConfiguration.speedFloatingProperty.isEnabled()) {
+                long nowTime = timeAlwaysReal.asCalendar().getTime().getTime();
+                long fakeTime = time.asCalendar().getTime().getTime();
+                long diff = fakeTime - nowTime;
+                boolean forewardMs = diff > 0;
+                boolean backwardMs = !forewardMs;
+                if (forewardMs && diff > 60000 && Math.random() > 0.95) {
+                    speed = -2;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                if (forewardMs && diff <= 60000 && Math.random() > 0.95) {
+                    speed = 1;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                if (backwardMs && diff < -60000 && Math.random() > 0.95) {
+                    speed = 2;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                if (backwardMs && diff >= -60000 && Math.random() > 0.95) {
+                    speed = -1;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                {
+                    if (forewardMs && diff > 600000 && Math.random() > 0.95) {
+                        speed = -4;
+                        timeCalcConfiguration.speedProperty.setValue(speed);
+                    }
+                    if (backwardMs && diff < -600000 && Math.random() > 0.95) {
+                        speed = 4;
+                        timeCalcConfiguration.speedProperty.setValue(speed);
+                    }
+                }
+                if (Math.random() > 0.95) {
+                    speed = (int) (-8d + Math.random() * 8d);
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                if(timeCalcConfiguration.speedNegativeProperty.isDisabled()){
+                if(Math.random() > 0.95 && Math.abs(diff) > 360000d * 6d) {
+                    speed = (int) (backwardMs ? (5d + Math.random() * 5d) : (-5d - Math.random() * 3d)) ;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                }
+                if(Math.random() > 0.999 ) {
+                    speed = 10;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                if(Math.random() < 0.001 ) {
+                    speed = -6;
+                    timeCalcConfiguration.speedProperty.setValue(speed);
+                }
+                if(diff >  360000 * 3) {
+                    timeCalcConfiguration.speedNegativeProperty.setValue(true);
+                } else {
+                    timeCalcConfiguration.speedNegativeProperty.setValue(false);
+                }
+
+//                if(Math.random() > 0.98) {
+//                    boolean add = Math.random() > 0.5;
+//                    this.timeCalcKeyAdapter.setMsToAdd((int) ((add ? (1) : (-1)) * Math.random() * 360000d));
+//                    this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, add, !add, false);
+//                    
+//                }
+
+            }
+
             double msShouldBeAdded = speed < -6 ? 1 : (Math.pow(2, speed) * 100d) + this.msRemaining;
-            int msShouldBeAddedInt = (int)Math.floor(msShouldBeAdded);
+            int msShouldBeAddedInt = (int) Math.floor(msShouldBeAdded);
             this.msRemaining = msShouldBeAdded - msShouldBeAddedInt;
             this.timeCalcKeyAdapter.setMsToAdd((timeCalcConfiguration.speedNegativeProperty.isEnabled() ? (-1) : 1) * msShouldBeAddedInt);
             this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
 
         }).start();
         this.timeCalcConfiguration.speedProperty.addListener(e -> {
-            
+
             int newSpeed = Integer.valueOf(timeCalcConfiguration.speedProperty.getValue());
-            if(newSpeed < MIN_SPEED) {
+            if (newSpeed < MIN_SPEED) {
                 newSpeed = MIN_SPEED;
             }
             this.speed = newSpeed;
         });
         int newSpeed = Integer.valueOf(timeCalcConfiguration.speedProperty.getValue());
-            if(newSpeed < MIN_SPEED) {
-                newSpeed = MIN_SPEED;
-            }
-            this.speed = newSpeed;
+        if (newSpeed < MIN_SPEED) {
+            newSpeed = MIN_SPEED;
+        }
+        this.speed = newSpeed;
         while (true) {
 
             if (Math.random() > 0.99) {
@@ -1354,10 +1425,12 @@ public class MainWindow extends TWindow {
         this.speed = Integer.MIN_VALUE;
         timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
+
     public void enableFloatingTime() {
-        this.floatingTime = true;
+        this.timeCalcConfiguration.speedFloatingProperty.enable();
     }
+
     public void disableFloatingTieme() {
-        this.floatingTime = false;
+        this.timeCalcConfiguration.speedFloatingProperty.disable();
     }
 }

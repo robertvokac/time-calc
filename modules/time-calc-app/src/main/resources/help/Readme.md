@@ -184,6 +184,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * CTRL + Q - Decrease speed of time
 * ALT + Q - Reset speed of time
 * COMMA - Switch between foreward and backward speed
+* T - Enable or disable floating speed
 * D - Reset custom time values to the real time
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time
@@ -213,7 +214,6 @@ Smileys can be colored or white-black (can be set in configuration)
 ### Fix these known bugs
 
 * Clock, square and circle are grey, if visibility mode is weakly colored.
-* Decreasing real time sometimes does not work correctly.
 
 ## For Developers
 

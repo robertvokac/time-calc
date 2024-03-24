@@ -707,6 +707,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 timeCalcConfiguration.speedNegativeProperty.flip();
                 break;
             }
+            
+            case KeyEvent.VK_T: {
+                timeCalcConfiguration.speedFloatingProperty.flip();
+                break;
+            }
             default:
                 if (!numberKeyWasPressed) {
                     Utils.showNotification(
