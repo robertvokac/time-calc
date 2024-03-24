@@ -69,8 +69,8 @@ public class ConfigWindow extends TWindow {
     private final JPanel panelInsideScrollPaneSmileys;
     private final JPanel panelInsideScrollPaneTest;
     private final JPanel panelInsideScrollPaneOther;
-    private final int[] currentY = new int[]{SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN};
-    private final int[] currentX = new int[]{SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN,SwingUtils.MARGIN};
+    private final int[] currentY = new int[]{SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN};
+    private final int[] currentX = new int[]{SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN};
     private final List<JComponent> propertiesList = new ArrayList<>();
     private final Map<TimeCalcProperty, JComponent> propertiesMap = new HashMap<>();
     private final TButton enableAsMuchAsPossible
@@ -122,16 +122,16 @@ public class ConfigWindow extends TWindow {
                             .getKey());
     private final JCheckBox clockSmileyVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_SMILEY_VISIBLE
-                    .getKey());
+                    TimeCalcProperty.CLOCK_SMILEY_VISIBLE
+                            .getKey());
     private final JCheckBox clockPercentProgressVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_PERCENT_PROGRESS_VISIBLE
-                    .getKey());
+                    TimeCalcProperty.CLOCK_PERCENT_PROGRESS_VISIBLE
+                            .getKey());
     private final JCheckBox clockCircleProgressVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.CLOCK_CIRCLE_PROGRESS_VISIBLE
-                    .getKey());
+                    TimeCalcProperty.CLOCK_CIRCLE_PROGRESS_VISIBLE
+                            .getKey());
     //
     private final JCheckBox batteryWavesVisibleProperty
             = new JCheckBox(TimeCalcProperty.BATTERY_WAVES_VISIBLE.getKey());
@@ -167,7 +167,7 @@ public class ConfigWindow extends TWindow {
                     TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW.getKey());
     private final JCheckBox batteryQuarterIconVisibleProperty
             = new JCheckBox(
-            TimeCalcProperty.BATTERY_QUARTER_ICON_VISIBLE.getKey());
+                    TimeCalcProperty.BATTERY_QUARTER_ICON_VISIBLE.getKey());
     private final JCheckBox jokesVisibleProperty
             = new JCheckBox(TimeCalcProperty.JOKES_VISIBLE.getKey());
     private final JCheckBox commandsVisibleProperty
@@ -228,6 +228,40 @@ public class ConfigWindow extends TWindow {
             = new JTextField(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
     public final JTextField speedProperty
             = new JTextField(TimeCalcProperty.SPEED.getKey());
+
+    //
+    public final JCheckBox clockHiddenProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_HIDDEN.getKey());
+    public final JCheckBox batteryMinuteHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_MINUTE_HIDDEN.getKey());
+    public final JCheckBox batteryHourHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_HOUR_HIDDEN.getKey());
+    public final JCheckBox batteryDayHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_DAY_HIDDEN.getKey());
+    public final JCheckBox batteryWeekHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_WEEK_HIDDEN.getKey());
+    public final JCheckBox batteryMonthHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_MONTH_HIDDEN.getKey());
+    public final JCheckBox batteryYearHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BATTERY_YEAR_HIDDEN.getKey());
+    public final JCheckBox squareHiddenProperty
+            = new JCheckBox(TimeCalcProperty.SQUARE_HIDDEN.getKey());
+    public final JCheckBox circleHiddenProperty
+            = new JCheckBox(TimeCalcProperty.CIRCLE_HIDDEN.getKey());
+    public final JCheckBox walkingHumanHiddenProperty
+            = new JCheckBox(TimeCalcProperty.WALKING_HUMAN_HIDDEN.getKey());
+    public final JCheckBox swingHiddenProperty
+            = new JCheckBox(TimeCalcProperty.SWING_HIDDEN.getKey());
+    public final JCheckBox lifeHiddenProperty
+            = new JCheckBox(TimeCalcProperty.LIFE_HIDDEN.getKey());
+    public final JCheckBox moneyHiddenProperty
+            = new JCheckBox(TimeCalcProperty.MONEY_HIDDEN.getKey());
+    public final JCheckBox weatherHiddenProperty
+            = new JCheckBox(TimeCalcProperty.WEATHER_HIDDEN.getKey());
+    public final JCheckBox dotHiddenProperty
+            = new JCheckBox(TimeCalcProperty.DOT_HIDDEN.getKey());
+
+    //
     private final JCheckBox testEnabledProperty
             = new JCheckBox(TimeCalcProperty.TEST_ENABLED.getKey());
     private final JTextField testClockCustomYearProperty
@@ -245,7 +279,7 @@ public class ConfigWindow extends TWindow {
     private final JTextField testClockCustomMillisecondProperty
             = new JTextField(TimeCalcProperty.TEST_CLOCK_CUSTOM_MILLISECOND.getKey());
     private final TTabbedPane tp;
-    
+
     public ConfigWindow(TimeCalcConfiguration timeCalcConfiguration) {
         this.timeCalcConfiguration = timeCalcConfiguration;
         setTitle("Configuration");
@@ -263,7 +297,7 @@ public class ConfigWindow extends TWindow {
         this.panelInsideScrollPaneSmileys = new JPanel();
         this.panelInsideScrollPaneTest = new JPanel();
         this.panelInsideScrollPaneOther = new JPanel();
-        
+
         List<JPanel> panelsInsideScrollPane = Stream.of(
                 panelInsideScrollPaneClock,
                 panelInsideScrollPaneBattery,
@@ -272,7 +306,7 @@ public class ConfigWindow extends TWindow {
                 panelInsideScrollPaneSmileys,
                 panelInsideScrollPaneTest,
                 panelInsideScrollPaneOther).collect(Collectors.toList());
-        panelsInsideScrollPane.forEach(p-> {
+        panelsInsideScrollPane.forEach(p -> {
             final BoxLayout boxLayout = new BoxLayout(p, BoxLayout.Y_AXIS);
             p.setLayout(boxLayout);
             p.setAlignmentX(LEFT_ALIGNMENT);
@@ -284,7 +318,6 @@ public class ConfigWindow extends TWindow {
         //mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-
         JScrollPane scrollPaneClock = new JScrollPane(panelInsideScrollPaneClock);
         JScrollPane scrollPaneBattery = new JScrollPane(panelInsideScrollPaneBattery);
         JScrollPane scrollPaneLife = new JScrollPane(panelInsideScrollPaneLife);
@@ -292,8 +325,8 @@ public class ConfigWindow extends TWindow {
         JScrollPane scrollPaneSmileys = new JScrollPane(panelInsideScrollPaneSmileys);
         JScrollPane scrollPaneTest = new JScrollPane(panelInsideScrollPaneTest);
         JScrollPane scrollPaneOther = new JScrollPane(panelInsideScrollPaneOther);
-        
-                List<JScrollPane> scrollPanes = Stream.of(
+
+        List<JScrollPane> scrollPanes = Stream.of(
                 scrollPaneClock,
                 scrollPaneBattery,
                 scrollPaneLife,
@@ -301,8 +334,8 @@ public class ConfigWindow extends TWindow {
                 scrollPaneSmileys,
                 scrollPaneTest,
                 scrollPaneOther
-                ).collect(Collectors.toList());
-                
+        ).collect(Collectors.toList());
+
         tp.add("Clock", scrollPaneClock);
         tp.add("Battery", scrollPaneBattery);
         tp.add("Life", scrollPaneLife);
@@ -310,8 +343,8 @@ public class ConfigWindow extends TWindow {
         tp.add("Smileys", scrollPaneSmileys);
         tp.add("Test", scrollPaneTest);
         tp.add("Other", scrollPaneOther);
-                scrollPanes.forEach(s->
-     {
+        scrollPanes.forEach(s
+                -> {
             s.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             s.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             s.setPreferredSize(
@@ -335,7 +368,7 @@ public class ConfigWindow extends TWindow {
                 .getWidth() + SwingUtils.MARGIN, SwingUtils.MARGIN, 250,
                 HEIGHT1);
 
-        scrollPanes.stream().forEach(s->s.setBounds(10, 10, Integer.MAX_VALUE,Integer.MAX_VALUE));
+        scrollPanes.stream().forEach(s -> s.setBounds(10, 10, Integer.MAX_VALUE, Integer.MAX_VALUE));
 
         mainPanel.add(tp);
 
@@ -405,12 +438,28 @@ public class ConfigWindow extends TWindow {
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
+                clockHiddenProperty.setSelected(!enable);
+                batteryMinuteHiddenProperty.setSelected(!enable);
+                batteryHourHiddenProperty.setSelected(!enable);
+                batteryDayHiddenProperty.setSelected(!enable);
+                batteryWeekHiddenProperty.setSelected(!enable);
+                batteryMonthHiddenProperty.setSelected(!enable);
+                batteryYearHiddenProperty.setSelected(!enable);
+                squareHiddenProperty.setSelected(!enable);
+                circleHiddenProperty.setSelected(!enable);
+                walkingHumanHiddenProperty.setSelected(!enable);
+                swingHiddenProperty.setSelected(!enable);
+                lifeHiddenProperty.setSelected(!enable);
+                moneyHiddenProperty.setSelected(!enable);
+                weatherHiddenProperty.setSelected(!enable);
+                dotHiddenProperty.setSelected(!enable);
                 MainWindow.hideShowFormsCheckBox.setSelected(enable);
             });
         }
 
         propertiesList.addAll(Arrays.asList(
                 clockVisibleProperty,
+                clockHiddenProperty,
                 clockHandsHourVisibleProperty,
                 clockHandsMinuteVisibleProperty,
                 clockHandsSecondVisibleProperty,
@@ -443,6 +492,12 @@ public class ConfigWindow extends TWindow {
                 batteryWeekVisibleProperty,
                 batteryMonthVisibleProperty,
                 batteryYearVisibleProperty,
+                batteryMinuteHiddenProperty,
+                batteryHourHiddenProperty,
+                batteryDayHiddenProperty,
+                batteryWeekHiddenProperty,
+                batteryMonthHiddenProperty,
+                batteryYearHiddenProperty,
                 batteryBlinkingIfCriticalLowVisibleProperty,
                 batteryQuarterIconVisibleProperty,
                 //
@@ -461,24 +516,32 @@ public class ConfigWindow extends TWindow {
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
                 squareVisibleProperty,
+                squareHiddenProperty,
                 squareTypeProperty,
                 dotVisibleProperty,
+                dotHiddenProperty,
                 dotTypeProperty,
                 circleVisibleProperty,
+                circleHiddenProperty,
                 circleTypeProperty,
                 swingVisibleProperty,
+                swingHiddenProperty,
                 swingTypeProperty,
                 swingQuarterIconVisibleProperty,
                 walkingHumanVisibleProperty,
+                walkingHumanHiddenProperty,
                 walkingHumanTypeProperty,
                 lifeVisibleProperty,
+                lifeHiddenProperty,
                 lifeTypeProperty,
                 lifeBirthDateProperty,
                 moneyVisibleProperty,
+                moneyHiddenProperty,
                 moneyTypeProperty,
                 moneyPerMonthProperty,
                 moneyCurrencyProperty,
                 weatherVisibleProperty,
+                weatherHiddenProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
                 activityNeededFlagsProperty,
@@ -704,16 +767,13 @@ public class ConfigWindow extends TWindow {
                 String timeCalcPropertyKey
                         = (String) textField.getClientProperty(
                                 CLIENT_PROPERTY_KEY);
-                if(timeCalcPropertyKey == null) {
+                if (timeCalcPropertyKey == null) {
                     timeCalcPropertyKey = textField.getText();
                     textField.putClientProperty(CLIENT_PROPERTY_KEY, timeCalcPropertyKey);
                 }
                 TimeCalcProperty timeCalcProperty
                         = TimeCalcProperty.forKey(timeCalcPropertyKey);
                 boolean isInteger = Integer.class == timeCalcProperty.getClazz();
-
-
-
 
                 {
                     textField.setEditable(false);
@@ -723,8 +783,8 @@ public class ConfigWindow extends TWindow {
                     textField
                             .addMouseListener((MouseClickedListener) f -> {
 
-                                String result =
-                                        (String) JOptionPane.showInputDialog(
+                                String result
+                                        = (String) JOptionPane.showInputDialog(
                                                 null,
                                                 "Select new value",
                                                 "New value",
@@ -735,15 +795,15 @@ public class ConfigWindow extends TWindow {
                                                         .getText()
                                         );
                                 if (result != null) {
-                                    if(timeCalcProperty.name().contains("TYPE")) {
+                                    if (timeCalcProperty.name().contains("TYPE")) {
                                         try {
-                                            WidgetType widgetType =
-                                                    WidgetType.valueOf(result.toUpperCase(
+                                            WidgetType widgetType
+                                                    = WidgetType.valueOf(result.toUpperCase(
                                                             Locale.ROOT));
                                         } catch (Exception e) {
                                             throw new TimeCalcException("Invalid format. Only these values are allowed: " + Arrays
                                                     .stream(WidgetType.values()).map(WidgetType::name).map(String::toLowerCase).collect(
-                                                            Collectors.joining(", ")));
+                                                    Collectors.joining(", ")));
                                         }
                                     }
                                     textField.setText(result);
@@ -755,7 +815,7 @@ public class ConfigWindow extends TWindow {
                 timeCalcConfiguration
                         .getProperty(timeCalcProperty).addListener(e -> {
 
-                textField.setText(isInteger
+                    textField.setText(isInteger
                             ? String.valueOf(timeCalcConfiguration
                                     .getProperty(timeCalcProperty).getValue())
                             : (String) timeCalcConfiguration
@@ -780,7 +840,7 @@ public class ConfigWindow extends TWindow {
                             }
 
                             private void update(DocumentEvent e) {
-                                if(textField.getClientProperty(EDITABLE_ONLY_IN_DIALOG) != null) {
+                                if (textField.getClientProperty(EDITABLE_ONLY_IN_DIALOG) != null) {
                                     return;
                                 }
                                 String text = textField.getText();
@@ -858,50 +918,75 @@ public class ConfigWindow extends TWindow {
     private void addToNextRow(JComponent jComponent) {
         addToNextRow(jComponent, true);
     }
+
     private void addToNextRow(JComponent jComponent, boolean nextRow) {
         int index = 6;
         String key = (String) jComponent.getClientProperty(CLIENT_PROPERTY_KEY);
-        if(key == null) {
+        if (key == null) {
             //nothing to do
             return;
         }
-        if(key.startsWith("clock")) index = 0;
-        if(key.startsWith("battery")) index = 1;
-        if(key.startsWith("life")) index = 2;
-        if(key.startsWith("money")) index = 3;
-        if(key.startsWith("smileys")) index = 4;
-        if(key.startsWith("test")) index = 5;
-        
-        JPanel panel = null;
-        switch(index) {
-            case 0: panel=panelInsideScrollPaneClock;break;
-            case 1: panel=panelInsideScrollPaneBattery;break;
-            case 2: panel=panelInsideScrollPaneLife;break;
-            case 3: panel=panelInsideScrollPaneMoney;break;
-            case 4: panel=panelInsideScrollPaneSmileys;break;
-            case 5: panel=panelInsideScrollPaneTest;break;
-            default:panel= panelInsideScrollPaneOther;
+        if (key.startsWith("clock")) {
+            index = 0;
         }
-        if(jComponent instanceof JTextField) {
+        if (key.startsWith("battery")) {
+            index = 1;
+        }
+        if (key.startsWith("life")) {
+            index = 2;
+        }
+        if (key.startsWith("money")) {
+            index = 3;
+        }
+        if (key.startsWith("smileys")) {
+            index = 4;
+        }
+        if (key.startsWith("test")) {
+            index = 5;
+        }
+
+        JPanel panel = null;
+        switch (index) {
+            case 0:
+                panel = panelInsideScrollPaneClock;
+                break;
+            case 1:
+                panel = panelInsideScrollPaneBattery;
+                break;
+            case 2:
+                panel = panelInsideScrollPaneLife;
+                break;
+            case 3:
+                panel = panelInsideScrollPaneMoney;
+                break;
+            case 4:
+                panel = panelInsideScrollPaneSmileys;
+                break;
+            case 5:
+                panel = panelInsideScrollPaneTest;
+                break;
+            default:
+                panel = panelInsideScrollPaneOther;
+        }
+        if (jComponent instanceof JTextField) {
             JPanel p = new JPanel();
             //p.setLayout(null);
 
             JLabel label = new JLabel(TimeCalcProperty.forKey(key).getDescription() + ": ");
             p.add(label);
             p.add(jComponent);
-            label.setBounds(10,0, 200, 25);
+            label.setBounds(10, 0, 200, 25);
 
             jComponent.setBounds(220, 0, 200, 25);
             LayoutManager flowLayout = new FlowLayout(FlowLayout.LEFT);
             p.setLayout(flowLayout);
             p.setAlignmentX(LEFT_ALIGNMENT);
 
-            label.setPreferredSize(new Dimension(key.startsWith("test.") ? 240: 200, 25));
+            label.setPreferredSize(new Dimension(key.startsWith("test.") ? 240 : 200, 25));
             jComponent.setPreferredSize(new Dimension(200, 25));
 
             p.setMaximumSize(new Dimension(600, 30));
             panel.add(p);
-
 
             //jComponent.setMinimumSize(new Dimension(60, 30));
             //label.setBounds(0,0,100, 30);
@@ -912,7 +997,7 @@ public class ConfigWindow extends TWindow {
         jComponent.setBounds(currentX[index], currentY[index], 200,
                 HEIGHT1);
         panel.add(Box.createRigidArea(new Dimension(5, 5)));
-        if(nextRow) {
+        if (nextRow) {
             nextRow(index);
         } else {
             currentX[index] = currentX[index] + SwingUtils.MARGIN + jComponent.getWidth();

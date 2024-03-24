@@ -16,7 +16,6 @@ import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.BasicStroke;
@@ -88,8 +87,8 @@ public class Widget extends JPanel implements
     private static final Color PURPLE_STRONGLY_COLORED = new Color(153,51,255);
     private static final Color PURPLE_WEAKLY_COLORED = new Color(204,153,255);
 
-    @Getter
-    private boolean hidden;
+    public final BooleanProperty hiddenProperty
+            = new BooleanProperty("hiddenProperty", false);
 
     private WidgetMenu widgetMenu = null;
     public Widget() {
@@ -117,8 +116,8 @@ public class Widget extends JPanel implements
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(hidden) {
-                    hidden = false;
+                if(hiddenProperty.isEnabled()) {
+                    hiddenProperty.disable();
                 }
 
                 if (mouseOverCloseButton) {
@@ -127,7 +126,7 @@ public class Widget extends JPanel implements
                 }
 
                 if(mouseOverMinimizeButton) {
-                    hidden = true;
+                    hiddenProperty.enable();
                     return;
                 }
 
@@ -245,8 +244,8 @@ public class Widget extends JPanel implements
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
 
-        if (visibleProperty.isDisabled() || hidden) {
-            if(hidden) {
+        if (visibleProperty.isDisabled() || hiddenProperty.isEnabled()) {
+            if(hiddenProperty.isEnabled()) {
                 if(this.smileyIcon != null) {
                     this.remove(this.smileyIcon);
                     this.smileyIcon = null;
@@ -261,7 +260,22 @@ public class Widget extends JPanel implements
                     brush.fillRect(1, 1, getWidth() - 2, getHeight() - 2);
                     brush.setColor(currentColor);
                 }
-                brush.drawString("Show", (int) (getWidth() * 0.5 - 10), (int) (getHeight() * 0.5 - 10));
+                if(!visibility.isStronglyColored()) {
+                    brush.setColor(Color.LIGHT_GRAY);
+                }
+                int row = 10;
+                int x = (int)(getWidth() > 100 ? (int) (getWidth() * 0.4) : (int) (getWidth() * 0.1));
+                brush.drawString("Show", x, row);
+                row = row + 20;
+                String[] nameArray = getHumanName().split(" ");
+                for(int i = 0; i< nameArray.length; i++) {
+                brush.drawString(
+                        nameArray[i],
+                        x
+                        , row);    
+                row = row + 12;
+                }
+                
             }
             //nothing to do
             return;
@@ -563,6 +577,21 @@ public class Widget extends JPanel implements
     }
 
     public void hideWidget() {
-        this.hidden = true;
+        this.hiddenProperty.enable();
+    }
+
+    private String getHumanName() {
+        String name = getClass().getSimpleName();
+        StringBuilder sb = new StringBuilder();
+        for (char ch : name.toCharArray()) {
+            if (Character.isUpperCase(ch)) {
+                sb.append(' ').append(Character.toLowerCase(ch));
+            } else {
+                sb.append(ch);
+            }
+
+        }
+        String result = sb.toString().trim();
+        return result.substring(0, 1).toUpperCase() + result.substring(1, result.length());
     }
 }

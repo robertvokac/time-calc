@@ -27,6 +27,9 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_VISIBLE
                     .getKey());
+    public final BooleanProperty clockHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_HIDDEN
+                    .getKey());
     public final BooleanProperty clockHandsLongVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_HANDS_LONG_VISIBLE
                     .getKey());
@@ -132,6 +135,24 @@ public class TimeCalcConfiguration {
     public final BooleanProperty batteryYearVisibleProperty
             = new BooleanProperty(TimeCalcProperty.BATTERY_YEAR_VISIBLE
                     .getKey());
+    public final BooleanProperty batteryMinuteHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_MINUTE_HIDDEN
+                    .getKey());
+    public final BooleanProperty batteryHourHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_HOUR_HIDDEN
+                    .getKey());
+    public final BooleanProperty batteryDayHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_DAY_HIDDEN
+                    .getKey());
+    public final BooleanProperty batteryWeekHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_WEEK_HIDDEN
+                    .getKey());
+    public final BooleanProperty batteryMonthHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_MONTH_HIDDEN
+                    .getKey());
+    public final BooleanProperty batteryYearHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.BATTERY_YEAR_HIDDEN
+                    .getKey());
     public final BooleanProperty batteryBlinkingIfCriticalLowVisibleProperty
             = new BooleanProperty(
                     TimeCalcProperty.BATTERY_BLINKING_IF_CRITICAL_LOW
@@ -160,23 +181,34 @@ public class TimeCalcConfiguration {
 
     public final BooleanProperty squareVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SQUARE_VISIBLE.getKey());
+    public final BooleanProperty squareHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.SQUARE_HIDDEN.getKey());
     public final StringProperty squareTypeProperty
             = new StringProperty(TimeCalcProperty.SQUARE_TYPE.getKey());
     public final BooleanProperty dotVisibleProperty
             = new BooleanProperty(TimeCalcProperty.DOT_VISIBLE.getKey());
+    public final BooleanProperty dotHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.DOT_HIDDEN.getKey());
     public final StringProperty dotTypeProperty
             = new StringProperty(TimeCalcProperty.DOT_TYPE.getKey());
     public final BooleanProperty circleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
+    public final BooleanProperty circleHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.CIRCLE_HIDDEN.getKey());
     public final StringProperty circleTypeProperty
             = new StringProperty(TimeCalcProperty.CIRCLE_TYPE.getKey());
     public final BooleanProperty walkingHumanVisibleProperty
             = new BooleanProperty(
                     TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
+    public final BooleanProperty walkingHumanHiddenProperty
+            = new BooleanProperty(
+                    TimeCalcProperty.WALKING_HUMAN_HIDDEN.getKey());
     public final StringProperty walkingHumanTypeProperty
             = new StringProperty(TimeCalcProperty.WALKING_HUMAN_TYPE.getKey());
     public final BooleanProperty swingVisibleProperty
             = new BooleanProperty(TimeCalcProperty.SWING_VISIBLE.getKey());
+    public final BooleanProperty swingHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.SWING_HIDDEN.getKey());
     public final StringProperty swingTypeProperty
             = new StringProperty(TimeCalcProperty.SWING_TYPE.getKey());
     public final BooleanProperty swingQuarterIconVisibleProperty
@@ -184,12 +216,16 @@ public class TimeCalcConfiguration {
 
     public final BooleanProperty lifeVisibleProperty
             = new BooleanProperty(TimeCalcProperty.LIFE_VISIBLE.getKey());
+    public final BooleanProperty lifeHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.LIFE_HIDDEN.getKey());
     public final StringProperty lifeTypeProperty
             = new StringProperty(TimeCalcProperty.LIFE_TYPE.getKey());
     public final StringProperty lifeBirthDateProperty
             = new StringProperty(TimeCalcProperty.LIFE_BIRTH_DATE.getKey());
     public final BooleanProperty moneyVisibleProperty
             = new BooleanProperty(TimeCalcProperty.MONEY_VISIBLE.getKey());
+    public final BooleanProperty moneyHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.MONEY_HIDDEN.getKey());
     public final StringProperty moneyTypeProperty
             = new StringProperty(TimeCalcProperty.MONEY_TYPE.getKey());
     public final IntegerProperty moneyPerMonthProperty
@@ -198,6 +234,8 @@ public class TimeCalcConfiguration {
             = new StringProperty(TimeCalcProperty.MONEY_CURRENCY.getKey());
     public final BooleanProperty weatherVisibleProperty
             = new BooleanProperty(TimeCalcProperty.WEATHER_VISIBLE.getKey());
+    public final BooleanProperty weatherHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.WEATHER_HIDDEN.getKey());
     public final StringProperty mainWindowCustomTitleProperty
             = new StringProperty(
                     TimeCalcProperty.MAIN_WINDOW_CUSTOM_TITLE.getKey());
@@ -299,6 +337,21 @@ public class TimeCalcConfiguration {
             profileNameProperty,
             activityNeededFlagsProperty,
             speedProperty,
+            clockHiddenProperty,
+            batteryMinuteHiddenProperty,
+            batteryHourHiddenProperty,
+            batteryDayHiddenProperty,
+            batteryWeekHiddenProperty,
+            batteryMonthHiddenProperty,
+            batteryYearHiddenProperty,
+            squareHiddenProperty,
+            circleHiddenProperty,
+            walkingHumanHiddenProperty,
+            swingHiddenProperty,
+            lifeHiddenProperty,
+            moneyHiddenProperty,
+            weatherHiddenProperty,
+            dotHiddenProperty,
             testEnabledProperty,
             testYearCustomProperty,
             testMonthCustomProperty,

@@ -70,7 +70,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.Timer;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
-import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 
 /**
  * @author Robert Vokac
@@ -386,6 +385,29 @@ public class MainWindow extends TWindow {
                     .bindTo(timeCalcConfiguration.lifeVisibleProperty);
         }
 
+        {
+            clock.hiddenProperty.bindTo(timeCalcConfiguration.clockHiddenProperty);
+            minuteBattery.hiddenProperty.bindTo(timeCalcConfiguration.batteryMinuteHiddenProperty);
+            hourBattery.hiddenProperty.bindTo(timeCalcConfiguration.batteryHourHiddenProperty);
+            dayBattery.hiddenProperty.bindTo(timeCalcConfiguration.batteryDayHiddenProperty);
+            weekBattery.hiddenProperty.bindTo(timeCalcConfiguration.batteryWeekHiddenProperty);
+            monthBattery.hiddenProperty.bindTo(timeCalcConfiguration.batteryMonthHiddenProperty);
+            yearBattery.hiddenProperty.bindTo(timeCalcConfiguration.batteryYearHiddenProperty);
+            progressSquare.hiddenProperty
+                    .bindTo(timeCalcConfiguration.squareHiddenProperty);
+            progressDot.hiddenProperty
+                    .bindTo(timeCalcConfiguration.dotHiddenProperty);
+            progressCircle.hiddenProperty
+                    .bindTo(timeCalcConfiguration.circleHiddenProperty);
+            walkingHumanProgress.hiddenProperty
+                    .bindTo(timeCalcConfiguration.walkingHumanHiddenProperty);
+            progressSwing.hiddenProperty
+                    .bindTo(timeCalcConfiguration.swingHiddenProperty);
+            progressLife.hiddenProperty
+                    .bindTo(timeCalcConfiguration.lifeHiddenProperty);
+            progressMoney.hiddenProperty.bindTo(timeCalcConfiguration.moneyHiddenProperty);
+            progressWeather.hiddenProperty.bindTo(timeCalcConfiguration.weatherHiddenProperty);
+        }
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
         arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
 
