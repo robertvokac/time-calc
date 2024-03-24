@@ -1321,6 +1321,10 @@ public class MainWindow extends TWindow {
         if (speed == Integer.MIN_VALUE) {
             speed = 0;
         }
+        if (speed == MAX_SPEED) {
+            //nothing to do
+            return;
+        }
         ++this.speed;
         timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
@@ -1337,6 +1341,7 @@ public class MainWindow extends TWindow {
         timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
     public static final int MIN_SPEED = -10;
+    public static final int MAX_SPEED = 25;
 
     public int getSpeed() {
         return speed;
