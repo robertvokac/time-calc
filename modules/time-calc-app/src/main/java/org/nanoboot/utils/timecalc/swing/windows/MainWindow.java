@@ -118,7 +118,7 @@ public class MainWindow extends TWindow {
     private final IntegerProperty forgetOvertimeProperty = new IntegerProperty("forgetOvertimeProperty", 0);
     private WeekStatistics weekStatistics = null;
     private final ProgressDot progressDot;
-    private int speed = Integer.MIN_VALUE;
+    
     private final TimeCalcKeyAdapter timeCalcKeyAdapter;
     private double msRemaining = 0d;
     private final Time timeAlwaysReal;
@@ -847,17 +847,18 @@ public class MainWindow extends TWindow {
         workingDayRepository.update(wd);
 
         new Timer(100, e -> {
-            if (speed == Integer.MIN_VALUE) {
+            IntegerProperty speed = timeCalcConfiguration.speedProperty;
+            if (speed.getValue() == Integer.MIN_VALUE) {
                 //timeCalcConfiguration.testEnabledProperty.setValue(false);
                 if (timeCalcConfiguration.speedFloatingProperty.isEnabled()) {
-                    speed = 0;
+                    speed.setValue(0);
                 } else {
                     return;
                 }
 
             }
-            double r = Math.pow(2, speed + 6);
-            if (speed < -6 && Math.random() > r) {
+            double r = Math.pow(2, speed.getValue() + 6);
+            if (speed.getValue() < -6 && Math.random() > r) {
 //                System.out.println(NumberFormats.FORMATTER_EIGHT_DECIMAL_PLACES.format(r));
                 return;
 
@@ -895,48 +896,38 @@ public class MainWindow extends TWindow {
                 boolean forewardMs = diff > 0;
                 boolean backwardMs = !forewardMs;
                 if (forewardMs && diff > 60000 && Math.random() > 0.95) {
-                    speed = -2;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue(-2);
                 }
                 if (forewardMs && diff <= 60000 && Math.random() > 0.95) {
-                    speed = 1;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue(1);
                 }
                 if (backwardMs && diff < -60000 && Math.random() > 0.95) {
-                    speed = 2;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue(2);
                 }
                 if (backwardMs && diff >= -60000 && Math.random() > 0.95) {
-                    speed = -1;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue(-1);
                 }
                 {
                     if (forewardMs && diff > 600000 && Math.random() > 0.95) {
-                        speed = -4;
-                        timeCalcConfiguration.speedProperty.setValue(speed);
+                        speed.setValue(-4);
                     }
                     if (backwardMs && diff < -600000 && Math.random() > 0.95) {
-                        speed = 4;
-                        timeCalcConfiguration.speedProperty.setValue(speed);
+                        speed.setValue(4);
                     }
                 }
                 if (Math.random() > 0.95) {
-                    speed = (int) (-8d + Math.random() * 8d);
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue((int) (-8d + Math.random() * 8d));
                 }
                 if(timeCalcConfiguration.speedNegativeProperty.isDisabled()){
                 if(Math.random() > 0.95 && Math.abs(diff) > 360000d * 6d) {
-                    speed = (int) (backwardMs ? (5d + Math.random() * 5d) : (-5d - Math.random() * 3d)) ;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue((int) (backwardMs ? (5d + Math.random() * 5d) : (-5d - Math.random() * 3d)));
                 }
                 }
                 if(Math.random() > 0.999 ) {
-                    speed = 10;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue(10);
                 }
                 if(Math.random() < 0.001 ) {
-                    speed = -6;
-                    timeCalcConfiguration.speedProperty.setValue(speed);
+                    speed.setValue(-6);
                 }
                 if(diff >  360000 * 3) {
                     timeCalcConfiguration.speedNegativeProperty.setValue(true);
@@ -953,26 +944,14 @@ public class MainWindow extends TWindow {
 
             }
 
-            double msShouldBeAdded = speed < -6 ? 1 : (Math.pow(2, speed) * 100d) + this.msRemaining;
+            double msShouldBeAdded = speed.getValue() < -6 ? 1 : (Math.pow(2, speed.getValue()) * 100d) + this.msRemaining;
             int msShouldBeAddedInt = (int) Math.floor(msShouldBeAdded);
             this.msRemaining = msShouldBeAdded - msShouldBeAddedInt;
             this.timeCalcKeyAdapter.setMsToAdd((timeCalcConfiguration.speedNegativeProperty.isEnabled() ? (-1) : 1) * msShouldBeAddedInt);
             this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
 
         }).start();
-        this.timeCalcConfiguration.speedProperty.addListener(e -> {
 
-            int newSpeed = Integer.valueOf(timeCalcConfiguration.speedProperty.getValue());
-            if (newSpeed < MIN_SPEED) {
-                newSpeed = MIN_SPEED;
-            }
-            this.speed = newSpeed;
-        });
-        int newSpeed = Integer.valueOf(timeCalcConfiguration.speedProperty.getValue());
-        if (newSpeed < MIN_SPEED) {
-            newSpeed = MIN_SPEED;
-        }
-        this.speed = newSpeed;
         while (true) {
 
             if (Math.random() > 0.99) {
@@ -1392,38 +1371,37 @@ public class MainWindow extends TWindow {
     }
 
     public void increaseSpeed() {
-        if (speed == Integer.MIN_VALUE) {
-            speed = 0;
+        IntegerProperty speed = timeCalcConfiguration.speedProperty;
+        if (speed.getValue() == Integer.MIN_VALUE) {
+            speed.setZero();
         }
-        if (speed == MAX_SPEED) {
+        if (speed.getValue() == MAX_SPEED) {
             //nothing to do
             return;
         }
-        ++this.speed;
-        timeCalcConfiguration.speedProperty.setValue(this.speed);
+        speed.increment();
     }
 
     public void decreaseSpeed() {
-        if (speed == Integer.MIN_VALUE) {
-            speed = 0;
+        IntegerProperty speed = timeCalcConfiguration.speedProperty;
+        if (speed.getValue() == Integer.MIN_VALUE) {
+            speed.setZero();
         }
-        if (speed == MIN_SPEED) {
+        if (speed.getValue() == MIN_SPEED) {
             //nothing to do
             return;
         }
-        --this.speed;
-        timeCalcConfiguration.speedProperty.setValue(this.speed);
+        speed.decrement();
     }
     public static final int MIN_SPEED = -10;
     public static final int MAX_SPEED = 25;
 
     public int getSpeed() {
-        return speed;
+        return timeCalcConfiguration.speedProperty.getValue();
     }
 
     public void resetSpeed() {
-        this.speed = Integer.MIN_VALUE;
-        timeCalcConfiguration.speedProperty.setValue(this.speed);
+        timeCalcConfiguration.speedProperty.setValue(Integer.MIN_VALUE);
     }
 
     public void enableFloatingTime() {

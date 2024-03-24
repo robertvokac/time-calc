@@ -21,4 +21,8 @@ public class IntegerProperty extends Property<Integer> {
     public void decrement() {
         this.setValue(getValue() - 1);
     }
+    
+    public void setZero() {
+        setValue(0);
+    }
 }
