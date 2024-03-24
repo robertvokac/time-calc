@@ -129,6 +129,11 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
             
             case KeyEvent.VK_U: {
                 int ms_ = msToAdd;
+                boolean negative = false;
+                if(ms_ < 0) {
+                    ms_ = Math.abs(ms_);
+                    negative = true;
+                }
                 //System.out.println("going to add ms:" +msToAdd);
                 int s_ = msToAdd / 1000;
                 ms_ = ms_ - s_ * 1000;
@@ -138,6 +143,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 ms_ = ms_ - h_ * 1000 * 60 * 60;
                 int d_ = msToAdd / 1000 / 60 / 60 / 24;
                 ms_ = ms_ - d_ * 1000 * 60 * 60 * 24;
+                if(negative && (increase || decrease)) {
+                    increase = false;
+                    decrease = true;
+                }
                 //Utils.showNotification((increase ? "Increasing" : (decrease ? "Decreasing" : "Reseting")) + " second.");
                 updateProperty(timeCalcConfiguration.testDayCustomProperty, increase, decrease, reset,
                         Calendar.DAY_OF_MONTH, d_);
@@ -149,12 +158,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                         Calendar.SECOND, s_);
                 updateProperty(timeCalcConfiguration.testMillisecondCustomProperty, increase, decrease, reset,
                         Calendar.MILLISECOND, ms_);
-                
-                
-                
-                
-                
-                
                 break;
             }
             case KeyEvent.VK_K: {
@@ -182,13 +185,15 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 final double newSpeed = this.mainWindow.getSpeed();
                 
                 if(oldSpeed != newSpeed) {
-                    TTime t= TTime.ofMilliseconds(((int)(Math.pow(2,newSpeed) * 1000)));
+                    final double msDouble = Math.pow(2,newSpeed) * 1000;
+                    TTime t= TTime.ofMilliseconds(((int)msDouble));
                 Utils.showNotification("Speed was changed from " + 
                         ((int)oldSpeed) + 
                         " to: " + ((int)newSpeed) + " (" + (NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(Math.pow(2, newSpeed))) + ") (" + 
-                        (newSpeed <= -10 ? "few" : (newSpeed <=21 ? t : "many"))
+                        (newSpeed <= -10 ? (NumberFormats.FORMATTER_SIX_DECIMAL_PLACES.format(msDouble) + "ms") : (/*newSpeed <=21*/ t.getHour() < 24 ? t : ((long)(msDouble / 1000d / 60d / 60d / 24d) + " days")))
                         +" /1s)");
                 } else {
+                    
                     if(decrease){
                     Utils.showNotification("Current speed cannot be decreased: " + 
                         NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(oldSpeed));
@@ -690,6 +695,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
                 timeCalcConfiguration.testEnabledProperty.flip();
                 Utils.showNotification((timeCalcConfiguration.testEnabledProperty.isEnabled()? "Enabled" : "Disabled") + " \"Test mode\".");
+                break;
+            }
+            case KeyEvent.VK_COMMA: {
+                timeCalcConfiguration.speedNegativeProperty.flip();
                 break;
             }
             default:

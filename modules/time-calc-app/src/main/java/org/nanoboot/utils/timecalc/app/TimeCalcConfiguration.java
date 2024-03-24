@@ -260,7 +260,9 @@ public class TimeCalcConfiguration {
             .getKey(), Integer.MAX_VALUE);
     
     public final IntegerProperty speedProperty = new IntegerProperty(TimeCalcProperty.SPEED
-            .getKey(), 1);
+            .getKey(), 1);    
+    public final BooleanProperty speedNegativeProperty = new BooleanProperty(TimeCalcProperty.SPEED_NEGATIVE
+            .getKey(), false);
 
     //
     private final Map<TimeCalcProperty, Property> mapOfProperties
@@ -337,6 +339,7 @@ public class TimeCalcConfiguration {
             profileNameProperty,
             activityNeededFlagsProperty,
             speedProperty,
+            speedNegativeProperty,
             clockHiddenProperty,
             batteryMinuteHiddenProperty,
             batteryHourHiddenProperty,

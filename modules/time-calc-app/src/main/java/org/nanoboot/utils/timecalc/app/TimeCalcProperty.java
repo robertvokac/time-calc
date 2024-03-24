@@ -124,7 +124,8 @@ public enum TimeCalcProperty {
     TEST_CLOCK_CUSTOM_SECOND("test.clock.custom.second", "Test : Clock : Custom : Second", Integer.class),
     TEST_CLOCK_CUSTOM_MILLISECOND("test.clock.custom.millisecond", "Test : Clock : Custom : Millisecond", Integer.class),
     ACTIVITY_NEEDED_FLAGS("activity.needed-flags", "Activity : Needed flags", String.class),
-    SPEED("speed", "Speed", Integer.class);
+    SPEED("speed", "Speed", Integer.class),
+    SPEED_NEGATIVE("speed.negative", "Speed : Negative", Integer.class);
 
     @Getter
     private final String key;

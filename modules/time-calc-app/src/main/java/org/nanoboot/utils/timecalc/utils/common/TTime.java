@@ -199,6 +199,14 @@ public class TTime implements Comparable<TTime> {
     public int toTotalMilliseconds() {
         return ((negative ? (-1) : 1)) * (hour * 60 * 60 * 1000 + minute * 60 * 1000 + second * 1000 + millisecond);
     }
+    
+        public long toTotalMillisecondsLong() {
+            long h = hour;
+            long m = minute;
+            long s = second;
+            long d = millisecond;
+        return ((negative ? (-1l) : 1l)) * (h * 60l * 60l * 1000l + m * 60l * 1000l + s * 1000l + d);
+    }
 
     @Override
     public int compareTo(TTime o) {

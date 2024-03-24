@@ -120,6 +120,7 @@ public class MainWindow extends TWindow {
     private final ProgressDot progressDot;
     private int speed = Integer.MIN_VALUE;
     private final TimeCalcKeyAdapter timeCalcKeyAdapter;
+    private double msRemaining = 0d;
 
     {
         ChangeListener valueMustBeTime
@@ -878,8 +879,10 @@ public class MainWindow extends TWindow {
             if (time.millisecondCustomProperty.getValue() == Integer.MAX_VALUE) {
                 time.millisecondCustomProperty.setValue(time.millisecondProperty.getValue());
             }
-            int msShouldBeAdded = speed < -6 ? 1 : (int) (Math.pow(2, speed) * 100d);
-            this.timeCalcKeyAdapter.setMsToAdd(msShouldBeAdded);
+            double msShouldBeAdded = speed < -6 ? 1 : (Math.pow(2, speed) * 100d) + this.msRemaining;
+            int msShouldBeAddedInt = (int)Math.floor(msShouldBeAdded);
+            this.msRemaining = msShouldBeAdded - msShouldBeAddedInt;
+            this.timeCalcKeyAdapter.setMsToAdd((timeCalcConfiguration.speedNegativeProperty.isEnabled() ? (-1) : 1) * msShouldBeAddedInt);
             this.timeCalcKeyAdapter.processShifCtrlAltModeKeyCodes(KeyEvent.VK_U, true, false, false);
 
         }).start();
@@ -1333,7 +1336,7 @@ public class MainWindow extends TWindow {
         --this.speed;
         timeCalcConfiguration.speedProperty.setValue(this.speed);
     }
-    public static final int MIN_SPEED = -15;
+    public static final int MIN_SPEED = -10;
 
     public int getSpeed() {
         return speed;

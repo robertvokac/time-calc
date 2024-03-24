@@ -228,6 +228,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField(TimeCalcProperty.ACTIVITY_NEEDED_FLAGS.getKey());
     public final JTextField speedProperty
             = new JTextField(TimeCalcProperty.SPEED.getKey());
+    public final JCheckBox speedNegativeProperty
+            = new JCheckBox(TimeCalcProperty.SPEED_NEGATIVE.getKey());
 
     //
     public final JCheckBox clockHiddenProperty
@@ -546,6 +548,7 @@ public class ConfigWindow extends TWindow {
                 profileNameProperty,
                 activityNeededFlagsProperty,
                 speedProperty,
+                speedNegativeProperty,
                 visibilityDefaultProperty,
                 visibilitySupportedColoredProperty));
         //

@@ -183,6 +183,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * SHIFT + Q - Increase speed of time
 * CTRL + Q - Decrease speed of time
 * ALT + Q - Reset speed of time
+* COMMA - Switch between foreward and backward speed
 * D - Reset custom time values to the real time
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time
