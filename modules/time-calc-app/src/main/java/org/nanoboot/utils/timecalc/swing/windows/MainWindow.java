@@ -121,6 +121,8 @@ public class MainWindow extends TWindow {
     private int speed = Integer.MIN_VALUE;
     private final TimeCalcKeyAdapter timeCalcKeyAdapter;
     private double msRemaining = 0d;
+    private final Time timeAlwaysReal;
+    private boolean floatingTime = false;
 
     {
         ChangeListener valueMustBeTime
@@ -155,6 +157,7 @@ public class MainWindow extends TWindow {
             setTitle(getWindowTitle());
         });
         Time time = new Time();
+        this.timeAlwaysReal = new Time();
         time.yearCustomProperty
                 .bindTo(timeCalcConfiguration.testYearCustomProperty);
         time.monthCustomProperty
@@ -845,10 +848,10 @@ public class MainWindow extends TWindow {
         workingDayRepository.update(wd);
 
         new Timer(100, e -> {
-//            if (speed == Integer.MIN_VALUE) {
-//                timeCalcConfiguration.testEnabledProperty.setValue(false);
-//                return;
-//            }
+            if (speed == Integer.MIN_VALUE) {
+                //timeCalcConfiguration.testEnabledProperty.setValue(false);
+                return;
+            }
             double r = Math.pow(2, speed + 6);
             if (speed < -6 && Math.random() > r) {
 //                System.out.println(NumberFormats.FORMATTER_EIGHT_DECIMAL_PLACES.format(r));
@@ -1350,5 +1353,11 @@ public class MainWindow extends TWindow {
     public void resetSpeed() {
         this.speed = Integer.MIN_VALUE;
         timeCalcConfiguration.speedProperty.setValue(this.speed);
+    }
+    public void enableFloatingTime() {
+        this.floatingTime = true;
+    }
+    public void disableFloatingTieme() {
+        this.floatingTime = false;
     }
 }
