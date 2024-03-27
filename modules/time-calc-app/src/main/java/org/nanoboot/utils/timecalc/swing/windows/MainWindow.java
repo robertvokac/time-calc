@@ -37,7 +37,7 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
-import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressFuelGauge;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
 import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressWeather;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;

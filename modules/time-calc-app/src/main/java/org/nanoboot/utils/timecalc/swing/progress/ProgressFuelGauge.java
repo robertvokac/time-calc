@@ -1,10 +1,12 @@
-package org.nanoboot.utils.timecalc.swing.progress.weather;
+package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
+import org.nanoboot.utils.timecalc.swing.common.Brush;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
+import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.property.Property;
@@ -20,6 +22,7 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 /**
  * @author Robert Vokac
@@ -27,7 +30,7 @@ import java.util.Locale;
  */
 public class ProgressFuelGauge extends Widget implements GetProperty {
 
-    public static final Color BLACK2 = new Color(32, 32, 32);
+    public static final Color BLACK2 = new Color(64, 64,64);
     public static final Color LIGHT_GRAY2 = new Color(160,160,160);
 
     private List<JMenuItem> menuItems = null;
@@ -82,7 +85,6 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
         );
         brush.setColor(Color.WHITE);
 
-
             int startX = getWidth() / 2;
             int startY = getHeight() - (ovalWidth / 2);
             int length = (int) (ovalWidth * 1.5d);
@@ -103,9 +105,14 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
         ((Graphics2D)brush).setStroke(new BasicStroke(1f));
         int length_ = (int) (ovalWidth * 1.5d);
         //brush.drawOval(startX - length_, startY - length_, (int)(length_ * 2d), (int)(length_ * 2d));
-        brush.drawArc(startX - length_, startY - length_ - 2, (int)(length_ * 2d), (int)(length_ * 2d), 180 + 45, 180 + 45 + 90);
-        brush.drawArc(startX - length_, startY - length_ + 6, (int)(length_ * 2d), (int)(length_ * 2d), 180 + 45, 180 + 45 + 90);
+        //brush.drawArc(startX - length_, startY - length_ - 2, (int)(length_ * 2d), (int)(length_ * 2d), 180 + 45, 180 + 45 + 90);
+        //brush.drawArc(startX - length_, startY - length_ + 6, (int)(length_ * 2d), (int)(length_ * 2d), 180 + 45, 180 + 45 + 90);
+        Brush tBrush = new Brush((Graphics2D) brush);
 
+//        tBrush.drawOval(startX, startY, length_ * 2, length_ * 2);
+//        tBrush.drawOval(startX, startY + 8, length_ * 2, length_ * 2);
+        tBrush.drawArc(startX, startY - 1 , length_ * 2, length_ * 2, -45, 90);
+        tBrush.drawArc(startX, startY + 5, length_ * 2, length_ * 2, -40, 80);
         brush.setColor(visibility.isStronglyColored() ? Color.BLACK
                 : visibility.isWeaklyColored() ? Color.GRAY
                 : Color.LIGHT_GRAY);
@@ -116,6 +123,23 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
                 width_,
                 width_
         );
+        brush.setColor(Color.WHITE);
+
+        Function<Double, Integer> getAngle = (d -> (int)(-45 + 90 * d));
+        brush.setColor(visibility.isStronglyColored() ? Color.RED : (visibility.isWeaklyColored() ?
+                Battery.ULTRA_LIGHT_RED : Color.GRAY));
+        ((Graphics2D) brush).setStroke(new BasicStroke(6.5f));
+        tBrush.drawArc(startX, startY + 2, length_ * 2, length_ * 2,
+                (int) (45d / 10d * 7.5d),
+                (int) (90d / 4d / 5d * 1.7d));
+        brush.setColor(Color.WHITE);
+        tBrush.drawBorder(startX, startY, 5, length_ - 4, getAngle.apply(0.25d / 5d * 3d), 2f, brush.getColor());
+        tBrush.drawBorder(startX, startY, 5, length_ - 4, getAngle.apply(0.25d), 2f, brush.getColor());
+        tBrush.drawBorder(startX, startY, 6, length_ - 7, getAngle.apply(0.5d), 7f, brush.getColor());
+        tBrush.drawBorder(startX, startY, 5, length_ - 4, getAngle.apply(0.75d), 2f, brush.getColor());
+        tBrush.drawBorder(startX, startY, 6, length_ - 7, getAngle.apply(1d), 7f, brush.getColor());
+
+        //tBrush.drawBorder(startX, startY, 10, length_ - 4 - 5, getAngle.apply(donePercent()), 3f, brush.getColor());
         this.setToolTipText(NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(donePercent() * 100d) + "%");
     }
     
