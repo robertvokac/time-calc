@@ -6,6 +6,7 @@ import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.Property;
 import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
@@ -34,7 +35,8 @@ public class TimeCalcApp {
             = new StringProperty("timeCalcApp.visibilityProperty",
                     Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
-    public ReadOnlyProperty<Boolean> allowOnlyBasicFeaturesProperty = new ReadOnlyProperty<>("allowOnlyBasicFeatures", false);
+    private Property<Boolean> allowOnlyBasicFeaturesReadWriteProperty = new Property<>("allowOnlyBasicFeaturesReadWriteProperty", false);
+    public ReadOnlyProperty<Boolean> allowOnlyBasicFeaturesProperty = new ReadOnlyProperty<>(allowOnlyBasicFeaturesReadWriteProperty);
     
     @Getter
     private SqliteConnectionFactory sqliteConnectionFactory;
@@ -58,14 +60,19 @@ public class TimeCalcApp {
             e.printStackTrace();
         }
         if(FileConstants.BASIC_TXT.exists()) {
-            allowOnlyBasicFeaturesProperty.setValue(true);
+            allowOnlyBasicFeaturesReadWriteProperty.setValue(true);
         }
         
         while (true) {
+            if(!allowOnlyBasicFeaturesProperty.getValue() && FileConstants.BASIC_TXT.exists()) {
+                allowOnlyBasicFeaturesReadWriteProperty.setValue(true);
+            }
+
             MainWindow timeCalcMainWindow = null;
             try {
                 timeCalcMainWindow = new MainWindow(this);
             } catch (Exception e) {
+
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
                         e.getMessage(), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();

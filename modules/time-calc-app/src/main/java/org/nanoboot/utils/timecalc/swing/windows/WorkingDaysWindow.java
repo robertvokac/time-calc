@@ -61,6 +61,7 @@ public class WorkingDaysWindow extends TWindow {
     private final TCheckBox enableMa14;
     private final TCheckBox enableMa28;
     private final TCheckBox enableMa56;
+    private final boolean extendedFeaturesAreDisabled;
     private ArrivalChart arrivalChart;
 
     private JTable table = null;
@@ -70,12 +71,12 @@ public class WorkingDaysWindow extends TWindow {
     private InvalidationListener invalidationHeightListener;
 
     public WorkingDaysWindow(WorkingDayRepositoryApi workingDayRepository,
-            Time time, double target) {
-
+            Time time, double target, boolean extendedFeaturesAreDisabled) {
         setTitle("Work Days");
         this.workingDayRepository = workingDayRepository;
         this.time = time;
         this.target = target;
+        this.extendedFeaturesAreDisabled = extendedFeaturesAreDisabled;
 
         int year = time.yearProperty.getValue();
         this.setLayout(null);
@@ -530,7 +531,9 @@ public class WorkingDaysWindow extends TWindow {
         this.widthProperty.addListener(invalidationWidthListener);
         this.heightProperty.addListener(invalidationHeightListener);
         arrivalChart.setBounds(bounds);
-        tp.add(arrivalChart, "Chart");
+        if(!extendedFeaturesAreDisabled) {
+            tp.add(arrivalChart, "Chart");
+        }
         tp.switchTo(currentTitle);
         arrivalChart.widthProperty.setValue(tp.getWidth() - 30);
         arrivalChart.heightProperty.setValue(tp.getHeight()  - 10);

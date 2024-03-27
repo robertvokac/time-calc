@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.Timer;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
+import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 
 /**
  * @author Robert Vokac
@@ -81,6 +82,8 @@ public class MainWindow extends TWindow {
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
     public static final JCheckBox hideShowFormsCheckBox = new JCheckBox();
     private static final int BATTERY_WIDTH = 140;
+    private static final String BACKUP = "_backup";
+    private static final String BASIC_FEATURE__ = "__only_basic_features__";
     private final TButton workDaysButton;
     private final TButton activitiesButton;
     private final TButton exitButton;
@@ -123,6 +126,8 @@ public class MainWindow extends TWindow {
     private double msRemaining = 0d;
     private final Time timeAlwaysReal;
 
+    public final ReadOnlyProperty<Boolean> allowOnlyBasicFeaturesProperty;
+
     {
         ChangeListener valueMustBeTime
                 = (property, oldValue, newValue) -> new TTime((String) newValue);
@@ -141,6 +146,7 @@ public class MainWindow extends TWindow {
 //        ToolTipManager ttm = ToolTipManager.sharedInstance();
 //        ttm.setInitialDelay(0);
 //        ttm.setDismissDelay(10000);
+        allowOnlyBasicFeaturesProperty = timeCalcApp.allowOnlyBasicFeaturesProperty;
         setFocusable(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -152,6 +158,7 @@ public class MainWindow extends TWindow {
         });
         timeCalcConfiguration
                 .loadFromTimeCalcProperties(TimeCalcProperties.getInstance());
+
         timeCalcConfiguration.mainWindowCustomTitleProperty.addListener(e -> {
             setTitle(getWindowTitle());
         });
@@ -187,12 +194,45 @@ public class MainWindow extends TWindow {
             }
         });
         this.configButton = new TButton("Config");
-        this.workDaysButton = new TButton("Work Days");
-        this.activitiesButton = new TButton("Activities"
-                + "");
-        this.restartButton = new TButton("Restart");
+        configButton.addActionListener(e -> {
+            if (configWindow == null) {
+                this.configWindow = new ConfigWindow(timeCalcConfiguration);
+            }
+            configWindow.setVisible(true);
+            configWindow.setLocationRelativeTo(this);
+            configWindow.setLocation(100, 100);
+        });
+        if(allowOnlyBasicFeaturesProperty.getValue()) {
+            if(!timeCalcConfiguration.profileNameProperty.getValue().equals(BASIC_FEATURE__)) {
+                timeCalcConfiguration.profileNameProperty.setValue(
+                        timeCalcConfiguration.profileNameProperty.getValue()
+                        + BACKUP);
+                timeCalcConfiguration.saveToTimeCalcProperties();
+
+                timeCalcConfiguration.profileNameProperty.setValue(BASIC_FEATURE__);
+                timeCalcConfiguration.saveToTimeCalcProperties();
+            }
+            timeCalcConfiguration.profileNameProperty.setValue(BASIC_FEATURE__);
+            timeCalcConfiguration.mainWindowCustomTitleProperty.setValue("Report");
+            this.doDisableAlmostEverything();
+            //
+            //timeCalcConfiguration.batteryNameVisibleProperty.enable();
+            timeCalcConfiguration.batteryPercentProgressProperty.enable();
+            //timeCalcConfiguration.batteryCircleProgressProperty.enable();
+            //
+//            timeCalcConfiguration.clockHandsHourVisibleProperty.setValue(true);
+//            timeCalcConfiguration.clockHandsMinuteVisibleProperty.setValue(true);
+            timeCalcConfiguration.clockVisibleProperty.setValue(true);
+//            timeCalcConfiguration.clockHandsLongVisibleProperty.setValue(true);
+            timeCalcConfiguration.notificationsVisibleProperty.setValue(true);
+                    //
+            timeCalcConfiguration.saveToTimeCalcProperties();
+        }
+        this.workDaysButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Work Days");
+        this.activitiesButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Activities");
+        this.restartButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Restart");
         this.exitButton = new TButton("Exit");
-        this.focusButton = new TButton("Focus");
+        this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus");
         this.helpButton = new TButton("Help");
         this.weatherButton = new TButton("Weather");
         this.commandButton = new TButton("Command");
@@ -200,11 +240,17 @@ public class MainWindow extends TWindow {
         this.aboutButton = new AboutButton();
 
         //window.add(weatherButton);
-        addAll(configButton, workDaysButton, activitiesButton, restartButton,
-                exitButton, focusButton, helpButton, commandButton, jokeButton,
-                hideShowFormsCheckBox);
+        addAll(workDaysButton, activitiesButton, restartButton,focusButton);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            addAll(configButton, commandButton,jokeButton,helpButton,
+                    exitButton,
+                    hideShowFormsCheckBox);
+        }
+        if(allowOnlyBasicFeaturesProperty.getValue()) {
+            timeOffCheckBox.setText("");
+        }
 
-        timeCalcApp.visibilityProperty
+            timeCalcApp.visibilityProperty
                 .bindTo(timeCalcConfiguration.visibilityDefaultProperty);
         if (!timeCalcConfiguration.visibilitySupportedColoredProperty
                 .isEnabled()) {
@@ -458,25 +504,27 @@ public class MainWindow extends TWindow {
         timeOffCheckBox.setBoundsFromLeft(noteTextField);
         //
 
-        add(arrivalTextFieldLabel);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) add(arrivalTextFieldLabel);
         add(arrivalTextField);
         add(arrivalIncreaseButton);
         add(arrivalDecreaseButton);
 
-        add(overtimeTextFieldLabel);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) add(overtimeTextFieldLabel);
         add(overtimeTextField);
         add(overtimeIncreaseButton);
         add(overtimeDecreaseButton);
 
-        add(workingTimeInMinutesTextFieldLabel);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) add(workingTimeInMinutesTextFieldLabel);
         add(workingTimeTextField);
         add(workingIncreaseButton);
         add(workingDecreaseButton);
 
-        add(pauseTimeInMinutesFieldLabel);
-        add(pauseTimeTextField);
-        add(pauseIncreaseButton);
-        add(pauseDecreaseButton);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            add(pauseTimeInMinutesFieldLabel);
+            add(pauseTimeTextField);
+            add(pauseIncreaseButton);
+            add(pauseDecreaseButton);
+        }
 
         arrivalIncreaseButton.addActionListener(e -> increaseArrival(TTime.T_TIME_ONE_MINUTE));
         arrivalDecreaseButton.addActionListener(e -> decreaseArrival(TTime.T_TIME_ONE_MINUTE));
@@ -487,7 +535,7 @@ public class MainWindow extends TWindow {
         pauseIncreaseButton.addActionListener(e -> increasePause(TTime.T_TIME_ONE_MINUTE));
         pauseDecreaseButton.addActionListener(e -> decreasePause(TTime.T_TIME_ONE_MINUTE));
 
-        add(noteTextFieldLabel);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) add(noteTextFieldLabel);
         add(noteTextField);
         add(timeOffCheckBox);
         //
@@ -513,13 +561,17 @@ public class MainWindow extends TWindow {
         saveButton.setBoundsFromLeft(remainingTextField);
         //
 
-        add(departureTextFieldLabel);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) add(departureTextFieldLabel);
         add(departureTextField);
-        add(elapsedTextFieldLabel);
-        add(elapsedTextField);
-        add(remainingTextFieldLabel);
-        add(remainingTextField);
-        add(saveButton);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            add(elapsedTextFieldLabel);
+            add(elapsedTextField);
+            add(remainingTextFieldLabel);
+            add(remainingTextField);
+        }
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            add(saveButton);
+        }
         this.workingDayRepository = new WorkingDayRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
         this.activityRepository = new ActivityRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
 
@@ -575,24 +627,16 @@ public class MainWindow extends TWindow {
         });
         workDaysButton.addActionListener(e -> {
             if (workingDaysWindow == null) {
-                this.workingDaysWindow = new WorkingDaysWindow(workingDayRepository, time, 7d);
+                this.workingDaysWindow = new WorkingDaysWindow(workingDayRepository, time, 7d, allowOnlyBasicFeaturesProperty.getValue());
             }
             workingDaysWindow.setVisible(true);
         });
         activitiesButton.addActionListener(e -> {
             if (activitiesWindow == null) {
-                this.activitiesWindow = new ActivitiesWindow(this.activityRepository, time, timeCalcConfiguration);
+                this.activitiesWindow = new ActivitiesWindow(this.activityRepository, time,
+                        timeCalcConfiguration);
             }
             activitiesWindow.setVisible(true);
-        });
-
-        configButton.addActionListener(e -> {
-            if (configWindow == null) {
-                this.configWindow = new ConfigWindow(timeCalcConfiguration);
-            }
-            configWindow.setVisible(true);
-            configWindow.setLocationRelativeTo(this);
-            configWindow.setLocation(100, 100);
         });
 
         helpButton.addActionListener(e -> {
@@ -690,7 +734,8 @@ public class MainWindow extends TWindow {
                             .bindTo(timeCalcConfiguration.batteryLabelVisibleProperty);
                     battery.blinkingIfCriticalLowVisibleProperty
                             .bindTo(timeCalcConfiguration.batteryQuarterIconVisibleProperty);
-                    battery.quarterIconVisibleProperty.bindTo(timeCalcConfiguration.batteryQuarterIconVisibleProperty);
+                    battery.quarterIconVisibleProperty.bindTo(
+                            timeCalcConfiguration.batteryQuarterIconVisibleProperty);
                     switch (battery.getName()) {
                         case MinuteBattery.MINUTE:
                             battery.visibleProperty
@@ -952,8 +997,28 @@ public class MainWindow extends TWindow {
 
         }).start();
 
+        if(allowOnlyBasicFeaturesProperty.getValue() && !FileConstants.BASIC_TXT.exists()) {
+            String msg =
+                    "You deleted the file " + FileConstants.BASIC_TXT
+                    + ", extended features are disabled until the next stop and start of this application. Please, stop and start this application to enable extended features.";
+            Utils.showNotification(msg, 30000);
+        }
+        if(allowOnlyBasicFeaturesProperty.getValue()) {
+            String msg = "Warning: " + "You disabled the extended features of this application. Only the basic features are enabled. To enable the extended features, please: 1. stop this application 2. delete manually this file: " + FileConstants.BASIC_TXT.getAbsolutePath() + " 3. start this application again.";
+            Utils.showNotification(msg, 30000, 200);
+        }
+
         while (true) {
 
+            if(allowOnlyBasicFeaturesProperty.getValue()) {
+                if(timeCalcConfiguration.batteryDayVisibleProperty.isDisabled()) {
+                    timeCalcConfiguration.batteryDayVisibleProperty.enable();
+                }
+
+                if(timeCalcConfiguration.batteryWeekVisibleProperty.isDisabled()) {
+                    timeCalcConfiguration.batteryDayVisibleProperty.enable();
+                }
+            }
             if (Math.random() > 0.99) {
                 File dbFileBackup = new File(
                         FileConstants.DB_FILE.getAbsolutePath() + ".backup."

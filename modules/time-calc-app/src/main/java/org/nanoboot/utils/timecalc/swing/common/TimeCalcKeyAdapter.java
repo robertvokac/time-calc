@@ -18,6 +18,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Properties;
 import lombok.Setter;
@@ -29,6 +30,10 @@ import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
  */
 public class TimeCalcKeyAdapter extends KeyAdapter {
 
+    private static final int[] ALLOWED_KEY_CODES =
+            {KeyEvent.VK_R, KeyEvent.VK_X, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_Z,KeyEvent.VK_O};
+    private static final String EXTENDED_FEATURES_ARE_DISABLED =
+            "Extended features are disabled";
     private final TimeCalcConfiguration timeCalcConfiguration;
     private final TimeCalcApp timeCalcApp;
     private final MainWindow mainWindow;
@@ -174,6 +179,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_Q: {
+                if(mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
+                    showWarningExtendedFeaturesAreDisabled();
+                    return;
+                }
                 double oldSpeed = this.mainWindow.getSpeed();
                 if (oldSpeed < 0) {
                     oldSpeed = 1.0d;
@@ -242,6 +251,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_P: {
+                if(mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
+                    showWarningExtendedFeaturesAreDisabled();
+                    break;
+                }
                 if (increase) {
                     mainWindow.increasePause(changeTTime);
                 }
@@ -268,7 +281,12 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
         }
     }
 
-//    private void processMetaKeyCodes(int keyCode) {
+    private void showWarningExtendedFeaturesAreDisabled() {
+
+        Utils.showNotification(EXTENDED_FEATURES_ARE_DISABLED);
+    }
+
+    //    private void processMetaKeyCodes(int keyCode) {
 //
 //        switch (keyCode) {
 //            case KeyEvent.VK_S: {
@@ -285,6 +303,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
 
     private void updateProperty(IntegerProperty integerProperty,
             boolean increase, boolean decrease, boolean reset, int timeUnit, int value) {
+        if(mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
+            showWarningExtendedFeaturesAreDisabled();
+            return;
+        }
         if (value == 0) {
             //nothing to do
             return;
@@ -444,6 +466,12 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     "Warning: There is no profile assigned to Key with number, you pressed.");
         }
 
+        if(mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
+            if(!Arrays.stream(ALLOWED_KEY_CODES).filter(k->k== keyCode).findFirst().isPresent()){
+                showWarningExtendedFeaturesAreDisabled();
+                return;
+            }
+        }
         switch (keyCode) {
 
             case KeyEvent.VK_UP: {
@@ -709,13 +737,28 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 break;
             }
             case KeyEvent.VK_O: {
-                if (timeCalcConfiguration.testEnabledProperty.isDisabled()) {
-                    if (!Utils.askYesNo(null, "Do you really want to enable \"Test mode\"? If yes, then you will be allowed to set custom time.", "Enabling \"Test mode\"")) {
+                if (mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
+                    Utils.showNotification("Extended features are already disabled.");
+                } else {
+                    String question =
+                            "Do you really want to disable the extended features of this application? Only the basic features will be enabled.";
+                    if (!Utils.askYesNo(null, question, "Disabling \"Extended features\" of this app")) {
                         break;
                     }
+                    try {
+                        FileConstants.BASIC_TXT.createNewFile();
+
+                        String msg = "Warning: " + "You disabled the extended features of this application. Only the basic features are enabled. To enable the extended features, please: 1. stop this application 2. delete manually this file: " + FileConstants.BASIC_TXT.getAbsolutePath() + " 3. start this application again.";
+                        Utils.showNotification(msg, 30000, 400);
+
+                        this.mainWindow.doRestart();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                    break;
                 }
-                timeCalcConfiguration.testEnabledProperty.flip();
-                Utils.showNotification((timeCalcConfiguration.testEnabledProperty.isEnabled() ? "Enabled" : "Disabled") + " \"Test mode\".");
+
                 break;
             }
             case KeyEvent.VK_COMMA: {
@@ -735,8 +778,14 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
 
         }
-        if (numberKeyWasPressed && FileConstants.TIME_CALC_PROFILES_TXT_FILE
-                .exists()) {
+        boolean profileSwitch =
+                numberKeyWasPressed && FileConstants.TIME_CALC_PROFILES_TXT_FILE
+                        .exists();
+        if(profileSwitch && mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
+            showWarningExtendedFeaturesAreDisabled();
+        }
+
+        if (profileSwitch && !mainWindow.allowOnlyBasicFeaturesProperty.getValue()) {
 
             Properties properties = new Properties();
             try {

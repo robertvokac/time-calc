@@ -115,10 +115,10 @@ public class Toaster {
      * Show a toaster with the specified message and the associated icon.
      */
     public void showToaster(Icon icon, String msg) {
-        if (notificationsVisibleProperty.isDisabled()) {
-            //nothing to do
-            return;
-        }
+//        if (notificationsVisibleProperty.isDisabled()) {
+//            //nothing to do
+//            return;
+//        }
         SingleToaster singleToaster = new SingleToaster();
         if (icon != null) {
             singleToaster.iconLabel.setIcon(icon);

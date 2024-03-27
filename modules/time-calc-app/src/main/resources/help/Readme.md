@@ -186,6 +186,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * COMMA - Switch between foreward and backward speed
 * T - Enable or disable floating speed
 * D - Reset custom time values to the real time
+* O - Disable many features, let enable only the basic features of "Time Calc" application.
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time
 * SHIFT + O - Increase overtime
