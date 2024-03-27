@@ -3,7 +3,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
-import org.nanoboot.utils.timecalc.swing.progress.Battery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressWeather;
 
 import javax.swing.JMenu;

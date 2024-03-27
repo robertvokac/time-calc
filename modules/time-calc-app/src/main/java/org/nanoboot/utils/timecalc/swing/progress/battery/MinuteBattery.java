@@ -1,4 +1,4 @@
-package org.nanoboot.utils.timecalc.swing.progress;
+package org.nanoboot.utils.timecalc.swing.progress.battery;
 
 /**
  * @author Robert Vokac

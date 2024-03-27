@@ -50,6 +50,10 @@ public class ProgressMoney extends Widget implements GetProperty {
 
     }
 
+    public int getTimerDelay() {
+        return 100;
+    }
+
     @Override
     public void paintWidget(Graphics brush) {
         double perMonth = this.perMonthProperty.getValue();

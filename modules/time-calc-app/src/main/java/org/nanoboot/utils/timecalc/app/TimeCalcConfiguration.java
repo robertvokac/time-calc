@@ -70,8 +70,8 @@ public class TimeCalcConfiguration {
     public final BooleanProperty clockCentreCircleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE
                     .getKey());
-    public final BooleanProperty clockCentreCircleBlackProperty
-            = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
+    public final BooleanProperty clockCentreCircleColoredProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_COLORED
                     .getKey());
     public final BooleanProperty clockProgressVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
@@ -291,7 +291,7 @@ public class TimeCalcConfiguration {
             clockCircleStrongBorderProperty,
             clockCircleBorderColorProperty,
             clockCentreCircleVisibleProperty,
-            clockCentreCircleBlackProperty,
+                clockCentreCircleColoredProperty,
             clockProgressVisibleOnlyIfMouseMovingOverProperty,
             clockDateVisibleOnlyIfMouseMovingOverProperty,
             clockSmileyVisibleProperty,

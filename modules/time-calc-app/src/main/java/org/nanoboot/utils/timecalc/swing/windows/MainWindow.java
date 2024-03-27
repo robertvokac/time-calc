@@ -27,11 +27,11 @@ import org.nanoboot.utils.timecalc.swing.controls.TLabel;
 import org.nanoboot.utils.timecalc.swing.controls.TTextField;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
-import org.nanoboot.utils.timecalc.swing.progress.Battery;
-import org.nanoboot.utils.timecalc.swing.progress.DayBattery;
-import org.nanoboot.utils.timecalc.swing.progress.HourBattery;
-import org.nanoboot.utils.timecalc.swing.progress.MinuteBattery;
-import org.nanoboot.utils.timecalc.swing.progress.MonthBattery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.DayBattery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.HourBattery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.MinuteBattery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.MonthBattery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
@@ -40,8 +40,8 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressWeather;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
-import org.nanoboot.utils.timecalc.swing.progress.WeekBattery;
-import org.nanoboot.utils.timecalc.swing.progress.YearBattery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.WeekBattery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.YearBattery;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
@@ -682,8 +682,8 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.clockCircleBorderColorProperty);
         clock.handsColoredProperty
                 .bindTo(timeCalcConfiguration.clockHandsColoredProperty);
-        clock.centreCircleBlackProperty
-                .bindTo(timeCalcConfiguration.clockCentreCircleBlackProperty);
+        clock.centreCircleColoredProperty
+                .bindTo(timeCalcConfiguration.clockCentreCircleColoredProperty);
         clock.progressVisibleOnlyIfMouseMovingOverProperty
                 .bindTo(timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty);
         clock.dateVisibleOnlyIfMouseMovingOverProperty
@@ -893,7 +893,11 @@ public class MainWindow extends TWindow {
 
         new Timer(100, e -> {
             IntegerProperty speed = timeCalcConfiguration.speedProperty;
+
             if (speed.getValue() == Integer.MIN_VALUE) {
+                timeCalcConfiguration.speedProperty.setValue(Integer.MAX_VALUE);
+            }
+            if (speed.getValue() == Integer.MAX_VALUE) {
                 //timeCalcConfiguration.testEnabledProperty.setValue(false);
                 if (timeCalcConfiguration.speedFloatingProperty.isEnabled()) {
                     speed.setValue(0);
@@ -1437,7 +1441,7 @@ public class MainWindow extends TWindow {
 
     public void increaseSpeed() {
         IntegerProperty speed = timeCalcConfiguration.speedProperty;
-        if (speed.getValue() == Integer.MIN_VALUE) {
+        if (speed.getValue() == Integer.MIN_VALUE || speed.getValue() == Integer.MAX_VALUE) {
             speed.setZero();
         }
         if (speed.getValue() == MAX_SPEED) {
@@ -1449,7 +1453,7 @@ public class MainWindow extends TWindow {
 
     public void decreaseSpeed() {
         IntegerProperty speed = timeCalcConfiguration.speedProperty;
-        if (speed.getValue() == Integer.MIN_VALUE) {
+        if (speed.getValue() == Integer.MIN_VALUE || speed.getValue() == Integer.MAX_VALUE) {
             speed.setZero();
         }
         if (speed.getValue() == MIN_SPEED) {
@@ -1466,7 +1470,7 @@ public class MainWindow extends TWindow {
     }
 
     public void resetSpeed() {
-        timeCalcConfiguration.speedProperty.setValue(Integer.MIN_VALUE);
+        timeCalcConfiguration.speedProperty.setValue(Integer.MAX_VALUE);
     }
 
     public void enableFloatingTime() {

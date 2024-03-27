@@ -1,12 +1,11 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
-import lombok.Getter;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
-import org.nanoboot.utils.timecalc.swing.progress.Battery;
+import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
@@ -31,10 +30,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import javax.swing.JMenuItem;
-import static org.nanoboot.utils.timecalc.swing.progress.Battery.HIGH_STRONGLY_COLORED;
-import static org.nanoboot.utils.timecalc.swing.progress.Battery.HIGH_WEAKLY_COLORED;
-import static org.nanoboot.utils.timecalc.swing.progress.Battery.LIGHT_RED;
-import static org.nanoboot.utils.timecalc.swing.progress.Battery.ULTRA_LIGHT_RED;
+import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.HIGH_STRONGLY_COLORED;
+import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.HIGH_WEAKLY_COLORED;
+import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.LIGHT_RED;
+import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.ULTRA_LIGHT_RED;
 
 /**
  * @author Robert Vokac

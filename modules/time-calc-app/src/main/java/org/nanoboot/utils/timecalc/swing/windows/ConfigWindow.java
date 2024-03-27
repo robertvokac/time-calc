@@ -67,10 +67,12 @@ public class ConfigWindow extends TWindow {
     private final JPanel panelInsideScrollPaneLife;
     private final JPanel panelInsideScrollPaneMoney;
     private final JPanel panelInsideScrollPaneSmileys;
+    private final JPanel panelInsideScrollPaneProgress;
     private final JPanel panelInsideScrollPaneTest;
     private final JPanel panelInsideScrollPaneOther;
-    private final int[] currentY = new int[]{SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN};
-    private final int[] currentX = new int[]{SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN};
+    private final int[] currentY = new int[]{SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN};
+    private final int[] currentX = new int[]{SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN, SwingUtils.MARGIN};
+
     private final List<JComponent> propertiesList = new ArrayList<>();
     private final Map<TimeCalcProperty, JComponent> propertiesMap = new HashMap<>();
     private final TButton enableAsMuchAsPossible
@@ -110,8 +112,8 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox clockCentreCircleVisibleProperty
             = new JCheckBox(
                     TimeCalcProperty.CLOCK_CENTRE_CIRCLE_VISIBLE.getKey());
-    private final JCheckBox clockCentreCircleBlackProperty
-            = new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK.getKey());
+    private final JCheckBox clockCentreCircleColoredProperty
+            = new JCheckBox(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_COLORED.getKey());
     private final JCheckBox clockProgressVisibleOnlyIfMouseMovingOverProperty
             = new JCheckBox(
                     TimeCalcProperty.CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER
@@ -299,6 +301,7 @@ public class ConfigWindow extends TWindow {
         this.panelInsideScrollPaneLife = new JPanel();
         this.panelInsideScrollPaneMoney = new JPanel();
         this.panelInsideScrollPaneSmileys = new JPanel();
+        this.panelInsideScrollPaneProgress = new JPanel();
         this.panelInsideScrollPaneTest = new JPanel();
         this.panelInsideScrollPaneOther = new JPanel();
 
@@ -308,6 +311,7 @@ public class ConfigWindow extends TWindow {
                 panelInsideScrollPaneLife,
                 panelInsideScrollPaneMoney,
                 panelInsideScrollPaneSmileys,
+                panelInsideScrollPaneProgress,
                 panelInsideScrollPaneTest,
                 panelInsideScrollPaneOther).collect(Collectors.toList());
         panelsInsideScrollPane.forEach(p -> {
@@ -327,6 +331,7 @@ public class ConfigWindow extends TWindow {
         JScrollPane scrollPaneLife = new JScrollPane(panelInsideScrollPaneLife);
         JScrollPane scrollPaneMoney = new JScrollPane(panelInsideScrollPaneMoney);
         JScrollPane scrollPaneSmileys = new JScrollPane(panelInsideScrollPaneSmileys);
+        JScrollPane scrollPaneProgress = new JScrollPane(panelInsideScrollPaneProgress);
         JScrollPane scrollPaneTest = new JScrollPane(panelInsideScrollPaneTest);
         JScrollPane scrollPaneOther = new JScrollPane(panelInsideScrollPaneOther);
 
@@ -336,6 +341,7 @@ public class ConfigWindow extends TWindow {
                 scrollPaneLife,
                 scrollPaneMoney,
                 scrollPaneSmileys,
+                scrollPaneProgress,
                 scrollPaneTest,
                 scrollPaneOther
         ).collect(Collectors.toList());
@@ -345,6 +351,7 @@ public class ConfigWindow extends TWindow {
         tp.add("Life", scrollPaneLife);
         tp.add("Money", scrollPaneMoney);
         tp.add("Smileys", scrollPaneSmileys);
+        tp.add("Progress", scrollPaneProgress);
         tp.add("Test", scrollPaneTest);
         tp.add("Other", scrollPaneOther);
         scrollPanes.forEach(s
@@ -402,7 +409,7 @@ public class ConfigWindow extends TWindow {
                         .setValue(enable ? "0,0,255" : "0,0,0");
 
                 clockCentreCircleVisibleProperty.setSelected(enable);
-                clockCentreCircleBlackProperty.setSelected(!enable);
+                clockCentreCircleColoredProperty.setSelected(!enable);
                 clockProgressVisibleOnlyIfMouseMovingOverProperty
                         .setSelected(!enable);
                 clockDateVisibleOnlyIfMouseMovingOverProperty
@@ -437,6 +444,12 @@ public class ConfigWindow extends TWindow {
                 dotVisibleProperty.setSelected(enable);
                 lifeVisibleProperty.setSelected(enable);
                 moneyVisibleProperty.setSelected(enable);
+                if(enable && moneyPerMonthProperty.getText().isEmpty()) {
+                    moneyPerMonthProperty.setText("1000000");
+                }
+                if(enable && moneyCurrencyProperty.getText().isEmpty()) {
+                    moneyPerMonthProperty.setText("$TT");
+                }
                 weatherVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
                 swingVisibleProperty.setSelected(enable);
@@ -459,10 +472,9 @@ public class ConfigWindow extends TWindow {
 //                dotHiddenProperty.setSelected(!enable);
                 if (enable) {
                     speedProperty.setText("0");
-                    speedFloatingProperty.setSelected(true);
                 }
                 if (!enable) {
-                    speedProperty.setText(String.valueOf(Integer.MIN_VALUE));
+                    speedProperty.setText(String.valueOf(Integer.MAX_VALUE));
                     speedFloatingProperty.setSelected(false);
                 }
                 MainWindow.hideShowFormsCheckBox.setSelected(enable);
@@ -485,7 +497,7 @@ public class ConfigWindow extends TWindow {
                 clockCircleStrongBorderProperty,
                 clockCircleBorderColorProperty,
                 clockCentreCircleVisibleProperty,
-                clockCentreCircleBlackProperty,
+                clockCentreCircleColoredProperty,
                 clockProgressVisibleOnlyIfMouseMovingOverProperty,
                 clockDateVisibleOnlyIfMouseMovingOverProperty,
                 clockSmileyVisibleProperty,
@@ -530,12 +542,12 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty,
                 squareHiddenProperty,
                 squareTypeProperty,
-                dotVisibleProperty,
-                dotHiddenProperty,
-                dotTypeProperty,
                 circleVisibleProperty,
                 circleHiddenProperty,
                 circleTypeProperty,
+                dotVisibleProperty,
+                dotHiddenProperty,
+                dotTypeProperty,
                 swingVisibleProperty,
                 swingHiddenProperty,
                 swingTypeProperty,
@@ -687,7 +699,9 @@ public class ConfigWindow extends TWindow {
                 String groupName = array[0];
                 if (groupName.equals("Clock") || groupName.equals("Battery")
                         || groupName.equals("Smileys")
-                        || groupName.equals("Test")) {
+                        || groupName.equals("Test")
+                    || groupName.equals("Money")
+                    || groupName.equals("Life")) {
 
                     checkBox.setText(array.length > 1 ? (checkBox.getText()
                             .substring(groupName.length() + 3)) : "Visible");
@@ -867,6 +881,9 @@ public class ConfigWindow extends TWindow {
                         });
             }
 
+            if(timeCalcConfiguration.speedProperty.getValue() == Integer.MIN_VALUE) {
+                timeCalcConfiguration.speedProperty.setValue(Integer.MAX_VALUE);
+            }
             propertiesMap.put(TimeCalcProperty.forKey(
                     (String) p.getClientProperty(CLIENT_PROPERTY_KEY)), p);
             addToNextRow(p);
@@ -934,7 +951,7 @@ public class ConfigWindow extends TWindow {
     }
 
     private void addToNextRow(JComponent jComponent, boolean nextRow) {
-        int index = 6;
+        int index = 7;
         String key = (String) jComponent.getClientProperty(CLIENT_PROPERTY_KEY);
         if (key == null) {
             //nothing to do
@@ -959,6 +976,10 @@ public class ConfigWindow extends TWindow {
             index = 5;
         }
 
+        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.")) {
+            index = 6;
+        }
+
         JPanel panel = null;
         switch (index) {
             case 0:
@@ -979,17 +1000,34 @@ public class ConfigWindow extends TWindow {
             case 5:
                 panel = panelInsideScrollPaneTest;
                 break;
+            case 6:
+                panel = panelInsideScrollPaneProgress;
+                break;
             default:
                 panel = panelInsideScrollPaneOther;
         }
+
+        if(index == 6 && !key.startsWith("test.") && !key.startsWith("square.") && key.endsWith(".visible") && !key.endsWith(".quarter-icon.visible")) {
+            panel.add(Box.createRigidArea(new Dimension(5, 20)));
+        }
+
         if (jComponent instanceof JTextField) {
             JPanel p = new JPanel();
-            //p.setLayout(null);
 
             JLabel label = new JLabel(TimeCalcProperty.forKey(key).getDescription() + ": ");
             p.add(label);
             p.add(jComponent);
             label.setBounds(10, 0, 200, 25);
+            if (label.getText().startsWith("Life")) {
+                label.setText(label.getText().substring("Life".length() + 3));
+            }
+            if (label.getText().startsWith("Money")) {
+                label.setText(label.getText().substring("Money".length() + 3));
+            }
+            if (label.getText().startsWith("Test")) {
+                label.setText(label.getText().substring("Test".length() + 3));
+            }
+
 
             jComponent.setBounds(220, 0, 200, 25);
             LayoutManager flowLayout = new FlowLayout(FlowLayout.LEFT);
@@ -1010,9 +1048,11 @@ public class ConfigWindow extends TWindow {
 
         jComponent.setBounds(currentX[index], currentY[index], 200,
                 HEIGHT1);
-        panel.add(Box.createRigidArea(new Dimension(5, 5)));
+        panel.add(Box.createRigidArea(new Dimension(5, 4)));
+
         if (nextRow) {
             nextRow(index);
+
         } else {
             currentX[index] = currentX[index] + SwingUtils.MARGIN + jComponent.getWidth();
         }

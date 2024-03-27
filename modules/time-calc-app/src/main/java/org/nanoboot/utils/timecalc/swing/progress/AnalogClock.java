@@ -6,6 +6,7 @@ import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.swing.controls.TMenuItem;
+import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
@@ -34,8 +35,8 @@ import org.nanoboot.utils.timecalc.entity.Progress;
 public class AnalogClock extends Widget {
 
     public static final Color COLOR_FOR_MILLISECOND_HAND_STRONGLY_COLORED
-            = new Color(246,
-                    152, 51);
+            = new Color(226,
+            126, 19);
     public final BooleanProperty borderVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CLOCK_BORDER_VISIBLE
                     .getKey());
@@ -57,8 +58,8 @@ public class AnalogClock extends Widget {
     public final StringProperty centreCircleBorderColorProperty
             = new StringProperty(TimeCalcProperty.CLOCK_CIRCLE_BORDER_COLOR
                     .getKey());
-    public final BooleanProperty centreCircleBlackProperty
-            = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_BLACK
+    public final BooleanProperty centreCircleColoredProperty
+            = new BooleanProperty(TimeCalcProperty.CLOCK_CENTRE_CIRCLE_COLORED
                     .getKey());
     public final BooleanProperty progressVisibleOnlyIfMouseMovingOverProperty
             = new BooleanProperty(
@@ -321,8 +322,7 @@ public class AnalogClock extends Widget {
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
         brush.setColor(visibility.isStronglyColored() || mouseOver
-                ? (centreCircleBlackProperty.isEnabled() ? Color.BLACK
-                : Color.RED)
+                ? (centreCircleColoredProperty.isEnabled() ? Color.RED : Color.BLACK)
                 : FOREGROUND_COLOR);
         brush.fillOval(centerX - 3, centerY - 3, 8, 8);
         brush.setColor(currentColor);
@@ -422,6 +422,15 @@ public class AnalogClock extends Widget {
         if (smileyVisibleProperty.isEnabled()) {
             paintSmiley(visibility, brush, ((int) (side * 0.25) + 90),
                     ((int) (side * 0.35)) + 20);
+        } else {
+            if(this.smileyIcon != null) {
+                remove(this.smileyIcon);
+                this.smileyIcon = null;
+            }
+            if(this.smileyIcon2 != null) {
+                remove(this.smileyIcon2);
+                this.smileyIcon2 = null;
+            }
         }
 
         if (numbersVisibleProperty.isEnabled()) {

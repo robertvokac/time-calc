@@ -1,6 +1,4 @@
-package org.nanoboot.utils.timecalc.swing.progress;
-
-import java.util.Calendar;
+package org.nanoboot.utils.timecalc.swing.progress.battery;
 
 /**
  * @author Robert Vokac

@@ -40,8 +40,8 @@ public enum TimeCalcProperty {
             Color.class),
     CLOCK_CENTRE_CIRCLE_VISIBLE("clock.centre-circle.visible",
             "Clock : Centre circle"),
-    CLOCK_CENTRE_CIRCLE_BLACK("clock.centre-circle.black",
-            "Clock : Centre Circle is black"),
+    CLOCK_CENTRE_CIRCLE_COLORED("clock.centre-circle.colored",
+            "Clock : Centre Circle is colored"),
     CLOCK_PROGRESS_VISIBLE_ONLY_IF_MOUSE_MOVING_OVER(
             "clock.progress.visible-only-if-mouse-moving-over",
             "Clock : Progress visible only, if mouse moving over"),

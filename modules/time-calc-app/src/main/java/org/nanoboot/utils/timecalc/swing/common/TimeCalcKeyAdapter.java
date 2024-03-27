@@ -689,7 +689,7 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     timeCalcConfiguration.clockCircleStrongBorderProperty.disable();
                     timeCalcConfiguration.clockCircleBorderColorProperty.setValue("0,0,255");
                     timeCalcConfiguration.clockCentreCircleVisibleProperty.enable();
-                    timeCalcConfiguration.clockCentreCircleBlackProperty.disable();
+                    timeCalcConfiguration.clockCentreCircleColoredProperty.disable();
                     timeCalcConfiguration.clockProgressVisibleOnlyIfMouseMovingOverProperty.disable();
                     timeCalcConfiguration.clockDateVisibleOnlyIfMouseMovingOverProperty.disable();
                 }

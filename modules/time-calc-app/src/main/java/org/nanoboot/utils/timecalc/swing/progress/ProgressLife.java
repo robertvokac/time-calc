@@ -59,6 +59,9 @@ public class ProgressLife extends Widget implements GetProperty {
         }).start();
 
     }
+    public int getTimerDelay() {
+        return 100;
+    }
 
     @Override
     public void paintWidget(Graphics brush) {

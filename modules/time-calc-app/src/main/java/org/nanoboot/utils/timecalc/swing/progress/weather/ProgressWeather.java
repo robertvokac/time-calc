@@ -64,6 +64,10 @@ public class ProgressWeather extends Widget implements GetProperty {
 
     private static Map<Integer, List<WeatherForecast>> forecastsForYears = new HashMap<>();
 
+    public int getTimerDelay() {
+        return 1000;
+    }
+
     @Override
     public void paintWidget(Graphics brush) {
 
