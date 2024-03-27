@@ -234,7 +234,13 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.SPEED_NEGATIVE.getKey());
     public final JCheckBox speedFloatingProperty
             = new JCheckBox(TimeCalcProperty.SPEED_FLOATING.getKey());
-
+    //
+    private final JCheckBox fuelVisibleProperty
+            = new JCheckBox(TimeCalcProperty.FUEL_VISIBLE.getKey());
+    private final JTextField fuelTypeProperty =
+            new JTextField(TimeCalcProperty.FUEL_TYPE.getKey());
+    private final JCheckBox fuelHiddenProperty
+            = new JCheckBox(TimeCalcProperty.FUEL_HIDDEN.getKey());
     //
     public final JCheckBox clockHiddenProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HIDDEN.getKey());
@@ -455,6 +461,7 @@ public class ConfigWindow extends TWindow {
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
+                fuelVisibleProperty.setSelected(enable);
 //                clockHiddenProperty.setSelected(!enable);
 //                batteryMinuteHiddenProperty.setSelected(!enable);
 //                batteryHourHiddenProperty.setSelected(!enable);
@@ -525,9 +532,7 @@ public class ConfigWindow extends TWindow {
                 batteryBlinkingIfCriticalLowVisibleProperty,
                 batteryQuarterIconVisibleProperty,
                 //
-                smileysVisibleProperty,
-                smileysVisibleOnlyIfMouseMovingOverProperty,
-                smileysColoredProperty,
+                smileysVisibleProperty,smileysVisibleOnlyIfMouseMovingOverProperty,smileysColoredProperty,
                 testEnabledProperty,
                 testClockCustomYearProperty,
                 testClockCustomMonthProperty,
@@ -539,33 +544,15 @@ public class ConfigWindow extends TWindow {
                 jokesVisibleProperty,
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
-                squareVisibleProperty,
-                squareHiddenProperty,
-                squareTypeProperty,
-                circleVisibleProperty,
-                circleHiddenProperty,
-                circleTypeProperty,
-                dotVisibleProperty,
-                dotHiddenProperty,
-                dotTypeProperty,
-                swingVisibleProperty,
-                swingHiddenProperty,
-                swingTypeProperty,
-                swingQuarterIconVisibleProperty,
-                walkingHumanVisibleProperty,
-                walkingHumanHiddenProperty,
-                walkingHumanTypeProperty,
-                lifeVisibleProperty,
-                lifeHiddenProperty,
-                lifeTypeProperty,
-                lifeBirthDateProperty,
-                moneyVisibleProperty,
-                moneyHiddenProperty,
-                moneyTypeProperty,
-                moneyPerMonthProperty,
-                moneyCurrencyProperty,
-                weatherVisibleProperty,
-                weatherHiddenProperty,
+                squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
+                circleVisibleProperty,circleHiddenProperty,circleTypeProperty,
+                dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
+                fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,
+                swingVisibleProperty,swingHiddenProperty,swingTypeProperty,swingQuarterIconVisibleProperty,
+                walkingHumanVisibleProperty,walkingHumanHiddenProperty,walkingHumanTypeProperty,
+                lifeVisibleProperty,lifeHiddenProperty,lifeTypeProperty,lifeBirthDateProperty,
+                moneyVisibleProperty,moneyHiddenProperty,moneyTypeProperty,moneyPerMonthProperty,moneyCurrencyProperty,
+                weatherVisibleProperty,weatherHiddenProperty,
                 mainWindowCustomTitleProperty,
                 profileNameProperty,
                 activityNeededFlagsProperty,

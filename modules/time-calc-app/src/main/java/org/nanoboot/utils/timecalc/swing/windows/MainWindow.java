@@ -37,6 +37,7 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
+import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressFuelGauge;
 import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressWeather;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
@@ -110,6 +111,7 @@ public class MainWindow extends TWindow {
     private final ProgressLife progressLife;
     private final ProgressMoney progressMoney;
     private final ProgressWeather progressWeather;
+    private final ProgressFuelGauge progressFuelGauge;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -409,9 +411,20 @@ public class MainWindow extends TWindow {
         progressDot.setBounds(progressWeather.getX() + progressWeather.getWidth() + SwingUtils.MARGIN, progressWeather.getY(),
                 100, 100);
 
-        progressDot.visibleProperty
-                .bindTo(timeCalcConfiguration.weatherVisibleProperty);
         add(progressDot);
+
+        this.progressFuelGauge = new ProgressFuelGauge();
+        progressFuelGauge.setBounds(progressDot.getX() + progressDot.getWidth() + SwingUtils.MARGIN, progressDot.getY(),
+                100, 100);
+
+        progressFuelGauge.visibleProperty
+                .bindTo(timeCalcConfiguration.fuelVisibleProperty);
+        progressFuelGauge.typeProperty
+                .bindTo(timeCalcConfiguration.fuelTypeProperty);
+        progressFuelGauge.hiddenProperty
+                .bindTo(timeCalcConfiguration.fuelHiddenProperty);
+
+        add(progressFuelGauge);
 
         {
             progressSquare.typeProperty
@@ -1274,6 +1287,7 @@ public class MainWindow extends TWindow {
         progressLife.setProgress(progress);
         progressMoney.setProgress(progress);
         progressDot.setProgress(progress);
+        progressFuelGauge.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);
