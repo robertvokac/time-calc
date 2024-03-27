@@ -440,7 +440,7 @@ public class WeatherForecast {
         sb.append(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(heatOrColdWave)).append('\t');
         sb.append(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(startCelsius)).append('\t');
         sb.append(NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES.format(endCelsius));
-        return sb.toString();
+        return sb.toString().replace(",", ".");
     }
 
     public WeatherForecast fromCsv(String csv) {
