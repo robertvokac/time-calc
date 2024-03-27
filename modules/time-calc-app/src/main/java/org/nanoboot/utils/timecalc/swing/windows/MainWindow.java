@@ -4,7 +4,7 @@ import org.nanoboot.utils.timecalc.app.CommandActionListener;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
-import org.nanoboot.utils.timecalc.app.TimeCalcKeyAdapter;
+import org.nanoboot.utils.timecalc.swing.common.TimeCalcKeyAdapter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Progress;

@@ -1,5 +1,9 @@
-package org.nanoboot.utils.timecalc.app;
+package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.app.TimeCalcApp;
+import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
+import org.nanoboot.utils.timecalc.app.TimeCalcException;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
@@ -693,7 +697,18 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
                 break;
             }
+
             case KeyEvent.VK_SLASH: {
+                if (timeCalcConfiguration.testEnabledProperty.isDisabled()) {
+                    if (!Utils.askYesNo(null, "Do you really want to enable \"Test mode\"? If yes, then you will be allowed to set custom time.", "Enabling \"Test mode\"")) {
+                        break;
+                    }
+                }
+                timeCalcConfiguration.testEnabledProperty.flip();
+                Utils.showNotification((timeCalcConfiguration.testEnabledProperty.isEnabled() ? "Enabled" : "Disabled") + " \"Test mode\".");
+                break;
+            }
+            case KeyEvent.VK_O: {
                 if (timeCalcConfiguration.testEnabledProperty.isDisabled()) {
                     if (!Utils.askYesNo(null, "Do you really want to enable \"Test mode\"? If yes, then you will be allowed to set custom time.", "Enabling \"Test mode\"")) {
                         break;

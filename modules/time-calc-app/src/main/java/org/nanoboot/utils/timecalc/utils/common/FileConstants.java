@@ -19,6 +19,7 @@ public class FileConstants {
     public static final File DB_FILE =  new File(FileConstants.TC_DIRECTORY.getAbsolutePath() + "/" + "time-calc.sqlite3");
     public static final File CLIMATE_TXT = new File(TC_DIRECTORY, "climate.txt");
     public static final File WEATHER_CSV = new File(TC_DIRECTORY, "weather.csv");
+    public static final File BASIC_TXT = new File(TC_DIRECTORY, "basic.txt");
     private FileConstants() {
         //Not meant to be instantiated.
     }

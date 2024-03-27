@@ -6,6 +6,7 @@ import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
+import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 import org.nanoboot.utils.timecalc.utils.property.StringProperty;
 
 import javax.swing.JOptionPane;
@@ -33,6 +34,7 @@ public class TimeCalcApp {
             = new StringProperty("timeCalcApp.visibilityProperty",
                     Visibility.WEAKLY_COLORED.name());
     private long startNanoTime = 0l;
+    public ReadOnlyProperty<Boolean> allowOnlyBasicFeaturesProperty = new ReadOnlyProperty<>("allowOnlyBasicFeatures", false);
     
     @Getter
     private SqliteConnectionFactory sqliteConnectionFactory;
@@ -54,6 +56,9 @@ public class TimeCalcApp {
         initDB();
         } catch(Exception e) {
             e.printStackTrace();
+        }
+        if(FileConstants.BASIC_TXT.exists()) {
+            allowOnlyBasicFeaturesProperty.setValue(true);
         }
         
         while (true) {
