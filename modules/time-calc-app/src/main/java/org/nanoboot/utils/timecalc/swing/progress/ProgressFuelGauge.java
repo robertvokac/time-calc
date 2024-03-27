@@ -100,7 +100,13 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
             int endX2 = (int) (startX + length * Math.cos(angle));
             int endY2 = (int) (startY + length * Math.sin(angle));
 
+            if(mouseOver) {
+                brush.setColor(visibility.isStronglyColored() ? Color.BLUE
+                        : visibility.isWeaklyColored() ? Color.BLUE
+                        : Color.WHITE);
+            }
             brush.drawLine(startX, startY, endX2, endY2);
+            brush.setColor(Color.WHITE);
         //
         ((Graphics2D)brush).setStroke(new BasicStroke(1f));
         int length_ = (int) (ovalWidth * 1.5d);
@@ -131,6 +137,11 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
         tBrush.drawBorder(startX, startY, 5, length_ - 4, getAngle.apply(0.75d), 2f, brush.getColor());
         tBrush.drawBorder(startX, startY, 6, length_ - 7, getAngle.apply(1.d - 0.02d), 7f, brush.getColor());
         //
+        if(mouseOver) {
+            brush.setColor(visibility.isStronglyColored() ? Color.BLUE
+                    : visibility.isWeaklyColored() ? Color.BLUE
+                    : Color.WHITE);
+        }
         ((Graphics2D)brush).setStroke(new BasicStroke(3f));
         brush.drawLine(startX, startY, endX, endY);
         //
