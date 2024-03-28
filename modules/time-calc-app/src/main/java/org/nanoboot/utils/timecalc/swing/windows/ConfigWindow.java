@@ -966,7 +966,7 @@ public class ConfigWindow extends TWindow {
             index = 5;
         }
 
-        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.")) {
+        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.")) {
             index = 6;
         }
 
