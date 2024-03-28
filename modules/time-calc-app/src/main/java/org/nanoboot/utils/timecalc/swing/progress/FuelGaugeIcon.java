@@ -23,12 +23,12 @@ public class FuelGaugeIcon extends ImageIcon {
 
     private FuelGaugeIcon(boolean reserve) {
         this.reserve = reserve;
-        java.net.URL smileyUrl = getClass()
+        java.net.URL iconUrl = getClass()
                 .getResource("/fuel_gauge/fuel_gauge_icon_" + (reserve
                               ? "orange" : "white") + ".gif");
-        ImageIcon tmpIcon = new ImageIcon(smileyUrl);
+        ImageIcon tmpIcon = new ImageIcon(iconUrl);
         this.icon = new ImageIcon(tmpIcon.getImage()
-                .getScaledInstance(32, 132, Image.SCALE_SMOOTH));
+                .getScaledInstance(32, 32, Image.SCALE_SMOOTH));
     }
 
     public static FuelGaugeIcon getInstance(boolean reserve) {
