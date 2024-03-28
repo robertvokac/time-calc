@@ -93,6 +93,27 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
                 : Color.LIGHT_GRAY);
         brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
         brush.fillRect(1, 1, getWidth(), getHeight());
+
+        if (fuelIconVisibleProperty.isEnabled() && visibility == Visibility.STRONGLY_COLORED) {
+            if(this.orangeIcon == null) {
+                try {
+                    this.orangeIcon = ImageIO.read(getClass().getResource(
+                            FUEL_GAUGE_FUEL_GAUGE_ICON_ORANGE_PNG));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(this.darkGrayIcon == null) {
+                try {
+                    this.darkGrayIcon = ImageIO.read(getClass().getResource(
+                            FUEL_GAUGE_FUEL_GAUGE_ICON_DARK_GRAY_PNG));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            brush.drawImage(donePercent() <= 0.15d ? this.orangeIcon : this.darkGrayIcon, getWidth() - 32, getHeight() - 48, 32, 32, null);
+
+        }
         brush.setColor(visibility.isStronglyColored() ? BLACK2
                 : visibility.isWeaklyColored() ? Color.LIGHT_GRAY
                 : LIGHT_GRAY2);
@@ -175,27 +196,6 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
                 width_
         );
         brush.setColor(Color.WHITE);
-
-        if (fuelIconVisibleProperty.isEnabled()) {
-            if(this.orangeIcon == null) {
-                try {
-                    this.orangeIcon = ImageIO.read(getClass().getResource(
-                            FUEL_GAUGE_FUEL_GAUGE_ICON_ORANGE_PNG));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(this.darkGrayIcon == null) {
-                try {
-                    this.darkGrayIcon = ImageIO.read(getClass().getResource(
-                            FUEL_GAUGE_FUEL_GAUGE_ICON_DARK_GRAY_PNG));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            brush.drawImage(donePercent() <= 0.15d ? this.orangeIcon : this.darkGrayIcon, getWidth() - 32, getHeight() - 48, 32, 32, null);
-
-        }
 
         //tBrush.drawBorder(startX, startY, 10, length_ - 4 - 5, getAngle.apply(donePercent()), 3f, brush.getColor());
         this.setToolTipText(NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(donePercent() * 100d) + "%");
