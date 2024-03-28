@@ -241,6 +241,8 @@ public class ConfigWindow extends TWindow {
             new JTextField(TimeCalcProperty.FUEL_TYPE.getKey());
     private final JCheckBox fuelHiddenProperty
             = new JCheckBox(TimeCalcProperty.FUEL_HIDDEN.getKey());
+    private final JCheckBox fuelIconVisibleProperty
+            = new JCheckBox(TimeCalcProperty.FUEL_ICON_VISIBLE.getKey());
     //
     public final JCheckBox clockHiddenProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HIDDEN.getKey());
@@ -462,6 +464,7 @@ public class ConfigWindow extends TWindow {
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
                 fuelVisibleProperty.setSelected(enable);
+                fuelIconVisibleProperty.setSelected(enable);
 //                clockHiddenProperty.setSelected(!enable);
 //                batteryMinuteHiddenProperty.setSelected(!enable);
 //                batteryHourHiddenProperty.setSelected(!enable);
@@ -547,7 +550,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
-                fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,
+                fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
                 swingVisibleProperty,swingHiddenProperty,swingTypeProperty,swingQuarterIconVisibleProperty,
                 walkingHumanVisibleProperty,walkingHumanHiddenProperty,walkingHumanTypeProperty,
                 lifeVisibleProperty,lifeHiddenProperty,lifeTypeProperty,lifeBirthDateProperty,

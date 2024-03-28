@@ -423,6 +423,8 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.fuelTypeProperty);
         progressFuelGauge.hiddenProperty
                 .bindTo(timeCalcConfiguration.fuelHiddenProperty);
+        progressFuelGauge.fuelIconVisibleProperty
+                .bindTo(timeCalcConfiguration.fuelIconVisibleProperty);
 
         add(progressFuelGauge);
 

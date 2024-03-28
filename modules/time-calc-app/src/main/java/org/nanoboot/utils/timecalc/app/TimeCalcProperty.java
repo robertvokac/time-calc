@@ -95,6 +95,7 @@ public enum TimeCalcProperty {
     FUEL_VISIBLE("fuel.visible", "Fuel"),
     FUEL_TYPE("fuel.type", "Fuel : Type"),
     FUEL_HIDDEN("fuel.hidden", "Fuel : Hidden"),
+    FUEL_ICON_VISIBLE("fuel.icon.visible", "Fuel : Icon"),
     CIRCLE_VISIBLE("circle.visible", "Circle"),
     CIRCLE_TYPE("circle.type", "Circle : Type"),
     CIRCLE_HIDDEN("circle.hidden", "Circle : Hidden"),

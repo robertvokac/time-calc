@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
+import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.Brush;
@@ -9,8 +10,10 @@ import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.Timer;
 import java.awt.BasicStroke;
@@ -33,6 +36,13 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
     public static final Color BLACK2 = new Color(64, 64,64);
     public static final Color LIGHT_GRAY2 = new Color(160,160,160);
 
+
+    protected JLabel fuelIconOrange = null;
+    protected JLabel fuelIconWhite = null;
+
+    public final BooleanProperty fuelIconVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.FUEL_ICON_VISIBLE.getKey());
+
     private List<JMenuItem> menuItems = null;
 
     public ProgressFuelGauge() {
@@ -42,6 +52,17 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
         setFocusable(false);
         setForeground(Color.GRAY);
         setBackground(MainWindow.BACKGROUND_COLOR);
+
+        this.fuelIconOrange = new JLabel(FuelGaugeIcon.getInstance(true));
+        this.fuelIconWhite = new JLabel(FuelGaugeIcon.getInstance(false));
+        fuelIconOrange.setVisible(false);
+        fuelIconWhite.setVisible(false);
+        add(fuelIconOrange);
+        add(fuelIconWhite);
+        this.setLayout(null);
+        fuelIconOrange.setBounds(1, 1, 40, 40);
+        fuelIconWhite.setBounds(fuelIconOrange.getBounds());
+
         this.typeProperty.setValue(WidgetType.DAY.name().toLowerCase(Locale.ROOT));
 
         new Timer(100, e -> {
@@ -155,6 +176,19 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
                 width_
         );
         brush.setColor(Color.WHITE);
+
+        if (fuelIconVisibleProperty.isEnabled()) {
+            if (donePercent() <= 0.15d) {
+                this.fuelIconOrange.setVisible(true);
+                this.fuelIconWhite.setVisible(false);
+            } else {
+                this.fuelIconOrange.setVisible(false);
+                this.fuelIconWhite.setVisible(true);
+            }
+        } else {
+            this.fuelIconOrange.setVisible(false);
+            this.fuelIconWhite.setVisible(false);
+        }
 
         //tBrush.drawBorder(startX, startY, 10, length_ - 4 - 5, getAngle.apply(donePercent()), 3f, brush.getColor());
         this.setToolTipText(NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(donePercent() * 100d) + "%");

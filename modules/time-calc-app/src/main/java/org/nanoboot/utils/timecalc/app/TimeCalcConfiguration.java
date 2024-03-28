@@ -197,6 +197,8 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(TimeCalcProperty.FUEL_HIDDEN.getKey());
     public final StringProperty fuelTypeProperty
             = new StringProperty(TimeCalcProperty.FUEL_TYPE.getKey());
+    public final BooleanProperty fuelIconVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.FUEL_ICON_VISIBLE.getKey());
     public final BooleanProperty circleVisibleProperty
             = new BooleanProperty(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     public final BooleanProperty circleHiddenProperty
@@ -328,6 +330,7 @@ public class TimeCalcConfiguration {
             circleVisibleProperty,circleTypeProperty,
             dotVisibleProperty,dotTypeProperty,
             fuelVisibleProperty, fuelTypeProperty, fuelHiddenProperty,
+                fuelIconVisibleProperty,
             swingVisibleProperty,
             swingTypeProperty,
             swingQuarterIconVisibleProperty,
