@@ -10,9 +10,11 @@ import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
+import org.nanoboot.utils.timecalc.utils.common.ProgressSmiley;
 import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
 
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.Timer;
@@ -21,7 +23,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -35,15 +40,17 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
 
     public static final Color BLACK2 = new Color(64, 64,64);
     public static final Color LIGHT_GRAY2 = new Color(160,160,160);
-
-
-    protected JLabel fuelIconOrange = null;
-    protected JLabel fuelIconWhite = null;
+    public static final String FUEL_GAUGE_FUEL_GAUGE_ICON_ORANGE_PNG =
+            "/fuel_gauge/fuel_gauge_icon_orange.png";
+    public static final String FUEL_GAUGE_FUEL_GAUGE_ICON_DARK_GRAY_PNG =
+            "/fuel_gauge/fuel_gauge_icon_dark_gray.png";
 
     public final BooleanProperty fuelIconVisibleProperty
             = new BooleanProperty(TimeCalcProperty.FUEL_ICON_VISIBLE.getKey());
 
     private List<JMenuItem> menuItems = null;
+    private Image orangeIcon;
+    private Image darkGrayIcon;
 
     public ProgressFuelGauge() {
 
@@ -53,15 +60,7 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
         setForeground(Color.GRAY);
         setBackground(MainWindow.BACKGROUND_COLOR);
 
-        this.fuelIconOrange = new JLabel(FuelGaugeIcon.getInstance(true));
-        this.fuelIconWhite = new JLabel(FuelGaugeIcon.getInstance(false));
-        fuelIconOrange.setVisible(false);
-        fuelIconWhite.setVisible(false);
-        add(fuelIconOrange);
-        add(fuelIconWhite);
         this.setLayout(null);
-        fuelIconOrange.setBounds(1, 1, 40, 40);
-        fuelIconWhite.setBounds(fuelIconOrange.getBounds());
 
         this.typeProperty.setValue(WidgetType.DAY.name().toLowerCase(Locale.ROOT));
 
@@ -178,16 +177,24 @@ public class ProgressFuelGauge extends Widget implements GetProperty {
         brush.setColor(Color.WHITE);
 
         if (fuelIconVisibleProperty.isEnabled()) {
-            if (donePercent() <= 0.15d) {
-                this.fuelIconOrange.setVisible(true);
-                this.fuelIconWhite.setVisible(false);
-            } else {
-                this.fuelIconOrange.setVisible(false);
-                this.fuelIconWhite.setVisible(true);
+            if(this.orangeIcon == null) {
+                try {
+                    this.orangeIcon = ImageIO.read(getClass().getResource(
+                            FUEL_GAUGE_FUEL_GAUGE_ICON_ORANGE_PNG));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            this.fuelIconOrange.setVisible(false);
-            this.fuelIconWhite.setVisible(false);
+            if(this.darkGrayIcon == null) {
+                try {
+                    this.darkGrayIcon = ImageIO.read(getClass().getResource(
+                            FUEL_GAUGE_FUEL_GAUGE_ICON_DARK_GRAY_PNG));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            brush.drawImage(donePercent() <= 0.15d ? this.orangeIcon : this.darkGrayIcon, getWidth() - 32, getHeight() - 48, 32, 32, null);
+
         }
 
         //tBrush.drawBorder(startX, startY, 10, length_ - 4 - 5, getAngle.apply(donePercent()), 3f, brush.getColor());
