@@ -203,6 +203,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * SHIFT + C - Increase or decrease of time is change by 1 hour
 * CTRL + C - Increase or decrease of time is change by 1 minute
 * CTRL + E - Save arrival, overtime, working time, pause time and note
+* O - Disable many features, let enable only the basic features of "Time Calc" application.
 
 ## Command button
 

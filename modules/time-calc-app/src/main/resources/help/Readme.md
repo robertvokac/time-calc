@@ -26,11 +26,17 @@ Time Calc is inspired by this document: [report.ods](https://code.nanoboot.org/n
 
 !["Config" window - battery](images/config_window_battery.jpg)
 
+!["Config" window - life](images/config_window_life.jpg)
+
+!["Config" window - money](images/config_window_money.jpg)
+
 !["Config" window - smileys](images/config_window_smileys.jpg)
+
+!["Config" window - progress](images/config_window_progress.jpg)
 
 !["Config" window - test](images/config_window_test.jpg)
 
-!["Config" window - misc](images/config_window_misc.jpg)
+!["Config" window - other](images/config_window_other.jpg)
 
 ## Usage
 
@@ -186,7 +192,6 @@ Smileys can be colored or white-black (can be set in configuration)
 * COMMA - Switch between foreward and backward speed
 * T - Enable or disable floating speed
 * D - Reset custom time values to the real time
-* O - Disable many features, let enable only the basic features of "Time Calc" application.
 * SHIFT + A - Increase arrival time
 * CTRL + A - Decrease arrival time
 * SHIFT + O - Increase overtime
@@ -198,6 +203,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * SHIFT + C - Increase or decrease of time is change by 1 hour
 * CTRL + C - Increase or decrease of time is change by 1 minute
 * CTRL + E - Save arrival, overtime, working time, pause time and note
+* O - Disable many features, let enable only the basic features of "Time Calc" application.
 
 ## Command button
 
