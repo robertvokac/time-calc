@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import javax.swing.JMenuItem;
+import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.HIGH_STRONGLY_COLORED;
 import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.HIGH_WEAKLY_COLORED;
 import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.LIGHT_RED;
@@ -471,7 +472,7 @@ public class Widget extends JPanel implements
             y = y - 2;
         }
         if(paintBody) {
-            brush.drawString(BODY, x - 5, y + 26);
+            brush.drawString(BODY, x - 5 + (TimeCalcApp.IS_RUNNING_ON_LINUX && getClass() == ProgressSwing.class ? - 4 : 0), y + 26);
             brush.drawString(LEGS, x - 5, y + 36);
         }
     }

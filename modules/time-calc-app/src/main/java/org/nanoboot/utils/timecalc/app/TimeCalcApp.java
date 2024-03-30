@@ -41,6 +41,7 @@ public class TimeCalcApp {
     @Getter
     private SqliteConnectionFactory sqliteConnectionFactory;
 
+    public static final boolean IS_RUNNING_ON_LINUX = System.getProperty("os.name").equals("Linux");
     public void start(String[] args) throws IOException {
         File dbFile = new File(FileConstants.TC_DIRECTORY.getAbsolutePath() + "/" + "time-calc.sqlite3");
         File dbFileBackup = new File(dbFile.getAbsolutePath() + ".backup." + DateFormats.DATE_TIME_FORMATTER_SHORT.format(new Date()).substring(0, 10) + ".sqlite3");

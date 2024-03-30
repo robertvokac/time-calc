@@ -397,7 +397,7 @@ public class ConfigWindow extends TWindow {
 
             button.addActionListener(e -> {
                 visibilityDefaultProperty
-                        .setSelectedItem(Visibility.GRAY.name());
+                        .setSelectedItem(enable ? Visibility.STRONGLY_COLORED.name() : Visibility.GRAY.name());
                 clockVisibleProperty.setSelected(true);
                 clockHandsHourVisibleProperty.setSelected(enable);
                 clockHandsMinuteVisibleProperty.setSelected(enable);
