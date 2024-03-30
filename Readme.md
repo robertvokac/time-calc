@@ -26,11 +26,17 @@ Time Calc is inspired by this document: [report.ods](https://code.nanoboot.org/n
 
 !["Config" window - battery](images/config_window_battery.jpg)
 
+!["Config" window - life](images/config_window_life.jpg)
+
+!["Config" window - money](images/config_window_money.jpg)
+
 !["Config" window - smileys](images/config_window_smileys.jpg)
+
+!["Config" window - progress](images/config_window_progress.jpg)
 
 !["Config" window - test](images/config_window_test.jpg)
 
-!["Config" window - misc](images/config_window_misc.jpg)
+!["Config" window - other](images/config_window_other.jpg)
 
 ## Usage
 
