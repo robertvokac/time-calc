@@ -74,7 +74,7 @@ Current profile is stored here.
 
 ### ./tc/time-calc-profiles.txt
 
-Optional assignments of profiles to numbers is stored here.
+Optional assignments of profiles to numbers are stored here.
 
 ## Features
 
