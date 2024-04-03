@@ -339,9 +339,12 @@ public class Widget extends JPanel implements
         boolean isMoney = getClass() == ProgressMoney.class;
         if (isLife || isMoney || typeProperty.getValue().equals(WidgetType.PRESENTATION.name().toLowerCase())) {
             brush.setColor(visibility.isStronglyColored() ? Color.BLUE : Color.GRAY);
-//            if(visibility.isStronglyColored() && (getClass() == ProgressFuelGauge.class || getClass() == ProgressDot.class)) {
-//                brush.setColor(Color.BLUE);
-//            }
+            if(visibility.isStronglyColored() && (getClass() == ProgressFuelGauge.class)) {
+                brush.setColor(Color.GRAY);
+            }
+            if(visibility.isWeaklyColored() && (getClass() == ProgressFuelGauge.class)) {
+                brush.setColor(Color.LIGHT_GRAY);
+            }
             brush.setFont(FONT);
             brush.drawString(progress.getWidgetType(WidgetType.valueOf(typeProperty.getValue().toUpperCase())).name(),
                     (int) (getWidth() * 0.5d - 20d), 15);
