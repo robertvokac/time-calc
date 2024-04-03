@@ -96,10 +96,10 @@ public class ProgressLife extends Widget implements GetProperty {
             //            }
             brush.setFont(SwingUtils.MEDIUM_MONOSPACE_FONT);
 
-            brush.drawString(date, SwingUtils.MARGIN, SwingUtils.MARGIN + 5);
+            brush.drawString(date, SwingUtils.MARGIN, SwingUtils.MARGIN + 16);
             brush.drawString(time, SwingUtils.MARGIN,
-                    (int) (2.5 * SwingUtils.MARGIN) + 5);
-            brush.drawString(typeProperty.getValue(), SwingUtils.MARGIN, 4 * SwingUtils.MARGIN + 5);
+                    (int) (2.5 * SwingUtils.MARGIN) + 22);
+
 
         }
     }

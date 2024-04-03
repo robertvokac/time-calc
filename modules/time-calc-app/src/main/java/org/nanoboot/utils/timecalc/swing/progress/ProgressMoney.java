@@ -6,7 +6,6 @@ import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
-import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.NumberFormats;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 import org.nanoboot.utils.timecalc.utils.property.Property;
@@ -17,8 +16,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.text.NumberFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -69,14 +66,16 @@ public class ProgressMoney extends Widget implements GetProperty {
             boolean isWeekend = progress.isWeekend();
             double perDay = perMonth / workDaysInMonth;
             double value = 0;
-            switch(WidgetType.valueOf(this.typeProperty.getValue().toUpperCase(
-                    Locale.ROOT))) {
-                case MINUTE: value = isWeekend ? 0d : perDay / 8d / 60d * progress.get(WidgetType.MINUTE);break;
-                case HOUR: value = isWeekend ? 0d : perDay / 8d * progress.get(WidgetType.HOUR);break;
-                case DAY: value = isWeekend ? 0d : perDay * progress.get(WidgetType.DAY);break;
-                case WEEK: value = perDay * 5d * progress.get(WidgetType.WEEK);break;
-                case MONTH: value = perMonth * progress.get(WidgetType.MONTH);break;
-                case YEAR: value = perMonth * 12 * progress.get(WidgetType.YEAR);break;
+            WidgetType widgetType = WidgetType.valueOf(this.typeProperty.getValue().toUpperCase(
+                    Locale.ROOT));
+            widgetType = progress.getWidgetType(widgetType);
+            switch(widgetType) {
+                case MINUTE: value = isWeekend ? 0d : perDay / 8d / 60d * progress.getDonePercent(WidgetType.MINUTE);break;
+                case HOUR: value = isWeekend ? 0d : perDay / 8d * progress.getDonePercent(WidgetType.HOUR);break;
+                case DAY: value = isWeekend ? 0d : perDay * progress.getDonePercent(WidgetType.DAY);break;
+                case WEEK: value = perDay * 5d * progress.getDonePercent(WidgetType.WEEK);break;
+                case MONTH: value = perMonth * progress.getDonePercent(WidgetType.MONTH);break;
+                case YEAR: value = perMonth * 12 * progress.getDonePercent(WidgetType.YEAR);break;
             }
 
             Visibility visibility
@@ -89,8 +88,7 @@ public class ProgressMoney extends Widget implements GetProperty {
 
             NumberFormat formatter = value >= 10000d ? NumberFormats.FORMATTER_TWO_DECIMAL_PLACES : NumberFormats.FORMATTER_FIVE_DECIMAL_PLACES;
             String valueFinal = formatter.format(value) + " " + this.currencyProperty.getValue();
-            brush.drawString(valueFinal, SwingUtils.MARGIN, SwingUtils.MARGIN + 10);
-            brush.drawString(typeProperty.getValue(), SwingUtils.MARGIN, SwingUtils.MARGIN + 25);
+            brush.drawString(valueFinal, SwingUtils.MARGIN, SwingUtils.MARGIN + 20);
 
         }
     }

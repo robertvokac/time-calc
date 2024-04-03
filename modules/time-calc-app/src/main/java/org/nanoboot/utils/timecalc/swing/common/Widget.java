@@ -5,6 +5,10 @@ import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
@@ -27,6 +31,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -60,6 +65,7 @@ public class Widget extends JPanel implements
     public static final Color MINIMIZE_BUTTON_BACKGROUND_COLOR_MOUSE_OVER_CLOSE_ICON = new Color(
             126, 179, 227);
     private static final Color VERY_LIGHT_GRAY = new Color(220, 220, 220);
+    private static final Font FONT = new Font("sans", Font.PLAIN, 12);
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -216,10 +222,10 @@ public class Widget extends JPanel implements
     //    }
     public final void setProgress(Progress newProgress) {
 
-        double oldDonePercent = this.progress == null ? 0 : this.progress.get(WidgetType.DAY);
+        double oldDonePercent = this.progress == null ? 0 : this.progress.getDonePercent(WidgetType.DAY);
         int oldDonePercentInt1000Mil = (int) (oldDonePercent * 1000000000);
 
-        int newDonePercentInt1000Mil = (int) (newProgress.get(WidgetType.DAY) * 1000000000);
+        int newDonePercentInt1000Mil = (int) (newProgress.getDonePercent(WidgetType.DAY) * 1000000000);
         if (newDonePercentInt1000Mil != oldDonePercentInt1000Mil) {
             lastUpdate = System.nanoTime();
         }
@@ -228,10 +234,38 @@ public class Widget extends JPanel implements
 
     protected double donePercent() {
         if(progress == null) {
-            return 0;
+            return 0d;
         }
-        return progress.get(WidgetType.valueOf(typeProperty.getValue().toUpperCase(
+        if(typeProperty.getValue().equals(WidgetType.PRESENTATION.name())) {
+            long currentTime = new Date().getTime() / 1000l;
+            long l = currentTime % 30;
+            if (l >= 0 && l < 5) {
+                return getDonePercentForWidgetType(WidgetType.MINUTE);
+            }
+            if (l >= 5 && l < 10) {
+                return getDonePercentForWidgetType(WidgetType.HOUR);
+            }
+            if (l >= 10 && l < 15) {
+                return getDonePercentForWidgetType(WidgetType.DAY);
+            }
+            if (l >= 15 && l < 20) {
+                return getDonePercentForWidgetType(WidgetType.WEEK);
+            }
+            if (l >= 20 && l < 25) {
+                return getDonePercentForWidgetType(WidgetType.MONTH);
+            }
+            if (l >= 25 && l < 30) {
+                return getDonePercentForWidgetType(WidgetType.YEAR);
+            }
+            return getDonePercentForWidgetType(WidgetType.DAY);
+        }
+        return getDonePercentForWidgetType(WidgetType.valueOf(typeProperty.getValue().toUpperCase(
                 Locale.ROOT)));
+    }
+
+    private double getDonePercentForWidgetType(WidgetType widgetType) {
+        return progress
+                .getDonePercent(widgetType);
     }
 
     public void setBounds(int x, int y, int side) {
@@ -300,6 +334,18 @@ public class Widget extends JPanel implements
             }
             brush.drawRect(1, 1, getWidth() - 2, getHeight() - 2);
             brush.setColor(currentColor);
+        }
+        boolean isLife = getClass() == ProgressLife.class;
+        boolean isMoney = getClass() == ProgressMoney.class;
+        if (isLife || isMoney || typeProperty.getValue().equals(WidgetType.PRESENTATION.name().toLowerCase())) {
+            brush.setColor(visibility.isStronglyColored() ? Color.BLUE : Color.GRAY);
+//            if(visibility.isStronglyColored() && (getClass() == ProgressFuelGauge.class || getClass() == ProgressDot.class)) {
+//                brush.setColor(Color.BLUE);
+//            }
+            brush.setFont(FONT);
+            brush.drawString(progress.getWidgetType(WidgetType.valueOf(typeProperty.getValue().toUpperCase())).name(),
+                    (int) (getWidth() * 0.5d - 20d), 15);
+
         }
     }
 

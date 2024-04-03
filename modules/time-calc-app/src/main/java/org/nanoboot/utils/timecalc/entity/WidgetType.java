@@ -7,7 +7,7 @@ import org.nanoboot.utils.timecalc.app.TimeCalcException;
  * @since 21.03.2024
  */
 public enum WidgetType {
-    MINUTE, HOUR, DAY, WEEK, MONTH, YEAR;
+    MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, PRESENTATION;
     public int getIndex() {
         int i = 0;
         for(WidgetType wt:WidgetType.values()) {
