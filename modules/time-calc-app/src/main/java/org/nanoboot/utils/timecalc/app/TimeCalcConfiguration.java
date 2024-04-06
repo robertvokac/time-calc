@@ -273,6 +273,8 @@ public class TimeCalcConfiguration {
             .getKey(), false);
     public final BooleanProperty speedFloatingProperty = new BooleanProperty(TimeCalcProperty.SPEED_FLOATING
             .getKey(), false);
+    public final BooleanProperty typeVisibleProperty = new BooleanProperty(TimeCalcProperty.TYPE_VISIBLE
+            .getKey(), false);
 
     //
     private final Map<TimeCalcProperty, Property> mapOfProperties
@@ -350,6 +352,7 @@ public class TimeCalcConfiguration {
             speedProperty,
             speedNegativeProperty,
             speedFloatingProperty,
+            typeVisibleProperty,
             clockHiddenProperty,
             batteryMinuteHiddenProperty,
             batteryHourHiddenProperty,

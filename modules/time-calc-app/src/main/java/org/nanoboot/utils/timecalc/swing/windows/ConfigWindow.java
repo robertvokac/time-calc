@@ -274,6 +274,8 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.WEATHER_HIDDEN.getKey());
     public final JCheckBox dotHiddenProperty
             = new JCheckBox(TimeCalcProperty.DOT_HIDDEN.getKey());
+    public final JCheckBox typeVisibleProperty
+            = new JCheckBox(TimeCalcProperty.TYPE_VISIBLE.getKey());
 
     //
     private final JCheckBox testEnabledProperty
@@ -465,6 +467,7 @@ public class ConfigWindow extends TWindow {
                 walkingHumanVisibleProperty.setSelected(enable);
                 fuelVisibleProperty.setSelected(enable);
                 fuelIconVisibleProperty.setSelected(enable);
+                typeVisibleProperty.setSelected(enable);
 //                clockHiddenProperty.setSelected(!enable);
 //                batteryMinuteHiddenProperty.setSelected(!enable);
 //                batteryHourHiddenProperty.setSelected(!enable);
@@ -562,6 +565,7 @@ public class ConfigWindow extends TWindow {
                 speedProperty,
                 speedNegativeProperty,
                 speedFloatingProperty,
+                typeVisibleProperty,
                 visibilityDefaultProperty,
                 visibilitySupportedColoredProperty));
         //

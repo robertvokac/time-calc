@@ -130,7 +130,8 @@ public enum TimeCalcProperty {
     ACTIVITY_NEEDED_FLAGS("activity.needed-flags", "Activity : Needed flags", String.class),
     SPEED("speed", "Speed", Integer.class),
     SPEED_NEGATIVE("speed.negative", "Speed : Negative", Integer.class),
-    SPEED_FLOATING("speed.floating", "Speed : Floating");
+    SPEED_FLOATING("speed.floating", "Speed : Floating"),
+    TYPE_VISIBLE("type.visible", "Type : Visible");
 
     @Getter
     private final String key;

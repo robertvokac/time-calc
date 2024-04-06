@@ -791,6 +791,7 @@ public class MainWindow extends TWindow {
                             .bindTo(timeCalcConfiguration.smileysVisibleOnlyIfMouseMovingOverProperty);
                     widget.smileysColoredProperty
                             .bindTo(timeCalcConfiguration.smileysColoredProperty);
+                    widget.typeVisibleProperty.bindTo(timeCalcConfiguration.typeVisibleProperty);
                 }
                 );
         setSize(progressSquare.getX() + progressSquare.getWidth()
