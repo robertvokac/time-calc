@@ -95,10 +95,12 @@ public class DayPanel extends JPanel {
 
         JButton reviewButton = new JButton("Copy all Total comments to clipboard");
         JButton statusButton = new JButton("Status");
+        JButton addFlagToAllActivitiesButton = new JButton("Add flag to all activities");
         buttons.add(newButton);
         buttons.add(pasteButton);
         buttons.add(reviewButton);
         buttons.add(statusButton);
+        buttons.add(addFlagToAllActivitiesButton);
         add(buttons);
 
         this.scrollPane
@@ -208,8 +210,36 @@ public class DayPanel extends JPanel {
             Utils.showNotification("Current status: done=" + NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(doneHours) + "h, todo="+ NumberFormats.FORMATTER_TWO_DECIMAL_PLACES.format(todoHours));
 
         });
+        addFlagToAllActivitiesButton.addActionListener(e -> {
+            String newFlag = (String) JOptionPane.showInputDialog(
+                    null,
+                    "Select new flag",
+                    "New flag",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    ""
+            );
+            if(newFlag != null) {
+                getActivityPanels().forEach(a->
+                {
+                    a.getActivity().addFlag(newFlag);
+                    a.flags.setText(a.getActivity().getFlags());
+                    activityRepository.update(a.getActivity());
+                }
+                );
+                revalidate();
+            }
+        });
         sortActivityPanels();
     }
+    public List<ActivityPanel> getActivityPanels() {
+        return Arrays
+                .stream(panelInsideScrollPane.getComponents())
+                .filter(c-> c instanceof ActivityPanel)
+                .map(ap->((ActivityPanel) ap)).collect(Collectors.toList());
+    }
+
     public List<Activity> getActivities() {
         return Arrays
                 .stream(panelInsideScrollPane.getComponents())

@@ -104,7 +104,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
 
     private final TTextField spentTime;
 
-    private final TTextField flags;
+    public final TTextField flags;
 
     @Getter(AccessLevel.PRIVATE)
     private final TTextField subject;
