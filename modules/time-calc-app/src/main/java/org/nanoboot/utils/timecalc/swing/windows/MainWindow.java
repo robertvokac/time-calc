@@ -27,6 +27,7 @@ import org.nanoboot.utils.timecalc.swing.controls.TLabel;
 import org.nanoboot.utils.timecalc.swing.controls.TTextField;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressRotation;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.DayBattery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.HourBattery;
@@ -120,6 +121,7 @@ public class MainWindow extends TWindow {
     private final ProgressMoney progressMoney;
     private final ProgressWeather progressWeather;
     private final ProgressFuelGauge progressFuelGauge;
+    private final ProgressRotation progressRotation;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -435,6 +437,20 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.fuelIconVisibleProperty);
 
         add(progressFuelGauge);
+        //
+        this.progressRotation = new ProgressRotation();
+        progressRotation.setBounds(progressFuelGauge.getX() + progressFuelGauge.getWidth() + SwingUtils.MARGIN, progressFuelGauge.getY(),
+                100, 100);
+
+        progressRotation.visibleProperty
+                .bindTo(timeCalcConfiguration.fuelVisibleProperty);
+        progressRotation.typeProperty
+                .bindTo(timeCalcConfiguration.fuelTypeProperty);
+        progressRotation.hiddenProperty
+                .bindTo(timeCalcConfiguration.fuelHiddenProperty);
+
+        add(progressRotation);
+        //
 
         {
             progressSquare.typeProperty
@@ -1310,6 +1326,7 @@ public class MainWindow extends TWindow {
         progressMoney.setProgress(progress);
         progressDot.setProgress(progress);
         progressFuelGauge.setProgress(progress);
+        progressRotation.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);
