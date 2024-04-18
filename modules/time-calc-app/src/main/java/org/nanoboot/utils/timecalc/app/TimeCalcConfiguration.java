@@ -211,6 +211,11 @@ public class TimeCalcConfiguration {
             = new BooleanProperty(TimeCalcProperty.CIRCLE_HIDDEN.getKey());
     public final StringProperty circleTypeProperty
             = new StringProperty(TimeCalcProperty.CIRCLE_TYPE.getKey());
+    public final BooleanProperty circleInnerCircleVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.CIRCLE_INNER_CIRCLE_VISIBLE.getKey());
+    public final BooleanProperty circleOuterCircleOnlyBorderProperty
+            = new BooleanProperty(TimeCalcProperty.CIRCLE_OUTER_CIRCLE_ONLY_BORDER.getKey());
+    //
     public final BooleanProperty walkingHumanVisibleProperty
             = new BooleanProperty(
                     TimeCalcProperty.WALKING_HUMAN_VISIBLE.getKey());
@@ -335,7 +340,7 @@ public class TimeCalcConfiguration {
             smileysVisibleOnlyIfMouseMovingOverProperty,
             smileysColoredProperty,
             squareVisibleProperty,squareTypeProperty,
-            circleVisibleProperty,circleTypeProperty,
+            circleVisibleProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleOnlyBorderProperty,
             dotVisibleProperty,dotTypeProperty,
             fuelVisibleProperty, fuelTypeProperty, fuelHiddenProperty,
                 fuelIconVisibleProperty,

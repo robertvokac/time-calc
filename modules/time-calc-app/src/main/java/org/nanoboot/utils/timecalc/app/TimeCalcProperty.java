@@ -102,6 +102,9 @@ public enum TimeCalcProperty {
     CIRCLE_VISIBLE("circle.visible", "Circle"),
     CIRCLE_TYPE("circle.type", "Circle : Type"),
     CIRCLE_HIDDEN("circle.hidden", "Circle : Hidden"),
+    CIRCLE_INNER_CIRCLE_VISIBLE("circle.inner-circle.visible", "Circle : Inner circle"),
+    CIRCLE_OUTER_CIRCLE_ONLY_BORDER("circle.outer-circle.only-border", "Circle : Outer circle : Only border"),
+    //
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
     WALKING_HUMAN_TYPE("walking-human.type", "Walking Human : Type"),
     WALKING_HUMAN_HIDDEN("walking-human.hidden", "Walking Human : Hidden"),

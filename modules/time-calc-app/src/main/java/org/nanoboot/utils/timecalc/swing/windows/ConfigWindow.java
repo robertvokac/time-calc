@@ -196,6 +196,10 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.CIRCLE_VISIBLE.getKey());
     private final JTextField circleTypeProperty
             = new JTextField(TimeCalcProperty.CIRCLE_TYPE.getKey());
+    private final JCheckBox circleInnerCircleVisibleProperty
+            = new JCheckBox(TimeCalcProperty.CIRCLE_INNER_CIRCLE_VISIBLE.getKey());
+    private final JCheckBox circleOuterCircleVisibleProperty
+            = new JCheckBox(TimeCalcProperty.CIRCLE_OUTER_CIRCLE_ONLY_BORDER.getKey());
     private final JCheckBox swingVisibleProperty
             = new JCheckBox(TimeCalcProperty.SWING_VISIBLE.getKey());
     private final JTextField swingTypeProperty
@@ -469,6 +473,8 @@ public class ConfigWindow extends TWindow {
                 }
                 weatherVisibleProperty.setSelected(enable);
                 circleVisibleProperty.setSelected(enable);
+                circleInnerCircleVisibleProperty.setSelected(enable);
+                circleOuterCircleVisibleProperty.setSelected(!enable);
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
@@ -559,7 +565,7 @@ public class ConfigWindow extends TWindow {
                 commandsVisibleProperty,
                 notificationsVisibleProperty,
                 squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
-                circleVisibleProperty,circleHiddenProperty,circleTypeProperty,
+                circleVisibleProperty,circleHiddenProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleVisibleProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
                 rotationVisibleProperty, rotationTypeProperty, rotationHiddenProperty,

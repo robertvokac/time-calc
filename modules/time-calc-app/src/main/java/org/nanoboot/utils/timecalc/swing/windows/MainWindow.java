@@ -461,6 +461,8 @@ public class MainWindow extends TWindow {
                     .bindTo(timeCalcConfiguration.dotVisibleProperty);
             progressCircle.typeProperty
                     .bindTo(timeCalcConfiguration.circleTypeProperty);
+            progressCircle.innerCircleVisibleProperty.bindTo(timeCalcConfiguration.circleInnerCircleVisibleProperty);
+            progressCircle.outerCircleOnlyBorderProperty.bindTo(timeCalcConfiguration.circleOuterCircleOnlyBorderProperty);
             walkingHumanProgress.typeProperty
                     .bindTo(timeCalcConfiguration.walkingHumanTypeProperty);
             progressSwing.typeProperty
