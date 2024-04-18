@@ -443,11 +443,11 @@ public class MainWindow extends TWindow {
                 100, 100);
 
         progressRotation.visibleProperty
-                .bindTo(timeCalcConfiguration.fuelVisibleProperty);
+                .bindTo(timeCalcConfiguration.rotationVisibleProperty);
         progressRotation.typeProperty
-                .bindTo(timeCalcConfiguration.fuelTypeProperty);
+                .bindTo(timeCalcConfiguration.rotationTypeProperty);
         progressRotation.hiddenProperty
-                .bindTo(timeCalcConfiguration.fuelHiddenProperty);
+                .bindTo(timeCalcConfiguration.rotationHiddenProperty);
 
         add(progressRotation);
         //

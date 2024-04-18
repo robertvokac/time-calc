@@ -113,7 +113,7 @@ public class ProgressRotation extends Widget {
         //
         angle = angle + 0.001d * donePercent() * 50d;
         if(angle > 1.0d) {
-            angle = 0.0d;
+            angle = angle - 1.0d;
         }
 
         drawHand(brush, side / 2 - 10, angle, 1.0f,

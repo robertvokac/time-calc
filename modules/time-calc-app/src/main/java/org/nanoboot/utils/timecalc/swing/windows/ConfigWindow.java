@@ -244,6 +244,13 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox fuelIconVisibleProperty
             = new JCheckBox(TimeCalcProperty.FUEL_ICON_VISIBLE.getKey());
     //
+    private final JCheckBox rotationVisibleProperty
+            = new JCheckBox(TimeCalcProperty.ROTATION_VISIBLE.getKey());
+    private final JTextField rotationTypeProperty =
+            new JTextField(TimeCalcProperty.ROTATION_TYPE.getKey());
+    private final JCheckBox rotationHiddenProperty
+            = new JCheckBox(TimeCalcProperty.ROTATION_HIDDEN.getKey());
+    //
     public final JCheckBox clockHiddenProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HIDDEN.getKey());
     public final JCheckBox batteryMinuteHiddenProperty
@@ -467,6 +474,7 @@ public class ConfigWindow extends TWindow {
                 walkingHumanVisibleProperty.setSelected(enable);
                 fuelVisibleProperty.setSelected(enable);
                 fuelIconVisibleProperty.setSelected(enable);
+                rotationVisibleProperty.setSelected(enable);
                 typeVisibleProperty.setSelected(enable);
 //                clockHiddenProperty.setSelected(!enable);
 //                batteryMinuteHiddenProperty.setSelected(!enable);
@@ -554,6 +562,7 @@ public class ConfigWindow extends TWindow {
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
+                rotationVisibleProperty, rotationTypeProperty, rotationHiddenProperty,
                 swingVisibleProperty,swingHiddenProperty,swingTypeProperty,swingQuarterIconVisibleProperty,
                 walkingHumanVisibleProperty,walkingHumanHiddenProperty,walkingHumanTypeProperty,
                 lifeVisibleProperty,lifeHiddenProperty,lifeTypeProperty,lifeBirthDateProperty,
@@ -970,7 +979,7 @@ public class ConfigWindow extends TWindow {
             index = 5;
         }
 
-        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.")) {
+        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.")  || key.startsWith("rotation.")) {
             index = 6;
         }
 
