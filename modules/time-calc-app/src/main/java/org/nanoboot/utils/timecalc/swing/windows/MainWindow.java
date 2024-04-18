@@ -27,6 +27,7 @@ import org.nanoboot.utils.timecalc.swing.controls.TLabel;
 import org.nanoboot.utils.timecalc.swing.controls.TTextField;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressBar;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressRotation;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.DayBattery;
@@ -122,6 +123,7 @@ public class MainWindow extends TWindow {
     private final ProgressWeather progressWeather;
     private final ProgressFuelGauge progressFuelGauge;
     private final ProgressRotation progressRotation;
+    private final ProgressBar progressBar;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -451,6 +453,21 @@ public class MainWindow extends TWindow {
 
         add(progressRotation);
         //
+        this.progressBar = new ProgressBar();
+        progressBar.setBounds(progressSwing.getX(), progressSwing.getY() + progressSwing.getHeight() + SwingUtils.MARGIN,
+                progressRotation.getX() + progressRotation.getWidth() - 2 * SwingUtils.MARGIN, 50);
+
+        progressBar.visibleProperty
+                .bindTo(timeCalcConfiguration.barVisibleProperty);
+        progressBar.typeProperty
+                .bindTo(timeCalcConfiguration.barTypeProperty);
+        progressBar.hiddenProperty
+                .bindTo(timeCalcConfiguration.barHiddenProperty);
+        progressBar.heightProperty
+                .bindTo(timeCalcConfiguration.barHeightProperty);
+
+        add(progressBar);
+        //
 
         {
             progressSquare.typeProperty
@@ -499,7 +516,7 @@ public class MainWindow extends TWindow {
             progressWeather.hiddenProperty.bindTo(timeCalcConfiguration.weatherHiddenProperty);
         }
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
-        arrivalTextFieldLabel.setBoundsFromTop(progressSwing, 3);
+        arrivalTextFieldLabel.setBoundsFromTop(progressBar, 3);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
         TButton arrivalIncreaseButton = new SmallTButton('+');
@@ -1089,7 +1106,7 @@ public class MainWindow extends TWindow {
                             long diff = now - Files.getLastModifiedTime(file.toPath()).toMillis();
                             int fileAgeInDays = (int) (diff / 1000 / 60 / 60 / 24);
                             System.out.println("Found backup file " + file.getName() + " with age: " + fileAgeInDays);
-                            if (fileAgeInDays > 14) {
+                            if (fileAgeInDays > 28) {
                                 file.delete();
                             }
 
@@ -1329,6 +1346,7 @@ public class MainWindow extends TWindow {
         progressDot.setProgress(progress);
         progressFuelGauge.setProgress(progress);
         progressRotation.setProgress(progress);
+        progressBar.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);

@@ -200,6 +200,16 @@ public class ConfigWindow extends TWindow {
             = new JCheckBox(TimeCalcProperty.CIRCLE_INNER_CIRCLE_VISIBLE.getKey());
     private final JCheckBox circleOuterCircleVisibleProperty
             = new JCheckBox(TimeCalcProperty.CIRCLE_OUTER_CIRCLE_ONLY_BORDER.getKey());
+    //
+    private final JCheckBox barVisibleProperty
+            = new JCheckBox(TimeCalcProperty.BAR_VISIBLE.getKey());
+    private final JTextField barTypeProperty
+            = new JTextField(TimeCalcProperty.BAR_TYPE.getKey());
+    private final JCheckBox barHiddenProperty
+            = new JCheckBox(TimeCalcProperty.BAR_HIDDEN.getKey());
+    private final JTextField barHeightProperty
+            = new JTextField(TimeCalcProperty.BAR_HEIGHT.getKey());
+    //
     private final JCheckBox swingVisibleProperty
             = new JCheckBox(TimeCalcProperty.SWING_VISIBLE.getKey());
     private final JTextField swingTypeProperty
@@ -475,6 +485,9 @@ public class ConfigWindow extends TWindow {
                 circleVisibleProperty.setSelected(enable);
                 circleInnerCircleVisibleProperty.setSelected(enable);
                 circleOuterCircleVisibleProperty.setSelected(!enable);
+                //
+                barVisibleProperty.setSelected(enable);
+                barHeightProperty.setText("50");
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
@@ -566,6 +579,7 @@ public class ConfigWindow extends TWindow {
                 notificationsVisibleProperty,
                 squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleVisibleProperty,
+                barVisibleProperty, barHiddenProperty, barTypeProperty, barHeightProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
                 rotationVisibleProperty, rotationTypeProperty, rotationHiddenProperty,
@@ -985,7 +999,7 @@ public class ConfigWindow extends TWindow {
             index = 5;
         }
 
-        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.")  || key.startsWith("rotation.")) {
+        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.")  || key.startsWith("rotation.")  || key.startsWith("bar.")) {
             index = 6;
         }
 

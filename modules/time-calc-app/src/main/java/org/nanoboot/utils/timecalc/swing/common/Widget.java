@@ -306,16 +306,21 @@ public class Widget extends JPanel implements
                 }
                 int row = 10;
                 int x = (int)(getWidth() > 100 ? (int) (getWidth() * 0.4) : (int) (getWidth() * 0.1));
-                brush.drawString("Show", x, row);
-                row = row + 20;
-                String[] nameArray = getHumanName().split(" ");
-                for(int i = 0; i< nameArray.length; i++) {
-                brush.drawString(
-                        nameArray[i],
-                        x
-                        , row);    
-                row = row + 12;
+                if(getHeight() <= 50) {
+                    brush.drawString("Show" + ' ' + getHumanName(), x, row);
+                } else {
+                    brush.drawString("Show", x, row);
+                    row = row + 20;
+                    String[] nameArray = getHumanName().split(" ");
+                    for(int i = 0; i< nameArray.length; i++) {
+                        brush.drawString(
+                                nameArray[i],
+                                x
+                                , row);
+                        row = row + 12;
+                    }
                 }
+
                 
             }
             //nothing to do
