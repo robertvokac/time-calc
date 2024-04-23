@@ -220,7 +220,7 @@ public class DayPanel extends JPanel {
                     null,
                     ""
             );
-            if(newFlag != null && !newFlag.isBlank()) {
+            if(newFlag != null && !newFlag.trim().isEmpty()) {
                 getActivityPanels().forEach(a->
                 {
                     a.getActivity().addFlag(newFlag);

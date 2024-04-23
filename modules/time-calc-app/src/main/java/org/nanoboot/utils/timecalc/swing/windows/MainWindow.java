@@ -117,6 +117,8 @@ public class MainWindow extends TWindow {
     private final TTextField departureTextField;
     private final TTextField elapsedTextField;
     private final TTextField remainingTextField;
+    private final TTextField elapsedWeekTextField;
+    private final TTextField remainingWeekTextField;
     private final TButton saveButton;
     private final ProgressLife progressLife;
     private final ProgressMoney progressMoney;
@@ -154,6 +156,8 @@ public class MainWindow extends TWindow {
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
+        this.elapsedWeekTextField = new TTextField("", 100);
+        this.remainingWeekTextField = new TTextField("", 100);
     }
 
     public MainWindow(TimeCalcApp timeCalcApp) {
@@ -608,7 +612,6 @@ public class MainWindow extends TWindow {
 
         elapsedTextField.setBoundsFromLeft(elapsedTextFieldLabel);
         elapsedTextField.setEditable(false);
-        elapsedTextField.setEditable(false);
         //
         TLabel remainingTextFieldLabel = new TLabel("Remaining:", 100);
         remainingTextFieldLabel.setBoundsFromLeft(elapsedTextField);
@@ -633,8 +636,38 @@ public class MainWindow extends TWindow {
         this.workingDayRepository = new WorkingDayRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
         this.activityRepository = new ActivityRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
 
+        ////////
+        TLabel weekLabel = new TLabel("Week:", 70);
+        weekLabel.setBoundsFromTop(departureTextFieldLabel);
+        TTextField field = new TTextField("");
+        field.setBoundsFromLeft(weekLabel);
+
+        field.setEditable(false);
+        field.setVisible(false);
         //
-        configButton.setBoundsFromTop(departureTextFieldLabel);
+
+        //
+        TLabel elapsedWeekTextFieldLabel = new TLabel("Elapsed:");
+        elapsedWeekTextFieldLabel.setBoundsFromLeft(field);
+
+        elapsedWeekTextField.setBoundsFromLeft(elapsedWeekTextFieldLabel);
+        elapsedWeekTextField.setEditable(false);
+        //
+        TLabel remainingWeekTextFieldLabel = new TLabel("Remaining:", 100);
+        remainingWeekTextFieldLabel.setBoundsFromLeft(elapsedWeekTextField);
+
+        remainingWeekTextField.setBoundsFromLeft(remainingWeekTextFieldLabel);
+        remainingWeekTextField.setEditable(false);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            add(weekLabel);
+            add(elapsedWeekTextFieldLabel);
+            add(elapsedWeekTextField);
+            add(remainingWeekTextFieldLabel);
+            add(remainingWeekTextField);
+        }
+        ////////
+        //
+        configButton.setBoundsFromTop(weekLabel);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
 
@@ -1263,8 +1296,39 @@ public class MainWindow extends TWindow {
 
         TTime timeRemains = TTime.computeTimeDiff(nowTime, endTime);
         TTime timeTotal = TTime.computeTimeDiff(startTime, endTime);
+
+        if(timeElapsed.toTotalMilliseconds() > 8.5 * 3600000) {
+            timeElapsed = new TTime(8,30);
+        }
+        if(timeRemains.toTotalMilliseconds() > 8.5 * 3600000) {
+            timeRemains = new TTime(8,30);
+        }
+        if(timeElapsed.toTotalMilliseconds() < 0) {
+            timeElapsed = new TTime(0, 0);
+        }
+        if(timeRemains.toTotalMilliseconds() < 0) {
+            timeRemains = new TTime(0, 0);
+        }
+
         String timeElapsedString = timeElapsed.toString();
         String timeRemainsString = timeRemains.toString();
+
+        int dayOfWeek = time.dayOfWeekProperty.getValue();
+
+        TTime timeWeekElapsed = dayOfWeek < 6 ? timeElapsed.cloneInstance() : TTime.ofMinutes(
+                (int) (5d * 8.5d * 60d));
+        TTime timeWeekRemains = dayOfWeek < 6 ? timeRemains.cloneInstance() : TTime.ofMinutes(0);
+
+        if(dayOfWeek < 6) {
+            if (dayOfWeek > 1) {
+                timeWeekElapsed = timeWeekElapsed.add(TTime.ofMinutes(
+                        (int) ((dayOfWeek - 1) * 8.5d * 60d)));
+            }
+            if (dayOfWeek < 5) {
+                timeWeekRemains = timeWeekRemains.add(TTime.ofMinutes(
+                        (int) ((5 - dayOfWeek) * 8.5d * 60d)));
+            }
+        }
 
         int secondsRemains = 60 - secondNow;
         int millisecondsRemains = 1000 - millisecondNow;
@@ -1272,10 +1336,13 @@ public class MainWindow extends TWindow {
                 .equals(timeRemainsString)) {
             remainingTextField.valueProperty.setValue(timeRemainsString);
         }
+        remainingWeekTextField.valueProperty.setValue(timeWeekRemains.toString());
+
         if (!elapsedTextField.valueProperty.getValue()
                 .equals(timeElapsedString)) {
             elapsedTextField.valueProperty.setValue(timeElapsedString);
         }
+        elapsedWeekTextField.valueProperty.setValue(timeWeekElapsed.toString());
         //            if (!elapsedTextField.valueProperty.getValue()
         //                    .equals(timeElapsed.remove(new TimeHM(0,1)).toString())) {
         //                String s = timeElapsed.remove(new TimeHM(0,1)).toString();
@@ -1393,7 +1460,7 @@ public class MainWindow extends TWindow {
             final int donePercentInt = (int) (Math.floor(progress.getDonePercent(WidgetType.DAY) * 100));
 
             int percentInt = donePercentInt;
-            if (/*donePercentInt % 5 == 0 &&*/ !alreadyShownPercents.contains(donePercentInt)) {
+            if (/*donePercentInt % 5 == 0 &&*/ !alreadyShownPercents.contains(donePercentInt) && timeCalcConfiguration.testEnabledProperty.isDisabled()) {
                 alreadyShownPercents.add(donePercentInt);
                 Toaster toasterManager = new Toaster();
                 Font font = new Font("sans", Font.PLAIN, 16);
