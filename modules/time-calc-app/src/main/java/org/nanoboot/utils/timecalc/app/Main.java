@@ -1,5 +1,7 @@
 package org.nanoboot.utils.timecalc.app;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 import java.io.IOException;
 
 /**
@@ -15,6 +17,7 @@ public class Main {
 //                f.delete();
 //            }
 //        }
+        FlatLightLaf.setup();
         if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
             ActivitiesMain.main(args);
         } else {
