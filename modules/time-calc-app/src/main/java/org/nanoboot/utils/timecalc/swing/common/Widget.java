@@ -240,7 +240,7 @@ public class Widget extends JPanel implements
         }
         if(typeProperty.getValue().equals(WidgetType.PRESENTATION.name())) {
             long currentTime = new Date().getTime() / 1000l;
-            long l = currentTime % 30;
+            long l = currentTime % 35;
             if (l >= 0 && l < 5) {
                 return getDonePercentForWidgetType(WidgetType.MINUTE);
             }
@@ -258,6 +258,9 @@ public class Widget extends JPanel implements
             }
             if (l >= 25 && l < 30) {
                 return getDonePercentForWidgetType(WidgetType.YEAR);
+            }
+            if (l >= 30 && l < 35) {
+                return getDonePercentForWidgetType(WidgetType.LIFE);
             }
             return getDonePercentForWidgetType(WidgetType.DAY);
         }

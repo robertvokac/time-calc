@@ -24,6 +24,7 @@ public class WidgetMenu extends JPopupMenu {
     private final JMenuItem typeWeekMenuItem;
     private final JMenuItem typeMonthMenuItem;
     private final JMenuItem typeYearMenuItem;
+    private final JMenuItem typeLifeMenuItem;
     private final JMenuItem typePresentationMenuItem;
     private final Widget widget;
     private WidgetType selectedType;
@@ -48,6 +49,7 @@ public class WidgetMenu extends JPopupMenu {
         this.typeWeekMenuItem = new JMenuItem(WidgetType.WEEK.name());
         this.typeMonthMenuItem = new JMenuItem(WidgetType.MONTH.name());
         this.typeYearMenuItem = new JMenuItem(WidgetType.YEAR.name());
+        this.typeLifeMenuItem = new JMenuItem(WidgetType.LIFE.name());
         this.typePresentationMenuItem = new JMenuItem(WidgetType.PRESENTATION.name());
         typeMenuItem.add(typeMinuteMenuItem);
         typeMenuItem.add(typeHourMenuItem);
@@ -55,6 +57,7 @@ public class WidgetMenu extends JPopupMenu {
         typeMenuItem.add(typeWeekMenuItem);
         typeMenuItem.add(typeMonthMenuItem);
         typeMenuItem.add(typeYearMenuItem);
+        typeMenuItem.add(typeLifeMenuItem);
         typeMenuItem.add(typePresentationMenuItem);
 
         BiConsumer<JMenuItem, WidgetType> typeActionCreator = (m,w) -> {
@@ -73,6 +76,7 @@ public class WidgetMenu extends JPopupMenu {
         typeActionCreator.accept(typeWeekMenuItem, WidgetType.WEEK);
         typeActionCreator.accept(typeMonthMenuItem, WidgetType.MONTH);
         typeActionCreator.accept(typeYearMenuItem, WidgetType.YEAR);
+        typeActionCreator.accept(typeLifeMenuItem, WidgetType.LIFE);
         typeActionCreator.accept(typePresentationMenuItem, WidgetType.PRESENTATION);
 
         //if(!aClass.getSimpleName().contains("Battery")) {
@@ -92,6 +96,7 @@ public class WidgetMenu extends JPopupMenu {
         this.typeWeekMenuItem.setText(WidgetType.WEEK.name());
         this.typeMonthMenuItem.setText(WidgetType.MONTH.name());
         this.typeYearMenuItem.setText(WidgetType.YEAR.name());
+        this.typeLifeMenuItem.setText(WidgetType.LIFE.name());
         this.typePresentationMenuItem.setText(WidgetType.PRESENTATION.name());
         switch (widgetType) {
             case MINUTE: typeMinuteMenuItem.setText(typeMinuteMenuItem.getText() + " (*)");break;
@@ -100,6 +105,7 @@ public class WidgetMenu extends JPopupMenu {
             case WEEK: typeWeekMenuItem.setText(typeWeekMenuItem.getText() + " (*)");break;
             case MONTH: typeMonthMenuItem.setText(typeMonthMenuItem.getText() + " (*)");break;
             case YEAR: typeYearMenuItem.setText(typeYearMenuItem.getText() + " (*)");break;
+            case LIFE: typeLifeMenuItem.setText(typeLifeMenuItem.getText() + " (*)");break;
             case PRESENTATION: typePresentationMenuItem.setText(typePresentationMenuItem.getText() + " (*)");break;
             default: throw new TimeCalcException("Unsupported WidgetType: " + widgetType);
         }

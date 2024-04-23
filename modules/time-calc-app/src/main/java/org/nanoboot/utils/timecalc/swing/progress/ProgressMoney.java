@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
 import org.nanoboot.utils.timecalc.app.GetProperty;
+import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
@@ -76,6 +77,7 @@ public class ProgressMoney extends Widget implements GetProperty {
                 case WEEK: value = perDay * 5d * progress.getDonePercent(WidgetType.WEEK);break;
                 case MONTH: value = perMonth * progress.getDonePercent(WidgetType.MONTH);break;
                 case YEAR: value = perMonth * 12 * progress.getDonePercent(WidgetType.YEAR);break;
+                case LIFE: value = perMonth * 12 * (Progress.RETIREMENT_AGE - Progress.STARTED_WORKING_AGE) * progress.getDonePercent(WidgetType.LIFE);break;
             }
 
             Visibility visibility

@@ -13,7 +13,7 @@ import java.util.Date;
  * @since 21.03.2024
  */
 public class Progress {
-    private final double[] array = new double[6];
+    private final double[] array = new double[7];
     @Getter
     @Setter
     private int workDaysInMonth;
@@ -30,7 +30,7 @@ public class Progress {
         if (type == WidgetType.PRESENTATION) {
 
             long currentTime = new Date().getTime() / 1000l;
-            long l = currentTime % 30;
+            long l = currentTime % 35;
             if (l >= 0 && l < 5) {
                 type = WidgetType.MINUTE;
             }
@@ -48,6 +48,9 @@ public class Progress {
             }
             if (l >= 25 && l < 30) {
                 type = WidgetType.YEAR;
+            }
+            if (l >= 30 && l < 35) {
+                type = WidgetType.LIFE;
             }
 
         }
@@ -139,6 +142,36 @@ public class Progress {
                                                         * monthProgress))
                    / totalCountOfDaysInAYear;
         }
+    }
+
+    public static final int STARTED_WORKING_AGE = 26;
+    public static final int RETIREMENT_AGE = 65;
+    public static double getLifeProgress(Date birthDate, Date currentDate) {
+        if(birthDate == null) {
+            Calendar calTmp = Calendar.getInstance();
+            calTmp.set(Calendar.YEAR, 2000);
+            calTmp.set(Calendar.MONTH, 0);
+            calTmp.set(Calendar.DAY_OF_MONTH, 1);
+        }
+        Calendar birthDateCal = Calendar.getInstance();
+        Calendar currentDateCal = Calendar.getInstance();
+        Calendar birthDateStartedWorkingCal = Calendar.getInstance();
+        birthDateCal.setTime(birthDate);
+        currentDateCal.setTime(currentDate);
+        birthDateStartedWorkingCal.setTime(birthDate);
+        birthDateStartedWorkingCal.add(Calendar.YEAR, STARTED_WORKING_AGE);
+
+        Date birthDateStartedWorking = birthDateStartedWorkingCal.getTime();
+        if(currentDate.compareTo(birthDateStartedWorking) < 0) {
+            return 0d;
+        }
+        Calendar retirementDateCal = Calendar.getInstance();
+        retirementDateCal.setTime(birthDate);
+        retirementDateCal.add(Calendar.YEAR, RETIREMENT_AGE);
+        Date retirementDate = retirementDateCal.getTime();
+        long secondsForWork = retirementDate.getTime() - birthDateStartedWorking.getTime();
+        long alreadyWorked = currentDate.getTime() - birthDateStartedWorking.getTime();
+        return (double)alreadyWorked / (double)secondsForWork;
     }
 
     //    public static double getYearProgress(Integer year, Integer month,

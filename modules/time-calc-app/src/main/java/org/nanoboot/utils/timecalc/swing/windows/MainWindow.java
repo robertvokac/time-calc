@@ -1334,10 +1334,32 @@ public class MainWindow extends TWindow {
         double minuteProgress
                 = Progress.getMinuteProgress(secondNow, millisecondNow);
         double yearProgress = Progress.getYearProgress(clock, monthProgress);
+        String birthDate = timeCalcConfiguration.lifeBirthDateProperty.getValue();
+        Calendar birthDateCal = Calendar.getInstance();
+        if(birthDate != null&& !birthDate.isEmpty()) {
+            String[] array = birthDate.split("-");
+            if(array.length == 3) {
+                try {
+                    int year = Integer.valueOf(array[0]);
+                    int month = Integer.valueOf(array[1]);
+                    int day = Integer.valueOf(array[2]);
+                    birthDateCal.set(Calendar.YEAR, year);
+                    birthDateCal.set(Calendar.MONTH, month - 1);
+                    birthDateCal.set(Calendar.DAY_OF_MONTH, day);
+                } catch (Exception e) {
+                    System.err.println("Parsing birth date failed: " + birthDate + " : " + birthDate);
+                    birthDateCal = null;
+                }
+            }
+        }
+        double lifeProgress = Progress.getLifeProgress(
+                birthDateCal == null ? null : birthDateCal.getTime(),
+                time.asCalendar().getTime());
         progress.set(WidgetType.HOUR, hourProgress);
         progress.set(WidgetType.WEEK, weekProgress);
         progress.set(WidgetType.MINUTE, minuteProgress);
         progress.set(WidgetType.YEAR, yearProgress);
+        progress.set(WidgetType.LIFE, lifeProgress);
         progressSquare.setProgress(progress);
         progressCircle.setProgress(progress);
         progressSwing.setProgress(progress);
