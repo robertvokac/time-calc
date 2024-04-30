@@ -335,7 +335,7 @@ public class WorkingDaysWindow extends TWindow {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month - 1);
-            int dayMaximum = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int dayMaximum = month ==2 ? (year % 4 == 0 ? 29 : 28) : cal.getActualMaximum(Calendar.DAY_OF_MONTH);
             for (int day = 1; day <= dayMaximum; day++) {
 
                 WorkingDay wd = workingDayRepository.read(year, month, day);
