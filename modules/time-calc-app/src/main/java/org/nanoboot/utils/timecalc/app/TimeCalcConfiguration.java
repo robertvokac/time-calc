@@ -426,12 +426,6 @@ public class TimeCalcConfiguration {
         }
         return mapOfProperties.get(timeCalcProperty);
     }
-    public String getProperty(String key) {
-        return timeCalcProperties.getString(key);
-    }
-    public void setProperty(String key, String value) {
-        timeCalcProperties.setString(key, value);
-    }
 
     public String print() {
         StringBuilder sb = new StringBuilder();
