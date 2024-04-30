@@ -151,12 +151,12 @@ public class MainWindow extends TWindow {
     {
         ChangeListener valueMustBeTime
                 = (property, oldValue, newValue) -> new TTime((String) newValue);
-        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 40, true, valueMustBeTime);
-        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 40, true, valueMustBeTime);
-        this.workingTimeTextField = new TTextField("08:00", 40, true, valueMustBeTime);
-        this.pauseTimeTextField = new TTextField("00:30", 40, true, valueMustBeTime);
+        this.arrivalTextField = new TTextField(Constants.DEFAULT_ARRIVAL_TIME, 50, true, valueMustBeTime);
+        this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 50, true, valueMustBeTime);
+        this.workingTimeTextField = new TTextField("08:00", 50, true, valueMustBeTime);
+        this.pauseTimeTextField = new TTextField("00:30", 50, true, valueMustBeTime);
 
-        this.noteTextField = new TTextField("", 100);
+        this.noteTextField = new TTextField("", 60);
         this.departureTextField = new TTextField();
         this.elapsedTextField = new TTextField("", 100);
         this.remainingTextField = new TTextField("", 100);
