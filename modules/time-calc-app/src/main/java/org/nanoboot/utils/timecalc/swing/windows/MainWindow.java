@@ -28,6 +28,7 @@ import org.nanoboot.utils.timecalc.swing.controls.TTextField;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressBar;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressColor;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressRotation;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.DayBattery;
@@ -128,6 +129,7 @@ public class MainWindow extends TWindow {
     private final ProgressFuelGauge progressFuelGauge;
     private final ProgressRotation progressRotation;
     private final ProgressBar progressBar;
+    private final ProgressColor progressColor;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -474,6 +476,22 @@ public class MainWindow extends TWindow {
 
         add(progressBar);
         //
+        //
+        this.progressColor = new ProgressColor();
+        progressColor.setBounds(progressBar.getX(), progressBar.getY() + progressBar.getHeight() + SwingUtils.MARGIN,
+                progressBar.getX() + progressBar.getWidth() - 2 * SwingUtils.MARGIN, 25);
+
+        progressColor.visibleProperty
+                .bindTo(timeCalcConfiguration.colorVisibleProperty);
+        progressColor.typeProperty
+                .bindTo(timeCalcConfiguration.colorTypeProperty);
+        progressColor.hiddenProperty
+                .bindTo(timeCalcConfiguration.colorHiddenProperty);
+        progressColor.heightProperty
+                .bindTo(timeCalcConfiguration.colorHeightProperty);
+
+        add(progressColor);
+        //
 
         {
             progressSquare.typeProperty
@@ -522,7 +540,7 @@ public class MainWindow extends TWindow {
             progressWeather.hiddenProperty.bindTo(timeCalcConfiguration.weatherHiddenProperty);
         }
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
-        arrivalTextFieldLabel.setBoundsFromTop(progressBar, 3);
+        arrivalTextFieldLabel.setBoundsFromTop(progressColor, 3);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
         TButton arrivalIncreaseButton = new SmallTButton('+');
@@ -1445,6 +1463,7 @@ public class MainWindow extends TWindow {
         progressFuelGauge.setProgress(progress);
         progressRotation.setProgress(progress);
         progressBar.setProgress(progress);
+        progressColor.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);

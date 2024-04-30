@@ -224,6 +224,17 @@ public class TimeCalcConfiguration {
             = new StringProperty(TimeCalcProperty.BAR_TYPE.getKey());
     public final IntegerProperty barHeightProperty
             = new IntegerProperty(TimeCalcProperty.BAR_HEIGHT.getKey());
+
+
+    //
+    public final BooleanProperty colorVisibleProperty
+            = new BooleanProperty(TimeCalcProperty.COLOR_VISIBLE.getKey());
+    public final BooleanProperty colorHiddenProperty
+            = new BooleanProperty(TimeCalcProperty.COLOR_HIDDEN.getKey());
+    public final StringProperty colorTypeProperty
+            = new StringProperty(TimeCalcProperty.COLOR_TYPE.getKey());
+    public final IntegerProperty colorHeightProperty
+            = new IntegerProperty(TimeCalcProperty.COLOR_HEIGHT.getKey());
     //
     public final BooleanProperty walkingHumanVisibleProperty
             = new BooleanProperty(
@@ -351,6 +362,7 @@ public class TimeCalcConfiguration {
             squareVisibleProperty,squareTypeProperty,
             circleVisibleProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleOnlyBorderProperty,
             barVisibleProperty, barTypeProperty, barHiddenProperty, barHeightProperty,
+            colorVisibleProperty, colorTypeProperty, colorHiddenProperty, colorHeightProperty,
             dotVisibleProperty,dotTypeProperty,
             fuelVisibleProperty, fuelTypeProperty, fuelHiddenProperty,
                 fuelIconVisibleProperty,

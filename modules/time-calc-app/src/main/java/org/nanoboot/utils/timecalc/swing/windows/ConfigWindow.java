@@ -210,6 +210,15 @@ public class ConfigWindow extends TWindow {
     private final JTextField barHeightProperty
             = new JTextField(TimeCalcProperty.BAR_HEIGHT.getKey());
     //
+    private final JCheckBox colorVisibleProperty
+            = new JCheckBox(TimeCalcProperty.COLOR_VISIBLE.getKey());
+    private final JTextField colorTypeProperty
+            = new JTextField(TimeCalcProperty.COLOR_TYPE.getKey());
+    private final JCheckBox colorHiddenProperty
+            = new JCheckBox(TimeCalcProperty.COLOR_HIDDEN.getKey());
+    private final JTextField colorHeightProperty
+            = new JTextField(TimeCalcProperty.COLOR_HEIGHT.getKey());
+    //
     private final JCheckBox swingVisibleProperty
             = new JCheckBox(TimeCalcProperty.SWING_VISIBLE.getKey());
     private final JTextField swingTypeProperty
@@ -488,6 +497,8 @@ public class ConfigWindow extends TWindow {
                 //
                 barVisibleProperty.setSelected(enable);
                 barHeightProperty.setText("50");
+                colorVisibleProperty.setSelected(enable);
+                colorHeightProperty.setText("50");
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
@@ -580,6 +591,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleVisibleProperty,
                 barVisibleProperty, barHiddenProperty, barTypeProperty, barHeightProperty,
+                colorVisibleProperty, colorHiddenProperty, colorTypeProperty, colorHeightProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
                 rotationVisibleProperty, rotationTypeProperty, rotationHiddenProperty,
@@ -999,7 +1011,7 @@ public class ConfigWindow extends TWindow {
             index = 5;
         }
 
-        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.")  || key.startsWith("rotation.")  || key.startsWith("bar.")) {
+        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.") || key.startsWith("rotation.") || key.startsWith("bar.") || key.startsWith("color.")) {
             index = 6;
         }
 
