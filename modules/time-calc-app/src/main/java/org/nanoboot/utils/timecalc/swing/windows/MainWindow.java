@@ -91,7 +91,7 @@ public class MainWindow extends TWindow {
     public static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
     public static final Color FOREGROUND_COLOR = new Color(210, 210, 210);
     public static final JCheckBox hideShowFormsCheckBox = new JCheckBox();
-    private static final int BATTERY_WIDTH = 140;
+    private static final int BATTERY_HEIGHT = 120;
     private static final String BACKUP = "_backup";
     private static final String BASIC_FEATURE__ = "__only_basic_features__";
     private static final String DASH = "-";
@@ -318,43 +318,43 @@ public class MainWindow extends TWindow {
 
         MinuteBattery minuteBattery
                 = new MinuteBattery(clock.getBounds().x + clock.getWidth() + SwingUtils.MARGIN,
-                        clock.getY(), BATTERY_WIDTH);
+                        clock.getY(), BATTERY_HEIGHT);
         add(minuteBattery);
         Battery hourBattery = new HourBattery(
                 minuteBattery.getBounds().x + minuteBattery.getWidth()
                 + SwingUtils.MARGIN,
                 minuteBattery.getY(),
-                BATTERY_WIDTH);
+                BATTERY_HEIGHT);
         add(hourBattery);
 
         Battery dayBattery = new DayBattery(
                 hourBattery.getBounds().x + hourBattery.getWidth()
                 + SwingUtils.MARGIN,
                 hourBattery.getY(),
-                BATTERY_WIDTH);
+                BATTERY_HEIGHT);
         add(dayBattery);
 
         Battery weekBattery = new WeekBattery(
                 dayBattery.getBounds().x + dayBattery.getWidth() + SwingUtils.MARGIN,
                 dayBattery.getY(),
-                BATTERY_WIDTH);
+                BATTERY_HEIGHT);
         add(weekBattery);
 
         Battery monthBattery = new MonthBattery(
                 weekBattery.getBounds().x + weekBattery.getWidth()
                 + SwingUtils.MARGIN,
-                weekBattery.getY(), BATTERY_WIDTH);
+                weekBattery.getY(), BATTERY_HEIGHT);
         add(monthBattery);
         Battery yearBattery = new YearBattery(
                 monthBattery.getBounds().x + monthBattery.getWidth()
                 + SwingUtils.MARGIN,
-                monthBattery.getY(), BATTERY_WIDTH);
+                monthBattery.getY(), BATTERY_HEIGHT);
         add(yearBattery);
 
         WalkingHumanProgress walkingHumanProgress
                 = new WalkingHumanProgress();
         walkingHumanProgress.setBounds(minuteBattery.getX(),
-                minuteBattery.getY() + minuteBattery.getHeight(), 400, 80);
+                minuteBattery.getY() + minuteBattery.getHeight() + SwingUtils.MARGIN, 400, 80);
         add(walkingHumanProgress);
         walkingHumanProgress.visibleProperty
                 .bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
@@ -365,7 +365,7 @@ public class MainWindow extends TWindow {
         //
         ProgressSquare progressSquare = new ProgressSquare();
         progressSquare
-                .setBounds(yearBattery.getX() + yearBattery.getWidth() + 4 * SwingUtils.MARGIN, yearBattery.getY(),
+                .setBounds(yearBattery.getX() + yearBattery.getWidth() + SwingUtils.MARGIN, yearBattery.getY(),
                         100);
         add(progressSquare);
         progressSquare.visibleProperty
@@ -871,7 +871,7 @@ public class MainWindow extends TWindow {
                 }
                 );
         setSize(progressSquare.getX() + progressSquare.getWidth()
-                + 3 * SwingUtils.MARGIN,
+                + 4 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 

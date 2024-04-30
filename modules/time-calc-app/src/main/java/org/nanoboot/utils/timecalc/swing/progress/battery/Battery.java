@@ -397,7 +397,7 @@ public class Battery extends Widget {
 
     @Override
     public void setBounds(int x, int y, int height) {
-        setBounds(x, y, (int) (40d / 100d * ((double) height)), height);
+        setBounds(x, y, (int) (50d / 100d * ((double) height)), height);
     }
 
     @Override

@@ -5,10 +5,7 @@ import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.entity.WidgetType;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSmileyIcon;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
@@ -35,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.swing.JMenuItem;
 import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 import static org.nanoboot.utils.timecalc.swing.progress.battery.Battery.HIGH_STRONGLY_COLORED;
@@ -66,6 +64,7 @@ public class Widget extends JPanel implements
             126, 179, 227);
     private static final Color VERY_LIGHT_GRAY = new Color(220, 220, 220);
     private static final Font FONT = new Font("sans", Font.PLAIN, 12);
+    public static final Color WIDGET_BACKGROUND_COLOR = ((Supplier<Color>) () ->{int i = 232;return new Color(i,i,i);}).get();
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -287,6 +286,10 @@ public class Widget extends JPanel implements
         setVisible(visibleProperty.isEnabled());
         Visibility visibility
                 = Visibility.valueOf(visibilityProperty.getValue());
+        Color currentColor = brush.getColor();
+        brush.setColor(WIDGET_BACKGROUND_COLOR);
+        brush.fillRect(1, 1, getWidth(), getHeight());
+        brush.setColor(currentColor);
 
         if (visibleProperty.isDisabled() || hiddenProperty.isEnabled()) {
             if(hiddenProperty.isEnabled()) {
@@ -299,7 +302,7 @@ public class Widget extends JPanel implements
                     this.smileyIcon2 = null;
                 }
                 if (mouseOver) {
-                    Color currentColor = brush.getColor();
+                    currentColor = brush.getColor();
                     brush.setColor(VERY_LIGHT_GRAY);
                     brush.fillRect(1, 1, getWidth() - 2, getHeight() - 2);
                     brush.setColor(currentColor);
@@ -338,7 +341,7 @@ public class Widget extends JPanel implements
         paintMinimizeIcon(brush, getWidth(), mouseOver, mouseOverMinimizeButton);
 
         if (mouseOver) {
-            Color currentColor = brush.getColor();
+            currentColor = brush.getColor();
             if(visibility.isStronglyColored()) {
                 brush.setColor(Color.BLUE);
             }

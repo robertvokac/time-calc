@@ -174,7 +174,7 @@ public class ProgressWeather extends Widget implements GetProperty {
             sb
                     .append("Maximum: ")
                     .append(NumberFormats.FORMATTER_ONE_DECIMAL_PLACE.format(wf.getMaximumCelsius()))
-                    .append(" °C at ").append(TTime.ofMilliseconds((int) (wf.getMinimumCelsiusTime() * 1000d * 60d * 60d)).toString().substring(0, 5))
+                    .append(" °C at ").append(TTime.ofMilliseconds((int) (wf.getMaximumCelsiusTime() * 1000d * 60d * 60d)).toString().substring(0, 5))
                     .append("\n");
             sb
                     .append("End: ")
