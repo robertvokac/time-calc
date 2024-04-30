@@ -101,7 +101,11 @@ public class Widget extends JPanel implements
     private WidgetMenu widgetMenu = null;
     public Widget() {
         setBackground(BACKGROUND_COLOR);
-        new Timer(getTimerDelay(), e -> repaint()).start();
+        int timerDelay = getTimerDelay();
+//        if(timerDelay > 10) {
+//            timerDelay = 10;
+//        }
+        new Timer(timerDelay, e -> repaint()).start();
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -208,7 +212,7 @@ public class Widget extends JPanel implements
     }
 
     public int getTimerDelay() {
-        return 100;
+        return 10;
     }
 
     //    @Override

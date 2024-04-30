@@ -83,6 +83,14 @@ public class TimeCalcProperties {
                 getDefaultStringValue(timeCalcProperty)));
     }
 
+    public String getString(String key) {
+        return (String) properties.get(key);
+    }
+
+    public void setString(String key, String value) {
+        properties.put(key, value);
+    }
+
     private String getDefaultStringValue(TimeCalcProperty timeCalcProperty) {
         if (!defaultProperties
                 .containsKey(timeCalcProperty.getKey())) {

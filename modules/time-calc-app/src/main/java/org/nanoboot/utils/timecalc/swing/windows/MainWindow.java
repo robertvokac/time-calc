@@ -104,7 +104,7 @@ public class MainWindow extends TWindow {
     private final TButton restartButton;
     private final TButton focusButton;
     private final TButton helpButton;
-    private final TButton weatherButton;
+    private final TButton webBrowserButton;
     private final TButton commandButton;
     private final TButton jokeButton;
     private final AboutButton aboutButton;
@@ -254,7 +254,7 @@ public class MainWindow extends TWindow {
         this.exitButton = new TButton("Exit");
         this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus");
         this.helpButton = new TButton("Help");
-        this.weatherButton = new TButton("Weather");
+        this.webBrowserButton = new TButton("Browse");
         this.commandButton = new TButton("Command");
         this.jokeButton = new TButton("Joke");
         this.aboutButton = new AboutButton();
@@ -360,7 +360,7 @@ public class MainWindow extends TWindow {
         add(walkingHumanProgress);
         walkingHumanProgress.visibleProperty
                 .bindTo(timeCalcConfiguration.walkingHumanVisibleProperty);
-        weatherButton
+        webBrowserButton
                 .setBounds(SwingUtils.MARGIN, walkingHumanProgress.getY()
                         + walkingHumanProgress.getHeight());
 
@@ -631,6 +631,7 @@ public class MainWindow extends TWindow {
             add(elapsedTextField);
             add(remainingTextFieldLabel);
             add(remainingTextField);
+            add(webBrowserButton);
         }
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
             add(saveButton);
@@ -672,6 +673,7 @@ public class MainWindow extends TWindow {
         configButton.setBoundsFromTop(weekLabel);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
+        webBrowserButton.setBoundsFromLeft(activitiesButton);
 
         exitButton.setBounds(saveButton.getX() + saveButton.getWidth() - activitiesButton.getWidth(), workDaysButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
         restartButton.setBounds(exitButton.getX() - SwingUtils.MARGIN - activitiesButton.getWidth(), activitiesButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
@@ -694,8 +696,8 @@ public class MainWindow extends TWindow {
 
         setTitle(getWindowTitle());
 
-        weatherButton
-                .addActionListener(e -> new WeatherWindow().setVisible(true));
+        webBrowserButton
+                .addActionListener(e -> WebBrowser.show(timeCalcConfiguration));
         commandButton.addActionListener(
                 new CommandActionListener(timeCalcApp, timeCalcConfiguration));
 
