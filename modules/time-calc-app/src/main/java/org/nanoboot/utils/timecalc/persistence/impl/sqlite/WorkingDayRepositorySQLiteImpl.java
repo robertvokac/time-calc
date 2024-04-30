@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.persistence.impl.sqlite;
 
+import org.nanoboot.utils.timecalc.app.Main;
 import org.nanoboot.utils.timecalc.app.TimeCalcException;
 import org.nanoboot.utils.timecalc.entity.WorkingDay;
 import org.nanoboot.utils.timecalc.persistence.api.WorkingDayRepositoryApi;
@@ -28,7 +29,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
     public void create(WorkingDay workingDay) {
         System.out.println("Going to create: " + workingDay.toString());
 
-        if(!Utils.askYesNo(null, "Do you want to create new Working Day? " + workingDay, "Creation of new Working Day")) {
+        if(Main.ONLY_ACTIVITIES_WINDOW_IS_ALLOWED || !Utils.askYesNo(null, "Do you want to create new Working Day? " + workingDay, "Creation of new Working Day")) {
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -140,7 +141,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             System.out.println("Nothing to update.");
             return;
         }
-        if(!Utils.askYesNo(null, "Do you want to update this Working Day? " + workingDay, "Update of Working Day")) {
+        if(Main.ONLY_ACTIVITIES_WINDOW_IS_ALLOWED || !Utils.askYesNo(null, "Do you want to update this Working Day? " + workingDay, "Update of Working Day")) {
             return;
         }
         StringBuilder sb = new StringBuilder();

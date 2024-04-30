@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
+import org.nanoboot.utils.timecalc.app.Main;
 import org.nanoboot.utils.timecalc.swing.controls.MouseClickedListener;
 import org.nanoboot.utils.timecalc.swing.controls.SmallTButton;
 import org.nanoboot.utils.timecalc.swing.controls.TTextField;
@@ -97,7 +98,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
     @Getter
     private final Activity activity;
 
-    //private final TTextField sortkey;
+    private final TTextField sortkey;
     private final TTextField name;
     private final TTextField comment;
     private final TTextField ticket;
@@ -125,7 +126,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         {
             this.subject = new TTextFieldForActivityPanel("", "subject");
             this.totalComment = new TTextFieldForActivityPanel("", "totalComment");
-            //this.sortkey = new TTextFieldForActivityPanel("1", "sortkey", (a, r)->a.setSortkey(Integer.parseInt(r)), true);
+            this.sortkey = new TTextFieldForActivityPanel("1", "sortkey", (a, r)->a.setSortkey(Integer.parseInt(r)), true);
             this.name = new TTextFieldForActivityPanel("", "name", (a, r)->{a.setName(r);getSubject().setText(a.createSubject());}, false);
             this.comment = new TTextFieldForActivityPanel("", "comment",  (a, r)->{a.setComment(r);getTotalComment().setText(a.createTotalComment());}, false);
             this.ticket = new TTextFieldForActivityPanel("", "ticket",
@@ -147,7 +148,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         }
 
         this.dayPanel = dayPanel;
-        //add(sortkey);
+        if(Main.ACTIVITIES_WINDOW_SHOW_SORTKEY) add(sortkey);
         add(name);
         add(comment);
         add(ticket);
@@ -158,7 +159,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         add(totalComment);
         add(today);
         add(remains);
-        //sortkey.setVisible(false);
+        sortkey.setVisible(false);
         name.setHorizontalAlignment(JTextField.LEFT);
         comment.setHorizontalAlignment(JTextField.LEFT);
         ticket.setHorizontalAlignment(JTextField.LEFT);
@@ -178,7 +179,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         moveThisButton.setFont(SwingUtils.SMALL_FONT);
         moveBeforeButton.setFont(SwingUtils.SMALL_FONT);
 
-        //sortkey.setPreferredSize(PREFERRED_SIZE1);
+        sortkey.setPreferredSize(PREFERRED_SIZE1);
         name.setPreferredSize(PREFERRED_SIZE);
         comment.setPreferredSize(PREFERRED_SIZE);
         ticket.setPreferredSize(PREFERRED_SIZE1);
@@ -196,7 +197,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         moveBeforeButton.setPreferredSize(PREFERRED_SIZE1);
         this.setPreferredSize(new Dimension(getWidth(), 40));
 
-        //sortkey.setText(String.valueOf(activity.getSortkey()));
+        sortkey.setText(String.valueOf(activity.getSortkey()));
         name.setText(activity.getName());
         comment.setText(activity.getComment());
         ticket.setText(activity.getTicket());
@@ -284,8 +285,8 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
             ActivityPanel activityPanelForActivity =
                     dayPanel.getActivityPanelForActivity(activityToBeMoved);
             activityPanelForActivity.getActivity().setSortkey(newSortKey);
-//            activityPanelForActivity.getSortkeyTTextField().setText(
-//                    String.valueOf(newSortKey));
+            activityPanelForActivity.getSortkeyTTextField().setText(
+                    String.valueOf(newSortKey));
             activityRepository.update(activityToBeMoved);
             dayPanel.sortActivityPanels();
 
@@ -297,7 +298,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
     public int compareTo(ActivityPanel o) {
         return this.getActivity().compareTo(o.getActivity());
     }
-//    public TTextField getSortkeyTTextField() {
-//        return sortkey;
-//    }
+    public TTextField getSortkeyTTextField() {
+        return sortkey;
+    }
 }

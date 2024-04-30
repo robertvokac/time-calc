@@ -82,6 +82,8 @@ import javax.swing.Timer;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
 import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 
+import static org.nanoboot.utils.timecalc.app.Main.ONLY_ACTIVITIES_WINDOW_IS_ALLOWED;
+
 /**
  * @author Robert Vokac
  * @since 08.02.2024
@@ -688,7 +690,7 @@ public class MainWindow extends TWindow {
                 exitButton.getY() + exitButton.getHeight() + SwingUtils.MARGIN);
 
         setLayout(null);
-        setVisible(true);
+        setVisible(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED ? false : true);
 
         setTitle(getWindowTitle());
 
@@ -1105,6 +1107,9 @@ public class MainWindow extends TWindow {
         }
 
         while (true) {
+            if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
+                break;
+            }
 
             if(allowOnlyBasicFeaturesProperty.getValue()) {
                 if(timeCalcConfiguration.batteryDayVisibleProperty.isDisabled()) {
@@ -1169,7 +1174,7 @@ public class MainWindow extends TWindow {
             workingDaysWindow.setVisible(false);
             workingDaysWindow.dispose();
         }
-        if (activitiesWindow != null) {
+        if (!ONLY_ACTIVITIES_WINDOW_IS_ALLOWED && activitiesWindow != null) {
             activitiesWindow.setVisible(false);
             activitiesWindow.dispose();
         }
@@ -1181,6 +1186,10 @@ public class MainWindow extends TWindow {
         //timeCalcConfiguration.saveToTimeCalcProperties();
         setVisible(false);
         dispose();
+
+        if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
+            openActivitiesWindow();
+        }
     }
 
     private final Set<Integer> alreadyShownPercents = new HashSet<>();

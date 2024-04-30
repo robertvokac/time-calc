@@ -1,6 +1,7 @@
 package org.nanoboot.utils.timecalc.swing.common;
 
 import lombok.Getter;
+import org.nanoboot.utils.timecalc.app.Main;
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.entity.Activity;
 import org.nanoboot.utils.timecalc.persistence.api.ActivityRepositoryApi;
@@ -301,7 +302,7 @@ public class DayPanel extends JPanel {
                 sortkey = sortkey + sortkeySpace;
                 ap.getActivity().setSortkey(sortkey);
                 activityRepository.update(ap.getActivity());
-//                ap.getSortkeyTTextField().setText(String.valueOf(sortkey));
+                if(Main.ACTIVITIES_WINDOW_SHOW_SORTKEY) ap.getSortkeyTTextField().setText(String.valueOf(sortkey));
 
             }
         }

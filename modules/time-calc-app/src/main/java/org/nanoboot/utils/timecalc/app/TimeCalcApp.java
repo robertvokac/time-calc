@@ -25,6 +25,8 @@ import org.nanoboot.utils.timecalc.persistence.api.VersionRepositoryApi;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.SqliteConnectionFactory;
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.VersionRepositorySQLiteImpl;
 
+import static org.nanoboot.utils.timecalc.app.Main.ONLY_ACTIVITIES_WINDOW_IS_ALLOWED;
+
 /**
  * @author Robert Vokac
  * @since 31.01.2024
@@ -79,6 +81,9 @@ public class TimeCalcApp {
                 e.printStackTrace();
                 timeCalcMainWindow.setVisible(false);
                 timeCalcMainWindow.dispose();
+            }
+            if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
+                break;
             }
         }
 

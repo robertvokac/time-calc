@@ -3,13 +3,29 @@ package org.nanoboot.utils.timecalc.app;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.function.Supplier;
 
 /**
  * @author Robert Vokac
  * @since 31.01.2024
  */
 public class Main {
-    private static final boolean ONLY_ACTIVITIES_WINDOW_IS_ALLOWED = false;
+    public static final boolean ONLY_ACTIVITIES_WINDOW_IS_ALLOWED = ((Supplier<Boolean>) () -> {
+
+                try {
+                    return !Main.class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI()
+                            .getPath().contains("time-calc");
+                } catch (URISyntaxException e) {
+                    return true;
+                }
+            }).get();
+
+    public static final boolean ACTIVITIES_WINDOW_SHOW_SORTKEY = false;
     public static void main(String[] args) throws IOException {
 //        for(File f:FileConstants.CLIMATE_TXT.getParentFile().listFiles()) {
 //            if(f.getName().contains("weather")) {
@@ -18,11 +34,7 @@ public class Main {
 //            }
 //        }
         FlatLightLaf.setup();
-        if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
-            ActivitiesMain.main(args);
-        } else {
-            TimeCalcApp timeCalcApp = new TimeCalcApp();
-            timeCalcApp.start(args);
-        }
+        TimeCalcApp timeCalcApp = new TimeCalcApp();
+        timeCalcApp.start(args);
     }
 }

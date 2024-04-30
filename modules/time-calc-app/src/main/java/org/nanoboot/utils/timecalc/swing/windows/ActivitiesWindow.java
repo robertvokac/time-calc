@@ -1,5 +1,6 @@
 package org.nanoboot.utils.timecalc.swing.windows;
 
+import org.nanoboot.utils.timecalc.app.Main;
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.controls.TTabbedPane;
@@ -19,6 +20,8 @@ import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 import org.nanoboot.utils.timecalc.swing.common.YearPanel;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 
+import static org.nanoboot.utils.timecalc.app.Main.ONLY_ACTIVITIES_WINDOW_IS_ALLOWED;
+
 /**
  * @author Robert Vokac
  * @since 16.02.2024
@@ -30,7 +33,7 @@ public class ActivitiesWindow extends TWindow {
 
     public ActivitiesWindow(ActivityRepositoryApi activityRepositoryApiIn, Time time, TimeCalcConfiguration timeCalcConfiguration) {
         setSize(1600, 800);
-        setTitle("Activities");
+        setTitle(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED ? "Activity Report" : "Activities");
         this.activityRepository = activityRepositoryApiIn;
 
         this.years = new HashMap<>();
@@ -54,7 +57,20 @@ public class ActivitiesWindow extends TWindow {
         JButton exitButton = new JButton("Exit");
         exitButton.setBounds(SwingUtils.MARGIN + addYearButton.getWidth() + SwingUtils.MARGIN, addYearButton.getY(), 150, 30);
         add(exitButton);
-        exitButton.addActionListener(e -> activitiesWindow.setVisible(false));
+        exitButton.addActionListener(e -> {
+            activitiesWindow.setVisible(false);
+            activitiesWindow.dispose();
+            if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
+                System.exit(0);
+            }
+        });
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                exitButton.doClick();
+            }
+        });
 
         tp.setBounds(addYearButton.getX(), addYearButton.getY() + addYearButton.getHeight() + SwingUtils.MARGIN, 1500, 750);
         yearsList.forEach(y -> {
