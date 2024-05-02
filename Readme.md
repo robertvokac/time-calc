@@ -185,7 +185,7 @@ Smileys can be colored or white-black (can be set in configuration)
 * SHIFT + {Y,N,D,H,M,S,I,K} - Increase test time value
 * CTRL + {Y,N,D,H,M,S,I,K} - Decrease test time value
 * ALT + {Y,N,D,H,M,S,I,K} - Reset test time value
-* Y=year, N=month, D=day of month, H=hour, M=minute, S=second, I=millisecond, K=week
+* Y=year, N=month, K=week, D=day of month, H=hour, M=minute, S=second, I=millisecond
 * SHIFT + Q - Increase speed of time
 * CTRL + Q - Decrease speed of time
 * ALT + Q - Reset speed of time
