@@ -221,7 +221,7 @@ public class ActivityPanel extends JPanel implements Comparable<ActivityPanel> {
         //            //dayPanel.moveMarkedActivityBeforeThisActivity(getActivity());
         //        });
         deleteButton.addActionListener(e -> {
-            boolean deleted = activityRepository.delete(this.activity.getId());
+            this.deleted = activityRepository.delete(this.activity.getId());
             if(deleted) {
                 this.setVisible(false);
                 deleted = true;
