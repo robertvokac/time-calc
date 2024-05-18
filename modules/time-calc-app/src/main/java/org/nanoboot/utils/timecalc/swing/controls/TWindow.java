@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.controls;
 
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.Component;

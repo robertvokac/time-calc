@@ -167,6 +167,10 @@ public class TTextField extends JTextField implements GetProperty {
     public void setBoundsFromLeft(JComponent jComponent) {
         setBoundsFromLeft(jComponent, 0);
     }
+    public void setBoundsFromLeftWithAdditionalX(JComponent jComponent, int additionalX) {
+        setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN + additionalX,
+                    jComponent.getY() + 0);
+    }
 
     public void setBoundsFromLeft(JComponent jComponent, int additionalY) {
         setBounds(jComponent.getX() + jComponent.getWidth() + SwingUtils.MARGIN,
@@ -188,8 +192,14 @@ public class TTextField extends JTextField implements GetProperty {
     }
 
     public void setOriginalForeground() {
+        if(!autoManageForeground) {
+            //nothing to do
+            return;
+        }
         this.setForeground(originalForeground);
     }
+    @Getter @Setter
+    private boolean autoManageForeground = true;
 
     @Override
     public Property getVisibilityProperty() {

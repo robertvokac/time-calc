@@ -4,7 +4,6 @@ import org.nanoboot.utils.timecalc.app.CommandActionListener;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
-import org.nanoboot.utils.timecalc.swing.common.TimeCalcKeyAdapter;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperties;
 import org.nanoboot.utils.timecalc.app.TimeCalcProperty;
 import org.nanoboot.utils.timecalc.entity.Progress;
@@ -16,6 +15,7 @@ import org.nanoboot.utils.timecalc.persistence.impl.sqlite.ActivityRepositorySQL
 import org.nanoboot.utils.timecalc.persistence.impl.sqlite.WorkingDayRepositorySQLiteImpl;
 import org.nanoboot.utils.timecalc.swing.common.AboutButton;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
+import org.nanoboot.utils.timecalc.swing.common.TimeCalcKeyAdapter;
 import org.nanoboot.utils.timecalc.swing.common.Toaster;
 import org.nanoboot.utils.timecalc.swing.common.WeekStatistics;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
@@ -28,24 +28,25 @@ import org.nanoboot.utils.timecalc.swing.controls.TTextField;
 import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressBar;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressColor;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressRotation;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
+import org.nanoboot.utils.timecalc.swing.progress.Time;
+import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.DayBattery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.HourBattery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.MinuteBattery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.MonthBattery;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
-import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressWeather;
-import org.nanoboot.utils.timecalc.swing.progress.Time;
-import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.battery.WeekBattery;
 import org.nanoboot.utils.timecalc.swing.progress.battery.YearBattery;
+import org.nanoboot.utils.timecalc.swing.progress.weather.ProgressWeather;
 import org.nanoboot.utils.timecalc.utils.common.Constants;
 import org.nanoboot.utils.timecalc.utils.common.DateFormats;
 import org.nanoboot.utils.timecalc.utils.common.FileConstants;
@@ -54,14 +55,19 @@ import org.nanoboot.utils.timecalc.utils.common.TTime;
 import org.nanoboot.utils.timecalc.utils.common.Utils;
 import org.nanoboot.utils.timecalc.utils.property.ChangeListener;
 import org.nanoboot.utils.timecalc.utils.property.IntegerProperty;
+import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -78,10 +84,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import javax.swing.Timer;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
-import org.nanoboot.utils.timecalc.utils.property.ReadOnlyProperty;
 
 import static org.nanoboot.utils.timecalc.app.Main.ONLY_ACTIVITIES_WINDOW_IS_ALLOWED;
 
@@ -98,6 +104,8 @@ public class MainWindow extends TWindow {
     private static final String BACKUP = "_backup";
     private static final String BASIC_FEATURE__ = "__only_basic_features__";
     private static final String DASH = "-";
+    public static final int HOUR_GLASS_ICON_HEIGHT = (int) (68d / 4d);
+    public static final int HOUR_GLASS_ICON_WIDTH = (int) (99d / 4d);
     private final TButton workDaysButton;
     private final TButton activitiesButton;
     private final TButton exitButton;
@@ -134,6 +142,12 @@ public class MainWindow extends TWindow {
     private final ProgressRotation progressRotation;
     private final ProgressBar progressBar;
     private final ProgressColor progressColor;
+    private final JLabel hourGlassElapsedDayIcon;
+    private final JLabel hourGlassRemainsDayIcon;
+    private final JLabel hourGlassElapsedWeekIcon;
+    private final JLabel hourGlassRemainsWeekIcon;
+    private final JLabel hourGlassElapsedPauseIcon;
+    private final JLabel hourGlassRemainsPauseIcon;
     private HelpWindow helpWindow = null;
     private ConfigWindow configWindow = null;
     private ActivitiesWindow activitiesWindow = null;
@@ -171,6 +185,13 @@ public class MainWindow extends TWindow {
         this.elapsedPauseTextField = new TTextField("", 80);
         this.remainingPauseTextField = new TTextField("", 80);
         this.endPauseTextField = new TTextField("", 50);
+        //
+        this.elapsedDayTextField.setAutoManageForeground(false);
+        this.remainingDayTextField.setAutoManageForeground(false);
+        this.elapsedWeekTextField.setAutoManageForeground(false);
+        this.remainingWeekTextField .setAutoManageForeground(false);
+        this.elapsedPauseTextField.setAutoManageForeground(false);
+        this.remainingPauseTextField.setAutoManageForeground(false);
     }
 
     public MainWindow(TimeCalcApp timeCalcApp) {
@@ -269,6 +290,30 @@ public class MainWindow extends TWindow {
         this.commandButton = new TButton("Run", 40);
         this.jokeButton = new TButton("Joke", 60);
         this.aboutButton = new AboutButton();
+
+        Function<String, ImageIcon> loadImageIcon = (p) ->
+                new ImageIcon(new javax.swing.ImageIcon(getClass()
+                        .getResource(p)).getImage()
+                        .getScaledInstance(
+                                HOUR_GLASS_ICON_HEIGHT, HOUR_GLASS_ICON_WIDTH, Image.SCALE_SMOOTH));
+        Supplier<JLabel> supplyHourglassElapsedImageIcon = () -> new JLabel(loadImageIcon.apply("/hourglass_elapsed.png"));
+        Supplier<JLabel> supplyHourglassRemainsImageIcon = () -> new JLabel(loadImageIcon.apply("/hourglass_remains.png"));
+        this.hourGlassElapsedDayIcon = supplyHourglassElapsedImageIcon.get();
+        this.hourGlassRemainsDayIcon = supplyHourglassRemainsImageIcon.get();
+        this.hourGlassElapsedWeekIcon = supplyHourglassElapsedImageIcon.get();
+        this.hourGlassRemainsWeekIcon = supplyHourglassRemainsImageIcon.get();
+        this.hourGlassElapsedPauseIcon = supplyHourglassElapsedImageIcon.get();
+        this.hourGlassRemainsPauseIcon = supplyHourglassRemainsImageIcon.get();
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            addAll(
+                    hourGlassElapsedDayIcon,
+                    hourGlassRemainsDayIcon,
+                    hourGlassElapsedWeekIcon,
+                    hourGlassRemainsWeekIcon,
+                    hourGlassElapsedPauseIcon,
+                    hourGlassRemainsPauseIcon
+            );
+        }
 
         //window.add(weatherButton);
         addAll(workDaysButton, activitiesButton, restartButton,focusButton);
@@ -668,7 +713,7 @@ public class MainWindow extends TWindow {
 
 
 
-        remainingDayTextField.setBoundsFromLeft(elapsedDayTextField);
+        remainingDayTextField.setBoundsFromLeftWithAdditionalX(elapsedDayTextField, 15);
         remainingDayTextField.setEditable(false);
         //
 
@@ -706,7 +751,7 @@ public class MainWindow extends TWindow {
         elapsedWeekTextField.setEditable(false);
         //
 
-        remainingWeekTextField.setBoundsFromLeft(elapsedWeekTextField);
+        remainingWeekTextField.setBoundsFromLeftWithAdditionalX(elapsedWeekTextField, 15);
         remainingWeekTextField.setEditable(false);
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
             add(weekLabel);
@@ -728,7 +773,7 @@ public class MainWindow extends TWindow {
         elapsedPauseTextField.setBoundsFromLeft(pauseLabel);
         elapsedPauseTextField.setEditable(false);
         //
-        remainingPauseTextField.setBoundsFromLeft(elapsedPauseTextField);
+        remainingPauseTextField.setBoundsFromLeftWithAdditionalX(elapsedPauseTextField, 15);
         remainingPauseTextField.setEditable(false);
         //
 
@@ -739,6 +784,16 @@ public class MainWindow extends TWindow {
             add(endPauseTextFieldLabel);
             add(endPauseTextField);
         }
+
+        BiConsumer<JLabel, JComponent> setBoundsForHourGlassIcon = (l, c) ->
+            l.setBounds(c.getX() - HOUR_GLASS_ICON_WIDTH,c.getY(), HOUR_GLASS_ICON_HEIGHT, HOUR_GLASS_ICON_WIDTH);
+        setBoundsForHourGlassIcon.accept(hourGlassElapsedDayIcon, elapsedDayTextField);
+        setBoundsForHourGlassIcon.accept(hourGlassRemainsDayIcon, remainingDayTextField);
+        setBoundsForHourGlassIcon.accept(hourGlassElapsedWeekIcon, elapsedWeekTextField);
+        setBoundsForHourGlassIcon.accept(hourGlassRemainsWeekIcon, remainingWeekTextField);
+        setBoundsForHourGlassIcon.accept(hourGlassElapsedPauseIcon, elapsedPauseTextField);
+        setBoundsForHourGlassIcon.accept(hourGlassRemainsPauseIcon, remainingPauseTextField);
+
         ////////
         //
 
@@ -946,7 +1001,7 @@ public class MainWindow extends TWindow {
                 }
                 );
         setSize(progressSquare.getX() + progressSquare.getWidth()
-                + 4 * SwingUtils.MARGIN,
+                + 5 * SwingUtils.MARGIN,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 
@@ -1186,6 +1241,26 @@ public class MainWindow extends TWindow {
         while (true) {
             if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
                 break;
+            }
+
+            boolean grey = Visibility
+                    .valueOf(timeCalcApp.visibilityProperty.getValue())
+                    .isGray();
+            if (grey) {
+//                remainingDayTextField.setForeground(Color.GRAY);
+//                elapsedDayTextField.setForeground(Color.GRAY);
+//                remainingWeekTextField.setForeground(Color.GRAY);
+//                elapsedWeekTextField.setForeground(Color.GRAY);
+//                remainingPauseTextField.setForeground(Color.GRAY);
+//                elapsedPauseTextField.setForeground(Color.GRAY);
+            } else {
+                remainingDayTextField.setForeground(Color.RED);
+                elapsedDayTextField.setForeground(Color.GREEN);
+                remainingWeekTextField.setForeground(Color.RED);
+                elapsedWeekTextField.setForeground(Color.GREEN);
+                remainingPauseTextField.setForeground(Color.RED);
+                elapsedPauseTextField.setForeground(Color.GREEN);
+
             }
 
             if(allowOnlyBasicFeaturesProperty.getValue()) {
