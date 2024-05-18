@@ -37,6 +37,7 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressRotation;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
+import org.nanoboot.utils.timecalc.swing.progress.ProgressWater;
 import org.nanoboot.utils.timecalc.swing.progress.Time;
 import org.nanoboot.utils.timecalc.swing.progress.WalkingHumanProgress;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
@@ -142,6 +143,7 @@ public class MainWindow extends TWindow {
     private final ProgressRotation progressRotation;
     private final ProgressBar progressBar;
     private final ProgressColor progressColor;
+    private final ProgressWater progressWater;
     private final JLabel hourGlassElapsedDayIcon;
     private final JLabel hourGlassRemainsDayIcon;
     private final JLabel hourGlassElapsedWeekIcon;
@@ -545,6 +547,21 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.colorHeightProperty);
 
         add(progressColor);
+        //
+
+        this.progressWater = new ProgressWater();
+        progressWater.setBounds(progressSquare.getX() + progressSquare.getWidth() + 4 * SwingUtils.MARGIN,
+                progressSquare.getY(),
+                100, 550 /*exitButton.getY() + exitButton.getHeight() - SwingUtils.MARGIN*/);
+
+        progressWater.visibleProperty
+                .bindTo(timeCalcConfiguration.waterVisibleProperty);
+        progressWater.typeProperty
+                .bindTo(timeCalcConfiguration.waterTypeProperty);
+        progressWater.hiddenProperty
+                .bindTo(timeCalcConfiguration.waterHiddenProperty);
+
+        add(progressWater);
         //
 
         {
@@ -1005,8 +1022,10 @@ public class MainWindow extends TWindow {
                     widget.typeVisibleProperty.bindTo(timeCalcConfiguration.typeVisibleProperty);
                 }
                 );
-        setSize(progressSquare.getX() + progressSquare.getWidth()
-                + 5 * SwingUtils.MARGIN,
+
+        int standardWidth = progressSquare.getX() + progressSquare.getWidth()
+                            + 5 * SwingUtils.MARGIN;
+        setSize(standardWidth,
                 focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
                 + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 
@@ -1247,6 +1266,9 @@ public class MainWindow extends TWindow {
             if(ONLY_ACTIVITIES_WINDOW_IS_ALLOWED) {
                 break;
             }
+            setSize(standardWidth + (timeCalcConfiguration.waterVisibleProperty.isEnabled() ? 120 : 0),
+                    focusButton.getY() + focusButton.getHeight() + SwingUtils.MARGIN
+                    + focusButton.getHeight() + 2 * SwingUtils.MARGIN);
 
             boolean stronglyColored = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue())
@@ -1625,6 +1647,7 @@ public class MainWindow extends TWindow {
         progressRotation.setProgress(progress);
         progressBar.setProgress(progress);
         progressColor.setProgress(progress);
+        progressWater.setProgress(progress);
         dayBattery.setProgress(progress);
 
         monthBattery.setProgress(progress);

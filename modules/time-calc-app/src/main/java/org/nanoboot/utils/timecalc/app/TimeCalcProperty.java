@@ -110,6 +110,10 @@ public enum TimeCalcProperty {
     BAR_HIDDEN("bar.hidden", "Bar : Hidden"),
     BAR_HEIGHT("bar.height", "Bar : Height", Integer.class),
     //
+    WATER_VISIBLE("water.visible", "Water"),
+    WATER_TYPE("water.type", "Water : Type"),
+    WATER_HIDDEN("water.hidden", "Water : Hidden"),
+    //
     COLOR_VISIBLE("color.visible", "Color"),
     COLOR_TYPE("color.type", "Color : Type"),
     COLOR_HIDDEN("color.hidden", "Color : Hidden"),

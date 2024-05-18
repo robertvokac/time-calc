@@ -210,6 +210,13 @@ public class ConfigWindow extends TWindow {
     private final JTextField barHeightProperty
             = new JTextField(TimeCalcProperty.BAR_HEIGHT.getKey());
     //
+    private final JCheckBox waterVisibleProperty
+            = new JCheckBox(TimeCalcProperty.WATER_VISIBLE.getKey());
+    private final JTextField waterTypeProperty
+            = new JTextField(TimeCalcProperty.WATER_TYPE.getKey());
+    private final JCheckBox waterHiddenProperty
+            = new JCheckBox(TimeCalcProperty.WATER_HIDDEN.getKey());
+    //
     private final JCheckBox colorVisibleProperty
             = new JCheckBox(TimeCalcProperty.COLOR_VISIBLE.getKey());
     private final JTextField colorTypeProperty
@@ -497,6 +504,7 @@ public class ConfigWindow extends TWindow {
                 //
                 barVisibleProperty.setSelected(enable);
                 barHeightProperty.setText("50");
+                waterVisibleProperty.setSelected(enable);
                 colorVisibleProperty.setSelected(enable);
                 colorHeightProperty.setText("50");
                 swingVisibleProperty.setSelected(enable);
@@ -591,6 +599,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleVisibleProperty,
                 barVisibleProperty, barHiddenProperty, barTypeProperty, barHeightProperty,
+                waterVisibleProperty, waterHiddenProperty, waterTypeProperty,
                 colorVisibleProperty, colorHiddenProperty, colorTypeProperty, colorHeightProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
@@ -1011,7 +1020,18 @@ public class ConfigWindow extends TWindow {
             index = 5;
         }
 
-        if (key.startsWith("square.")||key.startsWith("circle.")||key.startsWith("dot.")||key.startsWith("swing.")||key.startsWith("walking-human.") || key.startsWith("fuel.") || key.startsWith("rotation.") || key.startsWith("bar.") || key.startsWith("color.")) {
+        if (
+                key.startsWith("square.") ||
+                key.startsWith("circle.") ||
+                key.startsWith("dot.") ||
+                key.startsWith("swing.") ||
+                key.startsWith("walking-human.") ||
+                key.startsWith("fuel.") ||
+                key.startsWith("rotation.") ||
+                key.startsWith("bar.") ||
+                key.startsWith("color.") ||
+                key.startsWith("water.")
+                ) {
             index = 6;
         }
 
