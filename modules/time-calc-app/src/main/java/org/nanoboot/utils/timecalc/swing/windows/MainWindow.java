@@ -224,7 +224,7 @@ public class MainWindow extends TWindow {
                 throw new PropertyVetoException("Overtime must not be empty.", new PropertyChangeEvent(e.getSource(), e.getPropertyName(), e.getOldValue(), e.getNewValue()));
             }
         });
-        this.configButton = new TButton("Config");
+        this.configButton = new TButton("Config", 60);
         configButton.addActionListener(e -> {
             if (configWindow == null) {
                 this.configWindow = new ConfigWindow(timeCalcConfiguration);
@@ -259,14 +259,14 @@ public class MainWindow extends TWindow {
                     //
             timeCalcConfiguration.saveToTimeCalcProperties();
         }
-        this.workDaysButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Arrivals");
+        this.workDaysButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Working Days", 100);
         this.activitiesButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Activities");
         this.restartButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Restart");
         this.exitButton = new TButton("Exit", 50);
         this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus", 70);
         this.helpButton = new TButton("Help", 60);
         this.weatherButton = new TButton("Weather");
-        this.commandButton = new TButton("Run", 60);
+        this.commandButton = new TButton("Run", 40);
         this.jokeButton = new TButton("Joke", 60);
         this.aboutButton = new AboutButton();
 
@@ -741,13 +741,14 @@ public class MainWindow extends TWindow {
         }
         ////////
         //
-        configButton.setBoundsFromTop(dayLabel);
-        workDaysButton.setBoundsFromLeft(configButton);
+
+        workDaysButton.setBoundsFromTop(dayLabel);
         activitiesButton.setBoundsFromLeft(workDaysButton);
+        configButton.setBoundsFromLeft(activitiesButton);
 
 
         //
-        helpButton.setBoundsFromLeft(activitiesButton);
+        helpButton.setBoundsFromLeft(configButton);
         focusButton.setBoundsFromLeft(helpButton);
         commandButton.setBoundsFromLeft(focusButton);
         jokeButton.setBoundsFromLeft(commandButton);
