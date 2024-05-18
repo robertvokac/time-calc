@@ -2,6 +2,7 @@ package org.nanoboot.utils.timecalc.swing.common;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Insets;
 
 /**
  * @author Robert Vokac
@@ -14,7 +15,7 @@ public class SwingUtils {
     public static final Font VERY_SMALL_FONT = new Font("sans", Font.PLAIN, 9);
     public static final Font MEDIUM_MONOSPACE_FONT
             = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-
+    public static final Insets INSETS = new Insets(4,4,4,4);
     private SwingUtils() {
         //Not meant to be instantiated.
     }

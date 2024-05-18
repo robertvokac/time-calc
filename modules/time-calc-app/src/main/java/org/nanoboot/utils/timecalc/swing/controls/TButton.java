@@ -13,13 +13,15 @@ import java.awt.Color;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 
+import static org.nanoboot.utils.timecalc.swing.common.SwingUtils.INSETS;
+
 /**
  * @author Robert Vokac
  * @since 21.02.2024
  */
 public class TButton extends JButton implements GetProperty {
 
-    private static final int BUTTON_WIDTH = 100;
+    private static final int BUTTON_WIDTH = 80;
     private static final int BUTTON_HEIGHT = 30;
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
@@ -43,6 +45,7 @@ public class TButton extends JButton implements GetProperty {
         super(label);
         this.customWidth = customWidth;
         this.customHeight = customHeight;
+        setMargin(INSETS);
         new Timer(100, e -> {
             if (!MainWindow.hideShowFormsCheckBox.isSelected()) {
                 setVisible(false);

@@ -119,8 +119,8 @@ public class MainWindow extends TWindow {
     private final TTextField noteTextField;
     private final TCheckBox timeOffCheckBox = new TCheckBox("Time off");
     private final TTextField departureTextField;
-    private final TTextField elapsedTextField;
-    private final TTextField remainingTextField;
+    private final TTextField elapsedDayTextField;
+    private final TTextField remainingDayTextField;
     private final TTextField elapsedWeekTextField;
     private final TTextField remainingWeekTextField;
     private final TTextField elapsedPauseTextField;
@@ -162,15 +162,15 @@ public class MainWindow extends TWindow {
         this.pauseTimeTextField = new TTextField("00:30", 50, true, valueMustBeTime);
         this.pauseStartTextField = new TTextField("11:00", 50, true, valueMustBeTime);
 
-        this.noteTextField = new TTextField("", 60);
+        this.noteTextField = new TTextField("", 100);
         this.departureTextField = new TTextField();
-        this.elapsedTextField = new TTextField("", 100);
-        this.remainingTextField = new TTextField("", 100);
-        this.elapsedWeekTextField = new TTextField("", 100);
-        this.remainingWeekTextField = new TTextField("", 100);
-        this.elapsedPauseTextField = new TTextField("", 100);
-        this.remainingPauseTextField = new TTextField("", 100);
-        this.endPauseTextField = new TTextField("", 100);
+        this.elapsedDayTextField = new TTextField("", 80);
+        this.remainingDayTextField = new TTextField("", 80);
+        this.elapsedWeekTextField = new TTextField("", 80);
+        this.remainingWeekTextField = new TTextField("", 80);
+        this.elapsedPauseTextField = new TTextField("", 80);
+        this.remainingPauseTextField = new TTextField("", 80);
+        this.endPauseTextField = new TTextField("", 50);
     }
 
     public MainWindow(TimeCalcApp timeCalcApp) {
@@ -259,15 +259,15 @@ public class MainWindow extends TWindow {
                     //
             timeCalcConfiguration.saveToTimeCalcProperties();
         }
-        this.workDaysButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Work Days");
+        this.workDaysButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Arrivals");
         this.activitiesButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Activities");
         this.restartButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Restart");
-        this.exitButton = new TButton("Exit");
-        this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus");
-        this.helpButton = new TButton("Help");
+        this.exitButton = new TButton("Exit", 50);
+        this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus", 70);
+        this.helpButton = new TButton("Help", 60);
         this.weatherButton = new TButton("Weather");
-        this.commandButton = new TButton("Command");
-        this.jokeButton = new TButton("Joke");
+        this.commandButton = new TButton("Run", 60);
+        this.jokeButton = new TButton("Joke", 60);
         this.aboutButton = new AboutButton();
 
         //window.add(weatherButton);
@@ -472,7 +472,7 @@ public class MainWindow extends TWindow {
         //
         this.progressBar = new ProgressBar();
         progressBar.setBounds(progressSwing.getX(), progressSwing.getY() + progressSwing.getHeight() + SwingUtils.MARGIN,
-                progressRotation.getX() + progressRotation.getWidth() - 2 * SwingUtils.MARGIN, 50);
+                progressRotation.getX() + progressRotation.getWidth() - 2 * SwingUtils.MARGIN, 25);
 
         progressBar.visibleProperty
                 .bindTo(timeCalcConfiguration.barVisibleProperty);
@@ -548,8 +548,8 @@ public class MainWindow extends TWindow {
             progressMoney.hiddenProperty.bindTo(timeCalcConfiguration.moneyHiddenProperty);
             progressWeather.hiddenProperty.bindTo(timeCalcConfiguration.weatherHiddenProperty);
         }
-        TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 70);
-        arrivalTextFieldLabel.setBoundsFromTop(progressColor, 3);
+        TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 50);
+        arrivalTextFieldLabel.setBoundsFromTop(progressColor, 2);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
         TButton arrivalIncreaseButton = new SmallTButton('+');
@@ -601,19 +601,14 @@ public class MainWindow extends TWindow {
 
 
         //
-        TLabel noteTextFieldLabel = new TLabel("Note:", 80);
+        TLabel noteTextFieldLabel = new TLabel("Note:", 50);
         noteTextFieldLabel.setBoundsFromTop(arrivalTextFieldLabel);
 
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
         timeOffCheckBox.setBoundsFromLeft(noteTextField);
 
-        this.saveButton = new TButton("Save", 180);
-        saveButton.setBounds(
-                pauseDecreaseButton.getX() - SwingUtils.MARGIN,
-                timeOffCheckBox.getY(),
-                noteTextField.getWidth() * 3,
-                noteTextField.getHeight()
-                );
+        this.saveButton = new TButton("Save", 80);
+        saveButton.setBoundsFromLeft(timeOffCheckBox);
         //
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(arrivalTextFieldLabel);
@@ -657,32 +652,37 @@ public class MainWindow extends TWindow {
         add(noteTextField);
         add(timeOffCheckBox);
         //
-        TLabel departureTextFieldLabel = new TLabel("Departure:", 70);
-        departureTextFieldLabel.setBoundsFromTop(noteTextFieldLabel);
+        TLabel departureTextFieldLabel = new TLabel("Departure:", 65);
+        departureTextFieldLabel.setBoundsFromLeft(saveButton, 50);
 
         departureTextField.setBoundsFromLeft(departureTextFieldLabel);
         departureTextField.setEditable(false);
         //
-        TLabel elapsedTextFieldLabel = new TLabel("Elapsed:");
-        elapsedTextFieldLabel.setBoundsFromLeft(departureTextField);
 
-        elapsedTextField.setBoundsFromLeft(elapsedTextFieldLabel);
-        elapsedTextField.setEditable(false);
+        TLabel dayLabel = new TLabel("Day:", 50);
+        dayLabel.setBoundsFromTop(noteTextFieldLabel);
+
+        elapsedDayTextField.setBoundsFromLeft(dayLabel);
+        elapsedDayTextField.setEditable(false);
         //
-        TLabel remainingTextFieldLabel = new TLabel("Remaining:", 100);
-        remainingTextFieldLabel.setBoundsFromLeft(elapsedTextField);
 
-        remainingTextField.setBoundsFromLeft(remainingTextFieldLabel);
-        remainingTextField.setEditable(false);
+
+
+        remainingDayTextField.setBoundsFromLeft(elapsedDayTextField);
+        remainingDayTextField.setEditable(false);
         //
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(departureTextFieldLabel);
         add(departureTextField);
+        TLabel endPauseTextFieldLabel = new TLabel("Pause end:", 60);
+        endPauseTextFieldLabel.setBounds(pauseStartTimeLabel.getX(), departureTextFieldLabel.getY());
+
+        endPauseTextField.setBoundsFromLeft(endPauseTextFieldLabel);
+        endPauseTextField.setEditable(false);
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
-            add(elapsedTextFieldLabel);
-            add(elapsedTextField);
-            add(remainingTextFieldLabel);
-            add(remainingTextField);
+            add(dayLabel);
+            add(elapsedDayTextField);
+            add(remainingDayTextField);
         }
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
             add(saveButton);
@@ -691,82 +691,63 @@ public class MainWindow extends TWindow {
         this.activityRepository = new ActivityRepositorySQLiteImpl(timeCalcApp.getSqliteConnectionFactory());
 
         ////////
-        TLabel weekLabel = new TLabel("Week:", 70);
-        weekLabel.setBoundsFromTop(departureTextFieldLabel);
-        TTextField field = new TTextField("");
-        field.setBoundsFromLeft(weekLabel);
-
-        field.setEditable(false);
-        field.setVisible(false);
+//        TTextField field = new TTextField("");
+//        field.setBoundsFromLeft(weekLabel);
+//
+//        field.setEditable(false);
+//        field.setVisible(false);
         //
 
         //
-        TLabel elapsedWeekTextFieldLabel = new TLabel("Elapsed:");
-        elapsedWeekTextFieldLabel.setBoundsFromLeft(field);
+        TLabel weekLabel = new TLabel("Week", 50);
+        weekLabel.setBoundsFromLeft(remainingDayTextField);
 
-        elapsedWeekTextField.setBoundsFromLeft(elapsedWeekTextFieldLabel);
+        elapsedWeekTextField.setBoundsFromLeft(weekLabel);
         elapsedWeekTextField.setEditable(false);
         //
-        TLabel remainingWeekTextFieldLabel = new TLabel("Remaining:", 100);
-        remainingWeekTextFieldLabel.setBoundsFromLeft(elapsedWeekTextField);
 
-        remainingWeekTextField.setBoundsFromLeft(remainingWeekTextFieldLabel);
+        remainingWeekTextField.setBoundsFromLeft(elapsedWeekTextField);
         remainingWeekTextField.setEditable(false);
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
             add(weekLabel);
-            add(elapsedWeekTextFieldLabel);
             add(elapsedWeekTextField);
-            add(remainingWeekTextFieldLabel);
             add(remainingWeekTextField);
         }
         ////////
-        TLabel pauseLabel = new TLabel("Pause:", 70);
-        pauseLabel.setBoundsFromTop(weekLabel);
-        TTextField field2 = new TTextField("");
-        field2.setBoundsFromLeft(pauseLabel);
-
-        field2.setEditable(false);
-        field2.setVisible(false);
+//        TTextField field2 = new TTextField("");
+//        field2.setBoundsFromLeft(pauseLabel);
+//
+//        field2.setEditable(false);
+//        field2.setVisible(false);
         //
 
         //
-        TLabel elapsedPauseTextFieldLabel = new TLabel("Elapsed:");
-        elapsedPauseTextFieldLabel.setBoundsFromLeft(field2);
+        TLabel pauseLabel = new TLabel("Pause:", 50);
+        pauseLabel.setBoundsFromLeft(remainingWeekTextField);
 
-        elapsedPauseTextField.setBoundsFromLeft(elapsedPauseTextFieldLabel);
+        elapsedPauseTextField.setBoundsFromLeft(pauseLabel);
         elapsedPauseTextField.setEditable(false);
         //
-        TLabel remainingPauseTextFieldLabel = new TLabel("Remaining:", 100);
-        remainingPauseTextFieldLabel.setBoundsFromLeft(elapsedPauseTextField);
-
-        remainingPauseTextField.setBoundsFromLeft(remainingPauseTextFieldLabel);
+        remainingPauseTextField.setBoundsFromLeft(elapsedPauseTextField);
         remainingPauseTextField.setEditable(false);
         //
-        TLabel endPauseTextFieldLabel = new TLabel("End:", 50);
-        endPauseTextFieldLabel.setBoundsFromLeft(remainingPauseTextField);
 
-        endPauseTextField.setBoundsFromLeft(endPauseTextFieldLabel);
-        endPauseTextField.setEditable(false);
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
             add(pauseLabel);
-            add(elapsedPauseTextFieldLabel);
             add(elapsedPauseTextField);
-            add(remainingPauseTextFieldLabel);
             add(remainingPauseTextField);
             add(endPauseTextFieldLabel);
             add(endPauseTextField);
         }
         ////////
         //
-        configButton.setBoundsFromTop(pauseLabel);
+        configButton.setBoundsFromTop(dayLabel);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
 
-        exitButton.setBounds(saveButton.getX() + saveButton.getWidth() - activitiesButton.getWidth(), workDaysButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
-        restartButton.setBounds(exitButton.getX() - SwingUtils.MARGIN - activitiesButton.getWidth(), activitiesButton.getY(), activitiesButton.getWidth(), activitiesButton.getHeight());
 
         //
-        helpButton.setBoundsFromTop(exitButton, 2);
+        helpButton.setBoundsFromLeft(activitiesButton);
         focusButton.setBoundsFromLeft(helpButton);
         commandButton.setBoundsFromLeft(focusButton);
         jokeButton.setBoundsFromLeft(commandButton);
@@ -775,6 +756,8 @@ public class MainWindow extends TWindow {
                 jokeButton.getX() + jokeButton.getWidth() + SwingUtils.MARGIN,
                 jokeButton.getY(), 20, 20);
         //
+        restartButton.setBoundsFromLeft(hideShowFormsCheckBox);
+        exitButton.setBoundsFromLeft(restartButton);
         aboutButton.setBounds(exitButton.getX(),
                 exitButton.getY() + exitButton.getHeight() + SwingUtils.MARGIN);
 
@@ -1434,15 +1417,15 @@ public class MainWindow extends TWindow {
 
         int secondsRemains = 60 - secondNow;
         int millisecondsRemains = 1000 - millisecondNow;
-        if (!remainingTextField.valueProperty.getValue()
+        if (!remainingDayTextField.valueProperty.getValue()
                 .equals(timeRemainsString)) {
-            remainingTextField.valueProperty.setValue(timeRemainsString);
+            remainingDayTextField.valueProperty.setValue(timeRemainsString);
         }
         remainingWeekTextField.valueProperty.setValue(timeWeekRemains.toString());
 
-        if (!elapsedTextField.valueProperty.getValue()
+        if (!elapsedDayTextField.valueProperty.getValue()
                 .equals(timeElapsedString)) {
-            elapsedTextField.valueProperty.setValue(timeElapsedString);
+            elapsedDayTextField.valueProperty.setValue(timeElapsedString);
         }
         elapsedWeekTextField.valueProperty.setValue(timeWeekElapsed.toString());
         //            if (!elapsedTextField.valueProperty.getValue()
@@ -1456,26 +1439,28 @@ public class MainWindow extends TWindow {
         boolean beforePause = nowTime.toTotalMilliseconds() < pauseStart.toTotalMilliseconds();
         boolean afterPause = nowTime.toTotalMilliseconds() > pauseEnd.toTotalMilliseconds();
         boolean duringPause = !beforePause && !afterPause;
+
+        TTime pauseElapsed = beforePause ? TTime.ofMinutes(0) : (afterPause ? pauseTimeTextField.asTTime() : nowTime.remove(pauseStart));
+        double pauseElapsedMilliseconds = pauseElapsed.toTotalMilliseconds();
+        double pauseTotalMilliseconds = pauseTimeTextField.asTTime().toTotalMilliseconds();
+        double pauseProgress = pauseElapsedMilliseconds / pauseTotalMilliseconds;
+        TTime pauseRemains = afterPause ? TTime.ofMinutes(0) : (beforePause ? pauseTimeTextField.asTTime() : pauseEnd.remove(nowTime));
+        endPauseTextField.valueProperty.setValue(pauseEnd.toString().substring(0,5));
+        elapsedPauseTextField.valueProperty.setValue(pauseElapsed.toString());
+        remainingPauseTextField.valueProperty.setValue(pauseRemains.toString());
+
         if(timeCalcConfiguration.testEnabledProperty.isDisabled()) {
             if (duringPause && !pauseNotifications) {
                 pauseNotifications = true;
                 Utils.showNotification(
                         "It is the time for pause. Please, eat something and do not work.",
-                        pauseTimeTextField.asTTime().toTotalMilliseconds(),
+                        remainingPauseTextField.asTTime().toTotalMilliseconds(),
                         400);
             }
             if (!duringPause && pauseNotifications) {
                 pauseNotifications = false;
             }
         }
-        TTime pauseElapsed = beforePause ? TTime.ofMinutes(0) : (afterPause ? pauseTimeTextField.asTTime() : nowTime.remove(pauseStart));
-        double pauseElapsedMilliseconds = pauseElapsed.toTotalMilliseconds();
-        double pauseTotalMilliseconds = pauseTimeTextField.asTTime().toTotalMilliseconds();
-        double pauseProgress = pauseElapsedMilliseconds / pauseTotalMilliseconds;
-        TTime pauseRemains = afterPause ? TTime.ofMinutes(0) : (beforePause ? pauseTimeTextField.asTTime() : pauseEnd.remove(nowTime));
-        endPauseTextField.valueProperty.setValue(pauseEnd.toString());
-        elapsedPauseTextField.valueProperty.setValue(pauseElapsed.toString());
-        remainingPauseTextField.valueProperty.setValue(pauseRemains.toString());
 
         int totalMillisecondsDone
                 = timeElapsed.toTotalMilliseconds();

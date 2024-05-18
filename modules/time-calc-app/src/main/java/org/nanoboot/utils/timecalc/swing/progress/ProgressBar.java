@@ -16,9 +16,9 @@ import java.awt.RenderingHints;
 
 public class ProgressBar extends Widget {
 
-    public IntegerProperty heightProperty = new IntegerProperty("heightProperty", 50);
+    public IntegerProperty heightProperty = new IntegerProperty("heightProperty", 25);
     public ProgressBar() {
-        setPreferredSize(new Dimension(600, 50));
+        setPreferredSize(new Dimension(600, 25));
     }
 
     @Override
