@@ -341,7 +341,7 @@ public class WorkingDaysWindow extends TWindow {
                 WorkingDay wd = workingDayRepository.read(year, month, day);
                 if (wd == null) {
                     wd = new WorkingDay(WorkingDay.createId(year, month, day),
-                            year, month, day, -1, -1, -1, -1, -1, -1,
+                            year, month, day, -1, -1, -1, -1, -1, -1, -1, -1,
                             "Fictive day", true,0);
                 }
                 workingDaysList.add(wd);
@@ -383,6 +383,8 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(THREE_DASHES);
                 list2.add(THREE_DASHES);
                 list2.add(THREE_DASHES);
+                list2.add(THREE_DASHES);
+                list2.add(THREE_DASHES);
             } else {
                 TTime overtime = new TTime(wdfs.getOvertimeHour(),
                         wdfs.getOvertimeMinute());
@@ -401,6 +403,13 @@ public class WorkingDaysWindow extends TWindow {
                 list2.add(
                         TTime.ofMinutes(wdfs.getPauseTimeInMinutes()).toString()
                                 .substring(0, 5));
+                list2.add(
+                        new TTime(wdfs.getPauseStartHour(), wdfs.getPauseStartMinute()).toString()
+                                .substring(0, 5));
+                list2.add(
+                        new TTime(wdfs.getPauseEndHour(), wdfs.getPauseEndMinute()).toString()
+                                .substring(0, 5));
+
             }
             list2.add(wdfs.getNote());
             list2.add(wdfs.isTimeOff() ? YES : NO);
@@ -430,7 +439,7 @@ public class WorkingDaysWindow extends TWindow {
         }
         String[] columns =
                 new String[] {"Day of Week", "Weekend", "Date", "Arrival",
-                        "Departure", "Overtime", "Working time", "Pause time",
+                        "Departure", "Overtime", "Working length", "Pause length", "Pause start", "Pause end",
                         "Note", "Time off", "Forget overtime", "Total overtime", "Arrival MA7",
                         "Arrival MA14", "Arrival MA28", "Arrival MA56"};
 

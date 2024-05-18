@@ -36,6 +36,8 @@ public class WorkingDay {
     private int arrivalMinute;
     private int overtimeHour;
     private int overtimeMinute;
+    private int pauseStartHour;
+    private int pauseStartMinute;
 
     private int workingTimeInMinutes;
     private int pauseTimeInMinutes;

@@ -36,7 +36,7 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
         sb
                 .append("INSERT INTO ")
                 .append(WorkingDayTable.TABLE_NAME)
-                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?,?)");
+                .append(" VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?,?, ?,?)");
 
         String sql = sb.toString();
 
@@ -53,6 +53,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getArrivalMinute());
             stmt.setInt(++i, workingDay.getOvertimeHour());
             stmt.setInt(++i, workingDay.getOvertimeMinute());
+            stmt.setInt(++i, workingDay.getPauseStartHour());
+            stmt.setInt(++i, workingDay.getPauseStartMinute());
             //
             stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
@@ -153,6 +155,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
                 .append(WorkingDayTable.ARRIVAL_MINUTE).append("=?, ")
                 .append(WorkingDayTable.OVERTIME_HOUR).append("=?, ")
                 .append(WorkingDayTable.OVERTIME_MINUTE).append("=?, ")
+                .append(WorkingDayTable.PAUSE_START_HOUR).append("=?, ")
+                .append(WorkingDayTable.PAUSE_START_MINUTE).append("=?, ")
                 .append(WorkingDayTable.WORKING_TIME_IN_MINUTES).append("=?, ")
                 .append(WorkingDayTable.PAUSE_TIME_IN_MINUTES).append("=?, ")
                 .append(WorkingDayTable.NOTE).append("=?, ")
@@ -170,6 +174,9 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getArrivalMinute());
             stmt.setInt(++i, workingDay.getOvertimeHour());
             stmt.setInt(++i, workingDay.getOvertimeMinute());
+            stmt.setInt(++i, workingDay.getPauseStartHour());
+            stmt.setInt(++i, workingDay.getPauseStartMinute());
+            //
             stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
             stmt.setString(++i, workingDay.getNote());
@@ -205,6 +212,8 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
                 rs.getInt(WorkingDayTable.ARRIVAL_MINUTE),
                 rs.getInt(WorkingDayTable.OVERTIME_HOUR),
                 rs.getInt(WorkingDayTable.OVERTIME_MINUTE),
+                rs.getInt(WorkingDayTable.PAUSE_START_HOUR),
+                rs.getInt(WorkingDayTable.PAUSE_START_MINUTE),
                 rs.getInt(WorkingDayTable.WORKING_TIME_IN_MINUTES),
                 rs.getInt(WorkingDayTable.PAUSE_TIME_IN_MINUTES),
                 rs.getString(WorkingDayTable.NOTE),

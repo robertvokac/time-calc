@@ -22,6 +22,8 @@ public class WorkingDayForStats extends WorkingDay {
 
     private int departureHour;
     private int departureMinute;
+    private int pauseEndHour;
+    private int pauseEndMinute;
     private int dayOfWeek;
     private int remainingOvertimeHours;
     private int remainingOvertimeMinutes;
@@ -207,6 +209,8 @@ public class WorkingDayForStats extends WorkingDay {
                 wd.getArrivalMinute(),
                 wd.getOvertimeHour(),
                 wd.getOvertimeMinute(),
+                wd.getPauseStartHour(),
+                wd.getPauseStartMinute(),
                 wd.getWorkingTimeInMinutes(),
                 wd.getPauseTimeInMinutes(),
                 wd.getNote(),
@@ -216,10 +220,11 @@ public class WorkingDayForStats extends WorkingDay {
 
     public WorkingDayForStats(String id, int year, int month, int day,
             int arrivalHour, int arrivalMinute, int overtimeHour,
-            int overtimeMinute, int workingTimeInMinutes,
+            int overtimeMinute, int pauseStartHour, int pauseStartMinute,
+            int workingTimeInMinutes,
             int pauseTimeInMinutes, String note, boolean timeOff, int forgetOvertime) {
         super(id, year, month, day, arrivalHour, arrivalMinute, overtimeHour,
-                overtimeMinute, workingTimeInMinutes, pauseTimeInMinutes, note,
+                overtimeMinute, pauseStartHour, pauseStartMinute, workingTimeInMinutes, pauseTimeInMinutes, note,
                 timeOff, forgetOvertime);
         this.arrival = this.isThisDayTimeOff() ? null :
                 new TTime(arrivalHour, arrivalMinute);
@@ -234,6 +239,15 @@ public class WorkingDayForStats extends WorkingDay {
         this.departureHour = this.isThisDayTimeOff() ? -1 : departure.getHour();
         this.departureMinute =
                 this.isThisDayTimeOff() ? -1 : departure.getMinute();
+        TTime pauseStart = new TTime(this.getPauseStartHour(), this.getPauseStartMinute());
+        TTime pauseEnd = null;
+        if(pause == null) {
+            pauseEnd = pauseStart.cloneInstance();
+        } else {
+            pauseEnd = pauseStart.add(pause);
+        }
+        this.pauseEndHour = pauseEnd.getHour();
+        this.pauseEndMinute = pauseEnd.getMinute();
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);

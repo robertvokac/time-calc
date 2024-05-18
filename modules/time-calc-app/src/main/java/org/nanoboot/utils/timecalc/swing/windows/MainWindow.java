@@ -115,6 +115,7 @@ public class MainWindow extends TWindow {
     private final TTextField overtimeTextField;
     private final TTextField workingTimeTextField;
     private final TTextField pauseTimeTextField;
+    private final TTextField pauseStartTextField;
     private final TTextField noteTextField;
     private final TCheckBox timeOffCheckBox = new TCheckBox("Time off");
     private final TTextField departureTextField;
@@ -155,6 +156,7 @@ public class MainWindow extends TWindow {
         this.overtimeTextField = new TTextField(Constants.DEFAULT_OVERTIME, 50, true, valueMustBeTime);
         this.workingTimeTextField = new TTextField("08:00", 50, true, valueMustBeTime);
         this.pauseTimeTextField = new TTextField("00:30", 50, true, valueMustBeTime);
+        this.pauseStartTextField = new TTextField("11:00", 50, true, valueMustBeTime);
 
         this.noteTextField = new TTextField("", 60);
         this.departureTextField = new TTextField();
@@ -569,21 +571,42 @@ public class MainWindow extends TWindow {
         workingDecreaseButton.setBounds(workingTimeTextField.getX() + workingTimeTextField.getWidth(), workingTimeTextField.getY() + 15, 15, 15);
 
         //
-        TLabel pauseTimeInMinutesFieldLabel = new TLabel("Pause:", 40);
-        pauseTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeTextField, 15);
+        TLabel pauseLenghtTimeInMinutesFieldLabel = new TLabel("Pause length:", 80);
+        pauseLenghtTimeInMinutesFieldLabel.setBoundsFromLeft(workingTimeTextField, 15);
 
-        pauseTimeTextField.setBoundsFromLeft(pauseTimeInMinutesFieldLabel);
+        pauseTimeTextField.setBoundsFromLeft(pauseLenghtTimeInMinutesFieldLabel);
         TButton pauseIncreaseButton = new SmallTButton('+');
         TButton pauseDecreaseButton = new SmallTButton('-');
         pauseIncreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY(), 15, 15);
         pauseDecreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY() + 15, 15, 15);
 
         //
-        TLabel noteTextFieldLabel = new TLabel("Note:", 40);
-        noteTextFieldLabel.setBoundsFromLeft(pauseTimeTextField, 10);
+        TLabel pauseStartTimeLabel = new TLabel("Pause start:", 60);
+        pauseStartTimeLabel.setBoundsFromLeft(pauseIncreaseButton, 15);
+
+        pauseStartTextField.setBoundsFromLeft(pauseStartTimeLabel);
+        TButton pauseStartIncreaseButton = new SmallTButton('+');
+        TButton pauseStartDecreaseButton = new SmallTButton('-');
+        pauseStartIncreaseButton.setBounds(pauseStartTextField.getX() + pauseStartTextField.getWidth(), pauseStartTextField.getY(), 15, 15);
+        pauseStartDecreaseButton.setBounds(pauseStartTextField.getX() + pauseStartTextField.getWidth(), pauseStartTextField.getY() + 15, 15, 15);
+
+
+
+
+        //
+        TLabel noteTextFieldLabel = new TLabel("Note:", 80);
+        noteTextFieldLabel.setBoundsFromTop(arrivalTextFieldLabel);
 
         noteTextField.setBoundsFromLeft(noteTextFieldLabel);
         timeOffCheckBox.setBoundsFromLeft(noteTextField);
+
+        this.saveButton = new TButton("Save", 180);
+        saveButton.setBounds(
+                pauseDecreaseButton.getX() - SwingUtils.MARGIN,
+                timeOffCheckBox.getY(),
+                noteTextField.getWidth() * 3,
+                noteTextField.getHeight()
+                );
         //
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(arrivalTextFieldLabel);
@@ -602,10 +625,14 @@ public class MainWindow extends TWindow {
         add(workingDecreaseButton);
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
-            add(pauseTimeInMinutesFieldLabel);
+            add(pauseLenghtTimeInMinutesFieldLabel);
             add(pauseTimeTextField);
             add(pauseIncreaseButton);
             add(pauseDecreaseButton);
+            add(pauseStartTimeLabel);
+            add(pauseStartTextField);
+            add(pauseStartIncreaseButton);
+            add(pauseStartDecreaseButton);
         }
 
         arrivalIncreaseButton.addActionListener(e -> increaseArrival(TTime.T_TIME_ONE_MINUTE));
@@ -614,15 +641,17 @@ public class MainWindow extends TWindow {
         overtimeDecreaseButton.addActionListener(e -> decreaseOvertime(TTime.T_TIME_ONE_MINUTE));
         workingIncreaseButton.addActionListener(e -> increaseWork(TTime.T_TIME_ONE_MINUTE));
         workingDecreaseButton.addActionListener(e -> decreaseWork(TTime.T_TIME_ONE_MINUTE));
-        pauseIncreaseButton.addActionListener(e -> increasePause(TTime.T_TIME_ONE_MINUTE));
-        pauseDecreaseButton.addActionListener(e -> decreasePause(TTime.T_TIME_ONE_MINUTE));
+        pauseIncreaseButton.addActionListener(e -> increasePauseLength(TTime.T_TIME_ONE_MINUTE));
+        pauseDecreaseButton.addActionListener(e -> decreasePauseLength(TTime.T_TIME_ONE_MINUTE));
+        pauseStartIncreaseButton.addActionListener(e -> increasePauseStart(TTime.T_TIME_ONE_MINUTE));
+        pauseStartDecreaseButton.addActionListener(e -> decreasePauseStart(TTime.T_TIME_ONE_MINUTE));
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(noteTextFieldLabel);
         add(noteTextField);
         add(timeOffCheckBox);
         //
         TLabel departureTextFieldLabel = new TLabel("Departure:", 70);
-        departureTextFieldLabel.setBoundsFromTop(arrivalTextFieldLabel);
+        departureTextFieldLabel.setBoundsFromTop(noteTextFieldLabel);
 
         departureTextField.setBoundsFromLeft(departureTextFieldLabel);
         departureTextField.setEditable(false);
@@ -638,8 +667,6 @@ public class MainWindow extends TWindow {
 
         remainingTextField.setBoundsFromLeft(remainingTextFieldLabel);
         remainingTextField.setEditable(false);
-        this.saveButton = new TButton("Save", 180);
-        saveButton.setBoundsFromLeft(remainingTextField);
         //
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(departureTextFieldLabel);
@@ -901,6 +928,7 @@ public class MainWindow extends TWindow {
             TTime overtime_ = new TTime(overtimeTextField.getText());
             TTime work_ = new TTime(workingTimeTextField.getText());
             TTime pause_ = new TTime(pauseTimeTextField.getText());
+            TTime pauseStart = new TTime(pauseStartTextField.getText());
 
             Calendar cal = time.asCalendar();
             int year = cal.get(Calendar.YEAR);
@@ -922,6 +950,8 @@ public class MainWindow extends TWindow {
             workingDay.setOvertimeMinute(overtime_.getMinute() * (overtime_.isNegative() ? (-1) : 1));
             workingDay.setWorkingTimeInMinutes(work_.toTotalMilliseconds() / 1000 / 60);
             workingDay.setPauseTimeInMinutes(pause_.toTotalMilliseconds() / 1000 / 60);
+            workingDay.setPauseStartHour(pauseStart.getHour());
+            workingDay.setPauseStartMinute(pauseStart.getMinute());
             workingDay.setNote(noteTextField.getText());
             workingDay.setTimeOff(timeOffCheckBox.isSelected());
             workingDay.setForgetOvertime(forgetOvertimeProperty.getValue());
@@ -941,6 +971,7 @@ public class MainWindow extends TWindow {
             //
             workingTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getWorkingTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
             pauseTimeTextField.valueProperty.setValue(TTime.ofMilliseconds(wd.getPauseTimeInMinutes() * 60 * 1000).toString().substring(0, 5));
+            pauseStartTextField.valueProperty.setValue(new TTime(wd.getPauseStartHour(), wd.getPauseStartMinute()).toString().substring(0,5));
             noteTextField.valueProperty.setValue(wd.getNote());
             timeOffCheckBox.setSelected(wd.isTimeOff());
             forgetOvertimeProperty.setValue(wd.getForgetOvertime());
@@ -1630,15 +1661,26 @@ public class MainWindow extends TWindow {
         workingTimeTextField.valueProperty.setValue(new TTime(this.workingTimeTextField.valueProperty.getValue()).remove(tTime).toString().substring(0, 5));
     }
 
-    public void increasePause(TTime tTime) {
+    public void increasePauseLength(TTime tTime) {
         pauseTimeTextField.valueProperty.setValue(new TTime(this.pauseTimeTextField.valueProperty.getValue()).add(tTime).toString().substring(0, 5));
     }
 
-    public void decreasePause(TTime tTime) {
+    public void decreasePauseLength(TTime tTime) {
         pauseTimeTextField.valueProperty.setValue(
                 new TTime(this.pauseTimeTextField.valueProperty.getValue())
                         .remove(tTime).toString().substring(0, 5));
     }
+
+    public void increasePauseStart(TTime tTime) {
+        pauseStartTextField.valueProperty.setValue(new TTime(this.pauseStartTextField.valueProperty.getValue()).add(tTime).toString().substring(0, 5));
+    }
+
+    public void decreasePauseStart(TTime tTime) {
+        pauseStartTextField.valueProperty.setValue(
+                new TTime(this.pauseStartTextField.valueProperty.getValue())
+                        .remove(tTime).toString().substring(0, 5));
+    }
+
 
     public void doSaveButtonClick() {
         this.saveButton.doClick();

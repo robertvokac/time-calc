@@ -256,10 +256,10 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                     break;
                 }
                 if (increase) {
-                    mainWindow.increasePause(changeTTime);
+                    mainWindow.increasePauseLength(changeTTime);
                 }
                 if (decrease) {
-                    mainWindow.decreasePause(changeTTime);
+                    mainWindow.decreasePauseLength(changeTTime);
                 }
                 break;
             }
