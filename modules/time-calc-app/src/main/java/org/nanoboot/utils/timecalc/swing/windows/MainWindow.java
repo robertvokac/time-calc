@@ -123,6 +123,9 @@ public class MainWindow extends TWindow {
     private final TTextField remainingTextField;
     private final TTextField elapsedWeekTextField;
     private final TTextField remainingWeekTextField;
+    private final TTextField elapsedPauseTextField;
+    private final TTextField remainingPauseTextField;
+    private final TTextField endPauseTextField;
     private final TButton saveButton;
     private final ProgressLife progressLife;
     private final ProgressMoney progressMoney;
@@ -148,6 +151,7 @@ public class MainWindow extends TWindow {
     private final Time timeAlwaysReal;
 
     public final ReadOnlyProperty<Boolean> allowOnlyBasicFeaturesProperty;
+    private boolean pauseNotifications = false;
 
     {
         ChangeListener valueMustBeTime
@@ -164,6 +168,9 @@ public class MainWindow extends TWindow {
         this.remainingTextField = new TTextField("", 100);
         this.elapsedWeekTextField = new TTextField("", 100);
         this.remainingWeekTextField = new TTextField("", 100);
+        this.elapsedPauseTextField = new TTextField("", 100);
+        this.remainingPauseTextField = new TTextField("", 100);
+        this.endPauseTextField = new TTextField("", 100);
     }
 
     public MainWindow(TimeCalcApp timeCalcApp) {
@@ -713,8 +720,45 @@ public class MainWindow extends TWindow {
             add(remainingWeekTextField);
         }
         ////////
+        TLabel pauseLabel = new TLabel("Pause:", 70);
+        pauseLabel.setBoundsFromTop(weekLabel);
+        TTextField field2 = new TTextField("");
+        field2.setBoundsFromLeft(pauseLabel);
+
+        field2.setEditable(false);
+        field2.setVisible(false);
         //
-        configButton.setBoundsFromTop(weekLabel);
+
+        //
+        TLabel elapsedPauseTextFieldLabel = new TLabel("Elapsed:");
+        elapsedPauseTextFieldLabel.setBoundsFromLeft(field2);
+
+        elapsedPauseTextField.setBoundsFromLeft(elapsedPauseTextFieldLabel);
+        elapsedPauseTextField.setEditable(false);
+        //
+        TLabel remainingPauseTextFieldLabel = new TLabel("Remaining:", 100);
+        remainingPauseTextFieldLabel.setBoundsFromLeft(elapsedPauseTextField);
+
+        remainingPauseTextField.setBoundsFromLeft(remainingPauseTextFieldLabel);
+        remainingPauseTextField.setEditable(false);
+        //
+        TLabel endPauseTextFieldLabel = new TLabel("End:", 50);
+        endPauseTextFieldLabel.setBoundsFromLeft(remainingPauseTextField);
+
+        endPauseTextField.setBoundsFromLeft(endPauseTextFieldLabel);
+        endPauseTextField.setEditable(false);
+        if(!allowOnlyBasicFeaturesProperty.getValue()) {
+            add(pauseLabel);
+            add(elapsedPauseTextFieldLabel);
+            add(elapsedPauseTextField);
+            add(remainingPauseTextFieldLabel);
+            add(remainingPauseTextField);
+            add(endPauseTextFieldLabel);
+            add(endPauseTextField);
+        }
+        ////////
+        //
+        configButton.setBoundsFromTop(pauseLabel);
         workDaysButton.setBoundsFromLeft(configButton);
         activitiesButton.setBoundsFromLeft(workDaysButton);
 
@@ -1406,6 +1450,29 @@ public class MainWindow extends TWindow {
         //                String s = timeElapsed.remove(new TimeHM(0,1)).toString();
         //                elapsedTextField.valueProperty.setValue(s + ":" + (secondNow < 10 ? "0" : "") + secondNow + ":" + (millisecondNow < 10 ? "00" : (millisecondNow < 100 ? "0" : millisecondNow)) + millisecondNow);
         //            }
+        ////
+        TTime pauseStart = pauseStartTextField.asTTime();
+        TTime pauseEnd = pauseStart.add(pauseTimeTextField.asTTime());
+        boolean beforePause = nowTime.toTotalMilliseconds() < pauseStart.toTotalMilliseconds();
+        boolean afterPause = nowTime.toTotalMilliseconds() > pauseEnd.toTotalMilliseconds();
+        boolean duringPause = !beforePause && !afterPause;
+        if(timeCalcConfiguration.testEnabledProperty.isDisabled()) {
+            if (duringPause && !pauseNotifications) {
+                pauseNotifications = true;
+                Utils.showNotification(
+                        "It is the time for pause. Please, eat something and do not work.",
+                        pauseTimeTextField.asTTime().toTotalMilliseconds(),
+                        400);
+            }
+            if (!duringPause && pauseNotifications) {
+                pauseNotifications = false;
+            }
+        }
+        TTime pauseElapsed = beforePause ? TTime.ofMinutes(0) : (afterPause ? pauseTimeTextField.asTTime() : nowTime.remove(pauseStart));
+        TTime pauseRemains = afterPause ? TTime.ofMinutes(0) : (beforePause ? pauseTimeTextField.asTTime() : pauseEnd.remove(nowTime));
+        endPauseTextField.valueProperty.setValue(pauseEnd.toString());
+        elapsedPauseTextField.valueProperty.setValue(pauseElapsed.toString());
+        remainingPauseTextField.valueProperty.setValue(pauseRemains.toString());
 
         int totalMillisecondsDone
                 = timeElapsed.toTotalMilliseconds();
