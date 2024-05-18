@@ -1243,17 +1243,10 @@ public class MainWindow extends TWindow {
                 break;
             }
 
-            boolean grey = Visibility
+            boolean stronglyColored = Visibility
                     .valueOf(timeCalcApp.visibilityProperty.getValue())
-                    .isGray();
-            if (grey) {
-//                remainingDayTextField.setForeground(Color.GRAY);
-//                elapsedDayTextField.setForeground(Color.GRAY);
-//                remainingWeekTextField.setForeground(Color.GRAY);
-//                elapsedWeekTextField.setForeground(Color.GRAY);
-//                remainingPauseTextField.setForeground(Color.GRAY);
-//                elapsedPauseTextField.setForeground(Color.GRAY);
-            } else {
+                    .isStronglyColored();
+            if (stronglyColored) {
                 remainingDayTextField.setForeground(Color.RED);
                 elapsedDayTextField.setForeground(Color.GREEN);
                 remainingWeekTextField.setForeground(Color.RED);
