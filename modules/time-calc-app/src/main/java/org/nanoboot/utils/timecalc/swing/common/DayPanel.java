@@ -168,8 +168,8 @@ public class DayPanel extends JPanel {
                     .map(a->a.createTotalComment())
                     .collect(
                             Collectors.joining("\n"));
-            JOptionPane
-                    .showMessageDialog(null, comments, "All comments for: " + year + "-" + (month.length() < 2 ? "0" : "") + month + "-" + (day.length() < 2 ? "0" : "") + day , JOptionPane.INFORMATION_MESSAGE);
+//            JOptionPane
+//                    .showMessageDialog(null, comments, "All comments for: " + year + "-" + (month.length() < 2 ? "0" : "") + month + "-" + (day.length() < 2 ? "0" : "") + day , JOptionPane.INFORMATION_MESSAGE);
 
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(comments), null);

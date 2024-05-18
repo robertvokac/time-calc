@@ -707,14 +707,12 @@ public class MainWindow extends TWindow {
         TLabel dayLabel = new TLabel("Day:", 50);
         dayLabel.setBoundsFromTop(noteTextFieldLabel);
 
-        elapsedDayTextField.setBoundsFromLeft(dayLabel);
-        elapsedDayTextField.setEditable(false);
-        //
 
-
-
-        remainingDayTextField.setBoundsFromLeftWithAdditionalX(elapsedDayTextField, 15);
+        remainingDayTextField.setBoundsFromLeft(dayLabel);
         remainingDayTextField.setEditable(false);
+
+        elapsedDayTextField.setBoundsFromLeftWithAdditionalX(remainingDayTextField, 15);
+        elapsedDayTextField.setEditable(false);
         //
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(departureTextFieldLabel);
@@ -745,14 +743,19 @@ public class MainWindow extends TWindow {
 
         //
         TLabel weekLabel = new TLabel("Week", 50);
-        weekLabel.setBoundsFromLeft(remainingDayTextField);
+        weekLabel.setBoundsFromLeft(elapsedDayTextField);
 
-        elapsedWeekTextField.setBoundsFromLeft(weekLabel);
+        remainingWeekTextField.setBoundsFromLeft(weekLabel);
+        remainingWeekTextField.setEditable(false);
+        //
+        elapsedWeekTextField.setBoundsFromLeftWithAdditionalX(remainingWeekTextField, 15);
         elapsedWeekTextField.setEditable(false);
         //
 
-        remainingWeekTextField.setBoundsFromLeftWithAdditionalX(elapsedWeekTextField, 15);
-        remainingWeekTextField.setEditable(false);
+        //
+
+        //
+
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
             add(weekLabel);
             add(elapsedWeekTextField);
@@ -768,13 +771,15 @@ public class MainWindow extends TWindow {
 
         //
         TLabel pauseLabel = new TLabel("Pause:", 50);
-        pauseLabel.setBoundsFromLeft(remainingWeekTextField);
+        pauseLabel.setBoundsFromLeft(elapsedWeekTextField);
 
-        elapsedPauseTextField.setBoundsFromLeft(pauseLabel);
+        remainingPauseTextField.setBoundsFromLeft(pauseLabel);
+        remainingPauseTextField.setEditable(false);
+        //
+        elapsedPauseTextField.setBoundsFromLeftWithAdditionalX(remainingPauseTextField, 15);
         elapsedPauseTextField.setEditable(false);
         //
-        remainingPauseTextField.setBoundsFromLeftWithAdditionalX(elapsedPauseTextField, 15);
-        remainingPauseTextField.setEditable(false);
+
         //
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
