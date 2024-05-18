@@ -1469,6 +1469,9 @@ public class MainWindow extends TWindow {
             }
         }
         TTime pauseElapsed = beforePause ? TTime.ofMinutes(0) : (afterPause ? pauseTimeTextField.asTTime() : nowTime.remove(pauseStart));
+        double pauseElapsedMilliseconds = pauseElapsed.toTotalMilliseconds();
+        double pauseTotalMilliseconds = pauseTimeTextField.asTTime().toTotalMilliseconds();
+        double pauseProgress = pauseElapsedMilliseconds / pauseTotalMilliseconds;
         TTime pauseRemains = afterPause ? TTime.ofMinutes(0) : (beforePause ? pauseTimeTextField.asTTime() : pauseEnd.remove(nowTime));
         endPauseTextField.valueProperty.setValue(pauseEnd.toString());
         elapsedPauseTextField.valueProperty.setValue(pauseElapsed.toString());
@@ -1552,6 +1555,7 @@ public class MainWindow extends TWindow {
         progress.set(WidgetType.MINUTE, minuteProgress);
         progress.set(WidgetType.YEAR, yearProgress);
         progress.set(WidgetType.LIFE, lifeProgress);
+        progress.set(WidgetType.PAUSE, pauseProgress);
         progressSquare.setProgress(progress);
         progressCircle.setProgress(progress);
         progressSwing.setProgress(progress);

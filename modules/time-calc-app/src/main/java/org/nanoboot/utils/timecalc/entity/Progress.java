@@ -13,7 +13,7 @@ import java.util.Date;
  * @since 21.03.2024
  */
 public class Progress {
-    private final double[] array = new double[7];
+    private final double[] array = new double[9];
     @Getter
     @Setter
     private int workDaysInMonth;
