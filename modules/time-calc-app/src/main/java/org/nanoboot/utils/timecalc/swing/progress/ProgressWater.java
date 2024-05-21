@@ -43,7 +43,7 @@ public class ProgressWater extends Widget {
         int w = getWidth() - 1;
         int w48 = (int) (w * 0.48);
         int w52 = (int) (w * 0.52);
-        int h48 = (int) (h * 0.48);
+        int h48 = (int) (h * 0.48) - 1;
         int h52 = (int) (h * 0.52);
 
         int w4 = (int) (w * 0.04);

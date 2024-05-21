@@ -219,15 +219,6 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox waterColoredProperty
             = new JCheckBox(TimeCalcProperty.WATER_COLORED.getKey());
     //
-    private final JCheckBox colorVisibleProperty
-            = new JCheckBox(TimeCalcProperty.COLOR_VISIBLE.getKey());
-    private final JTextField colorTypeProperty
-            = new JTextField(TimeCalcProperty.COLOR_TYPE.getKey());
-    private final JCheckBox colorHiddenProperty
-            = new JCheckBox(TimeCalcProperty.COLOR_HIDDEN.getKey());
-    private final JTextField colorHeightProperty
-            = new JTextField(TimeCalcProperty.COLOR_HEIGHT.getKey());
-    //
     private final JCheckBox swingVisibleProperty
             = new JCheckBox(TimeCalcProperty.SWING_VISIBLE.getKey());
     private final JTextField swingTypeProperty
@@ -508,8 +499,6 @@ public class ConfigWindow extends TWindow {
                 barHeightProperty.setText("50");
                 waterVisibleProperty.setSelected(enable);
                 waterColoredProperty.setSelected(enable);
-                colorVisibleProperty.setSelected(enable);
-                colorHeightProperty.setText("50");
                 swingVisibleProperty.setSelected(enable);
                 swingQuarterIconVisibleProperty.setSelected(enable);
                 walkingHumanVisibleProperty.setSelected(enable);
@@ -603,7 +592,6 @@ public class ConfigWindow extends TWindow {
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleVisibleProperty,
                 barVisibleProperty, barHiddenProperty, barTypeProperty, barHeightProperty,
                 waterVisibleProperty, waterHiddenProperty, waterTypeProperty,waterColoredProperty,
-                colorVisibleProperty, colorHiddenProperty, colorTypeProperty, colorHeightProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
                 rotationVisibleProperty, rotationTypeProperty, rotationHiddenProperty,

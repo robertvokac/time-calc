@@ -29,7 +29,6 @@ import org.nanoboot.utils.timecalc.swing.controls.TWindow;
 import org.nanoboot.utils.timecalc.swing.progress.AnalogClock;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressBar;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressCircle;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressColor;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
@@ -142,7 +141,6 @@ public class MainWindow extends TWindow {
     private final ProgressFuelGauge progressFuelGauge;
     private final ProgressRotation progressRotation;
     private final ProgressBar progressBar;
-    private final ProgressColor progressColor;
     private final ProgressWater progressWater;
     private final JLabel hourGlassElapsedDayIcon;
     private final JLabel hourGlassRemainsDayIcon;
@@ -532,27 +530,11 @@ public class MainWindow extends TWindow {
 
         add(progressBar);
         //
-        //
-        this.progressColor = new ProgressColor();
-        progressColor.setBounds(progressBar.getX(), progressBar.getY() + progressBar.getHeight() + SwingUtils.MARGIN,
-                progressBar.getX() + progressBar.getWidth() - 2 * SwingUtils.MARGIN, 25);
-
-        progressColor.visibleProperty
-                .bindTo(timeCalcConfiguration.colorVisibleProperty);
-        progressColor.typeProperty
-                .bindTo(timeCalcConfiguration.colorTypeProperty);
-        progressColor.hiddenProperty
-                .bindTo(timeCalcConfiguration.colorHiddenProperty);
-        progressColor.heightProperty
-                .bindTo(timeCalcConfiguration.colorHeightProperty);
-
-        add(progressColor);
-        //
 
         this.progressWater = new ProgressWater();
         progressWater.setBounds(progressSquare.getX() + progressSquare.getWidth() + 4 * SwingUtils.MARGIN,
                 progressSquare.getY(),
-                100, 550 /*exitButton.getY() + exitButton.getHeight() - SwingUtils.MARGIN*/);
+                100, 520 /*exitButton.getY() + exitButton.getHeight() - SwingUtils.MARGIN*/);
 
         progressWater.visibleProperty
                 .bindTo(timeCalcConfiguration.waterVisibleProperty);
@@ -613,7 +595,7 @@ public class MainWindow extends TWindow {
             progressWeather.hiddenProperty.bindTo(timeCalcConfiguration.weatherHiddenProperty);
         }
         TLabel arrivalTextFieldLabel = new TLabel("Arrival:", 50);
-        arrivalTextFieldLabel.setBoundsFromTop(progressColor, 2);
+        arrivalTextFieldLabel.setBoundsFromTop(progressBar, 2);
 
         arrivalTextField.setBoundsFromLeft(arrivalTextFieldLabel);
         TButton arrivalIncreaseButton = new SmallTButton('+');
@@ -1648,7 +1630,6 @@ public class MainWindow extends TWindow {
         progressFuelGauge.setProgress(progress);
         progressRotation.setProgress(progress);
         progressBar.setProgress(progress);
-        progressColor.setProgress(progress);
         progressWater.setProgress(progress);
         dayBattery.setProgress(progress);
 

@@ -115,11 +115,6 @@ public enum TimeCalcProperty {
     WATER_HIDDEN("water.hidden", "Water : Hidden"),
     WATER_COLORED("water.colored", "Water : Colored"),
     //
-    COLOR_VISIBLE("color.visible", "Color"),
-    COLOR_TYPE("color.type", "Color : Type"),
-    COLOR_HIDDEN("color.hidden", "Color : Hidden"),
-    COLOR_HEIGHT("color.height", "Color : Height", Integer.class),
-    //
     WALKING_HUMAN_VISIBLE("walking-human.visible", "Walking Human"),
     WALKING_HUMAN_TYPE("walking-human.type", "Walking Human : Type"),
     WALKING_HUMAN_HIDDEN("walking-human.hidden", "Walking Human : Hidden"),
