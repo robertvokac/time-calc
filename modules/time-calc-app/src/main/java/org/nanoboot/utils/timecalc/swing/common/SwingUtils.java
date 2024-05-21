@@ -16,6 +16,7 @@ public class SwingUtils {
     public static final Font MEDIUM_MONOSPACE_FONT
             = new Font(Font.MONOSPACED, Font.PLAIN, 12);
     public static final Insets INSETS = new Insets(4,4,4,4);
+    public static final Font LINUX_FONT = new Font("sansserif", Font.PLAIN, 10);
     private SwingUtils() {
         //Not meant to be instantiated.
     }

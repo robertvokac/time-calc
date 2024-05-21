@@ -19,7 +19,8 @@ import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Color;
-import java.awt.Insets;
+import java.awt.Font;
+import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 
 import static org.nanoboot.utils.timecalc.swing.common.SwingUtils.INSETS;
 
@@ -31,7 +32,7 @@ public class TTextField extends JTextField implements GetProperty {
 
     private static final int WIDTH = 50;
     private static final int HEIGHT = 30;
-
+        
     private int customWidth = 0;
     private Color originalBackground;
     private Color originalForeground;
@@ -73,6 +74,9 @@ public class TTextField extends JTextField implements GetProperty {
         setVetoableChangeListener(vetoableChangeListener);
         this.customWidth = customWidth;
         valueProperty.setValue(s);
+        if(TimeCalcApp.IS_RUNNING_ON_LINUX) {
+            setFont(SwingUtils.LINUX_FONT);
+        }
         new Timer(100, e -> {
             if (editingOnlyInDialog) {
                 setEditable(false);

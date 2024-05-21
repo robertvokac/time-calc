@@ -634,7 +634,7 @@ public class MainWindow extends TWindow {
         pauseDecreaseButton.setBounds(pauseTimeTextField.getX() + pauseTimeTextField.getWidth(), pauseTimeTextField.getY() + 15, 15, 15);
 
         //
-        TLabel pauseStartTimeLabel = new TLabel("Pause start:", 60);
+        TLabel pauseStartTimeLabel = new TLabel("Pause start:", 70);
         pauseStartTimeLabel.setBoundsFromLeft(pauseIncreaseButton, 15);
 
         pauseStartTextField.setBoundsFromLeft(pauseStartTimeLabel);
@@ -718,7 +718,7 @@ public class MainWindow extends TWindow {
 
         if(!allowOnlyBasicFeaturesProperty.getValue()) add(departureTextFieldLabel);
         add(departureTextField);
-        TLabel endPauseTextFieldLabel = new TLabel("Pause end:", 60);
+        TLabel endPauseTextFieldLabel = new TLabel("Pause end:", 70);
         endPauseTextFieldLabel.setBounds(pauseStartTimeLabel.getX(), departureTextFieldLabel.getY());
 
         endPauseTextField.setBoundsFromLeft(endPauseTextFieldLabel);

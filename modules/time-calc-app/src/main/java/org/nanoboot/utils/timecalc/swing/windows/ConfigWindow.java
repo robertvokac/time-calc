@@ -505,7 +505,7 @@ public class ConfigWindow extends TWindow {
                 fuelVisibleProperty.setSelected(enable);
                 fuelIconVisibleProperty.setSelected(enable);
                 rotationVisibleProperty.setSelected(enable);
-                typeVisibleProperty.setSelected(enable);
+                typeVisibleProperty.setSelected(false);
 //                clockHiddenProperty.setSelected(!enable);
 //                batteryMinuteHiddenProperty.setSelected(!enable);
 //                batteryHourHiddenProperty.setSelected(!enable);

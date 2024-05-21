@@ -10,6 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import java.awt.Color;
+import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 import org.nanoboot.utils.timecalc.swing.windows.MainWindow;
 import org.nanoboot.utils.timecalc.swing.common.SwingUtils;
 
@@ -39,6 +40,9 @@ public class TLabel extends JLabel implements GetProperty {
     public TLabel(String text, int customWidth) {
         super(text);
         this.customWidth = customWidth;
+        if(TimeCalcApp.IS_RUNNING_ON_LINUX) {
+            setFont(SwingUtils.LINUX_FONT);
+        }
         new Timer(100, e -> {
             if (!MainWindow.hideShowFormsCheckBox.isSelected()) {
                 setVisible(false);
