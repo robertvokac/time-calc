@@ -216,6 +216,8 @@ public class ConfigWindow extends TWindow {
             = new JTextField(TimeCalcProperty.WATER_TYPE.getKey());
     private final JCheckBox waterHiddenProperty
             = new JCheckBox(TimeCalcProperty.WATER_HIDDEN.getKey());
+    private final JCheckBox waterColoredProperty
+            = new JCheckBox(TimeCalcProperty.WATER_COLORED.getKey());
     //
     private final JCheckBox colorVisibleProperty
             = new JCheckBox(TimeCalcProperty.COLOR_VISIBLE.getKey());
@@ -505,6 +507,7 @@ public class ConfigWindow extends TWindow {
                 barVisibleProperty.setSelected(enable);
                 barHeightProperty.setText("50");
                 waterVisibleProperty.setSelected(enable);
+                waterColoredProperty.setSelected(enable);
                 colorVisibleProperty.setSelected(enable);
                 colorHeightProperty.setText("50");
                 swingVisibleProperty.setSelected(enable);
@@ -599,7 +602,7 @@ public class ConfigWindow extends TWindow {
                 squareVisibleProperty,squareHiddenProperty,squareTypeProperty,
                 circleVisibleProperty,circleHiddenProperty,circleTypeProperty,circleInnerCircleVisibleProperty,circleOuterCircleVisibleProperty,
                 barVisibleProperty, barHiddenProperty, barTypeProperty, barHeightProperty,
-                waterVisibleProperty, waterHiddenProperty, waterTypeProperty,
+                waterVisibleProperty, waterHiddenProperty, waterTypeProperty,waterColoredProperty,
                 colorVisibleProperty, colorHiddenProperty, colorTypeProperty, colorHeightProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,

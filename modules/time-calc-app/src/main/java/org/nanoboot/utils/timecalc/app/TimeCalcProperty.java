@@ -113,6 +113,7 @@ public enum TimeCalcProperty {
     WATER_VISIBLE("water.visible", "Water"),
     WATER_TYPE("water.type", "Water : Type"),
     WATER_HIDDEN("water.hidden", "Water : Hidden"),
+    WATER_COLORED("water.colored", "Water : Colored"),
     //
     COLOR_VISIBLE("color.visible", "Color"),
     COLOR_TYPE("color.type", "Color : Type"),

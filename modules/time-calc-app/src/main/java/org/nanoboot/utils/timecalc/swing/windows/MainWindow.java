@@ -560,6 +560,8 @@ public class MainWindow extends TWindow {
                 .bindTo(timeCalcConfiguration.waterTypeProperty);
         progressWater.hiddenProperty
                 .bindTo(timeCalcConfiguration.waterHiddenProperty);
+        progressWater.coloredProperty
+                .bindTo(timeCalcConfiguration.waterColoredProperty);
 
         add(progressWater);
         //

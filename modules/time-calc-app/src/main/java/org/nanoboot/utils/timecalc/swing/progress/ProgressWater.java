@@ -1,7 +1,10 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
+import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
+import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
+import org.nanoboot.utils.timecalc.utils.property.BooleanProperty;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,6 +19,7 @@ public class ProgressWater extends Widget {
         setPreferredSize(new Dimension(100, 400));
     }
 
+    public final BooleanProperty coloredProperty = new BooleanProperty("coloredProperty", false);
     private static final Color WATER_COLOR = new Color(128, 197, 222);
 
     @Override
@@ -26,7 +30,7 @@ public class ProgressWater extends Widget {
         Graphics2D brush = (Graphics2D) g;
         brush.setColor(
                 visibility.isStronglyColored() || mouseOver ?
-                        WATER_COLOR
+                        (coloredProperty.isEnabled() ? Battery.getColourForProgress(donePercent(), Visibility.WEAKLY_COLORED, mouseOver): WATER_COLOR)
                         : FOREGROUND_COLOR);
         brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
