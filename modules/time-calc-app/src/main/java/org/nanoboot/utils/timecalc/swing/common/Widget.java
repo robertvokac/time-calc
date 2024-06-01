@@ -65,7 +65,7 @@ public class Widget extends JPanel implements
     private static final Color VERY_LIGHT_GRAY = new Color(220, 220, 220);
     private static final Font FONT = new Font("sans", Font.PLAIN, 12);
     public static final Color WIDGET_BACKGROUND_COLOR = ((Supplier<Color>) () ->{int i = 232;return new Color(i,i,i);}).get();
-    private static final int WIDGET_TIMER_DELAY_MINIMUM = 25;
+
     public final BooleanProperty visibilitySupportedColoredProperty
             = new BooleanProperty("visibilitySupportedColoredProperty", true);
     public final BooleanProperty visibleProperty
@@ -102,7 +102,7 @@ public class Widget extends JPanel implements
     private WidgetMenu widgetMenu = null;
     public Widget() {
         setBackground(BACKGROUND_COLOR);
-        new Timer(getTimerDelay() > WIDGET_TIMER_DELAY_MINIMUM ? WIDGET_TIMER_DELAY_MINIMUM : getTimerDelay(), e -> repaint()).start();
+        new Timer(getTimerDelay(), e -> repaint()).start();
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
