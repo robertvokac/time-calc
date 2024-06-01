@@ -1,6 +1,5 @@
 package org.nanoboot.utils.timecalc.swing.windows;
 
-import org.nanoboot.utils.timecalc.app.CommandActionListener;
 import org.nanoboot.utils.timecalc.app.GetProperty;
 import org.nanoboot.utils.timecalc.app.TimeCalcApp;
 import org.nanoboot.utils.timecalc.app.TimeCalcConfiguration;
@@ -113,8 +112,6 @@ public class MainWindow extends TWindow {
     private final TButton focusButton;
     private final TButton helpButton;
     private final TButton weatherButton;
-    private final TButton commandButton;
-    private final TButton jokeButton;
     private final AboutButton aboutButton;
     private final TimeCalcConfiguration timeCalcConfiguration
             = new TimeCalcConfiguration();
@@ -285,8 +282,6 @@ public class MainWindow extends TWindow {
         this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus", 70);
         this.helpButton = new TButton("Help", 60);
         this.weatherButton = new TButton("Weather");
-        this.commandButton = new TButton("Run", 40);
-        this.jokeButton = new TButton("Joke", 60);
         this.aboutButton = new AboutButton();
 
         Function<String, ImageIcon> loadImageIcon = (p) ->
@@ -316,7 +311,7 @@ public class MainWindow extends TWindow {
         //window.add(weatherButton);
         addAll(workDaysButton, activitiesButton, restartButton,focusButton);
         if(!allowOnlyBasicFeaturesProperty.getValue()) {
-            addAll(configButton, commandButton,jokeButton,helpButton,
+            addAll(configButton, helpButton,
                     exitButton,
                     hideShowFormsCheckBox);
         }
@@ -796,12 +791,10 @@ public class MainWindow extends TWindow {
         //
         helpButton.setBoundsFromLeft(configButton);
         focusButton.setBoundsFromLeft(helpButton);
-        commandButton.setBoundsFromLeft(focusButton);
-        jokeButton.setBoundsFromLeft(commandButton);
         hideShowFormsCheckBox.setSelected(true);
         hideShowFormsCheckBox.setBounds(
-                jokeButton.getX() + jokeButton.getWidth() + SwingUtils.MARGIN,
-                jokeButton.getY(), 20, 20);
+                focusButton.getX() + focusButton.getWidth() + SwingUtils.MARGIN,
+                focusButton.getY(), 20, 20);
         //
         restartButton.setBoundsFromLeft(hideShowFormsCheckBox);
         exitButton.setBoundsFromLeft(restartButton);
@@ -815,14 +808,7 @@ public class MainWindow extends TWindow {
 
         weatherButton
                 .addActionListener(e -> new WeatherWindow().setVisible(true));
-        commandButton.addActionListener(
-                new CommandActionListener(timeCalcApp, timeCalcConfiguration));
 
-        jokeButton.addActionListener(e -> {
-            for (int i = 1; i <= 1; i++) {
-                Jokes.showRandom();
-            }
-        });
         hideShowFormsCheckBox.addItemListener(e -> this.requestFocus());
         exitButton.addActionListener(e
                 -> {
@@ -1424,12 +1410,6 @@ public class MainWindow extends TWindow {
                         .isEnabled()) /*|| (c instanceof TButton ? ((Widget)c).visibleProperty.isEnabled()
                 : true)*/, currentVisibility.isNotNone());
 
-        jokeButton.setVisible(
-                TimeCalcProperties.getInstance().getBooleanProperty(
-                        TimeCalcProperty.JOKES_VISIBLE)
-                && !currentVisibility.isNone()
-                && MainWindow.hideShowFormsCheckBox.isSelected());
-
         setTitle(currentVisibility.isNone() ? "" : getWindowTitle());
 
         int secondNow = clock.secondProperty.getValue();
@@ -1719,10 +1699,6 @@ public class MainWindow extends TWindow {
 
     public void doRestart() {
         restartButton.doClick();
-    }
-
-    public void doCommand() {
-        commandButton.doClick();
     }
 
     public void openHelpWindow() {

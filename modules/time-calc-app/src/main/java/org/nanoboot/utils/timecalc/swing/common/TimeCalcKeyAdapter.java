@@ -548,10 +548,6 @@ public class TimeCalcKeyAdapter extends KeyAdapter {
                 }
                 break;
             }
-            case KeyEvent.VK_F2: {
-                mainWindow.doCommand();
-                break;
-            }
             case KeyEvent.VK_R: {
                 mainWindow.doRestart();
                 break;
