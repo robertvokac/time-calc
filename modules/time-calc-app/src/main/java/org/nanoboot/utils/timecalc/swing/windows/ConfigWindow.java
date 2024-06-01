@@ -267,13 +267,6 @@ public class ConfigWindow extends TWindow {
     private final JCheckBox fuelIconVisibleProperty
             = new JCheckBox(TimeCalcProperty.FUEL_ICON_VISIBLE.getKey());
     //
-    private final JCheckBox rotationVisibleProperty
-            = new JCheckBox(TimeCalcProperty.ROTATION_VISIBLE.getKey());
-    private final JTextField rotationTypeProperty =
-            new JTextField(TimeCalcProperty.ROTATION_TYPE.getKey());
-    private final JCheckBox rotationHiddenProperty
-            = new JCheckBox(TimeCalcProperty.ROTATION_HIDDEN.getKey());
-    //
     public final JCheckBox clockHiddenProperty
             = new JCheckBox(TimeCalcProperty.CLOCK_HIDDEN.getKey());
     public final JCheckBox batteryMinuteHiddenProperty
@@ -504,8 +497,7 @@ public class ConfigWindow extends TWindow {
                 walkingHumanVisibleProperty.setSelected(enable);
                 fuelVisibleProperty.setSelected(enable);
                 fuelIconVisibleProperty.setSelected(enable);
-                rotationVisibleProperty.setSelected(enable);
-                typeVisibleProperty.setSelected(false);
+//                typeVisibleProperty.setSelected(false);
 //                clockHiddenProperty.setSelected(!enable);
 //                batteryMinuteHiddenProperty.setSelected(!enable);
 //                batteryHourHiddenProperty.setSelected(!enable);
@@ -594,7 +586,6 @@ public class ConfigWindow extends TWindow {
                 waterVisibleProperty, waterHiddenProperty, waterTypeProperty,waterColoredProperty,
                 dotVisibleProperty,dotHiddenProperty,dotTypeProperty,
                 fuelVisibleProperty,fuelTypeProperty,fuelHiddenProperty,fuelIconVisibleProperty,
-                rotationVisibleProperty, rotationTypeProperty, rotationHiddenProperty,
                 swingVisibleProperty,swingHiddenProperty,swingTypeProperty,swingQuarterIconVisibleProperty,
                 walkingHumanVisibleProperty,walkingHumanHiddenProperty,walkingHumanTypeProperty,
                 lifeVisibleProperty,lifeHiddenProperty,lifeTypeProperty,lifeBirthDateProperty,
@@ -1018,9 +1009,7 @@ public class ConfigWindow extends TWindow {
                 key.startsWith("swing.") ||
                 key.startsWith("walking-human.") ||
                 key.startsWith("fuel.") ||
-                key.startsWith("rotation.") ||
                 key.startsWith("bar.") ||
-                key.startsWith("color.") ||
                 key.startsWith("water.")
                 ) {
             index = 6;

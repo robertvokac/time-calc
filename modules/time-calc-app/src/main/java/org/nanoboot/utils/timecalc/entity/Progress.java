@@ -64,7 +64,7 @@ public class Progress {
     }
 
     public static double getMinuteProgress(int secondNow, int millisecondNow) {
-        return millisecondNow / 60d / 1000d + secondNow / 60d;
+        return ((double)millisecondNow) / 60d / 1000d + secondNow / 60d;
     }
 
     public static double getHourProgress(TTime timeRemains, int secondsRemains,

@@ -1,6 +1,5 @@
 package org.nanoboot.utils.timecalc.swing.progress;
 
-import org.nanoboot.utils.timecalc.entity.Progress;
 import org.nanoboot.utils.timecalc.entity.Visibility;
 import org.nanoboot.utils.timecalc.swing.common.Widget;
 import org.nanoboot.utils.timecalc.swing.progress.battery.Battery;
@@ -37,7 +36,7 @@ public class ProgressWater extends Widget {
 
         int tankHeight = (int) (getHeight() * 0.48);
 
-        int doneWaterHeight = (int) (tankHeight * (donePercent()));
+        int doneWaterHeight = (int) (((double)tankHeight) * (donePercent()));
 
         int h = getHeight() - 1;
         int w = getWidth() - 1;

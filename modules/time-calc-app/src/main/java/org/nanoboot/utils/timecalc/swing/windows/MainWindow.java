@@ -33,7 +33,6 @@ import org.nanoboot.utils.timecalc.swing.progress.ProgressDot;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressFuelGauge;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressLife;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressMoney;
-import org.nanoboot.utils.timecalc.swing.progress.ProgressRotation;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSquare;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressSwing;
 import org.nanoboot.utils.timecalc.swing.progress.ProgressWater;
@@ -139,7 +138,6 @@ public class MainWindow extends TWindow {
     private final ProgressMoney progressMoney;
     private final ProgressWeather progressWeather;
     private final ProgressFuelGauge progressFuelGauge;
-    private final ProgressRotation progressRotation;
     private final ProgressBar progressBar;
     private final ProgressWater progressWater;
     private final JLabel hourGlassElapsedDayIcon;
@@ -502,22 +500,9 @@ public class MainWindow extends TWindow {
 
         add(progressFuelGauge);
         //
-        this.progressRotation = new ProgressRotation();
-        progressRotation.setBounds(progressFuelGauge.getX() + progressFuelGauge.getWidth() + SwingUtils.MARGIN, progressFuelGauge.getY(),
-                100, 100);
-
-        progressRotation.visibleProperty
-                .bindTo(timeCalcConfiguration.rotationVisibleProperty);
-        progressRotation.typeProperty
-                .bindTo(timeCalcConfiguration.rotationTypeProperty);
-        progressRotation.hiddenProperty
-                .bindTo(timeCalcConfiguration.rotationHiddenProperty);
-
-        add(progressRotation);
-        //
         this.progressBar = new ProgressBar();
         progressBar.setBounds(progressSwing.getX(), progressSwing.getY() + progressSwing.getHeight() + SwingUtils.MARGIN,
-                progressRotation.getX() + progressRotation.getWidth() - 2 * SwingUtils.MARGIN, 25);
+                progressCircle.getX() + progressCircle.getWidth() - 1 * SwingUtils.MARGIN, 25);
 
         progressBar.visibleProperty
                 .bindTo(timeCalcConfiguration.barVisibleProperty);
@@ -1628,7 +1613,6 @@ public class MainWindow extends TWindow {
         progressMoney.setProgress(progress);
         progressDot.setProgress(progress);
         progressFuelGauge.setProgress(progress);
-        progressRotation.setProgress(progress);
         progressBar.setProgress(progress);
         progressWater.setProgress(progress);
         dayBattery.setProgress(progress);

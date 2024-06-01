@@ -184,7 +184,7 @@ public class Battery extends Widget {
     @Override
     public void paintWidget(Graphics g) {
         if (totalHeight == 0) {
-            this.totalHeight = (int) (this.getHeight() / 10d * 7d);
+            this.totalHeight = (int) (this.getHeight() / 10d * 8d);
             this.totalWidth = this.getWidth();
         }
         double donePercent = donePercent();
