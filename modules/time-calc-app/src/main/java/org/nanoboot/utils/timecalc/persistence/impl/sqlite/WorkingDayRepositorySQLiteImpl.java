@@ -53,14 +53,14 @@ public class WorkingDayRepositorySQLiteImpl implements WorkingDayRepositoryApi {
             stmt.setInt(++i, workingDay.getArrivalMinute());
             stmt.setInt(++i, workingDay.getOvertimeHour());
             stmt.setInt(++i, workingDay.getOvertimeMinute());
-            stmt.setInt(++i, workingDay.getPauseStartHour());
-            stmt.setInt(++i, workingDay.getPauseStartMinute());
             //
             stmt.setInt(++i, workingDay.getWorkingTimeInMinutes());
             stmt.setInt(++i, workingDay.getPauseTimeInMinutes());
             stmt.setString(++i, workingDay.getNote());
             stmt.setInt(++i, workingDay.isTimeOff() ? 1 : 0);
             stmt.setInt(++i, workingDay.getForgetOvertime());
+            stmt.setInt(++i, workingDay.getPauseStartHour());
+            stmt.setInt(++i, workingDay.getPauseStartMinute());
 
             //
             stmt.execute();
