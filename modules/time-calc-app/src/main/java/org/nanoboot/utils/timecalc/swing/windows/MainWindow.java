@@ -240,7 +240,7 @@ public class MainWindow extends TWindow {
                 throw new PropertyVetoException("Overtime must not be empty.", new PropertyChangeEvent(e.getSource(), e.getPropertyName(), e.getOldValue(), e.getNewValue()));
             }
         });
-        this.configButton = new TButton("Config", 60);
+        this.configButton = new TButton("Config");
         configButton.addActionListener(e -> {
             if (configWindow == null) {
                 this.configWindow = new ConfigWindow(timeCalcConfiguration);
@@ -278,9 +278,9 @@ public class MainWindow extends TWindow {
         this.workDaysButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Working Days", 100);
         this.activitiesButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Activities");
         this.restartButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Restart");
-        this.exitButton = new TButton("Exit", 50);
-        this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus", 70);
-        this.helpButton = new TButton("Help", 60);
+        this.exitButton = new TButton("Exit");
+        this.focusButton = new TButton(allowOnlyBasicFeaturesProperty.getValue() ? " " : "Focus");
+        this.helpButton = new TButton("Help");
         this.weatherButton = new TButton("Weather");
         this.aboutButton = new AboutButton();
 
