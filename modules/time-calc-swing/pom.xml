@@ -4,7 +4,7 @@
 
     <parent>
         <relativePath>./../../pom.xml</relativePath>
-        <groupId>org.nanoboot.utils</groupId>
+        <groupId>com.robertvokac.utils</groupId>
         <artifactId>time-calc</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>

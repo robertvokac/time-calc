@@ -8,7 +8,7 @@ _Time Calc is written in Java programming language and uses the Swing framework.
 
 ![Screenshot of application "Time Calc"](images/screenshot.jpg)
 
-Time Calc is inspired by this document: [report.ods](https://code.nanoboot.org/nanoboot/time-calc/raw/branch/rvc/report.ods)
+Time Calc is inspired by this document: [report.ods](https://github.com/robertvokac/time-calc/raw/branch/rvc/report.ods)
 
 ![report.ods.working_day.jpg](images/report.ods.working_day.jpg)
 
