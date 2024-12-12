@@ -248,7 +248,11 @@ public class ArrivalChart extends JPanel {
             seriesTarget.add(day3, new Double(0d));
             seriesTargetMinus30Minutes.add(day3, new Double(-0.5d));
             seriesTargetMinus60Minutes.add(day3, new Double(-1.0d));
-            seriesMa7.add(day3, new Double(ma7[i]));
+            double ma7i = ma7[i];
+            if(ma7i < (ma28[i] - 2)) {
+                ma7i = ma28[i] - 2;
+            }
+            seriesMa7.add(day3, new Double(ma7i));
             seriesMa14.add(day3, new Double(ma14[i]));
             seriesMa28.add(day3, new Double(ma28[i]));
             seriesMa56.add(day3, new Double(ma56[i]));

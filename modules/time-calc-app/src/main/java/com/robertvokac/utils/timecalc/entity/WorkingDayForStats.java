@@ -112,6 +112,7 @@ public class WorkingDayForStats extends WorkingDay {
                         l.add(wd);
                     });
                 }
+                System.out.println("list7.size()=" + list7.size());
                 wd.setArrivalTimeMovingAverage7Days(list7.stream()
                         .map(WorkingDay::getArrivalAsDouble)
                         .mapToDouble(Double::doubleValue)
@@ -132,6 +133,10 @@ public class WorkingDayForStats extends WorkingDay {
                         .mapToDouble(Double::doubleValue)
                         .average()
                         .orElse(0.0));
+                if(list7.isEmpty()) wd.setArrivalTimeMovingAverage7Days(wd.getArrivalTimeMovingAverage56Days());
+                if(list14.isEmpty()) wd.setArrivalTimeMovingAverage14Days(wd.getArrivalTimeMovingAverage56Days());
+                if(list28.isEmpty()) wd.setArrivalTimeMovingAverage28Days(wd.getArrivalTimeMovingAverage56Days());
+
 //                System.out.println(
 //                        WorkingDay.createId(cal) + " 1 :: " + list7.size());
 //                System.out.println(
