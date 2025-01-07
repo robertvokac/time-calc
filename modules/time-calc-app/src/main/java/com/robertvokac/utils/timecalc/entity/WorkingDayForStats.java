@@ -162,14 +162,13 @@ public class WorkingDayForStats extends WorkingDay {
 
     public static ArrivalChartData toArrivalChartData(
             List<WorkingDayForStats> list, double target, String startDate, String endDate) {
-        list.remove(0);
-        list.remove(0);
-        list.remove(0);
-        list.remove(0);
-        list.remove(0);
-        list.remove(0);
-        list.remove(0);
-        while(list.get(list.size() - 1).isThisDayTimeOff()) {
+        for(int i = 0; i < 7; i++) {
+            if(list.isEmpty()) {
+                 break;
+            }
+            list.remove(0);
+        }
+        while(!list.isEmpty() && list.get(list.size() - 1).isThisDayTimeOff()) {
             list.remove(list.size() - 1);
         }
         String[] days = new String[list.size()];
